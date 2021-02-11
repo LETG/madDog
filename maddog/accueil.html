@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /** Modification de la taille de la fenêtre aide **/
+    @media (min-width: 992px){
+      #help .modal-lg {
+      width: 1200px;
+      }  
+    }   
+
+    .homeclose{
+      margin: 30px 0px;
+      text-align: center;
+    }
+
+    #actualite .card{
+      background-color: #e5e5e587;
+      padding: 5px 20px;
+      border-left: 4px solid #81cac8
+    }
+    #actualite .card-title{
+      color: #81cac8!important;
+    }
+
+  </style>
+
+  <title>Mad Dog</title>
+</head>
+<body>
+  <!-- Title -->
+  <div class="homeLogo">
+    <img src="maddog/img/logo.jpg" style="width:400px;">    
+  </div>
+  <!-- /.Title -->
+
+  <ul class="nav nav-tabs nav-center" role="tablist">
+    <!-- navbar -->
+    <li role="presentation" class="active" >
+      <a href="#h_presentation" aria-controls="profile" role="tab"
+      data-toggle="tab"></span> Accueil</a>
+    </li>
+    <li role="presentation">
+      <a href="#h_partenaires" aria-controls="profile" role="tab" data-toggle="tab">Les partenaires</a>
+    </li>
+    <li role="presentation">
+      <a href="#h_projet" aria-controls="profile" role="tab"
+      data-toggle="tab">Le projet</a>
+    </li>
+    <li role="presentation">
+      <a href="#h_data" aria-controls="profile" role="tab"
+      data-toggle="tab">Données</a>
+    </li>
+    <li role="presentation">
+      <a href="#h_apropos" aria-controls="profile" role="tab"
+      data-toggle="tab">Contact</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!--Chiffres clés-->
+    <div role="tabpanel" class="tab-pane active" id="h_presentation">
+      <div> 
+          <p>Depuis plus d´une dizaine d´années, le recours à des techniques modernes de mesures de terrain (tachéomètre, théodolite, DGPS, Lidar, sondeur multifaisceaux, etc.) a facilité l´acquisition toujours plus importante et plus précise de données topo-morphologiques du domaine littoral.</p>
+      </div>
+      <table><tbody><tr><td><img src="maddog/img/photos_acc.jpg" class="photosacc" height="300" width="134"></td><td><p> Dans le même temps, le développement des outils de traitement et de catalogage de l´information géographique a permis d´améliorer et de valoriser l´archivage de ces données sous la forme de bases de données interactives.</p><br \="">
+        <p>
+        Le projet MADDOG concerne le catalogage et la mise à disposition de données topo-morphologiques du domaine littoral de Bretagne.<br \=""> Il s’inscrit prioritairement dans le travail de suivi mené au sein de l´Observatoire du Domaine Côtier (ODC) de l´Institut Universitaire Européen de la Mer (IUEM) dont une partie des séries est reconnue depuis 2005 comme Observatoire des Sciences de l´Univers (OSU), et dont la mission porte sur les trois domaines principaux des sciences de la mer et du littoral : le climat et la circulation océanique, la géophysique des domaines océaniques, et l´environnement côtier.</p>
+        <br \="">
+        <p> Le catalogage et la mise à disposition de ces données topo-morphologiques visent également à satisfaire une demande de plus en plus croissante des gestionnaires du littoral (services de l´Etat, collectivités territoriales, services maritimes, etc.), travaillant dans le domaine de l´application (gestion de l´érosion du trait de côte, élaboration des PPR submersion marine, etc.).</p></td></tr></tbody></table>
+      <!-- Button Close modal-->
+      <div class="homeclose">
+        <a href="" class="data-downl" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
+      </div>
+      <!-- /.Button Close modal-->
+    </div>
+     <!--/.Chiffres clés-->
+
+    <!--Nos partenaires-->
+    <div role="tabpanel" class="tab-pane" id="h_partenaires">
+      <h2 class="title-tab">Le partenariat</h2>
+      <div>
+        <img src="maddog/img/partenaires.jpg">  
+      </div>
+      <!-- Button Close modal-->
+      <div class="homeclose">
+        <a href="" class="data-downl" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
+      </div>
+      <!-- /.Button Close modal-->
+    </div>
+     <!--/.Nos partenaires-->
+
+    <!--Publications-->
+    <div role="tabpanel" class="tab-pane" id="h_projet">
+        <h2 class="title-tab">Le projet</h2>
+        <div id="projet" class="textcontenu">
+          <h1>Cadre du projet et types de données</h1>
+      <p>Le projet MADDOG s’inscrit dans les opérations de suivi réalisées dans le cadre de l’Observatoire du Domaine Côtier (ODC) de l’Institut Universitaire Européen de la Mer (IUEM) dont une des missions porte sur la géophysique des domaines océaniques, et l’environnement côtier. MADDOG archive et met à disposition les données acquises dans le cadre du suivi « trait de côte ». L’objectif de ce suivi est de décrypter l’enregistrement d’un signal des variations météomarines et/ou climatiques par le domaine littoral à partir des changements morphosédimentaires des formes d’accumulation telles que les plages et estrans sableux, les cordons dunaires, les cordons de galets, etc.<br \="">
+      Les données topo-morphologiques cataloguées et mises à disposition sous MADDOG concernent le domaine côtier qui s’étend des milieux dunaires aux petits fonds (entre -10 et -20 m de profondeur). L’aire géographique couvre la région Bretagne. Trois types de données sont disponibles :
+      </p>
+      <ul>
+      <li>données sur le trait de côte (données planimétriques en x et y),</li>
+      <li>données de profil transversal de plage (données verticales en x, y, et z),</li>
+      <li>données topographiques du domaine littoral (données surfaciques en x, y, et z).</li>
+      </ul>
+      <h1>Systèmes de mesure et résultats produits</h1>
+      
+      <p>- L'évolution planimétrique du trait de côte permettant d’analyser la cinématique du trait de côte par une distance de recul ou d’avancée du rivage. La limite du trait de côte est acquise par photo-interprétation pour les périodes les plus anciennes, et par mesure de terrain pour la période actuelle. La ligne de référence retenue correspond à la limite de la végétation dunaire vivace ou à la microfalaise d'érosion dunaire lorsqu’elle est présente.</p>
+      <p>- L'évolution altimétrique des plages par comparaison de profils transversaux de plage. Les changements morphosédimentaires permettent de calculer l’évolution du bilan sédimentaire en m3 par mètre linéaire. Cette information est exprimée en fréquences séparées et cumulées.</p>
+      <p>- L'évolution des changements surfaciques des plages dans les trois dimensions (x, y et z) par comparaison de modèles numériques de terrain. Ces données permettent de calculer et de cartographier le bilan sédimentaire (en m3 par mètre linéaire) sous la forme de zones en accrétion et en érosion.</p>
+      
+      <h1>Réseau des points de mesure</h1>
+      <p> <b>Département du Finistère</b><br \="">
+      Des données sont disponibles sur 32 plages sableuse, cordons de galets, ou flèches littorales.
+      </p>
+      <p><b>Département des Côtes d’Armor</b><br \="">
+      Des données sont disponibles sur 8 plages sableuse, cordons de galets, ou flèches littorales.
+      </p>
+      <p><b>Département du Morbihan</b><br \="">
+      Des données sont disponibles sur 2 plages sableuse, cordons de galets, ou flèches littorales.
+      </p>
+      <p><i>NB: Le type de données et la fréquence des relevés diffèrent suivant les sites.</i></p>
+      <p>&nbsp;</p>
+      </div>
+        </div>
+        <!--/.Etude Marchés fonciers-->
+        <!-- Button Close modal-->
+        <div class="homeclose">
+          <a href="" class="data-downl" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
+        </div>
+        <!-- /.Button Close modal-->
+    </div>
+     <!--/.Publications-->
+
+     <!--Data-->
+    <div role="tabpanel" class="tab-pane" id="h_data">
+        <h2 class="title-tab">Les données</h2>
+        <!-- Button Close modal-->
+        <div class="homeclose">
+          <a href="" class="data-downl" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
+        </div>
+        <!-- /.Button Close modal-->
+    </div>
+     <!--/.Data-->
+
+     <!--A propos-->
+    <div role="tabpanel" class="tab-pane" id="h_apropos">
+        <h2 class="title-tab">Contact</h2>
+        <div id="contacts" class="textcontenu">
+	  
+          <h1>Responsable de projet et de l’inventaire des données topo-morphologiques :</h1>
+          <p class="linkacc"> Serge SUANEZ<br \="">
+          Laboratoire Géomer – <a href="http://letg.univ-nantes.fr/fr/laboratoire/1/presentation" target="_blank">UMR 6554 CNRS LETG</a><br \="">Université de Bretagne Occidentale, <a href="http://www-iuem.univ-brest.fr/" target="_blank">I.U.E.M.</a><br \="">
+          Tel : 33 (0)2 98 49 86 10 – Fax : 33 (0)2 98 49 87 03<br \="">
+          Email : <a href="mailto:serge.suanez@univ-brest.fr" class="linkacc">serge.suanez@univ-brest.fr</a></p>
+          
+          <h1>Responsable du développement archivage et webmapping :</h1>
+          <p class="linkacc">Mathias ROUAN<br \="">
+          Laboratoire Géomer – <a href="http://letg.univ-nantes.fr/fr/laboratoire/1/presentation" target="_blank">UMR 6554 CNRS LETG</a><br \="">Université de Bretagne Occidentale, <a href="http://www-iuem.univ-brest.fr/" target="_blank">I.U.E.M.</a><br \="">
+          Tel : 33 (0)2 98 49 86 81 – Fax : 33 (0)2 98 49 87 03<br \="">
+          Email : <a href="mailto:mathias.rouan@univ-brest.fr">mathias.rouan@univ-brest.fr</a></p>
+          
+          <h1>Responsable du développement post-traitement :</h1>
+          <p class="linkacc">Loïc LAGADEC<br \="">
+          Laboratoire Lab-STICC UMR 6285 - MOCS<br \="">
+          <a href="http://www.ensta-bretagne.fr" target="_blank">ENSTA-Bretagne</a><br \="">
+          Tel : 33 (0)2 98 34 89 08<br \="">
+          Email : <a href="mailto:loic.lagadec@ensta-bretagne.fr">loic.lagadec@ensta-bretagne.fr</a></p>
+          
+          <h1>Responsable de l’interface Web :</h1>
+          <p class="linkacc">Christophe MEASSON<br \="">
+          WEBSTERN VIDEOS : 
+          11 rue Jules Le Maître,
+          29200 Brest<br \="">
+          Tel : 33 (0)6 08 89 31 48 &nbsp; <a href="http://measson.free.fr/tv/" target="_blank">Web Site</a><br \="">
+          Email : <a href="mailto:webstern.videos@gmail.com">webstern.videos@gmail.com</a></p>
+          
+          
+          
+          <p>&nbsp;</p>
+          </div>
+
+        <!-- Button Close modal-->
+        <div class="homeclose">
+          <a href="" class="data-downl" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
+        </div>
+        <!-- /.Button Close modal-->
+    </div>
+     <!--/.A propos-->
+
+  </div>
+
+</body>
+</html>

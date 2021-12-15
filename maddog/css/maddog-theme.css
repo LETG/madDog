@@ -23,6 +23,21 @@
 }
 
 
+/* Titre de l'application */
+
+/* Suppresion du titre */
+.mv-title {
+   display: none;
+}
+
+/* Modification des propriétés du logo */
+img.mv-logo {
+   max-height: 45px!important;
+   max-width: 190px!important;
+   margin-top: -12px!important;
+}
+
+
 /* Style modal */
 
 .modal-content {
@@ -70,14 +85,6 @@
 .navbar-default .navbar-brand:focus {
    color: white;
 }
-
-
-/* Taille du logo */
-
-img.mv-logo {
-   max-height: 35px!important;
-}
-
 
 /* Titre de l'application */
 

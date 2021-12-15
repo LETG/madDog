@@ -3,7 +3,7 @@
     <application 
         title="Mad Dog" 
         mouseposition="false" 
-        logo="" 
+        logo="apps/maddog/maddog/img/maddog_logo.svg" 
         help="apps/maddog/maddog/accueil.html" 
         showhelp="false" 
         titlehelp=" " 
@@ -35,7 +35,7 @@
                     url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
                     legendurl="" 
                     queryable="true"
-                    attribution="Source: indigeo" 
+                    attribution="Source: Indigeo" 
                     tooltip="true" fields="site" tooltipenabled="true"
                     metadata=""
                     metadata-csw="" >

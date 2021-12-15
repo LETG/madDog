@@ -102,7 +102,6 @@ img.mv-logo {
    border-top-left-radius: 3px!important;
    border-bottom-left-radius: 3px!important;
    border: none;
-   font-weight: 500;
 }
 
 #searchtool .btn-default {
@@ -526,7 +525,7 @@ span.fa.mv-time-player {
    font-family: var(--myfont)!important;
    font-size: 12px!important;
    padding: 8px!important;
-   border-radius: 8px!important;
+   border-radius: 4px!important;
 }
 
 

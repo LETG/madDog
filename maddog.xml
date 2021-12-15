@@ -10,7 +10,7 @@
         iconhelp="home"
         measuretools="true" 
         exportpng="true" 
-        style="" />
+        style="apps/maddog/maddog/css/maddog-theme.css" />
     <mapoptions maxzoom="19" projection="EPSG:3857" center="-349164.37,6144925.57790189" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="default"><!-- style="default"||gallery" -->

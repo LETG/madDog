@@ -1,0 +1,154 @@
+@charset "UTF-8";
+
+/******
+	Définition des propriétés de style CSS
+	Application LETG - Maddog
+   Page d'accueil
+---
+******/
+
+
+/* Imports des fonts - Poppins Family GoogleFont */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Définition des variables */
+
+:root {
+	--mycolor: #13344B;
+	--mycolor2: #f79468;
+	--myfont: 'Roboto', sans-serif;
+}
+
+
+/* Entête */
+
+#help .modal-header {
+	background-color: var(--mycolor)!important;
+	padding: 15px 20px!important;
+}
+
+#help .modal-header .close {
+	color: white!important;
+   opacity: 1!important;
+   font-size: 50px;
+   font-weight: 200;
+   padding: 0 15px;
+}
+
+#help .modal-header .close:hover {
+   opacity: 0.7!important;
+}
+
+.homeLogo {
+   background-color: var(--mycolor);
+   padding: 0px 100px 50px;
+}
+
+
+/* Onglets de navigation - Tabs */
+
+#help .nav-tabs>li {
+	float: none;
+	display: inline-block;
+	zoom: 1;
+}
+
+#help .nav-tabs {
+	text-align: center;
+}
+
+#help .nav-tabs {
+	border-bottom: 1px solid #eeeee9;
+	background-color: #eeeee9;
+}
+
+#help .nav-tabs>li>a {
+	color: #fff;
+	font-size: 15px;
+}
+
+#help .nav-tabs>li>a:hover {
+	background-color: #eeeee9;
+	border-color: #eeeee9!important;
+   color:var(--mycolor2)!important;
+	border-bottom: 3px solid var(--mycolor2)!important;
+}
+
+#help .nav-tabs>li>a {
+	border-radius: 0px 0px 0 0px!important;
+	color: #555;
+}
+
+#help .nav-tabs>li.active>a {
+	background-color: #eeeee9;
+	border-color: #eeeee9!important;
+	color:var(--mycolor2)!important;
+	font-weight:500;
+	border-bottom: 3px solid var(--mycolor2)!important;
+}
+
+
+/* Modal Content */
+
+#help .modal-body {
+	padding: 0px!important;
+}
+
+#help .modal-content {
+	font-family: var(--myfont);
+	height: auto;
+}
+
+#help .tab-content>.active {
+	padding: 30px 100px;
+}
+
+#help .tab-pane h2 {
+   font-weight: 600;
+   color: var(--mycolor);
+   margin-bottom: 15px;
+}
+
+#help .tab-pane h4 {
+	font-family: var(--myfont);
+	color: var(--mycolor);
+	font-size: 20px;
+}
+
+#help .tab-pane h5 {
+	font-family: var(--myfont);
+	color: var(--mycolor);
+	font-size: 15px;
+}
+
+#help .tab-pane h6 {
+	font-family: var(--myfont);
+	color: var(--mycolor);
+	font-size: 14px;
+	margin-bottom: 2px;
+}
+
+#help .tab-pane p {
+	color: #555;
+   font-size: 14px;
+   text-align: justify;
+}
+
+ /* Btn Fermer la fenêtre */
+
+ .homeclose{
+   margin: 30px 0px;
+}
+
+.btn-close-home {
+   background-color: var(--mycolor);
+   padding: 10px 12px;
+   color: white;
+   border-radius: 3px;
+}
+
+.btn-close-home:hover {
+   opacity:0.9;
+   color:white;
+}

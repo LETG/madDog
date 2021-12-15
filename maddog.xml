@@ -5,14 +5,13 @@
         mouseposition="false" 
         logo="" 
         help="apps/maddog/maddog/accueil.html" 
-        showhelp="true" 
+        showhelp="false" 
         titlehelp=" " 
         iconhelp="home"
         measuretools="true" 
         exportpng="true" 
-        style="apps/maddog/maddog/css/maddog.css" 
-        togglealllayersfromtheme="true"/>
-    <mapoptions maxzoom="19" projection="EPSG:3857" center="-220750.13768758904,6144925.57790189" zoom="8" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
+        style="" />
+    <mapoptions maxzoom="19" projection="EPSG:3857" center="-349164.37,6144925.57790189" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="default"><!-- style="default"||gallery" -->
         <baselayer  type="OSM" id="darkmatter" label="Dark Matter" title="CartoDb" thumbgallery="img/basemap/darkmatter.png" 
@@ -29,11 +28,8 @@
     <olscompletion url="https://api-adresse.data.gouv.fr/search/" type="ban"/>
     <searchparameters bbox="false" localities="true" features="false" />   
 
-    <themes> 
-        <theme name="Communes"  collapsed="false" id="commune" icon="fas fa-users">
-
-		</theme>         
-        <theme name="Emprises"  collapsed="false" id="emprise" icon="fal fa-draw-polygon">
+    <themes>         
+        <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
         	<layer id="emprises_ligne_de_reference" name="Emprise de réference"  visible="true" 
                     infoformat="application/vnd.ogc.gml"
                     url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
@@ -45,26 +41,5 @@
                     metadata-csw="" >
 		    </layer>                               
         </theme>
-        <theme name="Traits"  collapsed="false" id="tdc" icon="fas fa-project-diagram">
-        	<layer id="trait_de_cote" name="Trait de côte"  visible="true" 
-                    infoformat="application/vnd.ogc.gml"
-                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
-                    legendurl=""
-                    queryable="true" 
-                    attribution="Source: indigeo" 
-                    metadata=""
-                    metadata-csw="" >
-		    </layer>                               
-        	<layer id="ligne_de_reference" name="Lignes de référence"  visible="true" 
-                    infoformat="application/vnd.ogc.gml"
-                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
-                    legendurl="" 
-                    queryable="true"
-                    attribution="Source: indigeo" 
-                    metadata=""
-                    metadata-csw="" >
-		    </layer>                               
-        </theme>
-
     </themes>
 </config>

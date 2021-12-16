@@ -135,6 +135,35 @@
    text-align: justify;
 }
 
+/* Bloc Actualité */
+
+.blockActu {
+    background-color: #eeeee99c;
+    padding: 25px;
+    border-radius: 4px;
+}
+
+.cardActu {
+    margin: 15px 0;
+}
+
+.cardActu h6 {
+    color: var(--mycolor2)!important;
+    font-size:15px!important;
+}
+
+.cardActu .dateActu {
+    color: var(--mycolor2)!important;
+    font-size:12px!important;
+    font-style:italic;
+}
+
+a.linkActu {  
+    color: #555;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
  /* Btn Fermer la fenêtre */
 
  .homeclose{

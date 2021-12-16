@@ -164,6 +164,18 @@ a.linkActu {
     text-decoration: underline;
 }
 
+.logoGrid img {
+    height: 90px;
+	margin: 15px;
+	-webkit-transition: 0.4s ease;
+	transition: 0.4s ease;
+}
+
+.logoGrid img:hover {
+	-webkit-transform: scale(1.08);
+	transform: scale(1.08);
+ }
+
  /* Btn Fermer la fenêtre */
 
  .homeclose{

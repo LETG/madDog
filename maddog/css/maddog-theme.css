@@ -849,7 +849,7 @@ button.swal2-confirm.swal2-styled {
 }
 
 .xs.mode-u .modal-content {
-   border-radius: 10px!important;
+   border-radius: 5px!important;
    padding: 10px!important;
    font-family: var(--myfont);
    background-color: #fffffff7!important;

@@ -193,3 +193,32 @@ a.linkActu {
    opacity:0.9;
    color:white;
 }
+
+/* 
+	Version Mobile 
+*/
+
+@media (max-width: 990px) {
+
+	.homeLogo {
+		padding: 20px;
+	}
+
+	.homeLogo img{
+		width: 20em!important;
+	}
+
+	.xs.mode-d #help .modal-content {
+		padding: 0!important;
+	}
+	
+	#help .modal-header {
+		border-top-left-radius: 7px;
+		border-top-right-radius: 7px;
+	}
+
+	/* Content */
+	#help .tab-content>.active {
+		padding: 20px;
+	}
+  }

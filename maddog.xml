@@ -41,5 +41,25 @@
                     metadata-csw="" >
 		    </layer>                               
         </theme>
+        <theme name="Traits"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
+        	<layer id="trait_de_cote" name="Trait de côte"  visible="false" 
+                    infoformat="application/vnd.ogc.gml"
+                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
+                    legendurl=""
+                    queryable="true" 
+                    attribution="Source: indigeo" 
+                    metadata=""
+                    metadata-csw="" >
+		    </layer>                               
+        	<layer id="ligne_de_reference" name="Lignes de référence"  visible="true" 
+                    infoformat="application/vnd.ogc.gml"
+                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
+                    legendurl="" 
+                    queryable="true"
+                    attribution="Source: indigeo" 
+                    metadata=""
+                    metadata-csw="" >
+		    </layer>                               
+        </theme>
     </themes>
 </config>

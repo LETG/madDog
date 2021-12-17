@@ -1,37 +1,34 @@
 <!-- Template Dekstop -->
 <div class="template-panel panel">
   <div class="panel-body">
-
      <!-- Selection de la zone -->
      <div class="row blockContainer" id="selectZone">
-          <h3 class="modal-title">Sélectionner un site d'étude</h3>
-          <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p> 
-
+        <h3 class="modal-title">Sélectionner un site d'étude</h3>
+        <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
         <!--INPUT FIELD-->
         <div class="row col-sm-12 pad-0" style="margin-top: 10px;">
-          <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
-            <div class="form-group form-autocomplete">
-                <div class="input-group">
-                  <span class="input-group-addon search-picto" ><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
-                  </span>
-                  <input type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Baie de Goulven">
-                </div>
-                <p class="italic text-small">Lancer la recherche avec la loupe</p>
-            </div>
-            <div class="autocomplete-list autocomplete-result col-sm-12" style="display:none;"></div>
-          </div>
-          <!--RADIO-->
-          <div class="col-sm-10 col-md-5" id="search-radio" >
-            <!--SIte d'étude-->
-            <input type="radio" id="ch-site" name="search" value="site" checked >
-            <label for="ch-site">Site d'étude</label>
-            <!--Commune-->
-            <input type="radio" id="ch-commune" name="search" value="commune" >
-            <label for="ch-commune">Commune littorale</label>
-          </div>
-        </div>  
+           <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
+              <div class="form-group form-autocomplete">
+                 <div class="input-group">
+                    <span class="input-group-addon search-picto" ><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
+                    </span>
+                    <input type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Baie de Goulven">
+                 </div>
+                 <p class="italic text-small">Lancer la recherche avec la loupe</p>
+              </div>
+              <div class="autocomplete-list autocomplete-result col-sm-12" style="display:none;"></div>
+           </div>
+           <!--RADIO-->
+           <div class="col-sm-10 col-md-5" id="search-radio" >
+              <!--SIte d'étude-->
+              <input type="radio" id="ch-site" name="search" value="site" checked >
+              <label for="ch-site">Site d'étude</label>
+              <!--Commune-->
+              <input type="radio" id="ch-commune" name="search" value="commune" >
+              <label for="ch-commune">Commune littorale</label>
+           </div>
+        </div>
         <!--/.INPUT FIELD-->
-
         <!--TOGGLE BUTTON-->
         <div class="row col-sm-12 pad-0">
            <div class="form-group" style="display: flex;">
@@ -44,20 +41,59 @@
               </div>
            </div>
         </div>
-
-      </div>
-      <!-- /.Selection de la zone --> 
-      <!-- Visualisation des résultats -->
-      <div class="row blockContainer" id="resultZone">
+     </div>
+     <!-- /.Selection de la zone --> 
+     <!-- Visualisation des résultats -->
+     <div class="row blockContainer" id="resultZone">
         <h3 class="modal-title">Visualiser l'évolution du littoral sur le site d'étude</h3>
-        <p class="select-info">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
-      </div>
-      <!-- /.Visualisation des résultats -->  
-    </div>
+        <div class="row col-sm-12 pad-0 select-info mbt-0">
+           <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> Sillon du Diben Pénerf (Morbihan)</p>
+        </div>
+        <!-- Onglets Services -->
+        <div class="row col-sm-12">
+           <!--NavTab-->
+           <ul class="nav nav-tabs nav-justified">
+              <li class="active"><a href="#Service1" data-toggle="tab">Trait de côte</a></li>
+              <li><a href="#Service2" data-toggle="tab">Profils de la plage</a></li>
+              <li><a href="#Service3" data-toggle="tab">MNT</a></li>
+              <li><a href="#Service4" data-toggle="tab">Trait de côte (2)</a></li>
+           </ul>
+           <!--/.NavTab-->  
+           <!--Tab-->    
+           <div class="tab-content">
+              <div id="Service1" class="tab-pane fade in active">
+                 <h4 class="service-title">Calcul de la cinématique du trait de côte <br> 
+                    <span class="service-subtitle">(Méthode ligne de référence et radiale)</span>
+                 </h4>
+                 <p>Paramètres du service + Visualisation des résultats</p>
+              </div>
+              <div id="Service2" class="tab-pane fade">
+                 <h4 class="service-title">Calcul du bilan sédimentaire<br> 
+                    <span class="service-subtitle">(à partir de profils de plage)</span>
+                 </h4>
+                 <p>Paramètres du service + Visualisation des résultats</p>
+              </div>
+              <div id="Service3" class="tab-pane fade">
+                 <h4 class="service-title">Calcul des changements morphologiques surfaciques du domaine littoral<br> 
+                    <span class="service-subtitle">(à partir de Modèles Numériques de Terrains (MNT))</span>
+                 </h4>
+                 <p>Paramètres du service + Visualisation des résultats</p>
+              </div>
+              <div id="Service4" class="tab-pane fade">
+                 <h4 class="service-title">Calcul de la cinématique du trait de côte<br> 
+                    <span class="service-subtitle">(Méthode des aires perdues ou gagnées)</span>
+                 </h4>
+                 <p>Paramètres du service + Visualisation des résultats</p>
+              </div>
+           </div>
+           <!--/.Tab-->  
+        </div>
+        <!-- /.Onglets Services -->
+     </div>
+     <!-- /.Visualisation des résultats -->  
+  </div>
 </div>
 <!-- /.Template Dekstop -->
-
-
 <!-- Template Mobile -->
 <div class="modal fade" id="template-modal" role="dialog">
   <div class="modal-dialog">

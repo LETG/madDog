@@ -28,6 +28,10 @@
     <olscompletion url="https://api-adresse.data.gouv.fr/search/" type="ban"/>
     <searchparameters bbox="false" localities="true" features="false" />   
 
+    <extensions>
+        <extension type="component" id="template" path="apps/maddog/maddog/addons"/>
+    </extensions>
+
     <themes>         
         <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
         	<layer id="emprises_ligne_de_reference" name="Emprise de réference"  visible="true" 

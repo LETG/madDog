@@ -1,0 +1,10 @@
+{
+    "js": [        
+        "js/lib/lodash.js"
+    ],
+    "css": [
+        "css/main.css"
+    ],
+    "html": "template.html",
+    "target": "page-content-wrapper"
+}

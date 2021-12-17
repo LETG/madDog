@@ -1,4 +1,4 @@
 # madDog
-Configuration Mviewer pour suivi littoral
+Création d'une application cartographique basée sur le Mviewer pour le suivi littoral en Bretagne
 
-Initail version : http://menir.univ-brest.fr/maddog/
+Initial version : http://menir.univ-brest.fr/maddog/

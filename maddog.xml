@@ -3,14 +3,14 @@
     <application 
         title="Mad Dog" 
         mouseposition="false" 
-        logo="apps/madDog/maddog/img/maddog_logo.svg" 
-        help="apps/madDog/maddog/accueil.html" 
+        logo="apps/maddog/maddog/img/maddog_logo.svg" 
+        help="apps/maddog/maddog/accueil.html" 
         showhelp="false" 
         titlehelp=" " 
         iconhelp="home"
         measuretools="true" 
         exportpng="true" 
-        style="apps/madDog/maddog/css/maddog-theme.css" />
+        style="apps/maddog/maddog/css/maddog-theme.css" />
     <mapoptions maxzoom="19" projection="EPSG:3857" center="-349164.37,6144925.57790189" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="default"><!-- style="default"||gallery" -->
@@ -29,7 +29,7 @@
     <searchparameters bbox="false" localities="true" features="false" />   
 
     <extensions>
-        <extension type="component" id="template" path="apps/madDog/maddog/addons"/>
+        <extension type="component" id="template" path="apps/maddog/maddog/addons"/>
     </extensions>
 
     <themes>         

@@ -1,0 +1,51 @@
+
+
+/**/
+.template-panel {
+    position: fixed;
+    right: 0px;
+    width: 50%;
+    background-color: white;
+	height: 100%;
+	overflow: auto;
+	max-height: 100%;
+	
+}
+
+.template-panel>.panel-body{
+    padding-top:80px;
+}
+
+
+/* HIDE NATIV MVIEWER UI*/
+
+.navbar-brand.menu-toggle, #sidebar-wrapper {
+	display:none !important;
+}
+
+#map {
+	left: 0px;
+	margin-left: 0px !important;
+}
+
+#iconhelp i {
+    content: url(../../../img/house.svg)!important;
+    width: 18px;
+}
+
+#backgroundlayerstoolbar-default {
+    right: 51%;
+}
+
+#toolstoolbar {
+    right: 51%;
+}
+
+#zoomtoolbar {
+    right: 51%;
+}
+
+#layers-container-box {
+    left: 0px;
+    top: 5px;
+}

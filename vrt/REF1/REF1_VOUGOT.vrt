@@ -1,0 +1,11 @@
+<OGRVRTDataSource>
+    <OGRVRTLayer name="REF1_VOUGOT">
+        <SrcDataSource>REF1_VOUGOT.csv</SrcDataSource>
+        <GeometryType>wkbPoint</GeometryType>
+        <LayerSRS>EPSG:2154</LayerSRS>
+        <FID name="id"/>
+        <Field name="identifiant" type="Integer"/>
+        <Field name="date" type="Date"/>
+        <GeometryField encoding="PointFromColumns" x="x" y="y" z="z"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource>

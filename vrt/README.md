@@ -21,7 +21,8 @@ cd vrt && ogr2ogr -f "GEOJson" ref1.geojson csvToLine.vrt
 
 1. Description
 
-Le script ./script/vrt2Postgis.sh permet d'importer un CSV vers PostGIS selon le modèle défini dans le VRT et selon la documentation gdal : 
+Le script `./script/vrt2Postgis.sh` permet d'importer un CSV vers PostGIS selon le modèle défini dans le VRT et selon la documentation gdal : 
+
 https://gdal.org/drivers/vector/pg.html
 
 Ce script prend 3 paramètres :

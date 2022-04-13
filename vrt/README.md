@@ -19,20 +19,20 @@ cd vrt && ogr2ogr -f "GEOJson" ref1.geojson csvToLine.vrt
 
 ### CSV -> VRT -> GEOJson -> PostGIS
 
-1. Description
+1. **Description**
 
 Le script `./script/vrt2Postgis.sh` permet d'importer un CSV vers PostGIS selon le modèle défini dans le VRT et selon la documentation gdal : 
 
 https://gdal.org/drivers/vector/pg.html
 
 Ce script prend 3 paramètres :
-- output: Nom du fichier GEOJson à créé en sortie du VRT
-- vrt: Nom du fichier VRT à utiliser (dans la version actuelle, le VRT doit être dans le même répertoire que le CSV)
-- table (optionnel): Nom de la table à crééer. Par défaut: nom du fichier GEOJson.
+- `output`: Nom du fichier GEOJson à créé en sortie du VRT
+- `vrt`: Nom du fichier VRT à utiliser (dans la version actuelle, le VRT doit être dans le même répertoire que le CSV)
+- `table` (optionnel): Nom de la table à crééer. Par défaut: nom du fichier GEOJson.
 
 > Attention : Si la table existe déjà, le script va supprimer et recréer la table (option overwrite ogr2ogr).
 
-2. Configuration
+2. **Configuration**
 
 Ouvrir le script et modifier les informations de connexion à la base de données PostGreSQL :
 
@@ -46,7 +46,7 @@ password=""
 db=""
 ```
 
-3. Exécution
+3. **Exécution**
 
 ```
 cd ./script/

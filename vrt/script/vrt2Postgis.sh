@@ -1,42 +1,38 @@
 #!/bin/bash
 
 echo ">START PROCESS"
-output="$1"
-vrt="$2"
-table="$3"
+vrt="$1"
+table="$2"
+output="$3"
 
 format="GEOJson"
 
 # DB infos
-host="127.0.0.1"
+host=""
 port=5432
 user=""
-schema=""
+schema="vougot"
 password=""
-db=""
+db="maddog"
 
-if [ -z $output ] || [ -z $vrt ]
+if [ -z $table ] || [ -z $vrt ]
 then
-    echo "-!-ARGS MISSING : output, vrt -> file.geojson, file.vrt"
+    echo "-!-ARGS MISSING : table, vrt -> tableName fileName.vrt"
     echo "-!-IMPORT FAIL"
     echo ">END PROCESS"
     exit 1
 fi
 
-if [ -z $table ]
-then
-    echo "-!-TABLE NAME IS REQUIRED"
-    # split the string by . and get the first column with outpu name file
-    table="${output%%.*}"
-    echo ">CREATE NEW TABLE NAME FROM OUTPUT : '$table'"
-fi
+if [ ! -z $output ]
 # create geojson from vrt
-echo ">CREATE GEOJSON FROM VRT"
-ogr2ogr -f "$format" $output $vrt
+then 
+    echo ">CREATE GEOJSON FROM VRT"
+    ogr2ogr -f "$format" $output $vrt
+fi
 
 # insert into postgis table
 echo ">OVERWRITE AND INSERT TO TABLE -> '$schema'.'$table'"
-ogr2ogr -overwrite -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $output --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
+ogr2ogr -overwrite -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $vrt --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
 
 echo ">IMPORT SUCCESS"
 echo ">END PROCESS"

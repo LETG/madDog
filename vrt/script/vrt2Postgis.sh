@@ -17,11 +17,19 @@ schema="vougot"
 password=""
 db=""
 
-if [ -z $table ] || [ -z $vrt ]
+echo ">READ -> $fileName"
+
+if [ -z $host ] || [ -z $port ] || [ -z $user ] || [ -z $password ] || [ -z $schema ] || [ -z $db ]
 then
-    echo "-!-ARGS MISSING : table, vrt -> tableName fileName.vrt"
-    echo "-!-IMPORT FAIL"
-    echo ">END PROCESS"
+    echo "-X-DB CONNEXION INFOS MISSING -> END PROCESS "
+    exit 1
+fi
+
+if [ -z $table ] || [ -z $vrt ] || [ -z $layerName ] || [ -z $fileName ]
+then
+    echo "-X-ARGS MISSING -> USE THIS REQUIRED ARGS ORDER :"
+    echo " table file.vrt layerName sourceFileName"
+    echo "-X-IMPORT FAIL -> END PROCESS"
     exit 1
 fi
 
@@ -32,17 +40,16 @@ then
     ogr2ogr -f "$format" $output $vrt
 fi
 
+# create temporary vrt file for this layer source
 tempVrt="$table.vrt"
 cp -pr $vrt $tempVrt
-echo "$tempVrt"
 sed -i "s/LAYERNAME/$layerName/g" "$tempVrt"
 sed -i "s/FILENAME/$fileName/g" "$tempVrt"
 
 # insert into postgis table
-echo ">OVERWRITE AND INSERT TO TABLE -> '$schema'.'$table'"
+echo ">OVERWRITE AND INSERT TO TABLE -> '$schema.$table'"
 ogr2ogr -overwrite -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $tempVrt --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
 
-echo ">CLEAN TEMPORARY VRT FILE"
+# clean temporary VRT file
 rm $tempVrt
 echo ">IMPORT SUCCESS"
-echo ">END PROCESS"

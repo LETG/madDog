@@ -48,7 +48,7 @@ sed -i "s/FILENAME/$fileName/g" "$tempVrt"
 
 # insert into postgis table
 echo ">OVERWRITE AND INSERT TO TABLE -> '$schema.$table'"
-ogr2ogr -overwrite -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $tempVrt --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
+ogr2ogr -append -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $tempVrt --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
 
 # clean temporary VRT file
 rm $tempVrt

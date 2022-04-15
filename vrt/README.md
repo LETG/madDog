@@ -34,7 +34,7 @@ Ce script prend 5 paramètres dans cet ordre :
 - `fileName`: CSV contenant les données pour le VRT 
 - `output`: (optionnel) - Nom du fichier GEOJson à créé en sortie du VRT
 
-> Attention : Si la table existe déjà, le script va supprimer et recréer la table (`ogr2ogr -overwrite`).
+> Attention : le nom de la table est obligatoire  pour ajouter un objet dans la base
 
 2. **Configuration**
 

@@ -1,0 +1,6 @@
+{
+    "js": ["main.js"],
+    "css": "",
+    "html": "main.html",
+    "target": "main"
+}

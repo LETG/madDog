@@ -1,0 +1,9 @@
+{
+    "js": ["maddog.js"],
+    "css": [
+        "css/main.css",
+        "css/template.css"
+    ],
+    "html": "maddog.html",
+    "target": "page-content-wrapper"
+}

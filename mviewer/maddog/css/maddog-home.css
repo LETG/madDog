@@ -19,7 +19,17 @@
 	--mycolor2: #f79468;
 	--myfont: 'Roboto', sans-serif;
 }
+/* LETG */
 
+#map {
+	width:50%;
+	left: 0px;
+	margin-left: 0px !important;
+}
+#iconhelp i {
+    content: url(../../../img/house.svg)!important;
+    width: 18px;
+}
 
 /* Entête */
 

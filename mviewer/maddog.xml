@@ -29,7 +29,10 @@
     <searchparameters bbox="false" localities="true" features="false" />   
 
     <extensions>
-        <extension type="component" id="template" path="apps/maddog/addons"/>
+        <extension type="component" id="wfs2Fuse" path="apps/maddog/addons"/>
+        <extension type="component" id="axios" path="apps/maddog/addons"/>
+        <extension type="component" id="maddog" path="apps/maddog/addons"/>
+        <extension type="component" id="wps-js-52-north" path="apps/maddog/addons"/>
     </extensions>
 
     <themes>         
@@ -63,7 +66,17 @@
                     attribution="Source: indigeo" 
                     metadata=""
                     metadata-csw="" >
-		    </layer>                               
+		    </layer>      
+            <layer id="communes" name="Communes littoral" visible="true" queryable="true"
+                type="customlayer" opacity="0.8"
+                url="apps/maddog/customlayers/communes.js"
+                vectorlegend="false"
+                expanded="true"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}} "
+                attribution="Source: iuem.univ-brest.fr"
+                metadata=""
+                metadata-csw="">
+            </layer>    
         </theme>
     </themes>
 </config>

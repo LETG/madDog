@@ -1,0 +1,6 @@
+{
+    "js": ["js/wps-js-all.js"],
+    "css": [],
+    "html": "main.html",
+    "target": "page-content-wrapper"
+}

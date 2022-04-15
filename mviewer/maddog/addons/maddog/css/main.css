@@ -23,16 +23,6 @@
 	display:none !important;
 }
 
-#map {
-	left: 0px;
-	margin-left: 0px !important;
-}
-
-#iconhelp i {
-    content: url(../../../img/house.svg)!important;
-    width: 18px;
-}
-
 #backgroundlayerstoolbar-default {
     right: 51%;
 }

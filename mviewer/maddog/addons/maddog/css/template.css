@@ -11,6 +11,7 @@
 	--mycolor: #13344B;
 	--mycolor2: #f79468;
 	--myfont: 'Roboto', sans-serif;
+	--background: #f5f5f5;
 }
 
 
@@ -244,4 +245,33 @@ h3.modal-title {
 	font-weight: 400;
 	font-size: 16px;
 	font-style: italic;
+}
+
+.autocomplete-result {
+	background-color: var(--background);
+	position: absolute;
+	z-index: 10000000;
+	border: 1px solid var(--background);
+	border-radius: 4px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	line-height: 1.6;
+	max-height: 250px;
+	overflow: auto;
+}
+
+.autocomplete-category-title {
+	overflow-x:hidden;
+	padding-top:5px;
+	font-size: 15px;
+	color: var(--mycolor2);
+}
+
+.autocomplete-li {
+	overflow-x:hidden;
+	padding-top:5px;
+}
+
+.autocomplete-li > a {
+	font-size: 13px;
 }

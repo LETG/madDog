@@ -19,7 +19,6 @@ const searchComm = (function () {
             if (!Fuse) {
                 return;
             }
-            console.log(axios);
             axios.get(wfsComm)
                 .then(({data}) => {
                     console.log("test");

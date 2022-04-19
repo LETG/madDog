@@ -26,7 +26,7 @@
     </baselayers>     
     <proxy url=""/>
     <olscompletion url="https://api-adresse.data.gouv.fr/search/" type="ban"/>
-    <searchparameters bbox="false" localities="true" features="false" />   
+    <searchparameters bbox="false" localities="false" features="false" />   
 
     <extensions>
         <extension type="component" id="wfs2Fuse" path="apps/maddog/addons"/>

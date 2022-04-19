@@ -2,5 +2,8 @@
     "js": ["main.js"],
     "css": "",
     "html": "main.html",
-    "target": "main"
+    "target": "main",
+    "options": {
+        "limit": 5
+    }
 }

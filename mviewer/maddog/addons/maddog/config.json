@@ -1,9 +1,18 @@
 {
-    "js": ["maddog.js"],
+    "js": [
+        "js/utils/autocomplete.js",
+        "js/lib/bootstrap-autocomplete.js",
+        "maddog.js"
+    ],
     "css": [
         "css/main.css",
         "css/template.css"
     ],
     "html": "maddog.html",
-    "target": "page-content-wrapper"
+    "target": "page-content-wrapper",
+    "options": {
+        "communesJsonUrl": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acomm3857&outputFormat=application%2Fjson",
+        "siteJsonUrl": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Aemprises&&outputFormat=application%2Fjson",
+        "searchLimit": 10
+    }
 }

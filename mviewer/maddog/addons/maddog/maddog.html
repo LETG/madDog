@@ -12,35 +12,14 @@
                  <div class="input-group">
                     <span class="input-group-addon search-picto" ><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
                     </span>
-                    <input type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Baie de Goulven">
+                    <input id="input-autocomplete" type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Baie de Goulven">
                  </div>
-                 <p class="italic text-small">Lancer la recherche avec la loupe</p>
+                 <!-- <p class="italic text-small">Lancer la recherche avec la loupe</p> -->
               </div>
-              <div class="autocomplete-list autocomplete-result col-sm-12" style="display:none;"></div>
-           </div>
-           <!--RADIO-->
-           <div class="col-sm-10 col-md-5" id="search-radio" >
-              <!--SIte d'étude-->
-              <input type="radio" id="ch-site" name="search" value="site" checked >
-              <label for="ch-site">Site d'étude</label>
-              <!--Commune-->
-              <input type="radio" id="ch-commune" name="search" value="commune" >
-              <label for="ch-commune">Commune littorale</label>
+              <div class="autocomplete-result col-sm-12" style="display:none;"></div>
            </div>
         </div>
         <!--/.INPUT FIELD-->
-        <!--TOGGLE BUTTON-->
-        <div class="row col-sm-12 pad-0">
-           <div class="form-group" style="display: flex;">
-              <div class="col-sm-3 col-md-2" style="display: inline-flex; width: 70px;">
-                 <input type="checkbox" id="switch">
-                 <label for="switch" class="toggle-label">Toggle</label>
-              </div>
-              <div class="col-sm-8 col-md-9 pad-0">
-                 <p>Afficher les communes littorales sur la carte</p>
-              </div>
-           </div>
-        </div>
      </div>
      <!-- /.Selection de la zone --> 
      <!-- Visualisation des résultats -->

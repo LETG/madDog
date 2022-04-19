@@ -81,12 +81,13 @@
      * Display list result
      * @param {Object} results from JSON parsed response
      */
-     displayList(results) {
+     displayList(results, select = () => {}, hover = () => {}) {
          this.closeAllLists();
-         console.log("test");
         // parse results
         if (this.html) {
             this.listTarget.append(results);
+            this.listTarget.find("a").click(select);
+            this.listTarget.find("a").hover(hover);
         }
 
         this.listTarget.show();

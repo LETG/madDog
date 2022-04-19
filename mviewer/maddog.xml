@@ -11,7 +11,7 @@
         measuretools="true" 
         exportpng="true" 
         style="apps/maddog/css/maddog-theme.css" />
-    <mapoptions maxzoom="19" projection="EPSG:3857" center="-349164.37,6144925.57790189" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
+    <mapoptions maxzoom="19" projection="EPSG:3857" center="-475802.67385310325, 6177784.8613143535" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="default"><!-- style="default"||gallery" -->
         <baselayer  type="OSM" id="darkmatter" label="Dark Matter" title="CartoDb" thumbgallery="img/basemap/darkmatter.png" 
@@ -37,37 +37,43 @@
 
     <themes>         
         <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
-        	<layer id="emprises_ligne_de_reference" name="Emprise de réference"  visible="true" 
-                    infoformat="application/vnd.ogc.gml"
-                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
-                    legendurl="" 
-                    queryable="true"
-                    attribution="Source: Indigeo" 
-                    tooltip="true" fields="site" tooltipenabled="true"
-                    metadata=""
-                    metadata-csw="" >
-		    </layer>                               
+        	<layer id="communes_intersect" name="Emprises des lignes de référence"  visible="true" 
+                infoformat="application/vnd.ogc.gml"
+                index="2"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
+                legendurl="" 
+                queryable="true"
+                infopanel="bottom-panel"
+                attribution="Source: indigeo"
+                metadata=""
+                metadata-csw="" >
+		    </layer>                           
         </theme>
         <theme name="Traits"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
-        	<layer id="trait_de_cote" name="Trait de côte"  visible="false" 
-                    infoformat="application/vnd.ogc.gml"
-                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
-                    legendurl=""
-                    queryable="true" 
-                    attribution="Source: indigeo" 
-                    metadata=""
-                    metadata-csw="" >
+        	<layer id="trait_de_cote" name="Trait de côte"  visible="false"
+                index="3"
+                infoformat="application/vnd.ogc.gml"
+                infopanel="bottom-panel"
+                url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
+                legendurl=""
+                queryable="true" 
+                attribution="Source: indigeo"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"
+                metadata=""
+                metadata-csw="" >
 		    </layer>                               
-        	<layer id="ligne_de_reference" name="Lignes de référence"  visible="true" 
-                    infoformat="application/vnd.ogc.gml"
-                    url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
-                    legendurl="" 
-                    queryable="true"
-                    attribution="Source: indigeo" 
-                    metadata=""
-                    metadata-csw="" >
-		    </layer>      
-            <layer id="communes" name="Communes littoral" visible="true" queryable="true"
+        	<layer id="emprises_buffer" name="Communes des lignes de référence"  visible="true" 
+                index="1"
+                infopanel="bottom-panel"
+                infoformat="application/vnd.ogc.gml"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
+                legendurl="" 
+                queryable="true"
+                attribution="Source: indigeo"
+                metadata=""
+                metadata-csw="" >
+		    </layer>
+            <!-- <layer id="communes" name="Communes littoral" visible="true" queryable="true"
                 type="customlayer" opacity="0.8"
                 url="apps/maddog/customlayers/communes.js"
                 vectorlegend="false"
@@ -76,7 +82,7 @@
                 attribution="Source: iuem.univ-brest.fr"
                 metadata=""
                 metadata-csw="">
-            </layer>    
+            </layer>     -->
         </theme>
     </themes>
 </config>

@@ -20,11 +20,18 @@
 	--myfont: 'Roboto', sans-serif;
 }
 /* LETG */
-
+#bottom-panel.active {
+	left: 0 !important;
+    margin: 0 !important;
+    padding-right: 0 !important;
+}
 #map {
 	width:50%;
 	left: 0px;
 	margin-left: 0px !important;
+}
+.ol-viewport {
+	width: 50%;
 }
 #iconhelp i {
     content: url(../../../img/house.svg)!important;

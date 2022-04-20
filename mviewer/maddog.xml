@@ -35,7 +35,7 @@
         <extension type="component" id="wps-js-52-north" path="apps/maddog/addons"/>
     </extensions>
 
-    <themes>         
+    <themes legendmini="true">         
         <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
         	<layer id="communes_intersect" name="Emprises des lignes de référence"  visible="true" 
                 infoformat="application/vnd.ogc.gml"
@@ -64,6 +64,7 @@
 		    </layer>                               
         	<layer id="emprises_buffer" name="Communes des lignes de référence"  visible="true" 
                 index="1"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{id}}"
                 infopanel="bottom-panel"
                 infoformat="application/vnd.ogc.gml"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
@@ -73,7 +74,8 @@
                 metadata=""
                 metadata-csw="" >
 		    </layer>
-            <!-- <layer id="communes" name="Communes littoral" visible="true" queryable="true"
+            <layer id="communes" name="Communes littoral" visible="true" queryable="true"
+                showintoc="true"
                 type="customlayer" opacity="0.8"
                 url="apps/maddog/customlayers/communes.js"
                 vectorlegend="false"
@@ -82,7 +84,7 @@
                 attribution="Source: iuem.univ-brest.fr"
                 metadata=""
                 metadata-csw="">
-            </layer>     -->
+            </layer>
         </theme>
     </themes>
 </config>

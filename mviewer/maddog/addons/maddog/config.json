@@ -1,5 +1,6 @@
 {
     "js": [
+        "js/utils/tools.js",
         "js/utils/autocomplete.js",
         "js/lib/bootstrap-autocomplete.js",
         "maddog.js"
@@ -11,8 +12,20 @@
     "html": "maddog.html",
     "target": "page-content-wrapper",
     "options": {
-        "communesJsonUrl": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acomm3857&outputFormat=application%2Fjson",
-        "siteJsonUrl": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Aemprises&&outputFormat=application%2Fjson",
+        "communes": {
+            "url": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acommunes_intersect&outputFormat=application%2Fjson",
+            "fuseOptions": {
+                "keys": ["nom"],
+                "threshold": 0.3
+            }
+        },
+        "sites": {
+            "url": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Aemprises&&outputFormat=application%2Fjson",
+            "fuseOptions": {
+                "keys": ["id"],
+                "threshold": 0.3
+            }
+        },
         "searchLimit": 10
     }
 }

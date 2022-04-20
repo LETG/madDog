@@ -1,36 +1,23 @@
-const searchComm = (function () {
-    const wfsComm = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acomm3857&outputFormat=application%2Fjson"
-
-    let fuse = null;
-
-    const prepareFuse = (list) => {
-        console.log(list);
-        const options = {
-            includeScore: true
-        }
-        console.log(list);
-        const fuse = new Fuse(list, options);
-    }
-    
+const tools = (function () {
     return {
-        init: () => {
-            let list = [];
-
-            if (!Fuse) {
-                return;
-            }
-            axios.get(wfsComm)
-                .then(({data}) => {
-                    console.log("test");
-                    if (!data?.totalFeatures) return;
-                    const noms = data.features.map(d => d.properties.nom);
-                    prepareFuse(noms);
-                })
-                .catch(error => reject([]))
+        init: () => console.log(_this),
+        waitPlugin: (id, ready) => new Promise((resolve, reject) => {
+            
+            if (!ready) {
+                document.addEventListener(`${id}-componentLoaded`, resolve(true));
+            } else {resolve(true)}
+        }),
+        initFuseSearch : (id, onSearch) => {
+            wfs2Fuse.initSearch(
+                getCfg(`config.options.${id}.url`),
+                getCfg(`config.options.${id}.fuseOptions`),
+                id,
+                (d) => {maddog[id] = d}
+            ).then(t => {
+                // create search func
+                onSearch(t)
+            });
         },
-        search: (text) => {
-            return fuse.search(text);
-        }
-    }
 
+    }
 })();

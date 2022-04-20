@@ -505,6 +505,7 @@ span.fa.mv-time-player {
    font-family: var(--myfont);
    font-size: 12px;
    padding: 20px 15px!important;
+   color: white !important;
 }
 
 .popover-content p {

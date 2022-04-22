@@ -1,7 +1,7 @@
 <OGRVRTDataSource>
-    <OGRVRTLayer name="PRF6_VOUGOT">
-        <SrcDataSource>PRF6_VOUGOT_20110617.csv</SrcDataSource>
-        <GeometryType>wkbPoint</GeometryType>
+    <OGRVRTLayer name="REF">
+        <SrcDataSource></SrcDataSource>
+        <GeometryType>wkbLineString</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
         <FID name="id"/>
         <Field name="identifiant" type="Integer"/>

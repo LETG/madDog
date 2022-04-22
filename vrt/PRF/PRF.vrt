@@ -1,6 +1,6 @@
 <OGRVRTDataSource>
-    <OGRVRTLayer name="TDC1_VOUGUOT">
-        <SrcDataSource>TDC1_VOUGOT_19520611.csv</SrcDataSource>
+    <OGRVRTLayer name="PRF">
+        <SrcDataSource></SrcDataSource>
         <GeometryType>wkbPoint</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
         <FID name="id"/>

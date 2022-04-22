@@ -1,6 +1,6 @@
 <OGRVRTDataSource>
-    <OGRVRTLayer name="MNT1_VOUGOT">
-        <SrcDataSource>MNT1_VOUGOT_20050701.csv</SrcDataSource>
+    <OGRVRTLayer name="MNT">
+        <SrcDataSource></SrcDataSource>
         <GeometryType>wkbPoint</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
         <Field name="id"/>

@@ -33,14 +33,47 @@ vrtFile="$type/$type.vrt"
 # update SrcDataSource
 # create temporary vrt file for this layer source
 tempVrt="current.vrt"
+tempType="TMP$type"
+if [ $type = "MNT" ]
+then
+    tempType="MNT"
+fi
+echo ">TempType -> $tempType"
 cp -pr $vrtFile $tempVrt
 escapedFileName=$(echo $fileName | sed 's_/_\\/_g')
+
+sed -i "s/LAYERNAME/$(basename ${fileName} .csv)/g" $tempVrt
 sed -i "s/<SrcDataSource>/<SrcDataSource>$escapedFileName/g" $tempVrt
 
-#ogr2ogr -append -f "PostgreSQL" PG:"host='$host' user='$user' dbname='$db' password='$password' schemas='$schema'" $tempVrt --config SCHEMA='$schema' PG_USE_COPY=YES -lco GEOMETRY_NAME=geom -nln "$table"
+ogr2ogr -f "GEOJson" points.geojson $tempVrt 
 
-ogr2ogr -f "GEOJson" data.geojson $tempVrt
+ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tempType" $tempVrt
+
+if [[ $type == "REF" ]]
+then
+    echo "Import LineREF"
+    ## Need to add date
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, geom) SELECT '$idSite', ST_Makeline(wkb_geometry) FROM (SELECT wkb_geometry FROM $tempType ORDER BY linepos) as allPoints;"
+    #DROP TempTable
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $tempType;"
+elif [[ $type == "TDC" ]]
+then
+    echo "TDC"
+    ## Need to add date and TDC number
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO TDC(idSite, geom) SELECT '$idSite', ST_Makeline(wkb_geometry) FROM (SELECT wkb_geometry FROM $tempType ORDER BY linepos) as allPoints;"
+    #DROP TempTable
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $tempType;"
+elif [[ $type == "PRF" ]]
+then
+    echo "PRF"
+    ## Need to add date and PRF number
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO PRF(idSite, geom) SELECT '$idSite', ST_Makeline(wkb_geometry) FROM (SELECT wkb_geometry FROM $tempType ORDER BY linepos) as allPoints;"
+    #DROP TempTable
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $tempType;"
+fi
 
 # clean temporary VRT file
+rm $tempVrt
+rm points.geojson
 
 echo ">IMPORT SUCCESS"

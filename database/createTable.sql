@@ -78,3 +78,5 @@ CREATE TABLE profil(
    FOREIGN KEY(id_survey) REFERENCES survey(id_survey),
    FOREIGN KEY(id_measure_type) REFERENCES measure_type(id_measure_type)
 );
+
+

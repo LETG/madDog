@@ -1,11 +1,10 @@
 <OGRVRTDataSource>
-    <OGRVRTLayer name="PRF">
+    <OGRVRTLayer name="LAYERNAME">
         <SrcDataSource></SrcDataSource>
         <GeometryType>wkbPoint</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
-        <FID name="id"/>
-        <Field name="identifiant" type="Integer"/>
+        <Field name="linepos" type="Integer" src="id"/>
         <Field name="date" type="Date"/>
-        <GeometryField encoding="PointFromColumns" x="x" y="y" z="z"/>
+        <GeometryField encoding="PointFromColumns" x="x" y="y"/>
     </OGRVRTLayer>
 </OGRVRTDataSource>

@@ -33,6 +33,7 @@
         <extension type="component" id="axios" path="apps/maddog/addons"/>
         <extension type="component" id="maddog" path="apps/maddog/addons"/>
         <extension type="component" id="wps-js-52-north" path="apps/maddog/addons"/>
+        <extension type="javascript" src="apps/maddog/addons/wps-js/wps-js-all.min.js"/>
     </extensions>
 
     <themes legendmini="true">         

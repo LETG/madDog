@@ -29,59 +29,81 @@
     <searchparameters bbox="false" localities="false" features="false" />   
 
     <extensions>
-        <extension type="component" id="wfs2Fuse" path="apps/maddog/addons"/>
-        <extension type="component" id="axios" path="apps/maddog/addons"/>
+        <extension type="javascript" id="wps-js-52-north" src="apps/maddog/addons/wps-js-52-north/js/wps-js-all.js"/>
+        <extension type="javascript" id="wfs2Fuse" src="apps/maddog/addons/wfs2Fuse/main.js"/>
+        <extension type="javascript" id="axios" src="apps/maddog/addons/axios/axios.min.js"/>
         <extension type="component" id="maddog" path="apps/maddog/addons"/>
-        <extension type="component" id="wps-js-52-north" path="apps/maddog/addons"/>
-        <extension type="javascript" src="apps/maddog/addons/wps-js/wps-js-all.min.js"/>
     </extensions>
 
     <themes legendmini="true">         
         <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
-        	<layer id="communes_intersect" name="Emprises des lignes de référence"  visible="true" 
+        	<layer id="communewithsite" name="Communes contenant un site d'étude"  visible="true" 
                 infoformat="application/vnd.ogc.gml"
                 index="2"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
                 legendurl="" 
-                queryable="true"
+                queryable="false"
                 infopanel="bottom-panel"
                 attribution="Source: indigeo"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{epci}}"
                 metadata=""
                 metadata-csw="" >
 		    </layer>                           
         </theme>
         <theme name="Traits"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
-        	<layer id="trait_de_cote" name="Trait de côte"  visible="false"
+        	<layer id="tdc" name="Traits de côte"  visible="true"
                 index="3"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
-                url="https://portail.indigeo.fr/geoserver/LETG-BREST/wms"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
                 legendurl=""
-                queryable="true" 
+                queryable="false" 
                 attribution="Source: indigeo"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"
                 metadata=""
                 metadata-csw="" >
 		    </layer>                               
-        	<layer id="emprises_buffer" name="Communes des lignes de référence"  visible="true" 
+		<layer id="prf" name="Profils de plages"  visible="true"
+                index="3"
+                infoformat="application/vnd.ogc.gml"
+                infopanel="bottom-panel"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
+                legendurl=""
+                queryable="false" 
+                attribution="Source: indigeo"
+                tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
+                metadata=""
+                metadata-csw="" >
+                </layer>                    
+		<layer id="mnt" name="Modèle numérique de terrain"  visible="false"
+                index="3"
+                infoformat="application/vnd.ogc.gml"
+                infopanel="bottom-panel"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
+                legendurl=""
+                queryable="false" 
+                attribution="Source: indigeo"
+                metadata=""
+                metadata-csw="" >
+                    </layer>            
+
+		<layer id="sitebuffer" name="Sites d'étude"  visible="true" 
                 index="1"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{id}}"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
                 infopanel="bottom-panel"
                 infoformat="application/vnd.ogc.gml"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
                 legendurl="" 
-                queryable="true"
+                queryable="false"
                 attribution="Source: indigeo"
                 metadata=""
                 metadata-csw="" >
-		    </layer>
-            <layer id="communes" name="Communes littoral" visible="true" queryable="true"
-                showintoc="true"
+	        </layer>
+            <layer id="radiales" name="Communes littoral" visible="true" queryable="true"
                 type="customlayer" opacity="0.8"
-                url="apps/maddog/customlayers/communes.js"
-                vectorlegend="false"
+                toplayer="true"
+                url="apps/maddog/customlayers/radiales.js"
+                vectorlegend="true"
                 expanded="true"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}} "
                 attribution="Source: iuem.univ-brest.fr"
                 metadata=""
                 metadata-csw="">

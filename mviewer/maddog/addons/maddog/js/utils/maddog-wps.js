@@ -89,7 +89,7 @@ const wps = (function () {
                 radialDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("radialDistance", null, null, radialDistance),
                 radialDirection: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("radialDirection", null, null, radialDirection),
                 coaslines: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
-                    "Coaslines",
+                    "coaslines",
                     "application/json",
                     "",
                     null,

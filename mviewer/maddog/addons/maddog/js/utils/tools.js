@@ -114,7 +114,13 @@ const tools = (function () {
                 fill: new ol.style.Fill({color:"red"}),
                 stroke: new ol.style.Stroke({color: "black", width: 2})
             });
+
+            // save with EPSG:2154 for getDistance WPS
+            maddog.radiales2154 = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(r.executeResponse.responseDocument);
             
+            // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
             }).readFeatures(r.executeResponse.responseDocument, {

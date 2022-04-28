@@ -51,7 +51,14 @@ const maddog = (function () {
         zoomFeatureExtent = feature.getGeometry().getExtent();
     }
 
-    const onSelect = (i) => tools.zoomToExtent(zoomFeatureExtent);
+    const onSelect = (i) => {
+        tools.zoomToExtent(zoomFeatureExtent);
+        const type = i.target.getAttribute("type");
+        if (type === "sites") {
+            tools.getReferenceLine(i.target.getAttribute("value"))
+            document.getElementById("siteName").innerHTML = i.target.getAttribute("value");
+        }
+    };
 
     const displayAutocompleteList = (inputEvt) => {
         const value = inputEvt.target.value;
@@ -70,7 +77,6 @@ const maddog = (function () {
         searchComm: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "communes") : "",
         searchSite: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "sites") : "",
         getCfg: (i) => _.get(mviewer.customComponents.maddog, i),
-        radiales: [],
         init: function () {
             // wait all plugin as required dependancies
             let waitAll = [
@@ -93,7 +99,7 @@ const maddog = (function () {
                 maddog.setDrawRadialConfig({
                     callback: tools.addRadiales, 
                     wpsService: wpsService,
-                    referenceLine: '<![CDATA[{"type":"FeatureCollection","features":[{"type":"Feature","id":"lineref.8","geometry":{"type":"LineString","coordinates":[[152059.7779,6863515.198],[152063.7083,6863506.068],[152063.9357,6863488.96],[152057.5771,6863467.537],[152045.7074,6863439.607],[152019.9777,6863407.949],[151959.6231,6863358.466],[151885.0617,6863317.661],[151791.9543,6863278.433],[151670.1483,6863220.874],[151617.0797,6863189.891],[151568.1792,6863144.599],[151497.3646,6863036.668],[151393.3409,6862881.891],[151305.2707,6862758.394],[151227.4553,6862667.65],[151118.1207,6862562.882],[150981.7434,6862468.323],[150877.0335,6862406.345],[150812.3509,6862351.186]]},"geometry_name":"geom","properties":{"ogc_fid":8,"idsite":"VOUGOT","creationdate":null}}],"totalFeatures":1,"numberMatched":1,"numberReturned":1,"timeStamp":"2022-04-27T14:09:00.059Z","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::2154"}}}]]>',
+                    referenceLine: '',
                     radialLength: 100,
                     radialDistance: 10,
                     radialDirection: true,
@@ -105,6 +111,7 @@ const maddog = (function () {
                 tools.initButton("drawRadialBtn", () => {
                     wps.drawRadial(maddog.drawRadialConfig);
                 });
+                tools.initEmpriseClickCtrl("sitebuffer");
             });
         },
         setDrawRadialConfig: (param) => {

@@ -3,6 +3,17 @@ const tools = (function () {
     var create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
     document.dispatchEvent(create);
+
+    const defaultClickedStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0)',
+        }),
+        stroke: new ol.style.Stroke({
+            color: 'rgba(55, 52, 79)',
+            width: 1.4,
+        })
+    });
+
     return {
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),
@@ -57,6 +68,35 @@ const tools = (function () {
         ),
         initButton: (buttonId, action) => {
             document.getElementById(buttonId).onclick = action;
+        },
+        initEmpriseClickCtrl: (layerId, style = defaultClickedStyle) => {
+            
+            mviewer.getMap().on('singleclick', function (evt) {
+                document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
+                const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
+                const url = mviewer.getLayer("sitebuffer").layer.getSource().getFeatureInfoUrl(
+                    evt.coordinate,
+                    viewResolution,
+                    'EPSG:3857',
+                    { 'INFO_FORMAT': 'application/json' }
+                );
+                if (url) {
+                  axios.get(url)
+                      .then((response) => response.data.features ? response.data.features[0] : [])
+                      .then((feature) => {
+                            document.getElementById("siteName").innerHTML = feature.properties.idsite;
+                            tools.getReferenceLine(feature.properties.idsite)
+                      })
+                }
+              });
+
+        },
+        getReferenceLine: (idsite) => {
+            const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            axios.get(`${lineRefUrl}'${idsite}'`)
+                .then(lineRef => lineRef.data.features ? lineRef.data.features[0] : [])
+                .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
+                .then(geojson => maddog.setDrawRadialConfig({ referenceLine: geojson }));
         },
         addRadiales: (r) => {
             let layer = mviewer.getLayer("radiales").layer;

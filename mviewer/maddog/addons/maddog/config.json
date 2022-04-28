@@ -18,14 +18,16 @@
             "fuseOptions": {
                 "keys": ["nom"],
                 "threshold": 0.3
-            }
+            },
+            "idField": "insee"
         },
         "sites": {
             "url": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Asitebuffer&outputFormat=application%2Fjson",
             "fuseOptions": {
                 "keys": ["idsite"],
                 "threshold": 0.3
-            }
+            },
+            "idField": "idsite"
         },
         "searchLimit": 10,
         "wps": {

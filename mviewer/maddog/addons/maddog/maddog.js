@@ -42,8 +42,10 @@ const maddog = (function () {
     };
 
     const onHover = (i) => {
+        const type = i.target.getAttribute("type");
+        const idField = maddog.getCfg(`config.options.${type}.idField`);
         const featureId = i.target.getAttribute("value");
-        let feature = maddog[i.target.getAttribute("type")].features.filter(f => f.properties.id.toString() === featureId.toString())[0];
+        let feature = maddog[type].features.filter(f => f.properties[idField].toString() === featureId.toString())[0];
         feature = GEOJSON.readFeature(feature);
         tools.featureToOverlay(feature);
         zoomFeatureExtent = feature.getGeometry().getExtent();
@@ -56,8 +58,8 @@ const maddog = (function () {
         maddog.searchComm(value).then(communesResult => maddog.searchSite(value).then(sitesResult => {
             const html = [
                 '<span id="test-autocomplete">',
-                ...createList(communesResult, 'nom', 'nom',  'Communes', 'communes'),
-                ...createList(sitesResult, 'idsite', 'idsite', 'Sites', 'sites'),
+                ...createList(communesResult, maddog.getCfg("config.options.communes.idField"), 'nom',  'Communes', 'communes'),
+                ...createList(sitesResult, maddog.getCfg("config.options.sites.idField"), 'idsite', 'Sites', 'sites'),
                 '</span>'
             ];
             maddog.autocomplete.display(html.join(""), onSelect, onHover );

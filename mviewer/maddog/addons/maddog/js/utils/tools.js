@@ -59,7 +59,6 @@ const tools = (function () {
             document.getElementById(buttonId).onclick = action;
         },
         addRadiales: (r) => {
-            
             let layer = mviewer.getLayer("radiales").layer;
 
             var style = new ol.style.Style({
@@ -74,13 +73,12 @@ const tools = (function () {
                 featureProjection: 'EPSG:3857'
             });
 
-            mviewer.getMap().getView().fit(features[0].getGeometry(),{duration:500});
-
             features.forEach(f => f.setStyle(style));
             
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
 
+            tools.zoomToExtent(layer.getSource().getExtent());
         }
     }
 })();

@@ -1,14 +1,9 @@
-
-drop table IF EXISTS MEASURE_TYPE;
-
 CREATE TABLE measure_type(
    id_measure_type SERIAL,
    type_measure VARCHAR(50)  NOT NULL,
    description_measure VARCHAR(100) ,
    PRIMARY KEY(id_measure_type)
 );
-
-drop table IF EXISTS site; 
 
 CREATE TABLE site(
    id_site SERIAL,
@@ -18,8 +13,6 @@ CREATE TABLE site(
    PRIMARY KEY(id_site)
 );
 
-drop table IF EXISTS operator;
-
 CREATE TABLE operator(
    id_operator SERIAL,
    type_operator VARCHAR(100) ,
@@ -27,16 +20,12 @@ CREATE TABLE operator(
    PRIMARY KEY(id_operator)
 );
 
-drop table IF EXISTS equipment;
-
 CREATE TABLE equipment(
    id_equipment SERIAL,
    name_equipment VARCHAR(50) ,
    description_equipment VARCHAR(50) ,
    PRIMARY KEY(id_equipment)
 );
-
-drop table IF EXISTS survey;
 
 CREATE TABLE survey(
    id_survey SERIAL,
@@ -47,8 +36,6 @@ CREATE TABLE survey(
    PRIMARY KEY(id_survey),
    FOREIGN KEY(id_site) REFERENCES site(id_site)
 );
-
-drop table IF EXISTS measure;
 
 CREATE TABLE measure(
    id_measure SERIAL,
@@ -67,8 +54,6 @@ CREATE TABLE measure(
    FOREIGN KEY(id_operator) REFERENCES operator(id_operator),
    FOREIGN KEY(id_survey) REFERENCES survey(id_survey)
 );
-
-drop table IF EXISTS profil;
 
 CREATE TABLE profil(
    id_survey INTEGER,

@@ -1,3 +1,4 @@
+
 -- Création d'un buffer autour du centroîd de la ligne de réference du site
 CREATE MATERIALIZED VIEW sitebuffer AS 
 	SELECT
@@ -12,8 +13,6 @@ CREATE MATERIALIZED VIEW sitebuffer AS
 	) AS sitebuffer ;
 
 ALTER TABLE sitebuffer OWNER TO maddog;
-
--- NEED TO CREATE INDEX on geom
 
 -- Create communewithsite 
 -- DROP MATERIALIZED VIEW communewithsite ;

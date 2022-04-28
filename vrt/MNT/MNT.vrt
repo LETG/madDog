@@ -3,7 +3,7 @@
         <SrcDataSource></SrcDataSource>
         <GeometryType>wkbPoint25D</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
-        <Field name="id"/>
+         <Field name="position" src="id"/>
         <Field name="identifiant" type="String"/>
         <Field name="date" type="Date"/>
         <GeometryField encoding="PointFromColumns" x="x" y="y" z="z"/>

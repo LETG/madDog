@@ -1,83 +1,85 @@
 <!-- Template Dekstop -->
 <div class="template-panel panel">
-  <div class="panel-body">
-     <!-- Selection de la zone -->
-     <div class="row blockContainer" id="selectZone">
-        <h3 class="modal-title">Sélectionner un site d'étude</h3>
-        <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
-        <!--INPUT FIELD-->
-        <div class="row col-sm-12 pad-0" style="margin-top: 10px;">
-           <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
-              <div class="form-group form-autocomplete">
-                 <div class="input-group">
-                    <span class="input-group-addon search-picto" ><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
-                    </span>
-                    <input id="input-autocomplete" type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Plouguerneau">
-                 </div>
-                 <!-- <p class="italic text-small">Lancer la recherche avec la loupe</p> -->
-              </div>
-              <div class="autocomplete-result col-sm-12" style="display:none;"></div>
+   <div class="panel-body">
+       <!-- Selection de la zone -->
+       <div class="row blockContainer" id="selectZone">
+           <h3 class="modal-title">Sélectionner un site d'étude</h3>
+           <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
+           <!--INPUT FIELD-->
+           <div class="row col-sm-12 pad-0" style="margin-top: 10px;">
+               <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
+                   <div class="form-group form-autocomplete">
+                       <div class="input-group">
+                           <span class="input-group-addon search-picto"><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
+                           </span>
+                           <input id="input-autocomplete" type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Plouguerneau">
+                       </div>
+                       <!-- <p class="italic text-small">Lancer la recherche avec la loupe</p> -->
+                   </div>
+                   <div class="autocomplete-result col-sm-12" style="display:none;"></div>
+               </div>
            </div>
-        </div>
-        <!--/.INPUT FIELD-->
-     </div>
-     <!-- /.Selection de la zone --> 
-     <!-- Visualisation des résultats -->
-     <div class="row blockContainer" id="resultZone">
-        <h3 class="modal-title">Visualiser l'évolution du littoral sur le site d'étude</h3>
-        <div class="row col-sm-12 pad-0 select-info mbt-0">
-           <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> Sillon du Diben Pénerf (Morbihan)</p>
-        </div>
-        <!-- Onglets Services -->
-        <div class="row col-sm-12">
-           <!--NavTab-->
-           <ul class="nav nav-tabs nav-justified">
-              <li class="active"><a href="#Service1" data-toggle="tab">Trait de côte</a></li>
-              <li><a href="#Service2" data-toggle="tab">Profils de la plage</a></li>
-              <li><a href="#Service3" data-toggle="tab">MNT</a></li>
-           </ul>
-           <!--/.NavTab-->  
-           <!--Tab-->    
-           <div class="tab-content">
-              <div id="Service1" class="tab-pane fade in active">
-                 <h4 class="service-title">Calcul de la cinématique du trait de côte <br> 
-                    <span class="service-subtitle">(Méthode ligne de référence et radiale)</span>
-                 </h4>
-                 <p>Paramètres du service + Visualisation des résultats</p>
-              </div>
-              <div id="Service2" class="tab-pane fade">
-                 <h4 class="service-title">Calcul du bilan sédimentaire<br> 
-                    <span class="service-subtitle">(à partir de profils de plage)</span>
-                 </h4>
-                 <p>Paramètres du service + Visualisation des résultats</p>
-              </div>
-              <div id="Service3" class="tab-pane fade">
-                 <h4 class="service-title">Calcul des changements morphologiques surfaciques du domaine littoral<br> 
-                    <span class="service-subtitle">(à partir de Modèles Numériques de Terrains (MNT))</span>
-                 </h4>
-                 <p>Paramètres du service + Visualisation des résultats</p>
-              </div>
+           <!--/.INPUT FIELD-->
+       </div>
+       <!-- /.Selection de la zone -->
+       <!-- Visualisation des résultats -->
+       <div class="row blockContainer" id="resultZone">
+           <h3 class="modal-title">Visualiser l'évolution du littoral sur le site d'étude</h3>
+           <div class="row col-sm-12 pad-0 select-info mbt-0">
+               <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> Sillon du Diben Pénerf (Morbihan)</p>
            </div>
-           <!--/.Tab-->  
-        </div>
-        <!-- /.Onglets Services -->
-     </div>
-     <!-- /.Visualisation des résultats -->  
-  </div>
+           <!-- Onglets Services -->
+           <div class="row col-sm-12">
+               <!--NavTab-->
+               <ul class="nav nav-tabs nav-justified">
+                   <li class="active"><a href="#tdcTab" data-toggle="tab">Trait de côte</a></li>
+                   <li><a href="#profile" data-toggle="tab">Profils de la plage</a></li>
+                   <li><a href="#mnt" data-toggle="tab">MNT</a></li>
+               </ul>
+               <!--/.NavTab-->
+               <!--Tab-->
+               <div class="tab-content">
+                   <div id="tdcTab" class="tab-pane fade in active">
+                       <h4 class="service-title">Calcul de la cinématique du trait de côte <br>
+                           <span class="service-subtitle">(Méthode ligne de référence et radiale)</span>
+                       </h4>
+                       <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
+                           Post-traitement
+                       </button>
+                   </div>
+                   <div id="profile" class="tab-pane fade">
+                       <h4 class="service-title">Calcul du bilan sédimentaire<br>
+                           <span class="service-subtitle">(à partir de profils de plage)</span>
+                       </h4>
+                       <p>Paramètres du service + Visualisation des résultats</p>
+                   </div>
+                   <div id="mnt" class="tab-pane fade">
+                       <h4 class="service-title">Calcul des changements morphologiques surfaciques du domaine littoral<br>
+                           <span class="service-subtitle">(à partir de Modèles Numériques de Terrains (MNT))</span>
+                       </h4>
+                       <p>Paramètres du service + Visualisation des résultats</p>
+                   </div>
+               </div>
+               <!--/.Tab-->
+           </div>
+           <!-- /.Onglets Services -->
+       </div>
+       <!-- /.Visualisation des résultats -->
+   </div>
 </div>
 <!-- /.Template Dekstop -->
 <!-- Template Mobile -->
 <div class="modal fade" id="template-modal" role="dialog">
-  <div class="modal-dialog">
-     <!-- Modal content-->
-     <div class="modal-content">
-        <div class="modal-header">
-           <button type="button" id="template-modal-close" class="close" data-dismiss="modal">×</button>
-        </div>
-        <div class="modal-body">
-           <p>Volet d'information - mode mobile</p>
-        </div>
-     </div>
-  </div>
+   <div class="modal-dialog">
+       <!-- Modal content-->
+       <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" id="template-modal-close" class="close" data-dismiss="modal">×</button>
+           </div>
+           <div class="modal-body">
+               <p>Volet d'information - mode mobile</p>
+           </div>
+       </div>
+   </div>
 </div>
 <!-- /.Template Mobile -->

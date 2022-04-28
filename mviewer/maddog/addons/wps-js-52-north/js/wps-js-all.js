@@ -15,7 +15,6 @@
 	// Create a new Class that inherits from this class
 	Class.extend = function(prop) {
 		var _super = this.prototype;
-
 		// Instantiate a base class (but only create the instance,
 		// don't run the init constructor)
 		initializing = true;
@@ -23,7 +22,7 @@
 		initializing = false;
 
 		// Copy the properties over onto the new prototype
-		for ( var name in prop) {
+		for (var name in prop) {
 			// Check if we're overwriting an existing function
 			prototype[name] = typeof prop[name] == "function"
 					&& typeof _super[name] == "function"
@@ -1579,7 +1578,10 @@ var ExecuteResponse = BaseResponse.extend({
  */
 var ExecuteResponse_v1_xml = ExecuteResponse
 		.extend({
-			instantiate : function(wpsResponse) {
+			instantiate: function (wpsResponse) {
+				if (wpsResponse.type && wps.type == "featureCollection") {
+					return wpsResponse
+				}
 				if ($(wpsResponse).find("wps\\:ExecuteResponse, ExecuteResponse").length > 0) {
 					/*
 					 * response document!
@@ -1603,10 +1605,14 @@ var ExecuteResponse_v1_xml = ExecuteResponse
 					 * else return the response directly
 					 */
 					var rawOutput;
-					if(!(typeof wpsResponse === 'string') && ($(wpsResponse).length > 0))
+					// raw type response return xml document object not string
+					if (!(typeof wpsResponse === 'string') && ($(wpsResponse).length > 0) && !wpsResponse.type)
+						// if string, serialise string to xml object
 						rawOutput = (new XMLSerializer()).serializeToString(wpsResponse);
 					else
+						// xml object type
 						rawOutput = wpsResponse;
+					
 					
 					this.executeResponse.responseDocument = rawOutput;
 				}

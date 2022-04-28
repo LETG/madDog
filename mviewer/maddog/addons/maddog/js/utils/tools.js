@@ -54,5 +54,33 @@ const tools = (function () {
                 getCfg(`config.options.${id}.fuseOptions`),
                 id,
             (d) => { maddog[id] = d }
-        )}
+        ),
+        initButton: (buttonId, action) => {
+            document.getElementById(buttonId).onclick = action;
+        },
+        addRadiales: (r) => {
+            
+            let layer = mviewer.getLayer("radiales").layer;
+
+            var style = new ol.style.Style({
+                fill: new ol.style.Fill({color:"red"}),
+                stroke: new ol.style.Stroke({color: "black", width: 2})
+            });
+            
+            let features = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(r.executeResponse.responseDocument, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+
+            mviewer.getMap().getView().fit(features[0].getGeometry(),{duration:500});
+
+            features.forEach(f => f.setStyle(style));
+            
+            layer.getSource().clear();
+            layer.getSource().addFeatures(features);
+
+        }
+    }
 })();

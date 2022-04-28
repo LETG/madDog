@@ -44,9 +44,19 @@
                        <h4 class="service-title">Calcul de la cinématique du trait de côte <br>
                            <span class="service-subtitle">(Méthode ligne de référence et radiale)</span>
                        </h4>
-                       <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
-                           Post-traitement
-                       </button>
+                       <row>
+                            <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
+                                Post-traitement
+                            </button>
+                        </row>
+                       <row style="margin-top: 5px" id="coastline-form" hidden>
+                            <select id="tdcDatesSelectorStart" class="form-control" style="margin-top: 5px" onchange="">
+                                <option label="Sélectionner une date..." value=""></option>
+                            </select>
+                            <select id="tdcDatesSelectorEnd" class="form-control" style="margin-top: 5px" onchange="">
+                                <option label="Sélectionner une date..." value=""></option>
+                            </select>
+                        </row>
                    </div>
                    <div id="profile" class="tab-pane fade">
                        <h4 class="service-title">Calcul du bilan sédimentaire<br>

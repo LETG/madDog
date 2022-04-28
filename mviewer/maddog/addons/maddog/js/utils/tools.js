@@ -96,9 +96,40 @@ const tools = (function () {
             axios.get(`${lineRefUrl}'${idsite}'`)
                 .then(lineRef => lineRef.data.features ? lineRef.data.features[0] : [])
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
-                .then(geojson => maddog.setDrawRadialConfig({ referenceLine: geojson }));
+                .then(geojson => maddog.setDrawRadialConfig({ referenceLine: geojson }))
+                .then(() => tools.getTDCByIdSite(idsite));
+        },
+        getTDCByIdSite: (idsite) => {
+            const tdcUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
+            axios.get(`${tdcUrl}'${idsite}'`)
+                .then(tdc => tdc.data.features ? tdc.data.features[0] : [])
+                .then(features => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`)
+                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({tdc: tdcGeojson, referenceLine: maddog.drawRadialConfig.referenceLine}))
+                .then(() => wps.coastLineTracking(maddog.coastLinesTrackingConfig))
         },
         addRadiales: (r) => {
+            let layer = mviewer.getLayer("radiales").layer;
+
+            var style = new ol.style.Style({
+                fill: new ol.style.Fill({color:"red"}),
+                stroke: new ol.style.Stroke({color: "black", width: 2})
+            });
+            
+            let features = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(r.executeResponse.responseDocument, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+
+            features.forEach(f => f.setStyle(style));
+            
+            layer.getSource().clear();
+            layer.getSource().addFeatures(features);
+
+            tools.zoomToExtent(layer.getSource().getExtent());
+        },
+        getCoastLineTracking: (r) => {
             let layer = mviewer.getLayer("radiales").layer;
 
             var style = new ol.style.Style({

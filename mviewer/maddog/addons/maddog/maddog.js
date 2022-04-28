@@ -108,6 +108,7 @@ const maddog = (function () {
                     executionMode: "async",
                     lineage: false
                 });
+                maddog.setCoastLinesTrackingConfig({ ...maddog.drawRadialConfig, tdc: {}, processIdentifier: "coa:coastLinesTracking" });
                 tools.initButton("drawRadialBtn", () => {
                     wps.drawRadial(maddog.drawRadialConfig);
                 });
@@ -120,7 +121,14 @@ const maddog = (function () {
             }
             maddog.drawRadialConfig = { ...maddog.drawRadialConfig, ...param };
         },
-        drawRadialConfig: {}
+        drawRadialConfig: {},
+        coastLinesTrackingConfig: {},
+        setCoastLinesTrackingConfig: (param) => {
+            if (!maddog.coastLinesTrackingConfig) {
+                maddog.coastLinesTrackingConfig = {};
+            }
+            maddog.coastLinesTrackingConfig = { ...maddog.coastLinesTrackingConfig, ...param };
+        },
     };
 
 })();

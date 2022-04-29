@@ -45,12 +45,24 @@
                 queryable="false"
                 infopanel="bottom-panel"
                 attribution="Source: indigeo"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{epci}}"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{name}}"
                 metadata=""
                 metadata-csw="" >
-		    </layer>                           
+		    </layer>           
+		    <layer id="sitebuffer" name="Sites d'étude"  visible="true" 
+                index="1"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
+                infopanel="bottom-panel"
+                infoformat="application/vnd.ogc.gml"
+                url="https://gis.jdev.fr/geoserver/maddog/wms"
+                legendurl="" 
+                queryable="false"
+                attribution="Source: indigeo"
+                metadata=""
+                metadata-csw="" >
+	        </layer>                         
         </theme>
-        <theme name="Traits"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
+        <theme name="Relevés"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
         	<layer id="tdc" name="Traits de côte"  visible="true"
                 index="3"
                 infoformat="application/vnd.ogc.gml"
@@ -62,7 +74,7 @@
                 metadata=""
                 metadata-csw="" >
 		    </layer>                               
-		<layer id="prf" name="Profils de plages"  visible="true"
+		    <layer id="prf" name="Profils de plages"  visible="false"
                 index="3"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
@@ -70,11 +82,10 @@
                 legendurl=""
                 queryable="false" 
                 attribution="Source: indigeo"
-                tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
                 metadata=""
                 metadata-csw="" >
                 </layer>                    
-		<layer id="mnt" name="Modèle numérique de terrain"  visible="false"
+		    <layer id="mnt" name="Modèle numérique de terrain"  visible="false"
                 index="3"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
@@ -84,27 +95,14 @@
                 attribution="Source: indigeo"
                 metadata=""
                 metadata-csw="" >
-                    </layer>            
-
-		<layer id="sitebuffer" name="Sites d'étude"  visible="true" 
-                index="1"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
-                infopanel="bottom-panel"
-                infoformat="application/vnd.ogc.gml"
-                url="https://gis.jdev.fr/geoserver/maddog/wms"
-                legendurl="" 
-                queryable="false"
-                attribution="Source: indigeo"
-                metadata=""
-                metadata-csw="" >
-	        </layer>
-            <layer id="radiales" name="Communes littoral" visible="true" queryable="true"
+            </layer>            
+            <layer id="radiales" name="Radial" visible="true" queryable="true"
                 type="customlayer" opacity="0.8"
                 toplayer="true"
                 url="apps/maddog/customlayers/radiales.js"
                 vectorlegend="true"
                 expanded="true"
-                attribution="Source: iuem.univ-brest.fr"
+                attribution="Source: service WPS"
                 metadata=""
                 metadata-csw="">
             </layer>

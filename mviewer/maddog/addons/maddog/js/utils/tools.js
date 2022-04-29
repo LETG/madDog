@@ -85,7 +85,7 @@ const tools = (function () {
                       .then((response) => response.data.features ? response.data.features[0] : [])
                       .then((feature) => {
                             document.getElementById("siteName").innerHTML = feature.properties.idsite;
-                            tools.getReferenceLine(feature.properties.idsite)
+                            tools.getReferenceLine(feature.properties.idsite);
                       })
                 }
               });
@@ -102,7 +102,7 @@ const tools = (function () {
         getTDCByIdSite: (idsite) => {
             const tdcUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
-                .then(tdc => tdc.data.features ? tdc.data.features[0] : [])
+                .then(tdc => tdc.data.features ? tdc.data.features : [])
                 .then(features => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`)
                 .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({tdc: tdcGeojson, referenceLine: maddog.drawRadialConfig.referenceLine}))
                 .then(() => wps.coastLineTracking(maddog.coastLinesTrackingConfig))

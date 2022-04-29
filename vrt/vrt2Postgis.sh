@@ -82,6 +82,6 @@ fi
 # clean temporary VRT file
 echo ">Cleanning temporary file"
 rm $configuredVrt
-#rm points.geojson
+rm points.geojson
 
 echo ">IMPORT SUCCESS"

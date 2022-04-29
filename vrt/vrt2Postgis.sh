@@ -8,7 +8,6 @@ idType="${1^^}" # MNT1 | PRF1 | TDC1 | REF1
 fileName="$2" # csv file with data
 idSite="$3" # VOUGOT ( 6 chars )
 
-
 if [ -z $maddogDBHost ] || [ -z $maddogDBPort ] || [ -z $maddogDBUser ] || [ -z $maddogDBPassword ] || [ -z $maddogDBSchema ] || [ -z $maddogDBName ]
 then
     echo "DB CONNEXION INFOS MISSING please configure in config.sh -> END PROCESS "
@@ -41,8 +40,8 @@ escapedFileName=$(echo $fileName | sed 's_/_\\/_g')
 sed -i "s/LAYERNAME/$(basename ${fileName} .csv)/g" $configuredVrt
 sed -i "s/<SrcDataSource>/<SrcDataSource>$escapedFileName/g" $configuredVrt
 
-echo ">Convert file to geoJson"
-ogr2ogr -f "GEOJson" points.geojson $configuredVrt 
+#echo ">Convert file to geoJson"
+#ogr2ogr -f "GEOJson" points.geojson $configuredVrt 
 
 ## Add data to database
 table="TMP$type"
@@ -82,6 +81,6 @@ fi
 # clean temporary VRT file
 echo ">Cleanning temporary file"
 rm $configuredVrt
-rm points.geojson
+#rm points.geojson
 
 echo ">IMPORT SUCCESS"

@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-echo "-- Create spatiale tables"
+echo "-- Delete all tables and views"
 PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -f 00-dropAll.sql
 
 echo "-- Insert communes in databases"

@@ -15,6 +15,8 @@ DROP SEQUENCE IF EXISTS tdc_ogc_fid_seq;
 DROP TABLE IF EXISTS prf;
 DROP SEQUENCE IF EXISTS prf_ogc_fid_seq;
 
+DROP TABLE IF EXISTS mnt;
+
 -- Application tables
 DROP TABLE IF EXISTS profil;
 DROP TABLE IF EXISTS measure;

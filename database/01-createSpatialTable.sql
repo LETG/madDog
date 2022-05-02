@@ -6,9 +6,6 @@ CREATE SEQUENCE lineref_ogc_fid_seq
     MAXVALUE 2147483647
     CACHE 1;
 
-ALTER SEQUENCE lineref_ogc_fid_seq
-    OWNER TO maddog;
-
 CREATE TABLE lineref
 (
     ogc_fid integer NOT NULL DEFAULT nextval('lineref_ogc_fid_seq'::regclass),
@@ -21,9 +18,6 @@ WITH (
     OIDS = FALSE
 );
 
-ALTER TABLE lineref
-    OWNER to maddog;
-
 CREATE INDEX lineref_index
     ON lineref USING gist
     (geom);
@@ -35,8 +29,6 @@ CREATE SEQUENCE tdc_ogc_fid_seq
     MAXVALUE 2147483647
     CACHE 1;
 
-ALTER SEQUENCE tdc_ogc_fid_seq
-    OWNER TO maddog;
 
 CREATE TABLE tdc
 (
@@ -51,9 +43,6 @@ WITH (
     OIDS = FALSE
 );
 
-ALTER TABLE tdc
-    OWNER to maddog;
-
 CREATE INDEX tdc_index
     ON tdc USING gist
     (geom);    
@@ -64,9 +53,6 @@ CREATE SEQUENCE prf_ogc_fid_seq
     MINVALUE 1
     MAXVALUE 2147483647
     CACHE 1;
-
-ALTER SEQUENCE prf_ogc_fid_seq
-    OWNER TO maddog;
 
 CREATE TABLE prf
 (
@@ -80,9 +66,6 @@ CREATE TABLE prf
 WITH (
     OIDS = FALSE
 );
-
-ALTER TABLE prf
-    OWNER to maddog;
 
 CREATE INDEX prf_index
     ON tdc USING gist

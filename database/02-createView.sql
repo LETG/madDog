@@ -12,7 +12,6 @@ CREATE MATERIALIZED VIEW sitebuffer AS
 		FROM lineref 
 	) AS sitebuffer ;
 
-ALTER TABLE sitebuffer OWNER TO maddog;
 
 -- Create communewithsite 
 -- DROP MATERIALIZED VIEW communewithsite ;
@@ -35,4 +34,3 @@ CREATE MATERIALIZED VIEW communewithsite AS
 		FROM communes, sitebuffer where ST_Intersects(sitebuffer.geom, communes.wkb_geometry)
 	) AS commune ;
 
-ALTER TABLE communewithsite OWNER TO maddog;

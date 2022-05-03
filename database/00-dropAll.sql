@@ -25,3 +25,8 @@ DROP TABLE IF EXISTS operator;
 DROP TABLE IF EXISTS equipment;
 DROP TABLE IF EXISTS survey;
 DROP TABLE IF EXISTS site; 
+
+-- Configuration tables
+
+DROP TABLE IF EXISTS serviceprofconf;
+DROP TABLE IF EXISTS servicetdcconf;

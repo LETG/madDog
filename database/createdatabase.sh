@@ -17,8 +17,12 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$
 
 echo "-- Create spatiale tables"
 PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -f 01-createSpatialTable.sql
+
 echo "-- Create materialized view"
 PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -f 02-createView.sql
+
 echo "-- Create application tables"
 PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -f 03-createTable.sql
-   
+
+echo "-- Create WPS configuration value tables"
+PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -f 04-createConfTable.sql 

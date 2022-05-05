@@ -100,8 +100,8 @@ const wps = (function () {
 
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
-                "csvString",
-                "text/csv", 
+                "jsonString",
+                "application/json", 
                 null,
                 null,
                 null,

@@ -45,13 +45,12 @@
                 queryable="false"
                 infopanel="bottom-panel"
                 attribution="Source: indigeo"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{name}}"
                 metadata=""
                 metadata-csw="" >
 		    </layer>           
 		    <layer id="sitebuffer" name="Sites d'étude"  visible="true" 
                 index="1"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
+                tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
                 infopanel="bottom-panel"
                 infoformat="application/vnd.ogc.gml"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
@@ -105,6 +104,14 @@
                 attribution="Source: service WPS"
                 metadata=""
                 metadata-csw="">
+            </layer>
+            <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
+            <layer id="tooltip" name="Tooltip" visible="true" queryable="false"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"
+                showintoc="false"
+                type="customlayer" opacity="0.8"
+                toplayer="true"
+                url="apps/maddog/customlayers/tooltip.js">
             </layer>
         </theme>
     </themes>

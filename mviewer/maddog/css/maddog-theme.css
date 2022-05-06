@@ -18,7 +18,7 @@
 
 :root {
    --mycolor: #13344B;
-   --mycolor2: #f79468;
+   --mycolor2: #6088bbff;
    --myfont: 'Roboto', sans-serif;
 }
 
@@ -32,9 +32,9 @@
 
 /* Modification des propriétés du logo */
 img.mv-logo {
-   max-height: 45px!important;
-   max-width: 190px!important;
-   margin-top: -12px!important;
+   max-height: 80px!important;
+   max-width: 500px!important;
+   margin-top: -6px!important;
 }
 
 

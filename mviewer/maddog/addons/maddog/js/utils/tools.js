@@ -19,6 +19,15 @@ const tools = (function () {
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
+        zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
+            const outConfig = endProj && startProj ? {dataProjection: startProj, featureProjection: endProj} : {}
+            const features = new ol.format.GeoJSON({
+                defaultDataProjection: startProj
+            }).readFeatures(jsonFeature, outConfig);
+            if (features.length) {
+                tools.zoomToExtent(features[0].getGeometry().getExtent());
+            }
+        },
         zoomToExtent: (extent) => {
             // NEED REPROJECTION FOR EMPRISE !
             const overlay = tools.getMvLayerById("featureoverlay");
@@ -84,6 +93,7 @@ const tools = (function () {
                   axios.get(url)
                       .then((response) => response.data.features ? response.data.features[0] : [])
                       .then((feature) => {
+                            tools.zoomToJSONFeature(feature, "EPSG:3857");
                             document.getElementById("siteName").innerHTML = feature.properties.idsite;
                             tools.getReferenceLine(feature.properties.idsite);
                       })

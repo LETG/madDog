@@ -78,8 +78,7 @@ const tools = (function () {
         initButton: (buttonId, action) => {
             document.getElementById(buttonId).onclick = action;
         },
-        initEmpriseClickCtrl: (layerId, style = defaultClickedStyle) => {
-            
+        initEmpriseClickCtrl: () => {
             mviewer.getMap().on('singleclick', function (evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
@@ -93,31 +92,43 @@ const tools = (function () {
                   axios.get(url)
                       .then((response) => response.data.features ? response.data.features[0] : [])
                       .then((feature) => {
-                            tools.zoomToJSONFeature(feature, "EPSG:3857");
-                            document.getElementById("siteName").innerHTML = feature.properties.idsite;
-                            tools.getReferenceLine(feature.properties.idsite);
+                            if (feature) {
+                                tools.zoomToJSONFeature(feature, "EPSG:3857");
+                                document.getElementById("siteName").innerHTML = feature.properties.idsite;
+                                // récupération de la ligne de référence utile pour la radiale et le coastline tracking
+                                tools.getReferenceLine(feature.properties.idsite);
+                            }
                       })
                 }
               });
 
         },
         getReferenceLine: (idsite) => {
+            // On cherche la ligne de référence, entité de base aux autres traitements
             const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}'`)
                 .then(lineRef => lineRef.data.features ? lineRef.data.features[0] : [])
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
+                // A partir de la ligne de référence, on va maintenant calculer la radiale
                 .then(geojson => maddog.setDrawRadialConfig({ referenceLine: geojson }))
                 .then(() => tools.getTDCByIdSite(idsite));
         },
         getTDCByIdSite: (idsite) => {
+            // on récupère ensuite le trait de côte utile pour le coastline tracking
             const tdcUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
+                // récupération du TDC
                 .then(tdc => tdc.data.features ? tdc.data.features : [])
+                // mise en forme du TDC
                 .then(features => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`)
-                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({tdc: tdcGeojson, referenceLine: maddog.drawRadialConfig.referenceLine}))
+                // lancement WPS
+                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({tdc: tdcGeojson}))
                 .then(() => wps.coastLineTracking(maddog.coastLinesTrackingConfig))
         },
-        addRadiales: (r) => {
+        getRadiales: (r) => {
+            console.log(">>>>>>>>>> RESULTAT DRAWLINE");
+            console.log(r.responseDocument);
+            // on affiche la radiale sur la carte
             let layer = mviewer.getLayer("radiales").layer;
 
             var style = new ol.style.Style({
@@ -128,12 +139,12 @@ const tools = (function () {
             // save with EPSG:2154 for getDistance WPS
             maddog.radiales2154 = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(r.executeResponse.responseDocument);
+            }).readFeatures(r.responseDocument);
             
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(r.executeResponse.responseDocument, {
+            }).readFeatures(r.responseDocument, {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
@@ -142,30 +153,16 @@ const tools = (function () {
             
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
+            // on garde la radiale en config pour le coastline tracking
+            maddog.setCoastLinesTrackingConfig({ radiales: `<![CDATA[${JSON.stringify(r.responseDocument)}]]>` });
+            wps.coastLineTracking(maddog.coastLinesTrackingConfig);
 
             tools.zoomToExtent(layer.getSource().getExtent());
         },
         getCoastLineTracking: (r) => {
+            // on récupère la radiale
             let layer = mviewer.getLayer("radiales").layer;
 
-            var style = new ol.style.Style({
-                fill: new ol.style.Fill({color:"red"}),
-                stroke: new ol.style.Stroke({color: "black", width: 2})
-            });
-            
-            let features = new ol.format.GeoJSON({
-                defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(r.executeResponse.responseDocument, {
-                dataProjection: 'EPSG:2154',
-                featureProjection: 'EPSG:3857'
-            });
-
-            features.forEach(f => f.setStyle(style));
-            
-            layer.getSource().clear();
-            layer.getSource().addFeatures(features);
-
-            tools.zoomToExtent(layer.getSource().getExtent());
         }
     }
 })();

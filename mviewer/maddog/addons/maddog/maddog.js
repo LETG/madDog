@@ -90,6 +90,12 @@ const maddog = (function () {
                 tools.initFuseSearch("communes", maddog.searchComm);
                 tools.initFuseSearch("sites", maddog.searchSite);
                 maddog.autocomplete = new Autocomplete(document.getElementById('input-autocomplete'), $('.autocomplete-result'), onInput, displayAutocompleteList);
+                // change default wps-js response factory
+                ExecuteResponse_v1_xml = ExecuteResponse_v1_xml.extend({
+                    instantiate: (wpsResponse) => {
+                        return wpsResponse
+                    }
+                });
                 // create WPS service from wps-js
                 wpsService = wps.createWpsService(
                     {
@@ -97,7 +103,7 @@ const maddog = (function () {
                     }
                 );
                 maddog.setDrawRadialConfig({
-                    callback: tools.addRadiales, 
+                    callback: tools.getRadiales,
                     wpsService: wpsService,
                     referenceLine: '',
                     radialLength: 100,
@@ -109,10 +115,17 @@ const maddog = (function () {
                     lineage: false
                 });
                 maddog.setCoastLinesTrackingConfig({
-                    ...maddog.drawRadialConfig,
+                    wpsService: wpsService,
+                    responseFormat: "raw",
+                    executionMode: "async",
+                    lineage: false,
+                    radiales: {},
                     tdc: {},
                     processIdentifier: "coa:coastLinesTracking",
-                    callback: (csv) => console.log(csv)
+                    callback: (response) => {
+                        console.log(">>>>>>>>>> RESULTAT COASTLINETRACKING");
+                        console.log(JSON.parse(response.responseDocument));
+                    }
                 });
                 tools.initButton("drawRadialBtn", () => {
                     wps.drawRadial(maddog.drawRadialConfig);

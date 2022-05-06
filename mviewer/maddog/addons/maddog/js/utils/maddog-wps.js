@@ -58,38 +58,31 @@ const wps = (function () {
                 null);
             var outputs = [complexOutput];
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
-            wps.coastLineTracking(maddog.coastLinesTrackingConfig);
         },
         coastLineTracking: ({
             callback = () => {},
             wpsService = null,
-            referenceLine = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>
-            radialLength = 100,
-            radialDistance = 10,
-            radialDirection = true,
+            radiales = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>
             processIdentifier = "coa:coastLinesTracking",
             executionMode = "async",
             lineage = false,
             tdc = {} // geojson in <![CDATA]> like <![CDATA{geojson}]>
         }) => {
-             if (!wpsService || _.isEmpty(referenceLine) || _.isEmpty(tdc)) return {};
+             if (!wpsService || _.isEmpty(radiales) || _.isEmpty(tdc)) return {};
 
             let inputGenerator = new InputGenerator();
 
             let inputs = Object.values({
-                referenceLine: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
-                    "referenceLine",
+                radiales: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
+                    "radiales",
                     "application/json",
                     "",
                     null,
                     false,
-                    referenceLine
+                    radiales
                 ),
-                radialLength: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("radialLength", null, null, radialLength),
-                radialDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("radialDistance", null, null, radialDistance),
-                radialDirection: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("radialDirection", null, null, radialDirection),
-                coaslines: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
-                    "coaslines",
+                coastlines: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
+                    "coastlines",
                     "application/json",
                     "",
                     null,

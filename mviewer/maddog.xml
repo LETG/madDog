@@ -29,6 +29,7 @@
     <searchparameters bbox="false" localities="false" features="false" />   
 
     <extensions>
+        <extension type="javascript" id="chartjs" src="lib/chartjs-3.7.1/Chart.min.js"/>
         <extension type="javascript" id="wps-js-52-north" src="apps/maddog/addons/wps-js-52-north/js/wps-js-all.js"/>
         <extension type="javascript" id="wfs2Fuse" src="apps/maddog/addons/wfs2Fuse/main.js"/>
         <extension type="javascript" id="axios" src="apps/maddog/addons/axios/axios.min.js"/>

@@ -1,4 +1,4 @@
-const tools = (function () {
+const tools = (function() {
     const eventName = "tools-componentLoaded";
     var create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
@@ -20,7 +20,10 @@ const tools = (function () {
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
-            const outConfig = endProj && startProj ? {dataProjection: startProj, featureProjection: endProj} : {}
+            const outConfig = endProj && startProj ? {
+                dataProjection: startProj,
+                featureProjection: endProj
+            } : {}
             const features = new ol.format.GeoJSON({
                 defaultDataProjection: startProj
             }).readFeatures(jsonFeature, outConfig);
@@ -36,10 +39,10 @@ const tools = (function () {
             if (!extent || !overlay) return;
             mviewer.getMap().getView().fit(
                 extent,
-                
+
                 {
                     size: mviewer.getMap().getSize(),
-                    padding: [100,100,100,100],
+                    padding: [100, 100, 100, 100],
                     duration: duration
                 }
             );
@@ -60,47 +63,52 @@ const tools = (function () {
          * @returns {function}
          */
         waitPlugin: (id, ready) => new Promise((resolve, reject) => {
-            
+
             if (!ready) {
                 document.addEventListener(`${id}-componentLoaded`, resolve(true));
-            } else {resolve(true)}
+            } else {
+                resolve(true)
+            }
         }),
         /**
          * Init Fuse Search by layer
          * @returns 
          */
-        initFuseSearch : (id) => wfs2Fuse.initSearch(
-                getCfg(`config.options.${id}.url`),
-                getCfg(`config.options.${id}.fuseOptions`),
-                id,
-            (d) => { maddog[id] = d }
+        initFuseSearch: (id) => wfs2Fuse.initSearch(
+            getCfg(`config.options.${id}.url`),
+            getCfg(`config.options.${id}.fuseOptions`),
+            id,
+            (d) => {
+                maddog[id] = d
+            }
         ),
         initButton: (buttonId, action) => {
             document.getElementById(buttonId).onclick = action;
         },
         initEmpriseClickCtrl: () => {
-            mviewer.getMap().on('singleclick', function (evt) {
+            mviewer.getMap().on('singleclick', function(evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
                 const url = mviewer.getLayer("sitebuffer").layer.getSource().getFeatureInfoUrl(
                     evt.coordinate,
                     viewResolution,
-                    'EPSG:3857',
-                    { 'INFO_FORMAT': 'application/json' }
+                    'EPSG:3857', {
+                        'INFO_FORMAT': 'application/json'
+                    }
                 );
                 if (url) {
-                  axios.get(url)
-                      .then((response) => response.data.features ? response.data.features[0] : [])
-                      .then((feature) => {
+                    axios.get(url)
+                        .then((response) => response.data.features ? response.data.features[0] : [])
+                        .then((feature) => {
                             if (feature) {
                                 tools.zoomToJSONFeature(feature, "EPSG:3857");
                                 document.getElementById("siteName").innerHTML = feature.properties.idsite;
                                 // récupération de la ligne de référence utile pour la radiale et le coastline tracking
                                 tools.getReferenceLine(feature.properties.idsite);
                             }
-                      })
+                        })
                 }
-              });
+            });
 
         },
         getReferenceLine: (idsite) => {
@@ -110,7 +118,9 @@ const tools = (function () {
                 .then(lineRef => lineRef.data.features ? lineRef.data.features[0] : [])
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // A partir de la ligne de référence, on va maintenant calculer la radiale
-                .then(geojson => maddog.setDrawRadialConfig({ referenceLine: geojson }))
+                .then(geojson => maddog.setDrawRadialConfig({
+                    referenceLine: geojson
+                }))
                 .then(() => tools.getTDCByIdSite(idsite));
         },
         getTDCByIdSite: (idsite) => {
@@ -122,7 +132,9 @@ const tools = (function () {
                 // mise en forme du TDC
                 .then(features => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`)
                 // lancement WPS
-                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({tdc: tdcGeojson}))
+                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({
+                    tdc: tdcGeojson
+                }))
                 .then(() => wps.coastLineTracking(maddog.coastLinesTrackingConfig))
         },
         getRadiales: (r) => {
@@ -132,15 +144,20 @@ const tools = (function () {
             let layer = mviewer.getLayer("radiales").layer;
 
             var style = new ol.style.Style({
-                fill: new ol.style.Fill({color:"red"}),
-                stroke: new ol.style.Stroke({color: "black", width: 2})
+                fill: new ol.style.Fill({
+                    color: "red"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "black",
+                    width: 2
+                })
             });
 
             // save with EPSG:2154 for getDistance WPS
             maddog.radiales2154 = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
             }).readFeatures(r.responseDocument);
-            
+
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -150,19 +167,80 @@ const tools = (function () {
             });
 
             features.forEach(f => f.setStyle(style));
-            
+
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
             // on garde la radiale en config pour le coastline tracking
-            maddog.setCoastLinesTrackingConfig({ radiales: `<![CDATA[${JSON.stringify(r.responseDocument)}]]>` });
+            maddog.setCoastLinesTrackingConfig({
+                radiales: `<![CDATA[${JSON.stringify(r.responseDocument)}]]>`
+            });
             wps.coastLineTracking(maddog.coastLinesTrackingConfig);
 
             tools.zoomToExtent(layer.getSource().getExtent());
         },
-        getCoastLineTracking: (r) => {
-            // on récupère la radiale
-            let layer = mviewer.getLayer("radiales").layer;
+        addDatasetChart: (chart, dataset) => {
+            chart.data.datasets.push(dataset);
+            chart.update();
+        },
+        cleanDatasets: (chart) => {
+            chart.data.datasets.pop()
+        },
+        cleanData: (chart, i) => {
+            chart.data.labels.splice(i, 1);
+            chart.data.datasets.forEach(d => d.data.pop());
+            chart.update();
+        },
+        destroyChart: (chart) => {
+            chart.destroy();
+        },
+        initNewChart: (datasets, labels, id) => {
+            var config = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Custom Chart Title'
+                    }
+                }
+            }
+            new Chart(document.getElementById(id).getContext('2d'), config);
+        },
+        createDateLine: (dataDate, labels, field) => {
+            let valByRadiale = [];
+            // sort by radiale name for each date
+            if (!dataDate.data.length) {
+                // create reference line with 0 values for each labels
+                valByRadiale = labels.map(() => 0);
+            } else {
+                valByRadiale = labels.map((radialeName, i) => {
+                    const radialeValues = _.find(dataDate.data, ["radiale", radialeName])
+                    return _.isEmpty(radialeValues) ? null : radialeValues[field];
+                });
+            }
+            return {
+                label: moment(dataDate.date).format("DD/MM/YYYY"),
+                data: valByRadiale,
+            };
+        },
+        tdcChart: (dates) => {
+            let selected = maddog.charts.coastLines.result;
+            let labels;
+            if (dates) {
+                selected = maddog.charts.coastLines.result.filter(r => dates.includes(r.date))
+            };
+            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
+            labels = _.sortBy(labels);
+            // create one line by date
+            const lines = selected.map(s => {
+                return tools.createDateLine(s, labels, "separateDist")
+            });
 
+            // return tools.testChart(lines, labels);
+            tools.initNewChart(lines, labels, "tdc-chart");
         }
     }
 })();

@@ -125,6 +125,8 @@ const maddog = (function () {
                     callback: (response) => {
                         console.log(">>>>>>>>>> RESULTAT COASTLINETRACKING");
                         console.log(JSON.parse(response.responseDocument));
+                        maddog.charts.coastLines = JSON.parse(response.responseDocument);
+                        tools.tdcChart();
                     }
                 });
                 tools.initButton("drawRadialBtn", () => {
@@ -147,7 +149,8 @@ const maddog = (function () {
             }
             maddog.coastLinesTrackingConfig = { ...maddog.coastLinesTrackingConfig, ...param };
         },
-        radiales2154: []
+        radiales2154: [],
+        charts: {}
     };
 
 })();

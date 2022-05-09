@@ -241,6 +241,11 @@ const tools = (function() {
 
             // return tools.testChart(lines, labels);
             tools.initNewChart(lines, labels, "tdc-chart");
+        }, 
+        showHideMenu: (ele) => {
+            var srcElement = document.getElementById(ele);
+            srcElement.hidden = !srcElement.hidden;
+            selectWPS.hidden = !selectWPS.hidden;
         }
     }
 })();

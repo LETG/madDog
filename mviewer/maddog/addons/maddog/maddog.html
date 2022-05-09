@@ -20,69 +20,123 @@
                </div>
            </div>
            <!--/.INPUT FIELD-->
+           <div class="row col-sm-12 pad-0 select-info mbt-0">
+            <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> 
+             <span id="siteName">Aucun site sélectionné !</span></p>
+            </div>
        </div>
        <!-- /.Selection de la zone -->
+
        <!-- Visualisation des résultats -->
        <div class="row blockContainer" id="resultZone">
-           <h3 class="modal-title">Visualiser l'évolution du littoral sur le site d'étude</h3>
-           <div class="row col-sm-12 pad-0 select-info mbt-0">
-               <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> 
-                <span id="siteName">Aucun site sélectionné !</span></p>
-           </div>
-           <!-- Onglets Services -->
-           <div class="row col-sm-12">
-               <!--NavTab-->
-               <ul class="nav nav-tabs nav-justified">
-                   <li class="active"><a href="#tdcTab" data-toggle="tab">Trait de côte</a></li>
-                   <li><a href="#profile" data-toggle="tab">Profils de la plage</a></li>
-                   <li><a href="#mnt" data-toggle="tab">MNT</a></li>
-               </ul>
-               <!--/.NavTab-->
-               <!--Tab-->
-               <div class="tab-content">
-                   <div id="tdcTab" class="tab-pane fade in active">
-                       <h4 class="service-title">Calcul de la cinématique du trait de côte <br>
-                           <span class="service-subtitle">(Méthode ligne de référence et radiale)</span>
-                       </h4>
-                       <row>
-                           <p>1. Recherchez une commune, puis cliquez sur un site (ou bien cliquez sur un site directement)</p>
-                           <p>2. Cliquez sur le bouton "Post-traitement"</p>
-                       </row>
-                       <row>
-                            <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
-                                Post-traitement
-                            </button>
-                        </row>
-                        <row>
-                            <div>
-                                <canvas id="tdc-chart"></canvas>
-                            </div>
-                        </row>
-                       <row style="margin-top: 5px" id="coastline-form" hidden>
-                            <select id="tdcDatesSelectorStart" class="form-control" style="margin-top: 5px" onchange="">
-                                <option label="Sélectionner une date..." value=""></option>
-                            </select>
-                            <select id="tdcDatesSelectorEnd" class="form-control" style="margin-top: 5px" onchange="">
-                                <option label="Sélectionner une date..." value=""></option>
-                            </select>
-                        </row>
-                   </div>
-                   <div id="profile" class="tab-pane fade">
-                       <h4 class="service-title">Calcul du bilan sédimentaire<br>
-                           <span class="service-subtitle">(à partir de profils de plage)</span>
-                       </h4>
-                       <p>Paramètres du service + Visualisation des résultats</p>
-                   </div>
-                   <div id="mnt" class="tab-pane fade">
-                       <h4 class="service-title">Calcul des changements morphologiques surfaciques du domaine littoral<br>
-                           <span class="service-subtitle">(à partir de Modèles Numériques de Terrains (MNT))</span>
-                       </h4>
-                       <p>Paramètres du service + Visualisation des résultats</p>
-                   </div>
-               </div>
-               <!--/.Tab-->
-           </div>
-           <!-- /.Onglets Services -->
+
+        <!-- Menu des suivis -->
+        <div class="row col-sm-12" id="selectWPS">
+            <h3 class="modal-title">Sélectionner un type de suivi</h3>
+            <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
+            <div class="row blockCards">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">Trait de côte</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link" onClick="tools.showHideMenu('TDC_WPS')"><i class="fas fa-arrow-right"></i> Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">Profil de plage</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link" onClick="tools.showHideMenu('PP_WPS')"><i class="fas fa-arrow-right"></i> Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">Modèle numérique de terrain</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link" onClick="tools.showHideMenu('MNT_WPS')"><i class="fas fa-arrow-right"></i> Accéder</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.Menu des suivis -->
+
+        <!-- Trait de côte -->
+        <div class="row col-sm-12" id="TDC_WPS" hidden>
+            <h3 class="modal-title">Calcul de la cinématique du trait de côte</h3>
+            <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>  
+            <div class="tab-block">
+                <!--NavTab-->
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#tdcTabDate" data-toggle="tab">Choix des dates</a></li>
+                    <li><a href="#tdcTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
+                </ul>
+                <!--/.NavTab-->
+                <!--Tab-->
+                <div class="tab-content">
+                    <div id="tdcTabDate" class="tab-pane fade in active">
+                        <!--Insérez ici les paramètres-->
+                        <p>Paramètrages du suivi >> Cliquez sur le bouton "Post-traitement"</p>
+                        <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
+                            Post-traitement
+                        </button>                       
+                    </div>
+                    <div id="tdcTabGraph" class="tab-pane fade">  
+                        <!--Insérez ici les résultats-->                     
+                        <p>Visualisation des résultats</p>
+                    </div>
+                </div>
+                <!--/.Tab-->
+            </div>            
+            <a href="#" class="card-link" onClick="tools.showHideMenu('TDC_WPS')"> <i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
+        </div>
+        <!-- /.Trait de côte -->
+
+        <!-- Profil de plage -->
+        <div class="row col-sm-12" id="PP_WPS" hidden>
+            <h3 class="modal-title">Profil de plage</h3>     
+            <div class="tab-block">
+                <!--NavTab-->
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#ppTabDate" data-toggle="tab">Choix des dates</a></li>
+                    <li><a href="#ppTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
+                </ul>
+                <!--/.NavTab-->
+                <!--Tab-->
+                <div class="tab-content">
+                    <div id="ppTabDate" class="tab-pane fade in active">
+                        <!--Insérez ici les paramètres-->
+                        <p>Paramètrages du suivi </p>                       
+                    </div>
+                    <div id="ppTabGraph" class="tab-pane fade">  
+                        <!--Insérez ici les résultats-->                     
+                        <p>Visualisation des résultats</p>
+                    </div>
+                </div>
+                <!--/.Tab-->
+            </div>            
+            <a href="#" class="card-link" onClick="tools.showHideMenu('PP_WPS')"><i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
+        </div>
+        <!-- /.Profil de plage -->
+
+        <!-- Modèle numérique de terrain -->
+        <div class="row col-sm-12" id="MNT_WPS" hidden>
+            <h3 class="modal-title">Modèle numérique de terrain</h3>     
+            <p><br>Insérer ici les paramètres <br><br></p>  
+            
+            <a href="#" class="card-link" onClick="tools.showHideMenu('MNT_WPS')"><i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
+        </div>
+        <!-- /.Modèle numérique de terrain -->
+
+           
+
+
+
        </div>
        <!-- /.Visualisation des résultats -->
    </div>
@@ -103,3 +157,4 @@
    </div>
 </div>
 <!-- /.Template Mobile -->
+

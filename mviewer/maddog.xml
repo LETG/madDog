@@ -11,7 +11,7 @@
         measuretools="true" 
         exportpng="true" 
         style="apps/maddog/css/maddog-theme.css" />
-    <mapoptions maxzoom="19" projection="EPSG:3857" center="-475802.67385310325, 6177784.8613143535" zoom="9" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
+    <mapoptions maxzoom="19" projection="EPSG:3857" center="-469122.1814135454, 6194499.885208064" zoom="10" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="default"><!-- style="default"||gallery" -->
         <baselayer  type="OSM" id="darkmatter" label="Dark Matter" title="CartoDb" thumbgallery="img/basemap/darkmatter.png" 

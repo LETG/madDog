@@ -9,7 +9,7 @@
 /* Définition des variables */
 :root {
 	--mycolor: #13344B;
-	--mycolor2: #f79468;
+	--mycolor2: #6088bbff;
 	--myfont: 'Roboto', sans-serif;
 	--background: #f5f5f5;
 }
@@ -59,6 +59,12 @@
 h3.modal-title {
 	color: var(--mycolor);
 	font-weight: 600;
+}
+
+h4.submodal-title {
+	font-style: italic;
+	margin: 0;
+	color: var(--mycolor);
 }
 
 .panel-body p {
@@ -206,8 +212,60 @@ h3.modal-title {
 * SERVICES WMTS
 */
 
+/* Menu des types de suivi */
+
+#selectWPS .blockCards {
+    margin-top:20px;
+}
+
+#selectWPS .card {
+    background-color: whitesmoke;
+    padding: 30px 20px;
+    border-radius: 5px;
+}
+
+#selectWPS .card:hover {
+    background-color: #6088bb1c;
+    
+}
+
+#selectWPS .card-title {
+    color: var(--mycolor2);
+}
+
+
+p.card-text {
+    margin-bottom: 25px;
+}
+
+a.card-link {
+    color: var(--mycolor2);
+    font-size: 13px;
+    border: 1px solid var(--mycolor2);
+    border-radius: 3px;padding: 7px;
+}
+
+
+a.card-link:hover {
+    color: white;
+    background-color: var(--mycolor2);
+    opacity:0.8;
+}
+
+a.menu-link {
+	background-color: var(--mycolor2);
+	color: white;
+	font-family: var(--myfont);
+	font-size: 13px;
+	border-radius: 3px;
+	padding: 8px;
+}
 
 /* Nav Tabs */
+
+.tab-block {
+	margin: 20px 0;
+}
 
 .nav-tabs {
 	border: none;

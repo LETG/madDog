@@ -241,6 +241,33 @@ const tools = (function() {
 
             // return tools.testChart(lines, labels);
             tools.initNewChart(lines, labels, "tdc-chart");
+        }, 
+        showHideService: (ele) => {
+            var srcElement = document.getElementById(ele);
+            if (srcElement != null) {
+                if (srcElement.style.display == "block") {
+                    srcElement.style.display = 'none';
+                }
+                else {
+                    srcElement.style.display = 'block';
+                    selectWPS.style.display = 'none';                    
+                }
+                return false;
+            }
+        },
+        showHideMenu: (ele) => {
+            var srcElement = document.getElementById(ele);
+            console.log(selectWPS);
+            if (srcElement != null) {
+                if (selectWPS.style.display == "block") {
+                    selectWPS.style.display = 'none';
+                }
+                else {
+                    selectWPS.style.display = 'block';
+                    srcElement.style.display = 'none';                    
+                }
+                return false;
+            }
         }
     }
 })();

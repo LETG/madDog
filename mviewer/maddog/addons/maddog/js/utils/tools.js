@@ -4,16 +4,6 @@ const tools = (function() {
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
     document.dispatchEvent(create);
 
-    const defaultClickedStyle = new ol.style.Style({
-        fill: new ol.style.Fill({
-            color: 'rgba(255, 255, 255, 0)',
-        }),
-        stroke: new ol.style.Stroke({
-            color: 'rgba(55, 52, 79)',
-            width: 1.4,
-        })
-    });
-
     return {
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),
@@ -98,10 +88,13 @@ const tools = (function() {
                         .then((response) => response.data.features ? response.data.features[0] : [])
                         .then((feature) => {
                             if (feature) {
+                                if (maddog.idsite && feature.properties.idsite === maddog.idsite) return;
+                                tools.tdcReset();
                                 tools.zoomToJSONFeature(feature, "EPSG:3857");
                                 document.getElementById("siteName").innerHTML = feature.properties.idsite;
                                 // récupération de la ligne de référence utile pour la radiale et le coastline tracking
                                 tools.getReferenceLine(feature.properties.idsite);
+                                maddog.idsite = feature.properties.idsite;
                             }
                         })
                 }
@@ -187,8 +180,6 @@ const tools = (function() {
             layerTdc.getSource().addFeatures(featuresTdc);
         },
         getRadiales: (r) => {
-            console.log(">>>>>>>>>> RESULTAT DRAWLINE");
-            console.log(r.responseDocument);
             // on affiche la radiale sur la carte
             let layer = mviewer.getLayer("radiales").layer;
 
@@ -343,6 +334,9 @@ const tools = (function() {
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
+            if (maddog.idSite && !TDC_WPS.hidden) {
+                tools.getTDCByIdSite(maddog.idsite);
+            }
         },
         setTdcFeatures: (features) => {
             const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
@@ -412,7 +406,12 @@ const tools = (function() {
             }
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
-
+            if (maddog.idsite) {
+                mviewer.getLayer("refline").layer.getSource().clear();
+                mviewer.getLayer("tdc").layer.getSource().clear();
+                mviewer.getLayer("radiales").layer.getSource().clear();
+                tools.getTDCByIdSite(maddog.idsite);
+            }
         }
     }
 })();

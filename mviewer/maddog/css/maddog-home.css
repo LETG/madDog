@@ -62,6 +62,12 @@
    padding: 0px 100px 50px;
 }
 
+.home-subtitle{
+	color: white;
+	font-size: 22px;
+	font-weight: 300;
+	padding: 10px;
+}
 
 /* Onglets de navigation - Tabs */
 

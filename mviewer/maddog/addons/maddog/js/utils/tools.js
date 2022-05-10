@@ -293,8 +293,7 @@ const tools = (function() {
             tools.initNewChart(lines, labels, "tdcChart");
         }, 
         showHideMenu: (ele) => {
-            var srcElement = document.getElementById(ele);
-            srcElement.hidden = !srcElement.hidden;
+            ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
         }
     }

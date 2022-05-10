@@ -129,7 +129,7 @@ const maddog = (function () {
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => {
-                                const color = _.find(maddog.charts.tdc, ["properties.creationdate", r.date + "Z"])?.properties?.color;
+                                const color = _.find(maddog.charts.tdc.features, ["properties.creationdate", r.date + "Z"])?.properties?.color;
                                 return { ...r, color: color };
                             }
                         );

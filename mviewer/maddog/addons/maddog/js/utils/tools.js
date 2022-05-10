@@ -129,11 +129,13 @@ const tools = (function() {
             axios.get(`${tdcUrl}'${idsite}'`)
                 // récupération du TDC
                 .then(tdc => {
-                    maddog.charts.tdc = tdc.data.features.map(f =>
-                        ({ ...f, properties: { ...f.properties, color: "#" + Math.floor(Math.random() * 16777215).toString(16) } })
-                    );
+                    maddog.charts.tdc = {
+                        ...tdc.data, features: tdc.data.features.map(f =>
+                            ({ ...f, properties: { ...f.properties, color: "#" + Math.floor(Math.random() * 16777215).toString(16) } })
+                        )
+                    };
                     // Affichage des TDC sur la carte
-                    tools.drawTDC({...tdc.data, features: maddog.charts.tdc});
+                    tools.drawTDC(maddog.charts.tdc);
                     // Affichage du multi select avec les dates des TDC
                     tools.setTdcFeatures(tdc.data.features)
                     tools.createTDCMultiSelect();
@@ -357,15 +359,16 @@ const tools = (function() {
             }
             // get checked TDC
             $('#tdcMultiselect option:selected').each((i, el) => {
-                selected.push(maddog.charts.tdc.filter(feature => feature.properties.creationdate === $(el).val()));
+                selected.push(maddog.charts.tdc.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
             });
             // create coastline tracking param
             tools.setTdcFeatures(selected);
+            tools.drawTDC({ ...maddog.charts.tdc, features: selected });
         },
         createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result
             //const dates = maddog.charts.coastLines.result.map(d => d.date);
-            const dates = maddog.charts.tdc.map(d => d.properties.creationdate);
+            const dates = maddog.charts.tdc.features.map(d => d.properties.creationdate);
             // clean multi select if exists
             $(selector).empty()
             // create multiselect HTML parent
@@ -399,7 +402,7 @@ const tools = (function() {
             $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
             $("#selector").find(".labelDateLine").each((i, x) => {
-                $(x).find(".dateLine").css("color", maddog.charts.tdc[i].properties.color);
+                $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
             });
             $("#tdcMultiselect").multiselect("selectAll", false);
         },

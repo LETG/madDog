@@ -194,6 +194,10 @@ const tools = (function() {
             chart.destroy();
         },
         initNewChart: (datasets, labels, id) => {
+            document.getElementById(id).remove();
+            const canvas = document.createElement("canvas");
+            canvas.id = id;
+            document.getElementById("tdcTabGraph").appendChild(canvas);
             var config = {
                 type: 'line',
                 data: {
@@ -201,9 +205,50 @@ const tools = (function() {
                     datasets: datasets
                 },
                 options: {
-                    title: {
-                        display: true,
-                        text: 'Custom Chart Title'
+                    responsive: true,
+                    scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Profils'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Distance (m)'
+                          },
+                        //   ticks: {
+                        //     // forces step size to be 50 units
+                        //     stepSize: 2
+                        //   }
+                        }
+                    },
+                    plugins: {
+                      title: {
+                            display: true,
+                            text: `Evolution de la cinématique du trait de côte pour le site sélectionné`,
+                            position: "bottom",
+                            font: {
+                                size: 15,
+                                family: 'roboto',
+                                weight: 'bold',
+                              },
+                        },
+                        subtitle: {
+                            display: true,
+                            text: `Date de référence : ${datasets[0].label}`,
+                            // color: 'blue',
+                            font: {
+                              size: 12,
+                              family: 'tahoma',
+                              weight: 'normal',
+                              style: 'italic'
+                            },
+                            padding: {
+                              bottom: 10
+                            }
+                          }
                     }
                 }
             }
@@ -224,6 +269,7 @@ const tools = (function() {
             return {
                 label: moment(dataDate.date).format("DD/MM/YYYY"),
                 data: valByRadiale,
+                pointRadius: 0
             };
         },
         tdcChart: (dates) => {
@@ -235,12 +281,16 @@ const tools = (function() {
             labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
             labels = _.sortBy(labels);
             // create one line by date
-            const lines = selected.map(s => {
-                return tools.createDateLine(s, labels, "separateDist")
+            let color = ["#19bbb6", "#a23f97", "#ff9e38"];
+            const lines = selected.map((s, i) => {
+                return {
+                    ...tools.createDateLine(s, labels, "separateDist"),
+                    borderColor: color[i] || "#333333"
+                }
             });
 
             // return tools.testChart(lines, labels);
-            tools.initNewChart(lines, labels, "tdc-chart");
+            tools.initNewChart(lines, labels, "tdcChart");
         }, 
         showHideMenu: (ele) => {
             var srcElement = document.getElementById(ele);

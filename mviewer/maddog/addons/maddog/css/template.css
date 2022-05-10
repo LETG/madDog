@@ -333,3 +333,8 @@ a.menu-link {
 .autocomplete-li > a {
 	font-size: 13px;
 }
+
+/** CHARTS **/
+#tdcTabGraph canvas{
+	margin-top: 10px;
+}

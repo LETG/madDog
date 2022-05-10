@@ -355,6 +355,14 @@ const tools = (function() {
                 $(x).find(".dateLine").css("color", maddog.charts.tdc[i].properties.color);
             });
             $("#tdcMultiselect").multiselect("selectAll", false);
+        },
+        tdcReset: () => {
+            if (document.getElementById("tdcChart")) {
+                tdcChart.remove();    
+            }
+            $("#tdcMultiselect").multiselect("refresh");
+            $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
+
         }
     }
 })();

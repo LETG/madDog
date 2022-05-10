@@ -128,7 +128,10 @@ const maddog = (function () {
                         console.log(JSON.parse(response.responseDocument));
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
-                            r => ({ ...r, color: "#" + Math.floor(Math.random()*16777215).toString(16) })
+                            r => {
+                                const color = _.find(maddog.charts.tdc, ["properties.creationdate", r.date + "Z"])?.properties?.color;
+                                return { ...r, color: color };
+                            }
                         );
                         tools.tdcChart();
                         $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');

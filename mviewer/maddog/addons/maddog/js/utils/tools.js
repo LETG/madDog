@@ -218,7 +218,8 @@ const tools = (function() {
             chart.destroy();
         },
         initNewChart: (datasets, labels, id) => {
-            document.getElementById(id).remove();
+            if(document.getElementById(id)) document.getElementById(id).remove();
+            
             const canvas = document.createElement("canvas");
             canvas.id = id;
             document.getElementById("tdcTabGraph").appendChild(canvas);

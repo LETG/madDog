@@ -132,6 +132,8 @@ const tools = (function() {
                     maddog.charts.tdc = tdc.data.features.map(f =>
                         ({ ...f, properties: { ...f.properties, color: "#" + Math.floor(Math.random() * 16777215).toString(16) } })
                     );
+                    // Affichage des TDC sur la carte
+                    tools.drawTDC({...tdc.data, features: maddog.charts.tdc});
                     // Affichage du multi select avec les dates des TDC
                     tools.setTdcFeatures(tdc.data.features)
                     tools.createTDCMultiSelect();
@@ -140,7 +142,7 @@ const tools = (function() {
         drawRefLine: () => {
             if (!maddog.refLine) return;
 
-            let layer = mviewer.getLayer("radiales").layer;
+            let layer = mviewer.getLayer("refline").layer;
             var style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "#01bbc2",
@@ -158,6 +160,29 @@ const tools = (function() {
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
+        },
+        drawTDC: (featureJSON) => {
+            if (_.isEmpty(featureJSON)) return;
+
+            let layerTdc = mviewer.getLayer("tdc").layer;
+
+            // display radiales on map with EPSG:3857
+            let featuresTdc = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(featureJSON, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+            featuresTdc.forEach(f => {
+                return f.setStyle(new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: f.get("color"),
+                        width: 2
+                    })
+                }))
+            });
+            layerTdc.getSource().clear();
+            layerTdc.getSource().addFeatures(featuresTdc);
         },
         getRadiales: (r) => {
             console.log(">>>>>>>>>> RESULTAT DRAWLINE");
@@ -305,7 +330,6 @@ const tools = (function() {
             labels = _.sortBy(labels);
             // create one line by date
             const lines = selected.map((s, i) => {
-                console.log(s.color);
                 return {
                     ...tools.createDateLine(s, labels, "separateDist"),
                     borderColor: s.color

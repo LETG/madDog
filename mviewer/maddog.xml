@@ -41,7 +41,7 @@
         <theme name="Emprises"  collapsed="false" id="emprise" icon="fas fa-arrow-right">
         	<layer id="communewithsite" name="Communes contenant un site d'étude"  visible="true" 
                 infoformat="application/vnd.ogc.gml"
-                index="2"
+                index="7"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
                 legendurl="" 
                 queryable="false"
@@ -51,7 +51,7 @@
                 metadata-csw="" >
 		    </layer>           
 		    <layer id="sitebuffer" name="Sites d'étude"  visible="true" 
-                index="1"
+                index="6"
                 tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
                 infopanel="bottom-panel"
                 infoformat="application/vnd.ogc.gml"
@@ -64,7 +64,7 @@
 	        </layer>                         
         </theme>
         <theme name="Relevés"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
-        	<layer id="tdc" name="Traits de côte"  visible="true"
+        	<!-- <layer id="tdc" name="Traits de côte"  visible="true"
                 index="3"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
@@ -74,9 +74,9 @@
                 attribution="Source: indigeo"
                 metadata=""
                 metadata-csw="" >
-		    </layer>                               
+		    </layer>                                -->
 		    <layer id="prf" name="Profils de plages"  visible="false"
-                index="3"
+                index="5"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
@@ -87,7 +87,7 @@
                 metadata-csw="" >
                 </layer>                    
 		    <layer id="mnt" name="Modèle numérique de terrain"  visible="false"
-                index="3"
+                index="4"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
                 url="https://gis.jdev.fr/geoserver/maddog/wms"
@@ -97,9 +97,9 @@
                 metadata=""
                 metadata-csw="" >
             </layer>            
-            <layer id="radiales" name="Radial" visible="true" queryable="true"
+            <layer id="radiales" name="Radiales" visible="true" queryable="false"
                 type="customlayer" opacity="0.8"
-                toplayer="true"
+                index="3"
                 url="apps/maddog/customlayers/radiales.js"
                 vectorlegend="true"
                 expanded="true"
@@ -107,21 +107,29 @@
                 metadata=""
                 metadata-csw="">
             </layer>
-            <layer id="refline" name="Radial" visible="true" queryable="true"
+            <layer id="refline" name="Ligne de référence" visible="true" queryable="false"
                 type="customlayer" opacity="0.8"
-                toplayer="true"
+                index="2"
                 url="apps/maddog/customlayers/refline.js"
                 vectorlegend="true"
                 expanded="true"
-                attribution="Source: service WPS"
-                metadata=""
-                metadata-csw="">
+                attribution="Source: service WPS">
+            </layer>
+            <layer id="tdc" name="Trait de côte" visible="true" queryable="false"
+                index="1"
+                toplayer="true"
+                type="customlayer" opacity="0.8"
+                url="apps/maddog/customlayers/tdc.js"
+                vectorlegend="true"
+                expanded="true"
+                attribution="Source: service WPS">
             </layer>
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
             <layer id="tooltip" name="Tooltip" visible="true" queryable="false"
                 tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"
                 showintoc="false"
                 type="customlayer" opacity="0.8"
+                scalemin="30000"
                 toplayer="true"
                 url="apps/maddog/customlayers/tooltip.js">
             </layer>

@@ -81,11 +81,10 @@
                 <div class="tab-content">
                     <div id="tdcTabDate" class="tab-pane fade in active">
                         <!--Insérez ici les paramètres-->
-                        <p>Paramètrages du suivi >> Cliquez sur le bouton "Post-traitement"</p>
-                        <span class="col-xs-6" id="selector"></span>
-                        <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
-                            Post-traitement
-                        </button>                       
+                        <div class="row">
+                            <p>Paramètrages du suivi >> Cliquez sur le bouton "Post-traitement"</p>
+                            <span class="col-xs-6" id="selector"></span>
+                        </div>
                     </div>
                     <div id="tdcTabGraph" class="tab-pane fade">  
                         <!--Insérez ici les résultats-->                     
@@ -93,8 +92,22 @@
                     </div>
                 </div>
                 <!--/.Tab-->
-            </div>            
-            <a href="#" class="card-link" onClick="tools.showHideMenu(TDC_WPS)"> <i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
+            </div>
+            <nav class="navbar navbar-default toolbarMenu">
+                <div class="container-fluid">
+                    <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(TDC_WPS)">
+                        <i class="fas fa-arrow-left"></i>
+                        Revenir à la liste des suivis
+                    </button>
+                    <button  type="button" class="navbar-right btn btn-default refreshWps" onClick="">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Réinitialiser
+                    </button>
+                    <button id="coastlinetrackingBtn" type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
+                        Lancer le traitement
+                    </button>
+                </div>
+            </nav>
         </div>
         <!-- /.Trait de côte -->
 

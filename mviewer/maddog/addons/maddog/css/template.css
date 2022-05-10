@@ -238,7 +238,7 @@ p.card-text {
     margin-bottom: 25px;
 }
 
-a.card-link {
+.card-link {
     color: var(--mycolor2);
     font-size: 13px;
     border: 1px solid var(--mycolor2);
@@ -246,7 +246,33 @@ a.card-link {
 }
 
 
-a.card-link:hover {
+.toolbarMenu {
+	background-color: transparent;
+    border: none;
+}
+
+.toolbarMenu .container-fluid{
+	padding-left: 0px;
+}
+
+.refreshWps {
+	color: var(--mycolor);
+    background-color: white;
+	border: 1px solid var(--mycolor);
+}
+
+.triggerWps {
+	color: white;
+    background-color: var(--mycolor);
+}
+
+.triggerWps:hover {
+	background-color: white;
+    color: var(--mycolor);
+    opacity:0.8;
+}
+
+a.card-link:hover, button.card-link:hover {
     color: white;
     background-color: var(--mycolor2);
     opacity:0.8;

@@ -130,21 +130,11 @@ const maddog = (function () {
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => ({ ...r, color: "#" + Math.floor(Math.random()*16777215).toString(16) })
                         );
-                        tools.createMultiSelect();
                         tools.tdcChart();
                         $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
                     }
                 });
-                tools.initButton("drawRadialBtn", () => {
-                    wps.drawRadial(maddog.drawRadialConfig);
-                });
                 tools.initEmpriseClickCtrl("sitebuffer");
-                $(document).ready(function() {
-                    $('#example-getting-started').multiselect({
-                        enableFiltering: true,
-                        filterBehavior: 'value'
-                    });
-                });
             });
         },
         setDrawRadialConfig: (param) => {

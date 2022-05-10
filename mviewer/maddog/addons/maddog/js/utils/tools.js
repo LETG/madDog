@@ -128,14 +128,14 @@ const tools = (function() {
             const tdcUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
                 // récupération du TDC
-                .then(tdc => tdc.data.features ? tdc.data.features : [])
-                // mise en forme du TDC
-                .then(features => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`)
-                // lancement WPS
-                .then(tdcGeojson => maddog.setCoastLinesTrackingConfig({
-                    tdc: tdcGeojson
-                }))
-                .then(() => wps.coastLineTracking(maddog.coastLinesTrackingConfig))
+                .then(tdc => {
+                    maddog.charts.tdc = tdc.data.features.map(f =>
+                        ({ ...f, properties: { ...f.properties, color: "#" + Math.floor(Math.random() * 16777215).toString(16) } })
+                    );
+                    // Affichage du multi select avec les dates des TDC
+                    tools.setTdcFeatures(tdc.data.features)
+                    tools.createTDCMultiSelect();
+                })
         },
         getRadiales: (r) => {
             console.log(">>>>>>>>>> RESULTAT DRAWLINE");
@@ -174,9 +174,11 @@ const tools = (function() {
             maddog.setCoastLinesTrackingConfig({
                 radiales: `<![CDATA[${JSON.stringify(r.responseDocument)}]]>`
             });
-            wps.coastLineTracking(maddog.coastLinesTrackingConfig);
-
+            // on zoom sur l'extent de la radiale
             tools.zoomToExtent(layer.getSource().getExtent());
+
+            // we call coastLineTracking now
+            wps.coastLineTracking(maddog.coastLinesTrackingConfig);
         },
         addDatasetChart: (chart, dataset) => {
             chart.data.datasets.push(dataset);
@@ -217,11 +219,7 @@ const tools = (function() {
                           title: {
                             display: true,
                             text: 'Distance (m)'
-                          },
-                        //   ticks: {
-                        //     // forces step size to be 50 units
-                        //     stepSize: 2
-                        //   }
+                          }
                         }
                     },
                     plugins: {
@@ -290,7 +288,6 @@ const tools = (function() {
                     borderColor: s.color
                 }
             });
-
             // create chart
             tools.initNewChart(lines, labels, "tdcChart");
         }, 
@@ -298,20 +295,30 @@ const tools = (function() {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
         },
-        onDateSelected: () => {
-            let selected = [];
-            $('#tdcMultiselect option:selected').each((i, el) => {
-                selected.push($(el).val());
+        setTdcFeatures: (features) => {
+            const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
+            maddog.setCoastLinesTrackingConfig({
+                tdc: tdcGeojson
             });
-            tools.tdcChart(selected);
-            maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
-                r => ({ ...r, selected: selected.includes(r.date) })
-            );
-            console.log(maddog.charts.coastLines.result.filter(f => f.selected));
+            $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
-        createMultiSelect: () => {
+        onDatesChange: () => {
+            let selected = [];
+            // clean graph
+            if (document.getElementById("tdcChart")) {
+                tdcChart.remove();    
+            }
+            // get checked TDC
+            $('#tdcMultiselect option:selected').each((i, el) => {
+                selected.push(maddog.charts.tdc.filter(feature => feature.properties.creationdate === $(el).val()));
+            });
+            // create coastline tracking param
+            tools.setTdcFeatures(selected);
+        },
+        createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result
-            const dates = maddog.charts.coastLines.result.map(d => d.date);
+            //const dates = maddog.charts.coastLines.result.map(d => d.date);
+            const dates = maddog.charts.tdc.map(d => d.properties.creationdate);
             // clean multi select if exists
             $(selector).empty()
             // create multiselect HTML parent
@@ -323,7 +330,7 @@ const tools = (function() {
             $("#tdcMultiselect").multiselect({
                 enableFiltering: true,
                 filterBehavior: 'value',
-                nonSelectedText: 'Sélection des dates',
+                nonSelectedText: 'Rechercher une date',
                 templates: {
                     li: `
                         <li>
@@ -334,10 +341,10 @@ const tools = (function() {
                         </li>`
                 },
                 onChange: () => {
-                    tools.onDateSelected();
+                    tools.onDatesChange();
                 },
             });
-            // create options as dataprovider
+            // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) => 
                 ({label: moment(d).format("DD/MM/YYYY"), value: d})
             );
@@ -345,7 +352,7 @@ const tools = (function() {
             $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
             $("#selector").find(".labelDateLine").each((i, x) => {
-                $(x).find(".dateLine").css("color", maddog.charts.coastLines.result[i].color);
+                $(x).find(".dateLine").css("color", maddog.charts.tdc[i].properties.color);
             });
             $("#tdcMultiselect").multiselect("selectAll", false);
         }

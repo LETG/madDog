@@ -107,6 +107,16 @@
                 metadata=""
                 metadata-csw="">
             </layer>
+            <layer id="refline" name="Radial" visible="true" queryable="true"
+                type="customlayer" opacity="0.8"
+                toplayer="true"
+                url="apps/maddog/customlayers/refline.js"
+                vectorlegend="true"
+                expanded="true"
+                attribution="Source: service WPS"
+                metadata=""
+                metadata-csw="">
+            </layer>
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
             <layer id="tooltip" name="Tooltip" visible="true" queryable="false"
                 tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"

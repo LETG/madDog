@@ -82,9 +82,6 @@ const tools = (function() {
                 maddog[id] = d
             }
         ),
-        initButton: (buttonId, action) => {
-            document.getElementById(buttonId).onclick = action;
-        },
         initEmpriseClickCtrl: () => {
             mviewer.getMap().on('singleclick', function(evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
@@ -115,7 +112,10 @@ const tools = (function() {
             // On cherche la ligne de référence, entité de base aux autres traitements
             const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}'`)
-                .then(lineRef => lineRef.data.features ? lineRef.data.features[0] : [])
+                .then(lineRef => {
+                    maddog.refLine = lineRef.data;
+                    return lineRef.data.features ? lineRef.data.features[0] : []
+                })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // A partir de la ligne de référence, on va maintenant calculer la radiale
                 .then(geojson => maddog.setDrawRadialConfig({
@@ -137,6 +137,28 @@ const tools = (function() {
                     tools.createTDCMultiSelect();
                 })
         },
+        drawRefLine: () => {
+            if (!maddog.refLine) return;
+
+            let layer = mviewer.getLayer("radiales").layer;
+            var style = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "#01bbc2",
+                    width: 2
+                })
+            });
+            // display radiales on map with EPSG:3857
+            let features = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(maddog.refLine, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+            features.forEach(f => f.setStyle(style));
+
+            layer.getSource().clear();
+            layer.getSource().addFeatures(features);
+        },
         getRadiales: (r) => {
             console.log(">>>>>>>>>> RESULTAT DRAWLINE");
             console.log(r.responseDocument);
@@ -144,9 +166,6 @@ const tools = (function() {
             let layer = mviewer.getLayer("radiales").layer;
 
             var style = new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "red"
-                }),
                 stroke: new ol.style.Stroke({
                     color: "black",
                     width: 2
@@ -179,6 +198,9 @@ const tools = (function() {
 
             // we call coastLineTracking now
             wps.coastLineTracking(maddog.coastLinesTrackingConfig);
+
+            // display ref line
+            tools.drawRefLine();
         },
         addDatasetChart: (chart, dataset) => {
             chart.data.datasets.push(dataset);

@@ -1,0 +1,6 @@
+{
+    "js": ["bootstrap-multiselect.js"],
+    "css": ["bootstrap-multiselect.css"],
+    "html": "main.html",
+    "target": "page-content-wrapper"
+}

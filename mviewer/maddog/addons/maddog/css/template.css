@@ -335,6 +335,21 @@ a.menu-link {
 }
 
 /** CHARTS **/
-#tdcTabGraph canvas{
+#tdcTabGraph canvas {
 	margin-top: 10px;
+}
+
+/** MULTISELECT **/
+
+#selector .btn-group {
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+#selector {
+	padding-left: 0px;
+}
+
+#selector .multiselect-container, #selector .btn-group button  {
+	width: 100%;
 }

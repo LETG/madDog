@@ -273,28 +273,81 @@ const tools = (function() {
             };
         },
         tdcChart: (dates) => {
-            let selected = maddog.charts.coastLines.result;
             let labels;
-            if (dates) {
-                selected = maddog.charts.coastLines.result.filter(r => dates.includes(r.date))
+            let selected = maddog.charts.coastLines.result;
+            // get dates from selection or every dates
+            if (!_.isEmpty(dates)) {
+                selected = selected.filter(r => dates.includes(r.date))
             };
+            // get uniq labels
             labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
             labels = _.sortBy(labels);
             // create one line by date
-            let color = ["#19bbb6", "#a23f97", "#ff9e38"];
             const lines = selected.map((s, i) => {
+                console.log(s.color);
                 return {
                     ...tools.createDateLine(s, labels, "separateDist"),
-                    borderColor: color[i] || "#333333"
+                    borderColor: s.color
                 }
             });
 
-            // return tools.testChart(lines, labels);
+            // create chart
             tools.initNewChart(lines, labels, "tdcChart");
         }, 
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
+        },
+        onDateSelected: () => {
+            let selected = [];
+            $('#tdcMultiselect option:selected').each((i, el) => {
+                selected.push($(el).val());
+            });
+            tools.tdcChart(selected);
+            maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
+                r => ({ ...r, selected: selected.includes(r.date) })
+            );
+            console.log(maddog.charts.coastLines.result.filter(f => f.selected));
+        },
+        createMultiSelect: () => {
+            // get dates from WPS coastlinetracking result
+            const dates = maddog.charts.coastLines.result.map(d => d.date);
+            // clean multi select if exists
+            $(selector).empty()
+            // create multiselect HTML parent
+            let multiSelectComp = document.createElement("select");
+            multiSelectComp.id = "tdcMultiselect";
+            multiSelectComp.setAttribute("multiple", "multiple");
+            selector.appendChild(multiSelectComp);
+            // create multiselect
+            $("#tdcMultiselect").multiselect({
+                enableFiltering: true,
+                filterBehavior: 'value',
+                nonSelectedText: 'Sélection des dates',
+                templates: {
+                    li: `
+                        <li>
+                            <a class="labelDateLine">
+                                <label style="display:inline;padding-right: 5px;"></label>
+                                <i class="dateLine fas fa-minus"></i>
+                            </a>
+                        </li>`
+                },
+                onChange: () => {
+                    tools.onDateSelected();
+                },
+            });
+            // create options as dataprovider
+            let datesOptions = dates.map((d, i) => 
+                ({label: moment(d).format("DD/MM/YYYY"), value: d})
+            );
+            // insert options into multiselect
+            $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
+            // change picto color according to chart and legend
+            $("#selector").find(".labelDateLine").each((i, x) => {
+                $(x).find(".dateLine").css("color", maddog.charts.coastLines.result[i].color);
+            });
+            $("#tdcMultiselect").multiselect("selectAll", false);
         }
     }
 })();

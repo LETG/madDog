@@ -72,7 +72,7 @@
             <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>  
             <div class="tab-block">
                 <!--NavTab-->
-                <ul class="nav nav-tabs nav-justified">
+                <ul class="nav nav-tabs nav-justified tdcNavTabs">
                     <li class="active"><a href="#tdcTabDate" data-toggle="tab">Choix des dates</a></li>
                     <li><a href="#tdcTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
                 </ul>
@@ -82,6 +82,7 @@
                     <div id="tdcTabDate" class="tab-pane fade in active">
                         <!--Insérez ici les paramètres-->
                         <p>Paramètrages du suivi >> Cliquez sur le bouton "Post-traitement"</p>
+                        <span class="col-xs-6" id="selector"></span>
                         <button type="button" id="drawRadialBtn" class="btn btn-primary btn-lg btn-block" click="wps.drawRadial(maddog.drawRadialConfig)">
                             Post-traitement
                         </button>                       

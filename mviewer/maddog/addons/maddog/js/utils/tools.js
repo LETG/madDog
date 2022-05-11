@@ -87,9 +87,8 @@ const tools = (function() {
                     axios.get(url)
                         .then((response) => response.data.features ? response.data.features[0] : [])
                         .then((feature) => {
-                            if (feature) {
-                                if (maddog.idsite && feature.properties.idsite === maddog.idsite) return;
-                                tdcUtils.tdcReset(true);
+                            tdcUtils.tdcReset(true);
+                            if (feature) {                    
                                 if (!TDC_WPS.hidden) {
                                     // récupération de la ligne de référence utile pour la radiale et le coastline tracking
                                     tdcUtils.getReferenceLine(feature.properties.idsite);
@@ -98,7 +97,7 @@ const tools = (function() {
                                 document.getElementById("siteName").innerHTML = feature.properties.idsite;
                                 maddog.idsite = feature.properties.idsite;
                             } else {
-                                maddog.idsite = null;   
+                                maddog.idsite = null;
                             }
                         })
                 }

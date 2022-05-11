@@ -134,6 +134,7 @@ const maddog = (function () {
                             }
                         );
                         tdcUtils.tdcChart();
+                        // tdcUtils.tdcChartBis();
                         $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
                     }
                 });

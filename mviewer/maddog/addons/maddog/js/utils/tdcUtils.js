@@ -182,6 +182,51 @@ const tdcUtils = (function() {
             }
             new Chart(document.getElementById(id).getContext('2d'), config);
         },
+        createPltolyLine: (dataDate, labels, field, color) => {
+            let valByRadiale = [];
+            const line = {
+                name: moment(dataDate.date).format("DD/MM/YYYY"),
+                x: valByRadiale,
+                y: labels,
+                type: "scatter",
+                mode: 'lines',
+                line: {
+                    color: color,
+                    dash: 'dashdot',
+                    width: 4
+                },
+                width: 3
+            };
+            // sort by radiale name for each date
+            if (!dataDate.data.length) {
+                // create reference line with 0 values for each labels
+                line.valByRadiale = labels.map(() => 0);
+                line.l
+            } else {
+                line.valByRadiale = labels.map((radialeName, i) => {
+                    const radialeValues = _.find(dataDate.data, ["radiale", radialeName])
+                    return _.isEmpty(radialeValues) ? null : radialeValues[field];
+                });
+            }
+            return line;
+        },
+        tdcPlotyChart: (dates) => {
+            let labels;
+            let selected = maddog.charts.coastLines.result;
+            // get dates from selection or every dates
+            if (!_.isEmpty(dates)) {
+                selected = selected.filter(r => dates.includes(r.date))
+            };
+            // get uniq labels
+            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
+            labels = _.sortBy(labels);
+            // create one line by date
+            const lines = selected.map((s, i) => {
+                return tdcUtils.createPltolyLine(s, labels, "separateDist", s.color)
+            });
+            // create chart
+            // Plotly.newPlot('tdcChartBis', lines);
+        },
         createDateLine: (dataDate, labels, field) => {
             let valByRadiale = [];
             // sort by radiale name for each date
@@ -233,6 +278,9 @@ const tdcUtils = (function() {
             if (document.getElementById("tdcChart")) {
                 tdcChart.remove();    
             }
+            // if (document.getElementById("tdcChartBis")) {
+            //     tdcChartBis.remove();    
+            // }
             // get checked TDC
             $('#tdcMultiselect option:selected').each((i, el) => {
                 selected.push(maddog.charts.tdc.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
@@ -286,6 +334,9 @@ const tdcUtils = (function() {
             if (document.getElementById("tdcChart")) {
                 tdcChart.remove();    
             }
+            // if (document.getElementById("tdcChartBis")) {
+            //     tdcChartBis.remove();    
+            // }
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();

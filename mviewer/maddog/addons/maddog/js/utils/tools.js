@@ -72,7 +72,7 @@ const tools = (function() {
                 maddog[id] = d
             }
         ),
-        initEmpriseClickCtrl: () => {
+        onClickAction: () => {
             mviewer.getMap().on('singleclick', function(evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
@@ -102,7 +102,6 @@ const tools = (function() {
                         })
                 }
             });
-
         },
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;

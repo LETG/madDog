@@ -6,15 +6,11 @@ const maddog = (function () {
 
     let wpsService = null;
 
+    document.addEventListener("map-ready", () => tools.onClickAction("sitebuffer"));
+
     const waitLib = (name, ready) => new Promise((resolve, reject) => {
         if (!ready) {
             document.addEventListener(name, resolve(true));
-        } else {resolve(true)}
-    });
-    // $( document ).on( "configurationCompleted"
-    const waitMap = () => new Promise((resolve, reject) => {
-        if (!mviewer.getMap()) {
-            document.addEventListener("configurationCompleted", resolve(true));
         } else {resolve(true)}
     });
 
@@ -90,8 +86,7 @@ const maddog = (function () {
                 waitLib(`axios-componentLoaded`, typeof axios !== 'undefined'),
                 waitLib(`wfs2Fuse-componentLoaded`, typeof wfs2Fuse !== 'undefined'),
                 waitLib(`maddog-wps-componentLoaded`, typeof wps !== 'undefined'),
-                waitLib(`bootstrap-multiselect-componentLoaded`, true),
-                waitMap()
+                waitLib(`bootstrap-multiselect-componentLoaded`, true)
             ];
             Promise.all(waitAll).then(responses => {
                 tools.init("maddog");
@@ -145,7 +140,6 @@ const maddog = (function () {
                         $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
                     }
                 });
-                tools.initEmpriseClickCtrl("sitebuffer");
             });
         },
         setDrawRadialConfig: (param) => {

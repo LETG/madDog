@@ -104,8 +104,11 @@ const tools = (function() {
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
-            if (maddog.idSite && !TDC_WPS.hidden) {
+            if (maddog.idsite && !TDC_WPS.hidden) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
+            }
+            if (TDC_WPS.hidden) {
+                tdcUtils.tdcReset(true);
             }
         }
     }

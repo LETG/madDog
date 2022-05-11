@@ -282,16 +282,16 @@ const tdcUtils = (function() {
             });
             $("#tdcMultiselect").multiselect("selectAll", false);
         },
-        tdcReset: () => {
+        tdcReset: (cleanTdcLayer) => {
             if (document.getElementById("tdcChart")) {
                 tdcChart.remove();    
             }
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
-            if (maddog.idsite) {
-                mviewer.getLayer("refline").layer.getSource().clear();
-                mviewer.getLayer("tdc").layer.getSource().clear();
-                mviewer.getLayer("radiales").layer.getSource().clear();
+            mviewer.getLayer("refline").layer.getSource().clear();
+            mviewer.getLayer("tdc").layer.getSource().clear();
+            mviewer.getLayer("radiales").layer.getSource().clear();
+            if (!cleanTdcLayer) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
         }

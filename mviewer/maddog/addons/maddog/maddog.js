@@ -126,8 +126,7 @@ const maddog = (function () {
                     tdc: {},
                     processIdentifier: "coa:coastLinesTracking",
                     callback: (response) => {
-                        console.log(">>>>>>>>>> RESULTAT COASTLINETRACKING");
-                        console.log(JSON.parse(response.responseDocument));
+                        $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => {
@@ -135,9 +134,9 @@ const maddog = (function () {
                                 return { ...r, color: color };
                             }
                         );
-                        tdcUtils.tdcChart();
-                        // tdcUtils.tdcChartBis();
-                        $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
+                        let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
+                        maddog.tdcCSV = Papa.unparse(csv);
+                        tdcUtils.tdcPlotyChart();
                     }
                 });
             });

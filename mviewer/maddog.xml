@@ -70,17 +70,6 @@
 	        </layer>                         
         </theme>
         <theme name="Relevés"  collapsed="false" id="tdc" icon="fas fa-arrow-right">
-        	<!-- <layer id="tdc" name="Traits de côte"  visible="true"
-                index="3"
-                infoformat="application/vnd.ogc.gml"
-                infopanel="bottom-panel"
-                url="https://gis.jdev.fr/geoserver/maddog/wms"
-                legendurl=""
-                queryable="false" 
-                attribution="Source: indigeo"
-                metadata=""
-                metadata-csw="" >
-		    </layer>                                -->
 		    <layer id="prf" name="Profils de plages"  visible="false"
                 index="5"
                 infoformat="application/vnd.ogc.gml"

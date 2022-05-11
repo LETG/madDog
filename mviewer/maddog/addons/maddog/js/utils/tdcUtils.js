@@ -124,86 +124,29 @@ const tdcUtils = (function() {
             // display ref line
             tdcUtils.drawRefLine();
         },
-        initNewChart: (datasets, labels, id) => {
-            if(document.getElementById(id)) document.getElementById(id).remove();
-            
-            const canvas = document.createElement("canvas");
-            canvas.id = id;
-            document.getElementById("tdcTabGraph").appendChild(canvas);
-            var config = {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                          title: {
-                            display: true,
-                            text: 'Profils'
-                          }
-                        },
-                        y: {
-                          title: {
-                            display: true,
-                            text: 'Distance (m)'
-                          }
-                        }
-                    },
-                    plugins: {
-                      title: {
-                            display: true,
-                            text: `Evolution de la cinématique du trait de côte pour le site sélectionné`,
-                            position: "bottom",
-                            font: {
-                                size: 15,
-                                family: 'roboto',
-                                weight: 'bold',
-                              },
-                        },
-                        subtitle: {
-                            display: true,
-                            text: `Date de référence : ${datasets[0].label}`,
-                            // color: 'blue',
-                            font: {
-                              size: 12,
-                              family: 'tahoma',
-                              weight: 'normal',
-                              style: 'italic'
-                            },
-                            padding: {
-                              bottom: 10
-                            }
-                          }
-                    }
-                }
-            }
-            new Chart(document.getElementById(id).getContext('2d'), config);
-        },
         createPltolyLine: (dataDate, labels, field, color) => {
             let valByRadiale = [];
             const line = {
                 name: moment(dataDate.date).format("DD/MM/YYYY"),
-                x: valByRadiale,
-                y: labels,
+                y: valByRadiale,
+                x: labels,
                 type: "scatter",
                 mode: 'lines',
                 line: {
-                    color: color,
-                    dash: 'dashdot',
-                    width: 4
+                    color: color
                 },
                 width: 3
             };
             // sort by radiale name for each date
             if (!dataDate.data.length) {
                 // create reference line with 0 values for each labels
-                line.valByRadiale = labels.map(() => 0);
-                line.l
+                line.y = labels.map(() => 0);
+                line.line = {
+                    ...line.line,
+                    dash: 'dashdot', width: 4
+                };
             } else {
-                line.valByRadiale = labels.map((radialeName, i) => {
+                line.y = labels.map((radialeName, i) => {
                     const radialeValues = _.find(dataDate.data, ["radiale", radialeName])
                     return _.isEmpty(radialeValues) ? null : radialeValues[field];
                 });
@@ -213,6 +156,12 @@ const tdcUtils = (function() {
         tdcPlotyChart: (dates) => {
             let labels;
             let selected = maddog.charts.coastLines.result;
+            // create or re generate chart div
+            $("#tdcChart").remove();
+            const div = document.createElement("div");
+            div.id = "tdcChart";
+            document.getElementById("tdcTabGraph").appendChild(div);
+
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
                 selected = selected.filter(r => dates.includes(r.date))
@@ -225,46 +174,69 @@ const tdcUtils = (function() {
                 return tdcUtils.createPltolyLine(s, labels, "separateDist", s.color)
             });
             // create chart
-            // Plotly.newPlot('tdcChartBis', lines);
-        },
-        createDateLine: (dataDate, labels, field) => {
-            let valByRadiale = [];
-            // sort by radiale name for each date
-            if (!dataDate.data.length) {
-                // create reference line with 0 values for each labels
-                valByRadiale = labels.map(() => 0);
-            } else {
-                valByRadiale = labels.map((radialeName, i) => {
-                    const radialeValues = _.find(dataDate.data, ["radiale", radialeName])
-                    return _.isEmpty(radialeValues) ? null : radialeValues[field];
-                });
-            }
-            return {
-                label: moment(dataDate.date).format("DD/MM/YYYY"),
-                data: valByRadiale,
-                pointRadius: 0
-            };
-        },
-        tdcChart: (dates) => {
-            let labels;
-            let selected = maddog.charts.coastLines.result;
-            // get dates from selection or every dates
-            if (!_.isEmpty(dates)) {
-                selected = selected.filter(r => dates.includes(r.date))
-            };
-            // get uniq labels
-            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
-            labels = _.sortBy(labels);
-            // create one line by date
-            const lines = selected.map((s, i) => {
-                return {
-                    ...tdcUtils.createDateLine(s, labels, "separateDist"),
-                    borderColor: s.color
+            const axesFont = {
+                font: {
+                    family: 'Roboto',
+                    size: 14,
+                    color: '#7f7f7f'
                 }
+            }
+            Plotly.newPlot('tdcChart', lines, {
+                showlegend: false,
+                title: {
+                    text: `Date de référence : ${maddog.tdcReference}`,
+                    font: {
+                        family: 'Roboto',
+                        size: 16
+                    },
+                    y: 0.9
+                },
+                xaxis: {
+                    title: {
+                        standoff: 40,
+                        text: 'Profils',
+                        pad: 2,
+                        ...axesFont,
+                    },
+                    showgrid: false,
+                    dtick: 5,
+                },
+                yaxis: {
+                    gridcolor: "#afa8a7",
+                    title: {
+                        text: 'Distance (m)',
+                        ...axesFont
+                    },
+                    dtick: 2,
+                }
+            }, {
+                responsive: true,
+                modeBarButtonsToAdd: [{
+                    name: 'Export SVG',
+                    icon: {
+                        width: 500,
+                        height: 600,
+                        path: "M384 128h-128V0L384 128zM256 160H384v304c0 26.51-21.49 48-48 48h-288C21.49 512 0 490.5 0 464v-416C0 21.49 21.49 0 48 0H224l.0039 128C224 145.7 238.3 160 256 160zM255 295L216 334.1V232c0-13.25-10.75-24-24-24S168 218.8 168 232v102.1L128.1 295C124.3 290.3 118.2 288 112 288S99.72 290.3 95.03 295c-9.375 9.375-9.375 24.56 0 33.94l80 80c9.375 9.375 24.56 9.375 33.94 0l80-80c9.375-9.375 9.375-24.56 0-33.94S264.4 285.7 255 295z"
+                    },
+                    click: function (gd) {
+                        Plotly.downloadImage(gd, { format: 'svg' })
+                    }
+                },{
+                    name: 'Export CSV',
+                    icon: {
+                        width: 500,
+                        height: 600,
+                        path: "M224 0V128C224 145.7 238.3 160 256 160H384V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64C0 28.65 28.65 0 64 0H224zM80 224C57.91 224 40 241.9 40 264V344C40 366.1 57.91 384 80 384H96C118.1 384 136 366.1 136 344V336C136 327.2 128.8 320 120 320C111.2 320 104 327.2 104 336V344C104 348.4 100.4 352 96 352H80C75.58 352 72 348.4 72 344V264C72 259.6 75.58 256 80 256H96C100.4 256 104 259.6 104 264V272C104 280.8 111.2 288 120 288C128.8 288 136 280.8 136 272V264C136 241.9 118.1 224 96 224H80zM175.4 310.6L200.8 325.1C205.2 327.7 208 332.5 208 337.6C208 345.6 201.6 352 193.6 352H168C159.2 352 152 359.2 152 368C152 376.8 159.2 384 168 384H193.6C219.2 384 240 363.2 240 337.6C240 320.1 231.1 305.6 216.6 297.4L191.2 282.9C186.8 280.3 184 275.5 184 270.4C184 262.4 190.4 256 198.4 256H216C224.8 256 232 248.8 232 240C232 231.2 224.8 224 216 224H198.4C172.8 224 152 244.8 152 270.4C152 287 160.9 302.4 175.4 310.6zM280 240C280 231.2 272.8 224 264 224C255.2 224 248 231.2 248 240V271.6C248 306.3 258.3 340.3 277.6 369.2L282.7 376.9C285.7 381.3 290.6 384 296 384C301.4 384 306.3 381.3 309.3 376.9L314.4 369.2C333.7 340.3 344 306.3 344 271.6V240C344 231.2 336.8 224 328 224C319.2 224 312 231.2 312 240V271.6C312 294.6 306.5 317.2 296 337.5C285.5 317.2 280 294.6 280 271.6V240zM256 0L384 128H256V0z"
+                    },
+                    click: function (gd) {
+                        console.log(gd);
+                        tools.downloadBlob(maddog.tdcCSV, 'export.csv', 'text/csv;charset=utf-8;')
+                    }
+                }]
+                
             });
-            // create chart
-            tdcUtils.initNewChart(lines, labels, "tdcChart");
-        }, 
+            
+        },
         setTdcFeatures: (features) => {
             const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
             maddog.setCoastLinesTrackingConfig({
@@ -278,9 +250,6 @@ const tdcUtils = (function() {
             if (document.getElementById("tdcChart")) {
                 tdcChart.remove();    
             }
-            // if (document.getElementById("tdcChartBis")) {
-            //     tdcChartBis.remove();    
-            // }
             // get checked TDC
             $('#tdcMultiselect option:selected').each((i, el) => {
                 selected.push(maddog.charts.tdc.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
@@ -288,6 +257,11 @@ const tdcUtils = (function() {
             // create coastline tracking param
             tdcUtils.setTdcFeatures(selected);
             tdcUtils.drawTDC({ ...maddog.charts.tdc, features: selected });
+            
+            let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data));
+            console.log(csv);
+            maddog.tdcCSV = Papa.unparse(csv);
+            
         },
         createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result
@@ -334,9 +308,6 @@ const tdcUtils = (function() {
             if (document.getElementById("tdcChart")) {
                 tdcChart.remove();    
             }
-            // if (document.getElementById("tdcChartBis")) {
-            //     tdcChartBis.remove();    
-            // }
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();

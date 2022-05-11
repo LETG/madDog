@@ -360,11 +360,6 @@ a.menu-link {
 	font-size: 13px;
 }
 
-/** CHARTS **/
-#tdcTabGraph canvas {
-	margin-top: 10px;
-}
-
 /** MULTISELECT **/
 
 #selector .btn-group {

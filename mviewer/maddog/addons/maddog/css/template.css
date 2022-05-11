@@ -38,7 +38,6 @@
 }
 
 
-
 .color1 {
 	color: var(--mycolor);
 }
@@ -218,6 +217,15 @@ h4.submodal-title {
 .row-for-cards {
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.icon-suivi {
+	width: 60px;
+}
+
+.block-icon {
+	text-align: center;
+	padding: 10px 0 15px;
 }
 
 .icon-suivi {

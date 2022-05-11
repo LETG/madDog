@@ -37,6 +37,10 @@
 	font-size: 12px!important;
 }
 
+.align-right {
+	text-align: right;
+}
+
 .color1 {
 	color: var(--mycolor);
 }
@@ -213,6 +217,15 @@ h4.submodal-title {
 */
 
 /* Menu des types de suivi */
+
+.icon-suivi {
+	width: 60px;
+}
+
+.block-icon {
+	text-align: center;
+	padding: 10px 0 15px;
+}
 
 #selectWPS .blockCards {
     margin-top:20px;

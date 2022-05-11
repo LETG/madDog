@@ -55,7 +55,7 @@ const maddog = (function () {
         tools.zoomToExtent(zoomFeatureExtent);
         const type = i.target.getAttribute("type");
         if (type === "sites") {
-            tools.getReferenceLine(i.target.getAttribute("value"))
+            tdcUtils.getReferenceLine(i.target.getAttribute("value"))
             document.getElementById("siteName").innerHTML = i.target.getAttribute("value");
         }
     };
@@ -104,7 +104,7 @@ const maddog = (function () {
                     }
                 );
                 maddog.setDrawRadialConfig({
-                    callback: tools.getRadiales,
+                    callback: tdcUtils.getRadiales,
                     wpsService: wpsService,
                     referenceLine: '',
                     radialLength: 100,
@@ -133,7 +133,7 @@ const maddog = (function () {
                                 return { ...r, color: color };
                             }
                         );
-                        tools.tdcChart();
+                        tdcUtils.tdcChart();
                         $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
                     }
                 });

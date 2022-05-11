@@ -50,7 +50,8 @@
                 metadata=""
                 metadata-csw="" >
 		    </layer>           
-		    <layer id="sitebuffer" name="Sites d'étude"  visible="true" 
+		    <layer id="sitebuffer" name="Sites d'étude"  visible="true"
+                scalemin="20000"
                 index="6"
                 tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
                 infopanel="bottom-panel"

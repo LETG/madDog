@@ -294,6 +294,9 @@ const tdcUtils = (function() {
             if (!cleanTdcLayer) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
+        },
+        initTDC: () => {
+            tdcUtils.tdcReset();
         }
     }
 })();

@@ -89,12 +89,16 @@ const tools = (function() {
                         .then((feature) => {
                             if (feature) {
                                 if (maddog.idsite && feature.properties.idsite === maddog.idsite) return;
-                                tdcUtils.tdcReset();
+                                tdcUtils.tdcReset(true);
+                                if (!TDC_WPS.hidden) {
+                                    // récupération de la ligne de référence utile pour la radiale et le coastline tracking
+                                    tdcUtils.getReferenceLine(feature.properties.idsite);
+                                }
                                 tools.zoomToJSONFeature(feature, "EPSG:3857");
                                 document.getElementById("siteName").innerHTML = feature.properties.idsite;
-                                // récupération de la ligne de référence utile pour la radiale et le coastline tracking
-                                tdcUtils.getReferenceLine(feature.properties.idsite);
                                 maddog.idsite = feature.properties.idsite;
+                            } else {
+                                maddog.idsite = null;   
                             }
                         })
                 }

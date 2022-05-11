@@ -88,7 +88,7 @@ const tools = (function() {
                         .then((response) => response.data.features ? response.data.features[0] : [])
                         .then((feature) => {
                             tdcUtils.tdcReset(true);
-                            if (feature) {                    
+                            if (feature) {
                                 if (!TDC_WPS.hidden) {
                                     // récupération de la ligne de référence utile pour la radiale et le coastline tracking
                                     tdcUtils.getReferenceLine(feature.properties.idsite);
@@ -107,6 +107,7 @@ const tools = (function() {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
             if (maddog.idsite && !TDC_WPS.hidden) {
+                tdcUtils.getReferenceLine(maddog.idsite);
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
             if (TDC_WPS.hidden) {

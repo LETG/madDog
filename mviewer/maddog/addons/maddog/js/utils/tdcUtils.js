@@ -44,7 +44,7 @@ const tdcUtils = (function() {
             let layer = mviewer.getLayer("refline").layer;
             var style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: "#01bbc2",
+                    color: "black",
                     width: 2
                 })
             });
@@ -199,7 +199,7 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    dtick: 3,
+                    dtick: 5,
                 },
                 yaxis: {
                     gridcolor: "#afa8a7",
@@ -320,6 +320,11 @@ const tdcUtils = (function() {
         },
         initTDC: () => {
             tdcUtils.tdcReset();
+        },
+        onParamChange: (e) => {
+            console.log(e);
+            maddog.setDrawRadialConfig({ [e.id]: e.type === "number" ? parseInt(e.value) : e.value });
+            console.log(maddog.drawRadialConfig[e.id]);
         }
     }
 })();

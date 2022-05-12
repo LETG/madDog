@@ -135,17 +135,17 @@
                                     <div class="panel-body">
                                         <div class="col-xs-3" style="padding-left: 5px">
                                             <label for="longParam">Longueur (m) <i class="fa fa-info-circle" aria-hidden="true"></i></label>
-                                            <input value="50" type="number" class="form-control tdcParams" id="longParam" aria-describedby="basic-addon3">
+                                            <input onchange="tdcUtils.onParamChange(this)" value="100" type="number" class="form-control tdcParams" id="radialLength" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-xs-3">
                                             <label for="spaceParam">Espacement (m) <i class="fa fa-info-circle" aria-hidden="true"></i></label>
-                                            <input value="50" type="number" class="form-control tdcParams" id="spaceParam" aria-describedby="basic-addon3">
+                                            <input onchange="tdcUtils.onParamChange(this)" value="50" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
-                                                <label for="dirParam">Direction (m) <i class="fa fa-info-circle" aria-hidden="true"></i></label>
-                                                <select class="form-control" name="" id="direParam" onchange="">
-                                                    <option label="oui" value="true">oui</option>
+                                                <label for="dirParam">Direction <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                                <select onchange="tdcUtils.onParamChange(this)" class="form-control" name="" id="radialDirection">
+                                                    <option label="oui" selected value="true">oui</option>
                                                     <option label="non" value="false">non</option>
                                                 </select>
                                             </div>
@@ -172,7 +172,7 @@
                         <i class="fa-solid fa-rotate-right"></i>
                         Réinitialiser
                     </button>
-                    <button id="coastlinetrackingBtn" type="button" disabled class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
+                    <button id="coastlinetrackingBtn" type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
                         Lancer le traitement
                     </button>
                 </div>

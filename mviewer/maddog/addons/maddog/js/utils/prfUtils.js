@@ -8,7 +8,7 @@ const prfUtils = (function() {
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher
-            const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}'`)
                 .then(prfRefLine => {
                     maddog.prfRefLine = prfRefLine.data;
@@ -56,7 +56,7 @@ const prfUtils = (function() {
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(maddog.refLine, {
+            }).readFeatures(maddog.prfRefLine, {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });

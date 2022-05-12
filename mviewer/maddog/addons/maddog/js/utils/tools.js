@@ -113,8 +113,14 @@ const tools = (function() {
                 tdcUtils.getReferenceLine(maddog.idsite);
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
+            if (maddog.idsite && !PP_WPS.hidden) {
+                prfUtils.getPrfRefLines(maddog.idsite);
+            }
             if (TDC_WPS.hidden) {
                 tdcUtils.tdcReset(true);
+            }
+            if (PP_WPS.hidden) {
+                prfUtils.prfReset(true);
             }
         },
         downloadBlob: (content, filename, contentType) => {

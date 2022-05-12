@@ -37,6 +37,7 @@
 	font-size: 12px!important;
 }
 
+
 .color1 {
 	color: var(--mycolor);
 }
@@ -213,6 +214,19 @@ h4.submodal-title {
 */
 
 /* Menu des types de suivi */
+.row-for-cards {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.icon-suivi {
+	width: 60px;
+}
+
+.block-icon {
+	text-align: center;
+	padding: 10px 0 15px;
+}
 
 #selectWPS .blockCards {
     margin-top:20px;
@@ -220,8 +234,9 @@ h4.submodal-title {
 
 #selectWPS .card {
     background-color: whitesmoke;
-    padding: 30px 20px;
+    padding: 40px 20px;
     border-radius: 5px;
+	height: 100%;
 }
 
 #selectWPS .card:hover {
@@ -245,6 +260,12 @@ p.card-text {
     border-radius: 3px;padding: 7px;
 }
 
+.align-right-link {
+	text-align: right;
+    position: absolute;
+    bottom: 25px;
+    right: 40px;
+}
 
 .toolbarMenu {
 	background-color: transparent;

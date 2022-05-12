@@ -263,12 +263,12 @@ const prfUtils = (function() {
         createPrfMultiSelect: () => {
             const dates = maddog.charts.prf.features.map(d => d.properties.creationdate);
             // clean multi select if exists
-            $(selector).empty()
+            $(selectorPrf).empty()
             // create multiselect HTML parent
             let multiSelectComp = document.createElement("select");
             multiSelectComp.id = "prfMultiselect";
             multiSelectComp.setAttribute("multiple", "multiple");
-            selector.appendChild(multiSelectComp);
+            selectorPrf.appendChild(multiSelectComp);
             // create multiselect
             $("#prfMultiselect").multiselect({
                 enableFiltering: true,
@@ -298,7 +298,7 @@ const prfUtils = (function() {
             // insert options into multiselect
             $("#prfMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
-            $("#selector").find(".labelDateLine").each((i, x) => {
+            $("#selectorPrf").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", maddog.charts.prf.features[i].properties.color);
             });
             $("#prfMultiselect").multiselect("selectAll", false);

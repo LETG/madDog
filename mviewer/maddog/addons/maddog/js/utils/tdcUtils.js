@@ -395,12 +395,12 @@ const tdcUtils = (function() {
             //const dates = maddog.charts.coastLines.result.map(d => d.date);
             const dates = maddog.charts.tdc.features.map(d => d.properties.creationdate);
             // clean multi select if exists
-            $(selector).empty()
+            $(selectorTdc).empty()
             // create multiselect HTML parent
-            let multiSelectComp = document.createElement("select");
+            let multiSelectComp = document.createElement("selectorTdc");
             multiSelectComp.id = "tdcMultiselect";
             multiSelectComp.setAttribute("multiple", "multiple");
-            selector.appendChild(multiSelectComp);
+            selectorTdc.appendChild(multiSelectComp);
             // create multiselect
             $("#tdcMultiselect").multiselect({
                 enableFiltering: true,
@@ -430,7 +430,7 @@ const tdcUtils = (function() {
             // insert options into multiselect
             $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
-            $("#selector").find(".labelDateLine").each((i, x) => {
+            $("#selectorTdc").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
             });
             $("#tdcMultiselect").multiselect("selectAll", false);

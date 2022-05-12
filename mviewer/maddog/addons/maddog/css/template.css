@@ -386,16 +386,16 @@ a.menu-link {
 
 /** MULTISELECT **/
 
-#selector .btn-group {
+#selectorTdc .btn-group {
 	margin-bottom: 5px;
 	width: 100%;
 }
 
-#selector {
+#selectorTdc {
 	padding-left: 0px;
 }
 
-#selector .multiselect-container, #selector .btn-group button  {
+#selectorTdc .multiselect-container, #selectorTdc .btn-group button  {
 	width: 100%;
 }
 

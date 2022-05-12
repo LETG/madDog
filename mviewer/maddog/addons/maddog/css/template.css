@@ -220,7 +220,7 @@ h4.submodal-title {
 }
 
 .icon-suivi {
-	width: 60px;
+	width: 100px;
 }
 
 .block-icon {
@@ -255,7 +255,7 @@ p.card-text {
 
 .card-link {
     color: var(--mycolor2);
-    font-size: 13px;
+    font-size: 14px;
     border: 1px solid var(--mycolor2);
     border-radius: 3px;padding: 7px;
 }
@@ -285,12 +285,15 @@ p.card-text {
 .triggerWps {
 	color: white;
     background-color: var(--mycolor);
+	border: 1px solid var(--mycolor);
+    margin-right: 14px!important;
 }
 
 .triggerWps:hover {
-	background-color: white;
-    color: var(--mycolor);
-    opacity:0.8;
+	background-color: var(--mycolor);
+    color: white;
+    opacity: 0.8;
+    border: 1px solid var(--mycolor);
 }
 
 a.card-link:hover, button.card-link:hover {
@@ -411,4 +414,19 @@ a.menu-link {
 	list-style-type: none; /* Remove bullets */
 	padding: 0; /* Remove padding */
 	margin: 0; /* Remove margins */
+}
+	
+#tdcTabDate {
+	padding: 20px;
+}
+
+.multiselect {
+	text-align: left;
+	color: #555;
+}
+
+.multiselect .caret {
+	position: absolute;
+	right: 12px;
+	top: 44%;
 }

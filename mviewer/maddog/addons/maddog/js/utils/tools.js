@@ -89,13 +89,8 @@ const tools = (function() {
                         .then((feature) => {
                             tdcUtils.tdcReset(true);
                             if (feature) {
-                                if (!TDC_WPS.hidden) {
-                                    // récupération de la ligne de référence utile pour la radiale et le coastline tracking
-                                    tdcUtils.getReferenceLine(feature.properties.idsite);
-                                }
+                                tools.tdcToMap(feature.properties.idsite);
                                 tools.zoomToJSONFeature(feature, "EPSG:3857");
-                                document.getElementById("siteName").innerHTML = feature.properties.idsite;
-                                maddog.idsite = feature.properties.idsite;
                             } else {
                                 maddog.idsite = null;
                             }
@@ -103,9 +98,17 @@ const tools = (function() {
                 }
             });
         },
+        tdcToMap: (idsite) => {
+            if (!TDC_WPS.hidden) {
+                tdcUtils.getReferenceLine(idsite);
+            }
+            document.getElementById("siteName").innerHTML = idsite;
+            maddog.idsite = idsite;
+        },
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
+            console.log(maddog.idsite);
             if (maddog.idsite && !TDC_WPS.hidden) {
                 tdcUtils.getReferenceLine(maddog.idsite);
                 tdcUtils.getTDCByIdSite(maddog.idsite);

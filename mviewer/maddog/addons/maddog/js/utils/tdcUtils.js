@@ -356,10 +356,10 @@ const tdcUtils = (function() {
             mviewer.getLayer("refline").layer.getSource().clear();
             mviewer.getLayer("tdc").layer.getSource().clear();
             mviewer.getLayer("radiales").layer.getSource().clear();
+            panelDrag.clean();
+            panelDrag.hidden();
             if (!cleanTdcLayer) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
-                panelDrag.clean();
-                panelDrag.hidden();
             }
         },
         initTDC: () => {

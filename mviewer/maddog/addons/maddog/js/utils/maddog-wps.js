@@ -90,6 +90,50 @@ const wps = (function () {
                     tdc
                 )
             });
+            var outputGenerator = new OutputGenerator();
+            var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
+                "jsonString",
+                "application/json", 
+                null,
+                null,
+                null,
+                false,
+                null,
+                null);
+            var outputs = [complexOutput];
+            wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
+        },
+        beachProfileTracking: ({
+            callback = () => {},
+            wpsService = null,
+            radiales = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>
+            processIdentifier = "BeachProfile:BeachProfileTracking",
+            executionMode = "async",
+            lineage = false,
+            prf = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,,
+            interval = 0.1,
+            minDist = 0,
+            maxDist = 0,
+            useSmallestDistance = true
+        }) => {
+             if (!wpsService || _.isEmpty(prf)) return {};
+
+            let inputGenerator = new InputGenerator();
+
+            let inputs = Object.values({
+                fc: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
+                    "fc",
+                    "application/json",
+                    "",
+                    null,
+                    false,
+                    prf
+                ),
+                interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("interval", null, null, interval),
+                useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("useSmallestDistance", null, null, useSmallestDistance),
+                minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("minDist", null, null, minDist),
+                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, minDist)
+            });
 
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(

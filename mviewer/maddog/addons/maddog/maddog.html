@@ -198,17 +198,79 @@
                 <!--Tab-->
                 <div class="tab-content">
                     <div id="ppTabDate" class="tab-pane fade in active">
-                        <!--Insérez ici les paramètres-->
-                        <p>Paramètrages du suivi </p>                       
+                        <div class="row">
+                            <span class="col-xs-6" id="selector"></span>
+                        </div>
+                        <div class="row" style="margin-top: 40px;"> 
+
+                        </div>
+                        <div class="row">
+                            <div id="alertPrfParams" class="alert alert-danger alert-dismissible" role="alert">
+                                <strong>Attention: </strong> Vous devez choisir un site, un profil et au moins 2 dates !
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;" id="panelPrfParam" hidden>
+                            <p class="text-small"><i>
+                                Sélectionner au minimum 2 profiles - <strong>La date la plus ancienne est considérée comme le profil de référence</strong>
+                            </i></p>
+                            <div class="panel-group">
+                              <div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapsePrfParam">Paramètres avancés du traitement</a>
+                                  </h4>
+                                </div>
+                                <div id="collapsePrfParam" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="col-xs-3" style="padding-left: 5px">
+                                            <label for="intervalInterpolation">Interval d'interpolation<i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <input onchange="prfUtils.onParamChange(this)" value="0.1" type="number" class="form-control tdcParams" id="interval" aria-describedby="basic-addon3">
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <label for="spaceParam">Distance de départ <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <label for="spaceParam">Distance de maximum <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-analyses dirForm">
+                                                <label for="useSmallestDist">Use smallest Distance <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                                <select onchange="prfUtils.onParamChange(this)" class="form-control" name="" id="useSmallestDistance">
+                                                    <option label="oui" selected value="true">oui</option>
+                                                    <option label="non" value="false">non</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>                     
                     </div>
                     <div id="ppTabGraph" class="tab-pane fade">  
                         <!--Insérez ici les résultats-->                     
                         <p>Visualisation des résultats</p>
                     </div>
                 </div>
+                <nav class="navbar navbar-default toolbarMenu">
+                    <div class="container-fluid">
+                        <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(PP_WPS)">
+                            <i class="fas fa-arrow-left"></i>
+                            Revenir à la liste des suivis
+                        </button>
+                        <button  hidden id="prfResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="prfUtils.prfReset()">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            Réinitialiser
+                        </button>
+                        <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking()">
+                            Lancer le traitement
+                        </button>
+                    </div>
+                </nav>
                 <!--/.Tab-->
             </div>            
-            <a href="#" class="card-link" onClick="tools.showHideMenu(PP_WPS)"><i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
         </div>
         <!-- /.Profil de plage -->
 

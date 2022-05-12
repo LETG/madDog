@@ -1,0 +1,9 @@
+{
+    "js": ["panelDrag.js","jquery.easyDrag.min.js"],
+    "css": "panelDrag.css",
+    "html": "panelDrag.html",
+    "target": "map",
+    "options": {
+        "title": "Openlayers"
+    }
+}

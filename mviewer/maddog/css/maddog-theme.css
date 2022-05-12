@@ -23,10 +23,17 @@
 }
 
 
-/* Titre de l'application */
+/** Propriétés spécifiques à MADDOG **/
 
-/* Suppresion du titre */
+/* Suppresion du panel de la légende */
 
+#layers-container-box {
+   display: none;
+}
+
+
+
+/**/
 
 /* Modification des propriétés du logo */
 img.mv-logo {

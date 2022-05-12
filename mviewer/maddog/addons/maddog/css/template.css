@@ -395,3 +395,15 @@ a.menu-link {
 #selector .multiselect-container, #selector .btn-group button  {
 	width: 100%;
 }
+
+.tdcParams, #direParam {
+	border-radius: 5px !important;
+}
+
+.panelTDCParam .panel-body {
+	padding: 10px !important;
+}
+
+.panelTDCParam .dirForm {
+	margin: 0 !important;
+}

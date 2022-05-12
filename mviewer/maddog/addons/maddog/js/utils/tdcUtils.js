@@ -257,12 +257,21 @@ const tdcUtils = (function() {
             // create coastline tracking param
             tdcUtils.setTdcFeatures(selected);
             tdcUtils.drawTDC({ ...maddog.charts.tdc, features: selected });
-            
-            let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data));
-            maddog.tdcCSV = Papa.unparse(csv);
+            if (maddog.charts.coastLines && maddog.charts.coastLines.result.length) {
+                let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data));
+                maddog.tdcCSV = Papa.unparse(csv);   
+            }
 
             // manage WPS trigger button
             $("#coastlinetrackingBtn").prop("disabled", $('#tdcMultiselect option:selected').length < 2);
+        },
+        manageError: () => {
+            const displayError = $('#tdcMultiselect option:selected').length < 2;
+            // manage trigger wps button
+            $("#coastlinetrackingBtn").prop("disabled", displayError);
+            panelTDCParam.hidden = displayError;
+            tdcResetBtn.hidden = displayError;
+            alertTdcParams.hidden = !displayError;
         },
         createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result
@@ -291,6 +300,7 @@ const tdcUtils = (function() {
                 },
                 onChange: () => {
                     tdcUtils.onDatesChange();
+                    tdcUtils.manageError();
                 },
             });
             // create options with multiselect dataprovider
@@ -304,6 +314,8 @@ const tdcUtils = (function() {
                 $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
             });
             $("#tdcMultiselect").multiselect("selectAll", false);
+
+            tdcUtils.manageError();
         },
         tdcReset: (cleanTdcLayer) => {
             if (document.getElementById("tdcChart")) {

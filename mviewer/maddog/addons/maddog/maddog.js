@@ -138,9 +138,6 @@ const maddog = (function () {
                         maddog.tdcCSV = Papa.unparse(csv);
                         maddog.tdcReference = moment.min(maddog.charts.coastLines.result.map(d => moment(d.date))).format("DD/MM/YYYY");
                         tdcUtils.tdcPlotyChart();
-                        
-                        // manage WPS trigger button
-                        $('#tdcMultiselect option:selected').length
                     }
                 });
             });

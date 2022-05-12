@@ -119,12 +119,18 @@
                             <span class="col-xs-6" id="selector"></span>
                         </div>
                         <div class="row" style="margin-top: 40px;"> 
+
+                        </div>
+                        <div class="row">
+                            <div hidden id="alertTdcParams" class="alert alert-danger alert-dismissible" role="alert">
+                                <strong>Attention: </strong> Vous devez choisir un site et au moins 2 dates !
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;" id="panelTDCParam" hidden>
                             <p><i>
                                 Sélectionner au minimum 2 traits de  côte - <strong>La date la plus ancienne est considérée comme le trait de côte de référence</strong>
                             </i></p>
-                        </div>
-                        <div class="row" style="margin-top: 10px;">
-                            <div class="panel-group panelTDCParam">
+                            <div class="panel-group">
                               <div class="panel panel-default">
                                 <div class="panel-heading">
                                   <h4 class="panel-title">
@@ -168,11 +174,11 @@
                         <i class="fas fa-arrow-left"></i>
                         Revenir à la liste des suivis
                     </button>
-                    <button  type="button" class="navbar-right btn btn-default refreshWps" onClick="tdcUtils.tdcReset()">
+                    <button  hidden id="tdcResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="tdcUtils.tdcReset()">
                         <i class="fa-solid fa-rotate-right"></i>
                         Réinitialiser
                     </button>
-                    <button id="coastlinetrackingBtn" type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
+                    <button id="coastlinetrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
                         Lancer le traitement
                     </button>
                 </div>

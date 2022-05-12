@@ -345,8 +345,11 @@ const tdcUtils = (function() {
         changeTdc: () => {
             let selected = [];
             // clean graph
-            if (document.getElementById("tdcChart")) {
-                tdcChart.remove();
+            if (document.getElementById("tdcTauxChart")) {
+                tdcTauxChart.remove();
+            }
+            if (document.getElementById("tdcDistanceChart")) {
+                tdcDistanceChart.remove();
             }
             // get checked TDC
             $('#tdcMultiselect option:selected').each((i, el) => {
@@ -435,8 +438,12 @@ const tdcUtils = (function() {
             tdcUtils.manageError();
         },
         tdcReset: (cleanTdcLayer) => {
-            if (document.getElementById("tdcChart")) {
-                tdcChart.remove();
+            // clean graph
+            if (document.getElementById("tdcTauxChart")) {
+                tdcTauxChart.remove();
+            }
+            if (document.getElementById("tdcDistanceChart")) {
+                tdcDistanceChart.remove();
             }
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');

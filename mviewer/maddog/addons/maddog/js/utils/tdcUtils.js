@@ -132,11 +132,9 @@ const tdcUtils = (function() {
             // display ref line
             tdcUtils.drawRefLine();
         },
-        createPltolyLine: (dataDate, labels, field, color) => {
-            let valByRadiale = [];
+        createPlotlyLine: (dataDate, labels, field, color) => {
             const line = {
                 name: moment(dataDate.date).format("DD/MM/YYYY"),
-                y: valByRadiale,
                 x: labels,
                 type: "scatter",
                 mode: 'lines',
@@ -162,13 +160,12 @@ const tdcUtils = (function() {
             }
             return line;
         },
-        tdcPlotyChart: (dates) => {
+        tdcDistanceChart: (dates) => {
             let labels;
             let selected = maddog.charts.coastLines.result;
-            // create or re generate chart div
-            $("#tdcChart").remove();
+            $("#tdcDistanceChart").remove();
             const div = document.createElement("div");
-            div.id = "tdcChart";
+            div.id = "tdcDistanceChart";
             document.getElementById("tdcTabGraph").appendChild(div);
 
             // get dates from selection or every dates
@@ -180,7 +177,7 @@ const tdcUtils = (function() {
             labels = _.sortBy(labels);
             // create one line by date
             const lines = selected.map((s, i) => {
-                return tdcUtils.createPltolyLine(s, labels, "separateDist", s.color)
+                return tdcUtils.createPlotlyLine(s, labels, "separateDist", s.color)
             });
             // create chart
             const axesFont = {
@@ -190,7 +187,7 @@ const tdcUtils = (function() {
                     color: '#7f7f7f'
                 }
             }
-            Plotly.newPlot('tdcChart', lines, {
+            Plotly.newPlot('tdcDistanceChart', lines, {
                 showlegend: false,
                 title: {
                     text: `Date de référence : ${maddog.tdcReference}`,
@@ -247,6 +244,96 @@ const tdcUtils = (function() {
 
             });
 
+        },
+        tdcTauxChart: (dates) => {
+            let labels;
+            let selected = maddog.charts.coastLines.result;
+            $("#tdcTauxChart").remove();
+            const div = document.createElement("div");
+            div.id = "tdcTauxChart";
+            document.getElementById("tdcTabGraph").appendChild(div);
+
+            // get dates from selection or every dates
+            if (!_.isEmpty(dates)) {
+                selected = selected.filter(r => dates.includes(r.date))
+            };
+            // get uniq labels
+            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
+            labels = _.sortBy(labels);
+            console.log(labels);
+            // create one line by date
+            const lines = selected.map((s, i) => {
+                return tdcUtils.createPlotlyLine(s, labels, "tauxRecul", s.color)
+            });
+            // create chart
+            const axesFont = {
+                font: {
+                    family: 'Roboto',
+                    size: 14,
+                    color: '#7f7f7f'
+                }
+            }
+            Plotly.newPlot('tdcTauxChart', lines, {
+                showlegend: false,
+                title: {
+                    text: `Date de référence : ${maddog.tdcReference}`,
+                    font: {
+                        family: 'Roboto',
+                        size: 16
+                    },
+                    y: 0.9
+                },
+                xaxis: {
+                    title: {
+                        standoff: 40,
+                        text: 'Profils',
+                        pad: 2,
+                        ...axesFont,
+                    },
+                    showgrid: false,
+                    dtick: 5,
+                },
+                yaxis: {
+                    gridcolor: "#afa8a7",
+                    title: {
+                        text: 'Taux de recul %/jour',
+                        ...axesFont
+                    },
+                    dtick: 2,
+                }
+            }, {
+                responsive: true,
+                modeBarButtonsToAdd: [{
+                    name: 'Export SVG',
+                    icon: {
+                        width: 500,
+                        height: 600,
+                        path: "M384 128h-128V0L384 128zM256 160H384v304c0 26.51-21.49 48-48 48h-288C21.49 512 0 490.5 0 464v-416C0 21.49 21.49 0 48 0H224l.0039 128C224 145.7 238.3 160 256 160zM255 295L216 334.1V232c0-13.25-10.75-24-24-24S168 218.8 168 232v102.1L128.1 295C124.3 290.3 118.2 288 112 288S99.72 290.3 95.03 295c-9.375 9.375-9.375 24.56 0 33.94l80 80c9.375 9.375 24.56 9.375 33.94 0l80-80c9.375-9.375 9.375-24.56 0-33.94S264.4 285.7 255 295z"
+                    },
+                    click: function(gd) {
+                        Plotly.downloadImage(gd, {
+                            format: 'svg'
+                        })
+                    }
+                }, {
+                    name: 'Export CSV',
+                    icon: {
+                        width: 500,
+                        height: 600,
+                        path: "M224 0V128C224 145.7 238.3 160 256 160H384V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64C0 28.65 28.65 0 64 0H224zM80 224C57.91 224 40 241.9 40 264V344C40 366.1 57.91 384 80 384H96C118.1 384 136 366.1 136 344V336C136 327.2 128.8 320 120 320C111.2 320 104 327.2 104 336V344C104 348.4 100.4 352 96 352H80C75.58 352 72 348.4 72 344V264C72 259.6 75.58 256 80 256H96C100.4 256 104 259.6 104 264V272C104 280.8 111.2 288 120 288C128.8 288 136 280.8 136 272V264C136 241.9 118.1 224 96 224H80zM175.4 310.6L200.8 325.1C205.2 327.7 208 332.5 208 337.6C208 345.6 201.6 352 193.6 352H168C159.2 352 152 359.2 152 368C152 376.8 159.2 384 168 384H193.6C219.2 384 240 363.2 240 337.6C240 320.1 231.1 305.6 216.6 297.4L191.2 282.9C186.8 280.3 184 275.5 184 270.4C184 262.4 190.4 256 198.4 256H216C224.8 256 232 248.8 232 240C232 231.2 224.8 224 216 224H198.4C172.8 224 152 244.8 152 270.4C152 287 160.9 302.4 175.4 310.6zM280 240C280 231.2 272.8 224 264 224C255.2 224 248 231.2 248 240V271.6C248 306.3 258.3 340.3 277.6 369.2L282.7 376.9C285.7 381.3 290.6 384 296 384C301.4 384 306.3 381.3 309.3 376.9L314.4 369.2C333.7 340.3 344 306.3 344 271.6V240C344 231.2 336.8 224 328 224C319.2 224 312 231.2 312 240V271.6C312 294.6 306.5 317.2 296 337.5C285.5 317.2 280 294.6 280 271.6V240zM256 0L384 128H256V0z"
+                    },
+                    click: function(gd) {
+                        tools.downloadBlob(maddog.tdcCSV, 'export.csv', 'text/csv;charset=utf-8;')
+                    }
+                }]
+
+            });
+
+        },
+        tdcPlotyChart: (dates) => {
+            // create or re generate chart div
+            tdcUtils.tdcDistanceChart(dates);
+            tdcUtils.tdcTauxChart(dates);
         },
         setTdcFeatures: (features) => {
             const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;

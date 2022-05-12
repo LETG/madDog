@@ -136,7 +136,11 @@ const maddog = (function () {
                         );
                         let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
                         maddog.tdcCSV = Papa.unparse(csv);
+                        maddog.tdcReference = moment.min(maddog.charts.coastLines.result.map(d => moment(d.date))).format("DD/MM/YYYY");
                         tdcUtils.tdcPlotyChart();
+                        
+                        // manage WPS trigger button
+                        $('#tdcMultiselect option:selected').length
                     }
                 });
             });

@@ -199,7 +199,7 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    dtick: 5,
+                    dtick: 3,
                 },
                 yaxis: {
                     gridcolor: "#afa8a7",
@@ -259,9 +259,10 @@ const tdcUtils = (function() {
             tdcUtils.drawTDC({ ...maddog.charts.tdc, features: selected });
             
             let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data));
-            console.log(csv);
             maddog.tdcCSV = Papa.unparse(csv);
-            
+
+            // manage WPS trigger button
+            $("#coastlinetrackingBtn").prop("disabled", $('#tdcMultiselect option:selected').length < 2);
         },
         createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result

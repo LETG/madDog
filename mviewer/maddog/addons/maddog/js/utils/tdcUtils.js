@@ -397,7 +397,7 @@ const tdcUtils = (function() {
             // clean multi select if exists
             $(selectorTdc).empty()
             // create multiselect HTML parent
-            let multiSelectComp = document.createElement("selectorTdc");
+            let multiSelectComp = document.createElement("select");
             multiSelectComp.id = "tdcMultiselect";
             multiSelectComp.setAttribute("multiple", "multiple");
             selectorTdc.appendChild(multiSelectComp);

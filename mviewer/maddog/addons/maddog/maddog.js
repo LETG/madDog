@@ -109,7 +109,7 @@ const maddog = (function () {
                     wpsService: wpsService,
                     referenceLine: '',
                     radialLength: 100,
-                    radialDistance: 10,
+                    radialDistance: 50,
                     radialDirection: true,
                     processIdentifier: "coa:drawRadial",
                     responseFormat: "raw",

@@ -42,7 +42,7 @@ const prfUtils = (function() {
                         return {
                             ...p,
                             properties: {
-                                ...f.properties,
+                                ...p.properties,
                                 color: "#" + Math.floor(Math.random() * 16777215).toString(16),
                                 points: points
                             }

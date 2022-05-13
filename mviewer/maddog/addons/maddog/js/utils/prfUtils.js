@@ -8,7 +8,7 @@ const prfUtils = (function() {
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher
-            const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}'`)
                 .then(prfRefLine => {
                     maddog.prfRefLine = prfRefLine.data;
@@ -24,7 +24,7 @@ const prfUtils = (function() {
         },
         getPrfByProfilAndIdSite: (idSite, idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
-            const prfUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
+            const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${prfUrl}'${idSite}' AND idtype='${idType}'`)
                 // récupération du PRF
                 .then(prf => {

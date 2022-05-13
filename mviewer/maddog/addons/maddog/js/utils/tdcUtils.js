@@ -7,7 +7,7 @@ const tdcUtils = (function() {
     return {
         getReferenceLine: (idsite) => {
             // On cherche la ligne de référence, entité de base aux autres traitements
-            const lineRefUrl = 'https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}'`)
                 .then(lineRef => {
                     maddog.refLine = lineRef.data;
@@ -22,7 +22,7 @@ const tdcUtils = (function() {
         },
         getTDCByIdSite: (idsite) => {
             // on récupère ensuite le trait de côte utile pour le coastline tracking
-            const tdcUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
+            const tdcUrl = maddog.server +  "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
                 // récupération du TDC
                 .then(tdc => {

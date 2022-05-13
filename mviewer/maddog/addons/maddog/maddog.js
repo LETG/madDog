@@ -58,7 +58,7 @@ const maddog = (function () {
         const type = i.target.getAttribute("type");
         if (type === "sites") {
             tools.setIdSite(i.target.getAttribute("value"));
-            maddog.initServicebyMenu();
+            tools.initServicebyMenu();
         }
     };
 
@@ -191,7 +191,8 @@ const maddog = (function () {
             maddog.beachProfileTrackingConfig = { ...maddog.beachProfileTrackingConfig, ...param };
         },
         radiales2154: [],
-        charts: {}
+        charts: {},
+        server: mviewer.customComponents.maddog.config.options?.server
     };
 
 })();

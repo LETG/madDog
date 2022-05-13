@@ -189,6 +189,7 @@ const tdcUtils = (function() {
             }
             Plotly.newPlot('tdcDistanceChart', lines, {
                 showlegend: false,
+                autosize: true,
                 title: {
                     text: `Date de référence : ${maddog.tdcReference}`,
                     font: {
@@ -205,7 +206,8 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    dtick: 5,
+                    autotick: true,
+                    dtick: 1,
                 },
                 yaxis: {
                     gridcolor: "#afa8a7",
@@ -213,7 +215,8 @@ const tdcUtils = (function() {
                         text: 'Distance (m)',
                         ...axesFont
                     },
-                    dtick: 2,
+                    autotick: true,
+                    dtick: 1,
                 }
             }, {
                 responsive: true,
@@ -274,6 +277,7 @@ const tdcUtils = (function() {
             }
             Plotly.newPlot('tdcTauxChart', lines, {
                 showlegend: false,
+                autosize: true,
                 title: {
                     text: `Date de référence : ${maddog.tdcReference}`,
                     font: {
@@ -290,7 +294,8 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    dtick: 5,
+                    autotick: true,
+                    dtick: 1,
                 },
                 yaxis: {
                     gridcolor: "#afa8a7",
@@ -298,7 +303,7 @@ const tdcUtils = (function() {
                         text: 'Taux de recul %/jour',
                         ...axesFont
                     },
-                    dtick: 2,
+                    dtick: 1,
                 }
             }, {
                 responsive: true,
@@ -370,7 +375,7 @@ const tdcUtils = (function() {
                 let color = "color:" + s.properties.color;
                 return `<li>
                     <a class="labelDateLine">
-                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate).format("DD/MM/YYYY")}</label>
+                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate, "YYYY-MM-DD").format("DD/MM/YYYY")}</label>
                         <i class="fas fa-minus" style='${color}'></i>
                     </a>
                 </li>`
@@ -422,7 +427,7 @@ const tdcUtils = (function() {
             // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) =>
                 ({
-                    label: moment(d).format("DD/MM/YYYY"),
+                    label: moment(d, "YYYY-MM-DD").format("DD/MM/YYYY"),
                     value: d
                 })
             );

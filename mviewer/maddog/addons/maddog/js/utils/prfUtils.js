@@ -52,7 +52,6 @@ const prfUtils = (function() {
                         ...prf.data,
                         features: newFeatures
                     };
-                    console.log(maddog.charts.beachProfile);
                     // Affichage du multi select avec les dates des PRF
                     prfUtils.setPrfFeatures(prf.data.features)
                     prfUtils.createPrfMultiSelect();

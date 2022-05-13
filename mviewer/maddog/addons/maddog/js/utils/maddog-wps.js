@@ -106,11 +106,10 @@ const wps = (function () {
         beachProfileTracking: ({
             callback = () => {},
             wpsService = null,
-            radiales = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>
             processIdentifier = "BeachProfile:BeachProfileTracking",
             executionMode = "async",
             lineage = false,
-            prf = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,,
+            fc = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,,
             interval = 0.1,
             minDist = 0,
             maxDist = 0,
@@ -127,7 +126,7 @@ const wps = (function () {
                     "",
                     null,
                     false,
-                    prf
+                    fc
                 ),
                 interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("interval", null, null, interval),
                 useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("useSmallestDistance", null, null, useSmallestDistance),

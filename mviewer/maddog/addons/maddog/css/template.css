@@ -399,7 +399,7 @@ a.menu-link {
 	width: 100%;
 }
 
-.tdcParams, #radialDirection {
+.tdcParams, #radialDirection, .dirForm select  {
 	border-radius: 5px !important;
 }
 
@@ -408,7 +408,7 @@ a.menu-link {
 	padding: 15px !important;
 }
 
-#panelTDCParam .dirForm {
+.dirForm {
 	margin: 0 !important;
 }
 
@@ -419,7 +419,6 @@ a.menu-link {
 #panelTDCParam label {
     font-weight:400!important;
 }
-
 
 .nobullet {
 	list-style-type: none; /* Remove bullets */

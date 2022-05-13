@@ -202,7 +202,7 @@
             <h3 class="modal-title">Profil de plage</h3>     
             <div class="tab-block">
                 <!--NavTab-->
-                <ul class="nav nav-tabs nav-justified">
+                <ul class="nav nav-tabs nav-justified ppNavTabs">
                     <li class="active"><a href="#ppTabDate" data-toggle="tab">Choix des dates</a></li>
                     <li><a href="#ppTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
                 </ul>
@@ -213,8 +213,10 @@
                         <div class="row">
                             <span class="col-xs-6" id="selectorPrf"></span>
                         </div>
-                        <div class="row" style="margin-top: 40px;"> 
-
+                        <div class="row" id="pofilesDates" style="margin-top: 40px;">
+                            <div class="row" id="pofilesDatesChart" style="margin-top: 40px;">
+                            
+                            </div>
                         </div>
                         <div class="row">
                             <div id="alertPrfParams" class="alert alert-danger alert-dismissible" role="alert">
@@ -226,7 +228,7 @@
                                 Sélectionner au minimum 2 profiles - <strong>La date la plus ancienne est considérée comme le profil de référence</strong>
                             </i></p>
                             <div class="panel-group">
-                              <div class="panel panel-default">
+                              <div class="panel panel-default panelPRF">
                                 <div class="panel-heading">
                                   <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#collapsePrfParam">Paramètres avancés du traitement</a>
@@ -243,12 +245,12 @@
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-xs-3">
-                                            <label for="spaceParam">Distance de maximum <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <label for="spaceParam">Distance maximum <i class="fa fa-info-circle" aria-hidden="true"></i></label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
-                                                <label for="useSmallestDist">Use smallest Distance <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                                <label for="useSmallestDist">Smallest Distance <i class="fa fa-info-circle" aria-hidden="true"></i></label>
                                                 <select onchange="prfUtils.onParamChange(this)" class="form-control" name="" id="useSmallestDistance">
                                                     <option label="oui" selected value="true">oui</option>
                                                     <option label="non" value="false">non</option>
@@ -276,7 +278,7 @@
                             <i class="fa-solid fa-rotate-right"></i>
                             Réinitialiser
                         </button>
-                        <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking()">
+                        <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking(maddog.beachProfileTrackingConfig)">
                             Lancer le traitement
                         </button>
                     </div>

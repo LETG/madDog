@@ -140,6 +140,33 @@ const maddog = (function () {
                         tdcUtils.tdcPlotyChart();
                     }
                 });
+                maddog.setBeachProfileTrackingConfig({
+                    wpsService: wpsService,
+                    responseFormat: "raw",
+                    executionMode: "async",
+                    lineage: false,
+                    fc: {},
+                    interval: 2,
+                    useSmallestDistance: true,
+                    minDist: 2,
+                    maxDist: 2,
+                    processIdentifier: "BeachProfile:BeachProfileTracking",
+                    callback: (response) => {
+                        console.log(response);
+                        // $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
+                        // maddog.charts.sediments = JSON.parse(response.responseDocument);
+                        // maddog.charts.sediments.result = maddog.charts.sediments.result.map(
+                        //     r => {
+                        //         const color = _.find(maddog.charts.sediments.features, ["properties.creationdate", r.date + "Z"])?.properties?.color;
+                        //         return { ...r, color: color };
+                        //     }
+                        // );
+                        // let csv = _.flatten(maddog.charts.sediments.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
+                        // maddog.sedimentsCSV = Papa.unparse(csv);
+                        // maddog.sedimentsReference = moment.min(maddog.charts.sediments.result.map(d => moment(d.date))).format("DD/MM/YYYY");
+                        // prfUtils.sedimentsPlotyChart();
+                    }
+                });
             });
         },
         setDrawRadialConfig: (param) => {
@@ -150,11 +177,18 @@ const maddog = (function () {
         },
         drawRadialConfig: {},
         coastLinesTrackingConfig: {},
+        beachProfileTrackingConfig: {},
         setCoastLinesTrackingConfig: (param) => {
             if (!maddog.coastLinesTrackingConfig) {
                 maddog.coastLinesTrackingConfig = {};
             }
             maddog.coastLinesTrackingConfig = { ...maddog.coastLinesTrackingConfig, ...param };
+        },
+        setBeachProfileTrackingConfig: (param) => {
+            if (!maddog.beachProfileTrackingConfig) {
+                maddog.beachProfileTrackingConfig = {};
+            }
+            maddog.beachProfileTrackingConfig = { ...maddog.beachProfileTrackingConfig, ...param };
         },
         radiales2154: [],
         charts: {}

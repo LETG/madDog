@@ -403,13 +403,24 @@ a.menu-link {
 	border-radius: 5px !important;
 }
 
+/* Panel des paramètres vaancés */
 #panelTDCParam .panel-body {
-	padding: 10px !important;
+	padding: 15px !important;
 }
 
 #panelTDCParam .dirForm {
 	margin: 0 !important;
 }
+
+#panelTDCParam, #panelTDCParam .panel-title {
+    color: #555555;
+}
+
+#panelTDCParam label {
+    font-weight:400!important;
+}
+
+
 .nobullet {
 	list-style-type: none; /* Remove bullets */
 	padding: 0; /* Remove padding */
@@ -430,3 +441,40 @@ a.menu-link {
 	right: 12px;
 	top: 44%;
 }
+
+/* Légende - TDC */
+
+.labelDateLine label {
+    font-weight: 400;
+}
+
+
+/* */
+
+.panelTDC>.panel-heading a:after {
+	content: "";
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	float: right;
+	transition: transform .25s linear;
+	-webkit-transition: -webkit-transform .25s linear;
+  }
+ 
+  .panelTDC>.panel-heading a[aria-expanded="true"]:after {
+	content: "\2212";
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+  }
+  
+  .panelTDC>.panel-heading a[aria-expanded="false"]:after {
+	content: "\002b";
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+  }

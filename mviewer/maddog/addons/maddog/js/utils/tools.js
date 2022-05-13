@@ -87,10 +87,12 @@ const tools = (function() {
                     axios.get(url)
                         .then((response) => response.data.features ? response.data.features[0] : [])
                         .then((feature) => {
-                            tdcUtils.tdcReset(true);
                             if (feature) {
-                                tools.tdcToMap(feature.properties.idsite);
+                                maddog.idsite = feature.properties.idsite;
+                                tools.setIdSite(feature.properties.idsite);
                                 tools.zoomToJSONFeature(feature, "EPSG:3857");
+                                // init service
+                                tools.initServicebyMenu();
                             } else {
                                 maddog.idsite = null;
                             }
@@ -98,17 +100,12 @@ const tools = (function() {
                 }
             });
         },
-        tdcToMap: (idsite) => {
-            if (!TDC_WPS.hidden) {
-                tdcUtils.getReferenceLine(idsite);
-            }
-            document.getElementById("siteName").innerHTML = idsite;
+        setIdSite: (idsite) => {
             maddog.idsite = idsite;
+            document.getElementById("siteName").innerHTML = idsite;
         },
-        showHideMenu: (ele) => {
-            ele.hidden = !ele.hidden;
-            selectWPS.hidden = !selectWPS.hidden;
-            console.log(maddog.idsite);
+        initServicebyMenu: () => {
+            tdcUtils.tdcReset(true);
             if (maddog.idsite && !TDC_WPS.hidden) {
                 tdcUtils.getReferenceLine(maddog.idsite);
                 tdcUtils.getTDCByIdSite(maddog.idsite);
@@ -116,6 +113,11 @@ const tools = (function() {
             if (maddog.idsite && !PP_WPS.hidden) {
                 prfUtils.getPrfRefLines(maddog.idsite);
             }
+        },
+        showHideMenu: (ele) => {
+            ele.hidden = !ele.hidden;
+            selectWPS.hidden = !selectWPS.hidden;
+            tools.initServicebyMenu();
             if (TDC_WPS.hidden) {
                 tdcUtils.tdcReset(true);
             }

@@ -21,9 +21,9 @@ const prfUtils = (function() {
         getPrfByProfilAndIdSite: (idSite, idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
             const prfUrl = "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
-            axios.get(`${prfUrl}'${idSite}' 'AND idtype='${idType}'`)
+            axios.get(`${prfUrl}'${idSite}' AND idtype='${idType}'`)
                 // récupération du PRF
-                .then(tdc => {
+                .then(prf => {
                     maddog.charts.prf = {
                         ...prf.data,
                         features: prf.data.features.map(f =>
@@ -36,12 +36,22 @@ const prfUtils = (function() {
                             })
                         )
                     };
+                    prfUtils.getProfileFeatures(prf.data);
                     // Affichage du multi select avec les dates des PRF
                     prfUtils.setPrfFeatures(prf.data.features)
                     prfUtils.createPrfMultiSelect();
                     // Affichage des Profils sur la carte
                     prfUtils.changePrf()
                 })
+        },
+        getProfileFeatures: (featuresJSON) => {
+            let features = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(featuresJSON, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+            console.log(features);
         },
         drawPrfRefLines: () => {
             if (!maddog.prfRefLine) return;
@@ -64,30 +74,6 @@ const prfUtils = (function() {
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
-        },
-        drawPrf: (featureJSON) => {
-            if (_.isEmpty(featureJSON)) return;
-
-            let layerPrf = mviewer.getLayer("prf").layer;
-
-            // display radiales on map with EPSG:3857
-            let featuresPrf = new ol.format.GeoJSON({
-                defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(featureJSON, {
-                dataProjection: 'EPSG:2154',
-                featureProjection: 'EPSG:3857'
-            });
-            featuresPrf.forEach(f => {
-                return f.setStyle(new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: f.get("color"),
-                        width: 2
-                    })
-                }))
-            });
-            layerPrf.getSource().clear();
-            layerPrf.getSource().addFeatures(featuresTdc);
-            
         },
         createPlotlyLine: (dataDate, labels, field, color) => {
             const line = {
@@ -226,15 +212,11 @@ const prfUtils = (function() {
             });
             // create coastline tracking param
             prfUtils.setPrfFeatures(selected);
-            prfUtils.drawPrf({
-                ...maddog.charts.prf,
-                features: selected
-            });
-            if (maddog.charts.prf && maddog.charts.prf.result.length) {
-                let csv = _.flatten(maddog.charts.prf.result.filter(c => c.data.length).map(x => x.data));
-                // check CSV
-                //maddog.prfCSV = Papa.unparse(csv);
-            }
+            // if (maddog.charts.prf && maddog.charts.prf.result.length) {
+            //     let csv = _.flatten(maddog.charts.prf.result.filter(c => c.data.length).map(x => x.data));
+            //     // check CSV
+            //     //maddog.prfCSV = Papa.unparse(csv);
+            // }
 
             // set legend content
             const legendHtml = selected.map(s => {
@@ -312,7 +294,6 @@ const prfUtils = (function() {
             $("#prfMultiselect").multiselect("refresh");
             $('.prfNavTabs a[href="#prfTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();
-            mviewer.getLayer("prf").layer.getSource().clear();
             panelDrag.clean();
             panelDrag.hidden();
             if (!cleanPrfLayer) {

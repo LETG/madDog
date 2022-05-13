@@ -73,18 +73,20 @@ const tools = (function() {
             }
         ),
         onClickAction: () => {
+            if (maddog.singleclick) return;
+            maddog.singleclick = true;
             mviewer.getMap().on('singleclick', function(evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
-                const url = mviewer.getLayer("sitebuffer").layer.getSource().getFeatureInfoUrl(
+                const urlSite = mviewer.getLayer("sitebuffer").layer.getSource().getFeatureInfoUrl(
                     evt.coordinate,
                     viewResolution,
                     'EPSG:3857', {
                         'INFO_FORMAT': 'application/json'
                     }
                 );
-                if (url) {
-                    axios.get(url)
+                if (urlSite) {
+                    axios.get(urlSite)
                         .then((response) => response.data.features ? response.data.features[0] : [])
                         .then((feature) => {
                             if (feature) {
@@ -96,8 +98,22 @@ const tools = (function() {
                             } else {
                                 maddog.idsite = null;
                             }
-                        })
+                        });
                 }
+                // enable feature selection for some features only
+                mviewer.getMap().forEachFeatureAtPixel(
+                    evt.pixel,
+                    function (e) {
+                        if (e.getProperties()) {
+                            console.log(e);
+                            const props = e.getProperties();
+                            prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);
+                        }
+                    },
+                    {
+                        layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
+                    }
+                  );
             });
         },
         setIdSite: (idsite) => {

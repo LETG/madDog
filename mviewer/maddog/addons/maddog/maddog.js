@@ -57,7 +57,8 @@ const maddog = (function () {
         tools.zoomToExtent(zoomFeatureExtent);
         const type = i.target.getAttribute("type");
         if (type === "sites") {
-            tools.tdcToMap(i.target.getAttribute("value"));
+            tools.setIdSite(i.target.getAttribute("value"));
+            maddog.initServicebyMenu();
         }
     };
 

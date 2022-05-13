@@ -260,7 +260,6 @@ const tdcUtils = (function() {
             // get uniq labels
             labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
             labels = _.sortBy(labels);
-            console.log(labels);
             // create one line by date
             const lines = selected.map((s, i) => {
                 return tdcUtils.createPlotlyLine(s, labels, "tauxRecul", s.color)

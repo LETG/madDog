@@ -44,7 +44,8 @@ const prfUtils = (function() {
                             properties: {
                                 ...p.properties,
                                 color: "#" + Math.floor(Math.random() * 16777215).toString(16),
-                                points: points
+                                points: points,
+                                elevation: p.geometry.coordinates[2]
                             }
                         };
                     });
@@ -81,32 +82,18 @@ const prfUtils = (function() {
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
         },
-        createPlotlyLine: (dataDate, labels, field, color) => {
+        createPlotlyLine: (data) => {
             const line = {
-                name: moment(dataDate.date).format("DD/MM/YYYY"),
-                x: labels,
+                name: data.name,
+                x: data.x,
+                y: data.y,
                 type: "scatter",
                 mode: 'lines',
                 line: {
-                    color: color
+                    color: data.color
                 },
                 width: 3
             };
-            // sort by radiale name for each date
-            if (!dataDate.data.length) {
-                // create reference line with 0 values for each labels
-                line.y = labels.map(() => 0);
-                line.line = {
-                    ...line.line,
-                    dash: 'dashdot',
-                    width: 4
-                };
-            } else {
-                line.y = labels.map((radialeName, i) => {
-                    const radialeValues = _.find(dataDate.data, ["radiale", radialeName])
-                    return _.isEmpty(radialeValues) ? null : _.get(radialeValues, field);
-                });
-            }
             return line;
         },
         prfBilanSedChart: (dates) => {
@@ -194,24 +181,26 @@ const prfUtils = (function() {
 
             });
         },
-        prfChart: (dates) => {
-            let labels;
-            let selected = maddog.charts.beachProfile.features;
+        prfChart: (features) => {
+            let selected = features || maddog.charts.beachProfile.features;
             $("#pofilesDatesChart").remove();
             const div = document.createElement("div");
             div.id = "pofilesDatesChart";
             document.getElementById("pofilesDates").appendChild(div);
 
-            // get dates from selection or every dates
-            if (!_.isEmpty(dates)) {
-                selected = selected.filter(r => dates.includes(r.properties.creationdate))
-            };
             // get uniq labels
-            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.distance)))).sort();
-            labels = _.sortBy(labels);
+            const preparedLinesData = selected.map(s => {
+                return {
+                    ...s.properties,
+                    x: s.properties.points.map(x => x[3]),
+                    y: s.properties.points.map(x => x[2]),
+                    name: `${s.id}-${s.properties.idtype}`
+                    
+                }
+            });
             // create one line by date
-            const lines = selected.map((s, i) => {
-                return prfUtils.createPlotlyLine(s, labels, s.color)
+            const lines = preparedLinesData.map((s, i) => {
+                return prfUtils.createPlotlyLine(s)
             });
             // create chart
             const axesFont = {
@@ -221,8 +210,9 @@ const prfUtils = (function() {
                     color: '#7f7f7f'
                 }
             }
-            Plotly.newPlot('prfBilanSedChart', lines, {
+            Plotly.newPlot('pofilesDatesChart', lines, {
                 showlegend: false,
+                autosize: true,
                 title: {
                     text: `Date de référence : ${maddog.sedimentsReference}`,
                     font: {
@@ -240,6 +230,7 @@ const prfUtils = (function() {
                     },
                     showgrid: false,
                     dtick: 5,
+                    autotick: true,
                 },
                 //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
                 yaxis: {
@@ -249,6 +240,7 @@ const prfUtils = (function() {
                         ...axesFont
                     },
                     dtick: 2,
+                    autotick: true,
                 }
             }, {
                 responsive: true,
@@ -306,6 +298,7 @@ const prfUtils = (function() {
                 // check CSV
                 maddog.prfCSV = Papa.unparse(csv);
             }
+            prfUtils.prfChart(selected);
 
             // set legend content
             const legendHtml = selected.map(s => {

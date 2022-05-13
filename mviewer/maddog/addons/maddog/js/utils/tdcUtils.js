@@ -303,6 +303,7 @@ const tdcUtils = (function() {
                         text: 'Taux de recul %/jour',
                         ...axesFont
                     },
+                    autotick: true,
                     dtick: 1,
                 }
             }, {

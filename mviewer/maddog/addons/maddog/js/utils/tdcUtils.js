@@ -391,7 +391,7 @@ const tdcUtils = (function() {
         manageError: () => {
             const displayError = $('#tdcMultiselect option:selected').length < 2;
             // manage trigger wps button
-            $("#coastlinetrackingBtn").prop("disabled", displayError);
+            coastlinetrackingBtn.disabled = displayError;
             panelTDCParam.hidden = displayError;
             alertTdcParams.hidden = !displayError;
         },
@@ -443,6 +443,7 @@ const tdcUtils = (function() {
             tdcUtils.manageError();
         },
         tdcReset: (cleanTdcLayer) => {
+            $("#coastlinetrackingBtn").show();
             // clean graph
             if (document.getElementById("tdcTauxChart")) {
                 tdcTauxChart.remove();
@@ -468,6 +469,7 @@ const tdcUtils = (function() {
             maddog.setDrawRadialConfig({
                 [e.id]: e.type === "number" ? parseInt(e.value) : e.value
             });
+            $("#coastlinetrackingBtn").show();
         }
     }
 })();

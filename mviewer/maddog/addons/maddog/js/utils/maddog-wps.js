@@ -58,6 +58,7 @@ const wps = (function () {
                 null);
             var outputs = [complexOutput];
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
+            $("#coastlinetrackingBtn").hide();
         },
         coastLineTracking: ({
             callback = () => {},

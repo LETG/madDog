@@ -10,6 +10,7 @@
     ],
     "css": [
         "css/main.css",
+        "css/loader.css",
         "css/template.css"
     ],
     "html": "maddog.html",

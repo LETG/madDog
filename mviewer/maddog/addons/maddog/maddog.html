@@ -102,7 +102,7 @@
         <!-- Trait de côte -->
         <div class="row col-sm-12" id="TDC_WPS" hidden>
             <h3 class="modal-title">Calcul de la cinématique du trait de côte</h3>
-            <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>  
+            <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>
             <div class="tab-block">
                 <!--NavTab-->
                 <ul class="nav nav-tabs nav-justified tdcNavTabs">
@@ -110,6 +110,7 @@
                     <li><a href="#tdcTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
                 </ul>
                 <!--/.NavTab-->
+                <!--Loader-->
                 <!--Tab-->
                 <div class="tab-content">
                     <div id="tdcTabDate" class="tab-pane fade in active">
@@ -175,6 +176,15 @@
                     </div>
                     <div id="tdcTabGraph" class="tab-pane fade">  
                         <!--Insérez ici les résultats-->
+                        <div class="col-sm-12 text-center load-panel" id="tdcLoader" hidden>
+                            <div class="loader-sig" id="loader-6">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <p>Chargement des données ...</p>
+                        </div>
                     </div>
                 </div>
                 <!--/.Tab-->

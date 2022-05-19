@@ -126,7 +126,7 @@ const maddog = (function () {
                     tdc: {},
                     processIdentifier: "coa:coastLinesTracking",
                     callback: (response) => {
-                        $('.tdcNavTabs a[href="#tdcTabGraph"]').tab('show');
+                        tdcLoader.hidden = true;
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => {

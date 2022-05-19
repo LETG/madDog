@@ -72,48 +72,62 @@ const tools = (function() {
                 maddog[id] = d
             }
         ),
+        getGFIUrl: (coordinate, layerId, callback) => {
+            const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
+            const urlSite = mviewer.getLayer(layerId).layer.getSource().getFeatureInfoUrl(
+                coordinate,
+                viewResolution,
+                'EPSG:3857', {
+                    'INFO_FORMAT': 'application/json'
+                }
+            );
+            if (urlSite) {
+                axios.get(urlSite)
+                    .then((response) => response.data.features ? response.data.features[0] : [])
+                    .then((feature) => {
+                        callback(feature);
+                    });
+            }
+        },
+        findCommuneOnClick: (coordinate) => {
+            tools.getGFIUrl(coordinate, "communewithsite", (feature) => {
+                if (feature) {
+                    tools.zoomToJSONFeature(feature, "EPSG:3857");
+                }
+            });
+        },
+        findSiteOnClick: (coordinate) => {
+            tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
+                if (feature) {
+                    tools.setIdSite(feature.properties.idsite);
+                    tools.zoomToJSONFeature(feature, "EPSG:3857");
+                    // init service
+                    tools.initServicebyMenu();
+                } else {
+                    maddog.idsite = null;
+                    tools.findCommuneOnClick(coordinate);
+                }
+            });
+        },
         onClickAction: () => {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
-            mviewer.getMap().on('singleclick', function(evt) {
+            mviewer.getMap().on('singleclick', function (evt) {
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
-                const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
-                const urlSite = mviewer.getLayer("sitebuffer").layer.getSource().getFeatureInfoUrl(
-                    evt.coordinate,
-                    viewResolution,
-                    'EPSG:3857', {
-                        'INFO_FORMAT': 'application/json'
-                    }
-                );
-                if (urlSite) {
-                    axios.get(urlSite)
-                        .then((response) => response.data.features ? response.data.features[0] : [])
-                        .then((feature) => {
-                            if (feature) {
-                                maddog.idsite = feature.properties.idsite;
-                                tools.setIdSite(feature.properties.idsite);
-                                tools.zoomToJSONFeature(feature, "EPSG:3857");
-                                // init service
-                                tools.initServicebyMenu();
-                            } else {
-                                maddog.idsite = null;
-                            }
-                        });
-                }
+                tools.findSiteOnClick(evt.coordinate);
                 // enable feature selection for some features only
                 mviewer.getMap().forEachFeatureAtPixel(
                     evt.pixel,
-                    function (e) {
-                        if (e.getProperties()) {
-                            console.log(e);
-                            const props = e.getProperties();
+                    function (feature) {
+                        if (feature.getProperties()) {
+                            const props = feature.getProperties();
                             prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);
                         }
                     },
                     {
                         layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
                     }
-                  );
+                );
             });
         },
         setIdSite: (idsite) => {

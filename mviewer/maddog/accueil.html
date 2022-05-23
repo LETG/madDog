@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <link rel="stylesheet" href="apps/maddog/css/maddog-home.css" />
+      <link rel="stylesheet" href="apps/maddog/css/maddog-home.css" />      
       <style>
          /** Modification de la taille de la fenêtre aide **/
          @media (min-width: 992px){
@@ -78,16 +78,7 @@
                <div class="col-md-4">
                   <div class="blockActu">
                      <h4>Actualités</h4>
-                     <div class="cardActu">
-                        <h6>Lorem ipsum dolor sit amet</h6>
-                        <p class="dateActu">16/12/2021</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                     </div>
-                     <div class="cardActu">
-                        <h6>Lorem ipsum dolor sit amet</h6>
-                        <p class="dateActu">16/12/2021</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                        <a class="linkActu">En savoir plus</a>
+                     <div id="rssActuBlock">
                      </div>
                   </div>                     
                </div>
@@ -178,6 +169,7 @@
             <!--Flux RSS avec les données issues de Indigéo-->
             <div id="rssDataBlock">
             </div>
+
             <!-- Button Close modal-->
             <div class="homeclose">
                <a href="" class="btn-close-home" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
@@ -231,9 +223,33 @@
 
    <script>
   
-      const RSS_URL = `https://portail.indigeo.fr/geonetwork/srv/fre/rss.search?keyword=MADDOG`;
+      const RSS_URL_DATA = `https://portail.indigeo.fr/geonetwork/srv/fre/rss.search?keyword=MADDOG`;
     
-      fetch(RSS_URL)
+      fetch(RSS_URL_DATA)
+      .then(response => response.text())
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(data => {
+        //console.log(data);
+        const items = data.querySelectorAll("item");
+        let test = ``;
+        items.forEach(el => {
+          test += `
+            <div class="rssData">
+              <h4>${el.querySelector("title").innerHTML}</h4>
+              <p class='descriptionRssData'>${el.querySelector("description").innerHTML}</p>
+              <p style="text-align:right;"><a class='linkData' href="${el.querySelector("link").innerHTML}" target="_blank" rel="noopener"> En savoir plus</a></p>              
+            </div>
+          `;
+        });
+        document.getElementById('rssDataBlock').insertAdjacentHTML("afterbegin", test);
+      });
+
+
+      // Actualités
+
+      const RSS_URL_ACTU = `https://portail.indigeo.fr/geonetwork/srv/fre/rss.search?keyword=MADDOG`;
+    
+      fetch(RSS_URL_ACTU)
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
@@ -242,16 +258,16 @@
         let test = ``;
         items.forEach(el => {
           test += `
-            <div class="rssData">
-              <h4>${el.querySelector("title").innerHTML}</h4>
-              <p class='description'>${el.querySelector("description").innerHTML}</p>
-              <p style="text-align:right;"><a class='linkData' href="${el.querySelector("link").innerHTML}" target="_blank" rel="noopener"> En savoir plus</a></p>              
+            <div class="cardActu">
+              <h6>${el.querySelector("title").innerHTML}</h6>
+              <p class='dateActu'>${el.querySelector("pubDate").innerHTML}</p>
+              <p class='textActu'>${el.querySelector("description").innerHTML}</p>
+                            
             </div>
           `;
         });
-        document.getElementById('rssDataBlock').insertAdjacentHTML("afterbegin", test);
+        document.getElementById('rssActuBlock').insertAdjacentHTML("afterbegin", test);
       });
       
     </script>
-
 </html>

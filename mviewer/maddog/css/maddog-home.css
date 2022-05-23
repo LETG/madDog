@@ -169,6 +169,15 @@
 
 .cardActu {
     margin: 15px 0;
+	color: #ff000000;
+}
+
+.textActu img {
+	display: none;
+}
+
+p.textActu {
+	font-size: 13px!important;
 }
 
 .cardActu h6 {
@@ -207,13 +216,18 @@ a.linkActu {
 	 padding: 10px 25px 20px;
 	 margin: 10px 0;
 	 border-radius: 5px;
+	 color: #ff000000!important;
 }
 
-.description img {
+.rssData br {
+	display: none;
+}
+
+.descriptionRssData img {
 	margin-right: 15px;
 }
 
-.description {
+.descriptionRssData {
 	padding: 10px 0px 0px 0px;
 }
 
@@ -230,6 +244,7 @@ a.linkActu {
 	background-color:var(--mycolor);
 	color: white!important;
 }
+
 
 
  /* Btn Fermer la fenêtre */

@@ -175,6 +175,9 @@
          <!--Data-->
          <div role="tabpanel" class="tab-pane" id="h_data">
             <h2 class="title-tab">Données</h2>
+            <!--Flux RSS avec les données issues de Indigéo-->
+            <div id="rssDataBlock">
+            </div>
             <!-- Button Close modal-->
             <div class="homeclose">
                <a href="" class="btn-close-home" data-dismiss="modal"><span class="fa fa-close" aria-hidden="true"></span> Fermer la fenêtre</a>
@@ -225,4 +228,30 @@
       </div>
       <!-- /.NavTab Content -->
    </body>
+
+   <script>
+  
+      const RSS_URL = `https://portail.indigeo.fr/geonetwork/srv/fre/rss.search?keyword=MADDOG`;
+    
+      fetch(RSS_URL)
+      .then(response => response.text())
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(data => {
+        console.log(data);
+        const items = data.querySelectorAll("item");
+        let test = ``;
+        items.forEach(el => {
+          test += `
+            <div class="rssData">
+              <h4>${el.querySelector("title").innerHTML}</h4>
+              <p class='description'>${el.querySelector("description").innerHTML}</p>
+              <p style="text-align:right;"><a class='linkData' href="${el.querySelector("link").innerHTML}" target="_blank" rel="noopener"> En savoir plus</a></p>              
+            </div>
+          `;
+        });
+        document.getElementById('rssDataBlock').insertAdjacentHTML("afterbegin", test);
+      });
+      
+    </script>
+
 </html>

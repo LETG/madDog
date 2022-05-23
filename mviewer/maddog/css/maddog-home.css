@@ -200,6 +200,38 @@ a.linkActu {
 	transform: scale(1.08);
  }
 
+ /* Onglet Données */
+
+ .rssData {
+	 background-color: #eeeee963;
+	 padding: 10px 25px 20px;
+	 margin: 10px 0;
+	 border-radius: 5px;
+}
+
+.description img {
+	margin-right: 15px;
+}
+
+.description {
+	padding: 10px 0px 0px 0px;
+}
+
+.linkData {
+	font-family: var(--myfont);
+	font-size: 14px;
+	border:1px solid var(--mycolor);
+	padding: 7px;
+	border-radius: 3px;
+	color: var(--mycolor)!important;
+}
+
+.linkData:hover {
+	background-color:var(--mycolor);
+	color: white!important;
+}
+
+
  /* Btn Fermer la fenêtre */
 
  .homeclose{
@@ -208,9 +240,10 @@ a.linkActu {
 
 .btn-close-home {
    background-color: var(--mycolor);
-   padding: 10px 12px;
    color: white;
    border-radius: 3px;
+   padding: 8px;
+   font-size: 14px;
 }
 
 .btn-close-home:hover {

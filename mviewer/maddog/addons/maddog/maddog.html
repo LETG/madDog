@@ -31,7 +31,7 @@
        <div class="row blockContainer" id="resultZone">
 
         <!-- Menu des suivis -->
-        <div class="row col-sm-12" id="selectWPS">
+        <div class="row col-sm-12" id="selectWPS" style="opacity: 0.2;">
             <h3 class="modal-title">Sélectionner un type de suivi</h3>
             <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
             <div class="row row-for-cards blockCards">
@@ -51,7 +51,7 @@
                             </h5>
                             <p class="card-text">Suivi en plan de la position du trait de côte. </p>
                             <div class="align-right-link">
-                                <a href="#" class="card-link" onClick="tools.showHideMenu(TDC_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" onClick="tools.showHideMenu(TDC_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             </h5>
                             <p class="card-text">Suivi des altitudes le long d'un profil perpendiculaire au trait de côte.</p>
                             <div class="align-right-link">
-                                <a href="#" class="card-link" onClick="tools.showHideMenu(PP_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" onClick="tools.showHideMenu(PP_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                             </h5>
                             <p class="card-text">Suivi surfacique de la morphologie de la zone littorale.</p>
                             <div class="align-right-link">
-                                <a href="#" class="card-link" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>                            
+                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>                            
                             </div>                            
                         </div>
                     </div>

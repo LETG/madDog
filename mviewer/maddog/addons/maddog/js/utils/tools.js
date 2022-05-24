@@ -133,6 +133,10 @@ const tools = (function() {
         setIdSite: (idsite) => {
             maddog.idsite = idsite;
             document.getElementById("siteName").innerHTML = idsite;
+            document.getElementById("selectWPS").classList.add("display-opacity");
+            document.getElementById("btn-wps-tdc").classList.remove("disabled");
+            document.getElementById("btn-wps-pp").classList.remove("disabled");
+            document.getElementById("btn-wps-mnt").classList.remove("disabled");
         },
         initServicebyMenu: () => {
             tdcUtils.tdcReset(true);

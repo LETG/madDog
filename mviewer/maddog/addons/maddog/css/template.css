@@ -42,6 +42,9 @@
 	color: var(--mycolor);
 }
 
+.display-opacity{
+	opacity: 1!important;
+}
 
 /* Panel */
 

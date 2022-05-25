@@ -95,10 +95,22 @@ const tdcUtils = (function() {
             // on affiche la radiale sur la carte
             let layer = mviewer.getLayer("radiales").layer;
 
+            //let labelLayer = layer.getSource().idIndex_;
+            //console.log(labelLayer);
+
             var style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "black",
                     width: 2
+                }),
+                text: new ol.style.Text({
+                    font: '18px Roboto',
+                    text: 'profil',
+                    placement: 'line',
+                    textAlign: 'end',
+                    fill: new ol.style.Fill({
+                        color: 'black'
+                    })
                 })
             });
 

@@ -278,7 +278,7 @@ const tdcUtils = (function() {
                 showlegend: false,
                 autosize: true,
                 title: {
-                    text: `Date de référence : ${maddog.tdcReference}`,
+                    //text: `Date de référence : ${maddog.tdcReference}`,
                     font: {
                         family: 'Roboto',
                         size: 16

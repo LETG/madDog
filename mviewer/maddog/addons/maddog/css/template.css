@@ -488,3 +488,7 @@ a.menu-link {
 	-webkit-transform: rotate(90deg);
 	transform: rotate(90deg);
   }
+
+.titleChart{
+	  text-align: center;
+  }

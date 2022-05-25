@@ -166,7 +166,9 @@ const tdcUtils = (function() {
             $("#tdcDistanceChart").remove();
             const div = document.createElement("div");
             div.id = "tdcDistanceChart";
-            document.getElementById("tdcTabGraph").appendChild(div);
+            document.getElementById("tdcGraph1").appendChild(div);
+            const titleGraph = "<p><b>Évolution de la cinématique du trait de côte (en mètres) </b><br><i>pour le site sélectionné</i><p>";
+            document.getElementById("titleChart1").innerHTML=titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -183,8 +185,8 @@ const tdcUtils = (function() {
             const axesFont = {
                 font: {
                     family: 'Roboto',
-                    size: 14,
-                    color: '#7f7f7f'
+                    size: 13,
+                    color: '#555'
                 }
             }
             Plotly.newPlot('tdcDistanceChart', lines, {
@@ -194,7 +196,7 @@ const tdcUtils = (function() {
                     text: `Date de référence : ${maddog.tdcReference}`,
                     font: {
                         family: 'Roboto',
-                        size: 16
+                        size: 14
                     },
                     y: 0.9
                 },
@@ -210,7 +212,7 @@ const tdcUtils = (function() {
                     dtick: 1,
                 },
                 yaxis: {
-                    gridcolor: "#afa8a7",
+                    gridcolor: "#555",
                     title: {
                         text: 'Distance (m)',
                         ...axesFont
@@ -253,7 +255,9 @@ const tdcUtils = (function() {
             $("#tdcTauxChart").remove();
             const div = document.createElement("div");
             div.id = "tdcTauxChart";
-            document.getElementById("tdcTabGraph").appendChild(div);
+            document.getElementById("tdcGraph2").appendChild(div);
+            const titleGraph = "<p><b>Évolution journalière de la cinématique du trait de côte (en %)</b><br><i>pour le site sélectionné</i><p>";
+            document.getElementById("titleChart2").innerHTML=titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -270,21 +274,21 @@ const tdcUtils = (function() {
             const axesFont = {
                 font: {
                     family: 'Roboto',
-                    size: 14,
-                    color: '#7f7f7f'
+                    size: 13,
+                    color: '#555'
                 }
             }
             Plotly.newPlot('tdcTauxChart', lines, {
                 showlegend: false,
                 autosize: true,
-                title: {
+                //title: {
                     //text: `Date de référence : ${maddog.tdcReference}`,
-                    font: {
-                        family: 'Roboto',
-                        size: 16
-                    },
-                    y: 0.9
-                },
+                    //font: {
+                        //family: 'Roboto',
+                        //size: 14
+                    //},
+                    //y: 0.9
+                //},
                 xaxis: {
                     title: {
                         standoff: 40,
@@ -297,9 +301,9 @@ const tdcUtils = (function() {
                     dtick: 1,
                 },
                 yaxis: {
-                    gridcolor: "#afa8a7",
+                    gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul %/jour',
+                        text: 'Taux de recul (%/jour)',
                         ...axesFont
                     },
                     autotick: true,

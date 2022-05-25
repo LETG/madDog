@@ -206,7 +206,7 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    autotick: true,
+                    //autotick: true,
                     dtick: 1,
                 },
                 yaxis: {
@@ -293,7 +293,7 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    autotick: true,
+                    //autotick: true,
                     dtick: 1,
                 },
                 yaxis: {

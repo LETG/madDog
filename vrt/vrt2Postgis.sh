@@ -56,7 +56,7 @@ if [[ $type == "REF" ]]
 then
     echo ">Create line for point in LineREF"
     ## Need to add date
-    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, geom) SELECT '$idSite', ST_Makeline(wkb_geometry) FROM (SELECT wkb_geometry FROM $table ORDER BY linePosition) as allPoints;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, idType, geom) SELECT '$idSite', idType, line FROM (SELECT idType, ST_Makeline(wkb_geometry ORDER BY linePosition) as line FROM $table GROUP BY idType) as allLines;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
     #Update site buffer and communes

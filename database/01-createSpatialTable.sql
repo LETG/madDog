@@ -10,6 +10,7 @@ CREATE TABLE lineref
 (
     ogc_fid integer NOT NULL DEFAULT nextval('lineref_ogc_fid_seq'::regclass),
     idSite VARCHAR(6),
+    idType VARCHAR(5),
     creationDate date,
     geom geometry(LineString,2154),
     CONSTRAINT lineref_pkey PRIMARY KEY (ogc_fid)

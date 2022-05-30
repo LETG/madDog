@@ -91,27 +91,35 @@ const tdcUtils = (function() {
             layerTdc.getSource().addFeatures(featuresTdc);
             
         },
+        radialesStyle: (feature) => {
+            let last = feature.getGeometry().getCoordinates()[0];
+            let first = feature.getGeometry().getCoordinates()[1];
+            return (f, res) => {
+                const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
+                const labelOffset = res > 4 ? -20 : Math.round(res > 3.5 ? res/-2*10 : -30);
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "black",
+                        width: 2
+                    }),
+                    text: displayLabel ? new ol.style.Text({
+                        font: '18px Roboto',
+                        text: `${f.get('name')}`,
+                        placement: 'point',
+                        rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
+                        textAlign: 'start',
+                        offsetX: labelOffset,
+                        offsetY: 12,
+                        fill: new ol.style.Fill({
+                            color: 'black'
+                        })
+                    }) : null
+                })
+            }
+        },
         getRadiales: (r) => {
             // on affiche la radiale sur la carte
             let layer = mviewer.getLayer("radiales").layer;
-
-            let style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                }),
-                text: mviewer.textStyle || new ol.style.Text({
-                    font: '18px Roboto',
-                    text: 'profil',
-                    offsetX: 20,
-                    placement: 'line',
-                    textAlign: 'end',
-                    fill: new ol.style.Fill({
-                        color: 'black'
-                    })
-                })
-            });
-
             // save with EPSG:2154 for getDistance WPS
             maddog.radiales2154 = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -125,31 +133,7 @@ const tdcUtils = (function() {
                 featureProjection: 'EPSG:3857'
             });
 
-            features.forEach(f => {
-                let last = f.getGeometry().getCoordinates()[0];
-                let first = f.getGeometry().getCoordinates()[1];
-
-                return f.setStyle(
-                    new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: "black",
-                            width: 2
-                        }),
-                        text: mviewer.textStyle || new ol.style.Text({
-                            font: '18px Roboto',
-                            text: `${f.get('name')}`,
-                            placement: 'point',
-                            rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
-                            textAlign: 'start',
-                            offsetX: -30,
-                            offsetY: 12,
-                            fill: new ol.style.Fill({
-                                color: 'black'
-                            })
-                        })
-                    })
-                )
-            });
+            features.forEach(f => f.setStyle((tdcUtils.radialesStyle(f))));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);

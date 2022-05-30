@@ -372,6 +372,9 @@ const tdcUtils = (function() {
             }
 
             // set legend content
+            if (!selected.length) {
+                return tdcUtils.changeLegend($(`<p>Aucune date n'a été sélectionnée !</p>`));
+            }
             const legendHtml = selected.map(s => {
                 let color = "color:" + s.properties.color;
                 return `<li>
@@ -394,6 +397,11 @@ const tdcUtils = (function() {
             coastlinetrackingBtn.disabled = displayError;
             panelTDCParam.hidden = displayError;
             alertTdcParams.hidden = !displayError;
+        },
+        multiSelectBtn: (action) => {
+            $("#tdcMultiselect").multiselect(action, false);
+            tdcUtils.changeTdc();
+            tdcUtils.manageError();
         },
         createTDCMultiSelect: () => {
             // get dates from WPS coastlinetracking result

@@ -270,7 +270,11 @@ p.card-text {
     right: 40px;
 }
 
-.toolbarMenu {
+.toolbarMultiselect {
+	margin-bottom: 10px;	
+}
+
+.toolbarMenu, .toolbarMultiselect {
 	background-color: transparent;
     border: none;
 }
@@ -279,10 +283,14 @@ p.card-text {
 	padding-left: 0px;
 }
 
-.refreshWps {
+.refreshWps, .navbarBtn {
 	color: var(--mycolor);
     background-color: white;
 	border: 1px solid var(--mycolor);
+}
+
+#tdcMultiCleanBtn {
+	margin-left: 14px;
 }
 
 .triggerWps {

@@ -116,6 +116,14 @@
                     <div id="tdcTabDate" class="tab-pane fade in active">
                         <!--Insérez ici les paramètres-->
                         <div class="row">
+                            <nav class="navbar navbar-default toolbarMultiselect">
+                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('selectAll')">
+                                    Tout sélectionner
+                                </button>
+                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('deselectAll')">
+                                    Tout désélectionner
+                                </button>
+                            </nav>
                             <span class="col-xs-6" id="selectorTdc"></span>
                         </div>
                         <div class="row" style="margin-top: 40px;"> 

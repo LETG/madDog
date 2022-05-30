@@ -9,7 +9,7 @@ CREATE MATERIALIZED VIEW sitebuffer AS
 		SELECT 
 			lineref.idSite,
 			ST_Transform(st_buffer(st_centroid(lineref.geom), 700), 3857) AS geom
-		FROM lineref 
+		FROM lineref WHERE lineref.idType='REF1'
 	) AS sitebuffer ;
 
 

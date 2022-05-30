@@ -28,5 +28,5 @@ DROP TABLE IF EXISTS site;
 
 -- Configuration tables
 
-DROP TABLE IF EXISTS serviceprofconf;
-DROP TABLE IF EXISTS servicetdcconf;
+DROP TABLE IF EXISTS wpsprofconf;
+DROP TABLE IF EXISTS wpstdcconf;

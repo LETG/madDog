@@ -119,7 +119,7 @@ const wps = (function () {
             maxDist = 0,
             useSmallestDistance = true
         }) => {
-             if (!wpsService || _.isEmpty(prf)) return {};
+             if (!wpsService || _.isEmpty(fc)) return {};
 
             let inputGenerator = new InputGenerator();
 

@@ -109,13 +109,22 @@
                 attribution="Source: service WPS">
             </layer>
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
-            <layer id="tooltip" name="Tooltip" visible="true" queryable="false"
+            <layer id="tooltip-communes" name="Tooltip" visible="true" queryable="false"
                 tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"
                 showintoc="false"
                 type="customlayer" opacity="0.8"
                 scalemin="30000"
                 toplayer="true"
-                url="apps/maddog/customlayers/tooltip.js">
+                url="apps/maddog/customlayers/tooltip-communes.js">
+            </layer>
+            <!-- Cette couche utilitaire permet d'avoir une tooltip pour les sites avec un style transparent -->
+            <layer id="tooltip-sites" name="Tooltip" visible="true" queryable="false"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
+                showintoc="false"
+                type="customlayer" opacity="0.8"
+                scalemin="30000"
+                toplayer="true"
+                url="apps/maddog/customlayers/tooltip-sites.js">
             </layer>
         </theme>
     </themes>

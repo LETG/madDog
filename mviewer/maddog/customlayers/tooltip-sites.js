@@ -14,11 +14,11 @@ let legend = { items: [] };
 let layer = new ol.layer.Vector({
     source: new ol.source.Vector({
         format: new ol.format.GeoJSON(),
-        url: "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acommunewithsite&outputFormat=application%2Fjson"
+        url: "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Asitebuffer&outputFormat=application%2Fjson"
     }),
     style: function(feature, resolution) {
         return style;
     }
 });
 
-new CustomLayer("tooltip", layer, legend);
+new CustomLayer("tooltip-sites", layer, legend);

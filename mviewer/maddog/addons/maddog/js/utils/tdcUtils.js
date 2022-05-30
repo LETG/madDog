@@ -8,7 +8,7 @@ const tdcUtils = (function() {
         getReferenceLine: (idsite) => {
             // On cherche la ligne de référence, entité de base aux autres traitements
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}'`)
+            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'REF1'`)
                 .then(lineRef => {
                     maddog.refLine = lineRef.data;
                     return lineRef.data.features ? lineRef.data.features[0] : []

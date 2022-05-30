@@ -8,8 +8,8 @@ const prfUtils = (function() {
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher
-            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}'`)
+            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(prfRefLine => {
                     maddog.prfRefLine = prfRefLine.data;
                     return prfRefLine.data.features ? prfRefLine.data.features[0] : []
@@ -28,7 +28,6 @@ const prfUtils = (function() {
             axios.get(`${prfUrl}'${idSite}' AND idtype='${idType}'`)
                 // récupération du PRF
                 .then(prf => {
-
                     // get ref point (first by default)
                     const newFeatures = prf.data.features.map(p => {
                         let refPoint = null;

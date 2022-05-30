@@ -346,6 +346,12 @@ const tdcUtils = (function() {
             });
             $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
+        orderDates: (selected) => {
+            selected = selected.map(s => ({ ...s.properties, isodate: new Date(s.properties.creationdate) }));
+            return _.orderBy(selected, (o) => {
+                return moment(o.isodate);
+              }, ['asc'])
+        },
         changeTdc: () => {
             $("#coastlinetrackingBtn").show();
             let selected = [];
@@ -370,16 +376,16 @@ const tdcUtils = (function() {
                 let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data));
                 maddog.tdcCSV = Papa.unparse(csv);
             }
-
+            selected = tdcUtils.orderDates(selected);
             // set legend content
             if (!selected.length) {
                 return tdcUtils.changeLegend($(`<p>Aucune date n'a été sélectionnée !</p>`));
             }
             const legendHtml = selected.map(s => {
-                let color = "color:" + s.properties.color;
+                let color = "color:" + s.color;
                 return `<li>
                     <a class="labelDateLine">
-                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate, "YYYY-MM-DD").format("DD/MM/YYYY")}</label>
+                        <label style="display:inline;padding-right: 5px;">${new Date(s.isodate).toLocaleDateString()}</label>
                         <i class="fas fa-minus" style='${color}'></i>
                     </a>
                 </li>`
@@ -404,9 +410,8 @@ const tdcUtils = (function() {
             tdcUtils.manageError();
         },
         createTDCMultiSelect: () => {
-            // get dates from WPS coastlinetracking result
-            //const dates = maddog.charts.coastLines.result.map(d => d.date);
-            const dates = maddog.charts.tdc.features.map(d => d.properties.creationdate);
+            // get dates from WPS result
+            const dates = tdcUtils.orderDates(maddog.charts.tdc.features).map(e => e.creationdate)
             // clean multi select if exists
             $(selectorTdc).empty()
             // create multiselect HTML parent

@@ -20,5 +20,11 @@ let layer = new ol.layer.Vector({
         return style;
     }
 });
+layer.getSource().once('change', function (e) {
+    if (layer.getSource().getState() === 'ready') {
+        const layerReadyEvt = new Event('communes-ready');
+        document.dispatchEvent(layerReadyEvt);
+    }
+});
 
 new CustomLayer("tooltip-communes", layer, legend);

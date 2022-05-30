@@ -9,6 +9,25 @@ const tools = (function() {
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
+        zoomToWMSLayerExtent: (layer, workspace, asHome = false) => {
+            if (!mviewer.getLayer(layer)) return;
+            const url = mviewer.getLayer(layer).url + "?service=WMS&version=1.1.0&request=GetCapabilities&workspace=" + workspace;
+            fetch(url).then(function(response) {
+                return response.text();
+                }).then(function(text) {
+                    const reader = new ol.format.WMSCapabilities();
+                    const infos = reader.read(text);
+                    const extent = _.find(infos.Capability.Layer.Layer, ["Name", layer]).BoundingBox[0].extent;
+                    maddog.bbox = extent;
+                    // wait 2000 ms correct map size to zoom correctly
+                    tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
+                    if (asHome) {
+                        mviewer.zoomToInitialExtent = () => {
+                            tools.zoomToExtent(maddog.bbox);
+                        };
+                    }
+            })
+        },
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
             const outConfig = endProj && startProj ? {
                 dataProjection: startProj,
@@ -21,21 +40,29 @@ const tools = (function() {
                 tools.zoomToExtent(features[0].getGeometry().getExtent());
             }
         },
-        zoomToExtent: (extent) => {
+        zoomToExtent: (extent, props, time) => {
             // NEED REPROJECTION FOR EMPRISE !
             const overlay = tools.getMvLayerById("featureoverlay");
             const duration = 1000;
             const displayTime = 3000;
-            if (!extent || !overlay) return;
-            mviewer.getMap().getView().fit(
-                extent,
+            const fit = () => {
+                mviewer.getMap().getView().fit(
+                    extent,
+                    {
+                        size: mviewer.getMap().getSize(),
+                        padding: [100, 100, 100, 100],
+                        duration: duration,
+                        ...props
+                    }
+                );
+            };
 
-                {
-                    size: mviewer.getMap().getSize(),
-                    padding: [100, 100, 100, 100],
-                    duration: duration
-                }
-            );
+            if (!extent || !overlay) return;
+            if (time) {
+                setTimeout(() => fit(), time);
+            } else {
+                fit();
+            }
             setTimeout(() => overlay.getSource().clear(), displayTime);
         },
         featureToOverlay: (feature) => {

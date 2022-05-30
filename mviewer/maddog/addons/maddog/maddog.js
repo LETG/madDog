@@ -8,6 +8,13 @@ const maddog = (function () {
 
     document.addEventListener("map-ready", () => tools.onClickAction("sitebuffer"));
 
+    document.addEventListener("communes-ready", () => {
+        const defaultZoomOptions = maddog.getCfg("config.options.defaultLayerZoom");
+        if (defaultZoomOptions && !_.isEmpty(defaultZoomOptions)) {
+            tools.zoomToWMSLayerExtent(defaultZoomOptions.layer, defaultZoomOptions.workspace, defaultZoomOptions.asHomeExtent);
+        }
+    });
+
     const waitLib = (name, ready) => new Promise((resolve, reject) => {
         if (!ready) {
             document.addEventListener(name, resolve(true));
@@ -192,7 +199,8 @@ const maddog = (function () {
         },
         radiales2154: [],
         charts: {},
-        server: mviewer.customComponents.maddog.config.options?.server
+        server: mviewer.customComponents.maddog.config.options?.server,
+        bbox: []
     };
 
 })();

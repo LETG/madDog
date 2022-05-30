@@ -109,7 +109,8 @@ const tdcUtils = (function() {
                         rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
                         textAlign: 'start',
                         offsetX: labelOffset,
-                        offsetY: 12,
+                        offsetY: 3,
+                        textBaseline: "bottom",
                         fill: new ol.style.Fill({
                             color: 'black'
                         })

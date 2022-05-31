@@ -91,17 +91,36 @@ const tdcUtils = (function() {
             layerTdc.getSource().addFeatures(featuresTdc);
             
         },
+        radialesStyle: (feature) => {
+            let last = feature.getGeometry().getCoordinates()[0];
+            let first = feature.getGeometry().getCoordinates()[1];
+            return (f, res) => {
+                const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
+                const labelOffset = res > 4 ? -20 : Math.round(res > 3.5 ? res/-2*10 : -30);
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "black",
+                        width: 2
+                    }),
+                    text: displayLabel ? new ol.style.Text({
+                        font: '18px Roboto',
+                        text: `${f.get('name')}`,
+                        placement: 'point',
+                        rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
+                        textAlign: 'start',
+                        offsetX: labelOffset,
+                        offsetY: 3,
+                        textBaseline: "bottom",
+                        fill: new ol.style.Fill({
+                            color: 'black'
+                        })
+                    }) : null
+                })
+            }
+        },
         getRadiales: (r) => {
             // on affiche la radiale sur la carte
             let layer = mviewer.getLayer("radiales").layer;
-
-            var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                })
-            });
-
             // save with EPSG:2154 for getDistance WPS
             maddog.radiales2154 = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -115,7 +134,7 @@ const tdcUtils = (function() {
                 featureProjection: 'EPSG:3857'
             });
 
-            features.forEach(f => f.setStyle(style));
+            features.forEach(f => f.setStyle((tdcUtils.radialesStyle(f))));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
@@ -166,7 +185,9 @@ const tdcUtils = (function() {
             $("#tdcDistanceChart").remove();
             const div = document.createElement("div");
             div.id = "tdcDistanceChart";
-            document.getElementById("tdcTabGraph").appendChild(div);
+            document.getElementById("tdcGraph1").appendChild(div);
+            const titleGraph = "<p><b>Évolution de la cinématique du trait de côte (en mètres) </b><br><i>pour le site sélectionné</i><p>";
+            document.getElementById("titleChart1").innerHTML=titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -183,8 +204,8 @@ const tdcUtils = (function() {
             const axesFont = {
                 font: {
                     family: 'Roboto',
-                    size: 14,
-                    color: '#7f7f7f'
+                    size: 13,
+                    color: '#555'
                 }
             }
             Plotly.newPlot('tdcDistanceChart', lines, {
@@ -194,7 +215,7 @@ const tdcUtils = (function() {
                     text: `Date de référence : ${maddog.tdcReference}`,
                     font: {
                         family: 'Roboto',
-                        size: 16
+                        size: 14
                     },
                     y: 0.9
                 },
@@ -206,11 +227,11 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    autotick: true,
+                    //autotick: true,
                     dtick: 1,
                 },
                 yaxis: {
-                    gridcolor: "#afa8a7",
+                    gridcolor: "#555",
                     title: {
                         text: 'Distance (m)',
                         ...axesFont
@@ -253,7 +274,9 @@ const tdcUtils = (function() {
             $("#tdcTauxChart").remove();
             const div = document.createElement("div");
             div.id = "tdcTauxChart";
-            document.getElementById("tdcTabGraph").appendChild(div);
+            document.getElementById("tdcGraph2").appendChild(div);
+            const titleGraph = "<p><b>Évolution journalière de la cinématique du trait de côte (en %)</b><br><i>pour le site sélectionné</i><p>";
+            document.getElementById("titleChart2").innerHTML=titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -270,21 +293,13 @@ const tdcUtils = (function() {
             const axesFont = {
                 font: {
                     family: 'Roboto',
-                    size: 14,
-                    color: '#7f7f7f'
+                    size: 13,
+                    color: '#555'
                 }
             }
             Plotly.newPlot('tdcTauxChart', lines, {
                 showlegend: false,
                 autosize: true,
-                title: {
-                    text: `Date de référence : ${maddog.tdcReference}`,
-                    font: {
-                        family: 'Roboto',
-                        size: 16
-                    },
-                    y: 0.9
-                },
                 xaxis: {
                     title: {
                         standoff: 40,
@@ -293,13 +308,12 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    autotick: true,
                     dtick: 1,
                 },
                 yaxis: {
-                    gridcolor: "#afa8a7",
+                    gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul %/jour',
+                        text: 'Taux de recul (%/jour)',
                         ...axesFont
                     },
                     autotick: true,

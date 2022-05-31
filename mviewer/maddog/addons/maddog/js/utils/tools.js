@@ -225,12 +225,12 @@ const tools = (function() {
 
             const btn = document.querySelector(btnName);
 
-            if (btn.className == "btn btn-default btn-warning draw") {
+            if (btn.className == "btn btn-default btn-warning") {
                 btn.className = "btn btn-default";
                 btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
                 sourceLayer.clear();                          
             } else {
-                btn.className = "btn btn-default btn-warning draw";
+                btn.className = "btn btn-default btn-warning";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";
                 tools.addInteraction(sourceLayer);         
             }

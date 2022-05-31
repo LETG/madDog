@@ -31,12 +31,13 @@
        <div class="row blockContainer" id="resultZone">
 
         <!-- Menu des suivis -->
-        <div class="row col-sm-12" id="selectWPS" style="opacity: 0.2;">
+        <div class="row col-sm-12" id="selectWPS">
+            <div id="WPSnoselect"></div>
             <h3 class="modal-title">Sélectionner un type de suivi</h3>
             <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
             <div class="row row-for-cards blockCards">
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(TDC_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_tdc.png" alt="Icône Trait de côte">
@@ -51,13 +52,13 @@
                             </h5>
                             <p class="card-text">Suivi en plan de la position du trait de côte. </p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" onClick="tools.showHideMenu(TDC_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(PP_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_pp.png" alt="Icône Profil de plage">
@@ -70,13 +71,13 @@
                             </h5>
                             <p class="card-text">Suivi des altitudes le long d'un profil perpendiculaire au trait de côte.</p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" onClick="tools.showHideMenu(PP_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(MNT_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_mnt.png" alt="Icône MNT">
@@ -90,7 +91,7 @@
                             </h5>
                             <p class="card-text">Suivi surfacique de la morphologie de la zone littorale.</p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>                            
+                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>                            
                             </div>                            
                         </div>
                     </div>

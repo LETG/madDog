@@ -300,14 +300,6 @@ const tdcUtils = (function() {
             Plotly.newPlot('tdcTauxChart', lines, {
                 showlegend: false,
                 autosize: true,
-                //title: {
-                    //text: `Date de référence : ${maddog.tdcReference}`,
-                    //font: {
-                        //family: 'Roboto',
-                        //size: 14
-                    //},
-                    //y: 0.9
-                //},
                 xaxis: {
                     title: {
                         standoff: 40,
@@ -316,7 +308,6 @@ const tdcUtils = (function() {
                         ...axesFont,
                     },
                     showgrid: false,
-                    //autotick: true,
                     dtick: 1,
                 },
                 yaxis: {

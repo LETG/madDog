@@ -232,8 +232,7 @@ const tools = (function() {
             } else {
                 btn.className = "btn btn-default btn-warning draw";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";
-                tools.addInteraction(sourceLayer);                  
-                
+                tools.addInteraction(sourceLayer);         
             }
         },
 

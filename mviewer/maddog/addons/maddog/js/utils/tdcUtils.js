@@ -482,9 +482,6 @@ const tdcUtils = (function() {
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();
             mviewer.getLayer("tdc").layer.getSource().clear();
-            mviewer.getLayer("drawRefline").layer.getSource().clear();
-            $("#btnDrawRefLine").removeClass("btn-danger");
-            $('#btnDrawRefLine').empty().append("<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner");
             mviewer.getLayer("radiales").layer.getSource().clear();
             panelDrag.clean();
             panelDrag.hidden();

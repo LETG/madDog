@@ -180,7 +180,10 @@
                                                 <span data-toggle="tooltip" data-placement="top" title="Dessiner une nouvelle ligne de référence">
                                                     <i class="fas fa-info-circle"></i></span>
                                             </label>
-                                            <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline('#btnDrawRefLine', mviewer.getLayer('drawRefline').layer.getSource())">
+                                            <!-- <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline('#btnDrawRefLine', mviewer.getLayer('drawRefline').layer.getSource())">
+                                                <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
+                                            </button> -->
+                                            <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline(this, 'drawRefline')">
                                                 <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
                                             </button>
                                             

@@ -199,10 +199,7 @@ const tools = (function() {
         },
         addInteraction: (sourceLayer) => {
             var draw;
-            var feature;
-            var line;
-
-            info.disable();
+            var feature;       
 
             draw = new ol.interaction.Draw({
                 source: sourceLayer,
@@ -213,28 +210,30 @@ const tools = (function() {
 
             draw.on('drawend', function(evt){
                 feature = evt.feature;
-                line = feature.getGeometry().getCoordinates();
-                console.log(line);
+                maddog.setDrawRadialConfig({
+                    drawReferenceLine: `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`
+                });
                 mviewer.getMap().removeInteraction(draw);
-                info.enable();
             });
 
             mviewer.getMap().addInteraction(draw);
         },
-        btnDrawline: (btnName, sourceLayer) => {
-
-            const btn = document.querySelector(btnName);
-
-            if (btn.className == "btn btn-default btn-warning") {
+        btnDrawline: (btn, idLayer) => {
+            const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
+            if (btn.className == "btn btn-default btn-danger") {
                 btn.className = "btn btn-default";
                 btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
-                sourceLayer.clear();                          
+                sourceLayer.clear();  
+                info.enable(); 
+                maddog.setDrawRadialConfig({
+                    drawReferenceLine: null
+                });                       
             } else {
-                btn.className = "btn btn-default btn-warning";
+                btn.className = "btn btn-default btn-danger";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";
-                tools.addInteraction(sourceLayer);         
+                tools.addInteraction(sourceLayer); 
+                info.disable();       
             }
-        },
-
+        }
     }
 })();

@@ -80,7 +80,16 @@
                 attribution="Source: indigeo"
                 metadata=""
                 metadata-csw="" >
-            </layer>            
+            </layer> 
+            <layer id="drawRefline" name="drawRefline" visible="true" queryable="false"
+                type="customlayer" opacity="0.8"
+                url="apps/maddog/customlayers/drawRefline.js"
+                vectorlegend="true"
+                expanded="true"
+                attribution="Source: service WPS"
+                metadata=""
+                metadata-csw="">
+            </layer>           
             <layer id="radiales" name="Radiales" visible="true" queryable="false"
                 type="customlayer" opacity="0.8"
                 index="3"

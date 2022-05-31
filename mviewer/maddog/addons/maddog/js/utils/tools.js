@@ -196,6 +196,46 @@ const tools = (function() {
             pom.href = url;
             pom.setAttribute('download', filename);
             pom.click();
-        }
+        },
+        addInteraction: (sourceLayer) => {
+            var draw;
+            var feature;
+            var line;
+
+            info.disable();
+
+            draw = new ol.interaction.Draw({
+                source: sourceLayer,
+                type: 'LineString'
+            });
+
+            sourceLayer.clear();  
+
+            draw.on('drawend', function(evt){
+                feature = evt.feature;
+                line = feature.getGeometry().getCoordinates();
+                console.log(line);
+                mviewer.getMap().removeInteraction(draw);
+                info.enable();
+            });
+
+            mviewer.getMap().addInteraction(draw);
+        },
+        btnDrawline: (btnName, sourceLayer) => {
+
+            const btn = document.querySelector(btnName);
+
+            if (btn.className == "btn btn-default btn-warning draw") {
+                btn.className = "btn btn-default";
+                btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
+                sourceLayer.clear();                          
+            } else {
+                btn.className = "btn btn-default btn-warning draw";
+                btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";
+                tools.addInteraction(sourceLayer);                  
+                
+            }
+        },
+
     }
 })();

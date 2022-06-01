@@ -142,7 +142,7 @@ const wps = (function () {
 
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
-                "jsonString",
+                "result",
                 "application/json", 
                 null,
                 null,

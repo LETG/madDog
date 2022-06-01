@@ -271,7 +271,15 @@ const prfUtils = (function() {
             });
         },
         setPrfFeatures: (features) => {
-            const prfGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
+            const crsInfo = `
+                "crs": {
+                    "type": "name",
+                    "properties": {
+                        "name": "EPSG:2154"
+                    }
+                }
+            `;
+            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":[${JSON.stringify(features)}]}]]>`;
             maddog.setBeachProfileTrackingConfig({
                 fc: prfGeojson
             });

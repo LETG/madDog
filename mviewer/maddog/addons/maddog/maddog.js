@@ -158,8 +158,8 @@ const maddog = (function () {
                     fc: {},
                     interval: 2,
                     useSmallestDistance: true,
-                    minDist: 2,
-                    maxDist: 2,
+                    minDist: 0,
+                    maxDist: 0,
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {
                         console.log(response);

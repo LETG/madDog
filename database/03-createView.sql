@@ -3,13 +3,15 @@
 CREATE MATERIALIZED VIEW sitebuffer AS 
 	SELECT
 		sitebuffer.idSite, -- nom du site sur 6 caractères
+		sitebuffer.nameSite,
 		sitebuffer.geom -- geometry
 	FROM 
 	(
 		SELECT 
 			lineref.idSite,
+			site.name_site as nameSite,
 			ST_Transform(st_buffer(st_centroid(lineref.geom), 700), 3857) AS geom
-		FROM lineref WHERE lineref.idType='REF1'
+		FROM lineref, site WHERE lineref.idType='TDC1' AND lineref.idSite = site.code_site
 	) AS sitebuffer ;
 
 

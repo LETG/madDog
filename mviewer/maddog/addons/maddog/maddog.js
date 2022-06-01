@@ -64,7 +64,6 @@ const maddog = (function () {
         tools.zoomToExtent(zoomFeatureExtent);
         const type = i.target.getAttribute("type");
         if (type === "sites") {
-            console.log(i.target.getAttribute("value"));
             tools.setIdSite(i.target.getAttribute("value"), i.target.innerHTML);
             tools.initServicebyMenu();
         }

@@ -52,7 +52,7 @@ const tools = (function() {
                 maddog.bbox = extent;
                 // wait 2000 ms correct map size to zoom correctly
                 tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
-                if (options.asHome) {
+                if (options.asHomeExtent) {
                     mviewer.zoomToInitialExtent = () => {
                         tools.zoomToExtent(maddog.bbox);
                     };

@@ -216,6 +216,19 @@ h4.submodal-title {
 * SERVICES WMTS
 */
 
+#WPSnoselect {
+	background-color: #ffffffd4;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
 /* Menu des types de suivi */
 .row-for-cards {
 	display: flex;
@@ -487,4 +500,8 @@ a.menu-link {
 	content: "\002b";
 	-webkit-transform: rotate(90deg);
 	transform: rotate(90deg);
+  }
+
+.titleChart{
+	  text-align: center;
   }

@@ -140,6 +140,8 @@ const tools = (function() {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
             mviewer.getMap().on('singleclick', function (evt) {
+                // don't use actions to avoid conflict with TDC draw refline
+                if (maddog.drawStart) return;
                 document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 tools.findSiteOnClick(evt.coordinate);
                 // enable feature selection for some features only
@@ -160,7 +162,7 @@ const tools = (function() {
         setIdSite: (idsite) => {
             maddog.idsite = idsite;
             document.getElementById("siteName").innerHTML = idsite;
-            document.getElementById("selectWPS").classList.add("display-opacity");
+            document.getElementById("WPSnoselect").style.display = "none";
             document.getElementById("btn-wps-tdc").classList.remove("disabled");
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
@@ -196,6 +198,56 @@ const tools = (function() {
             pom.href = url;
             pom.setAttribute('download', filename);
             pom.click();
+        },
+        addInteraction: (sourceLayer) => {
+            let draw;
+            let feature;
+
+            draw = new ol.interaction.Draw({
+                source: sourceLayer,
+                type: 'LineString',
+                id:"test"
+            });
+
+            sourceLayer.clear();  
+
+            draw.on('drawend', function (evt) {
+                // need to clone to keep default draw line
+                feature = evt.feature.clone();
+                // reproject draw line to work with WPS
+                feature.getGeometry().transform("EPSG:3857", "EPSG:2154");
+                // WPS only works if properties is not null
+                feature.setProperties({ time: new Date().toISOString() });
+                // create JSON
+                const featureJSON = new ol.format.GeoJSON({ defaultDataProjection: "EPSG:2154" }).writeFeature(feature);
+                // set drawRadial config
+                maddog.setDrawRadialConfig({
+                    drawReferenceLine: `<![CDATA[{"type":"FeatureCollection","features":[${featureJSON}]}]]>`
+                });
+                // close draw interaction
+                mviewer.getMap().removeInteraction(draw);
+            });
+
+            mviewer.getMap().addInteraction(draw);
+        },
+        btnDrawline: (btn, idLayer) => {
+            const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
+            if (btn.className == "btn btn-default btn-danger") {
+                btn.className = "btn btn-default";
+                btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
+                sourceLayer.clear();  
+                info.enable(); 
+                maddog.setDrawRadialConfig({
+                    drawReferenceLine: null
+                });
+                maddog.drawStart = false;
+            } else {
+                btn.className = "btn btn-default btn-danger";
+                btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";
+                maddog.drawStart = true;
+                tools.addInteraction(sourceLayer);
+                info.disable();
+            }
         }
     }
 })();

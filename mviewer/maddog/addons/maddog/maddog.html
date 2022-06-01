@@ -31,12 +31,13 @@
        <div class="row blockContainer" id="resultZone">
 
         <!-- Menu des suivis -->
-        <div class="row col-sm-12" id="selectWPS" style="opacity: 0.2;">
+        <div class="row col-sm-12" id="selectWPS">
+            <div id="WPSnoselect"></div>
             <h3 class="modal-title">Sélectionner un type de suivi</h3>
             <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
             <div class="row row-for-cards blockCards">
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(TDC_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_tdc.png" alt="Icône Trait de côte">
@@ -51,13 +52,13 @@
                             </h5>
                             <p class="card-text">Suivi en plan de la position du trait de côte. </p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" onClick="tools.showHideMenu(TDC_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(PP_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_pp.png" alt="Icône Profil de plage">
@@ -70,13 +71,13 @@
                             </h5>
                             <p class="card-text">Suivi des altitudes le long d'un profil perpendiculaire au trait de côte.</p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" onClick="tools.showHideMenu(PP_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>
+                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
                             </div>                            
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card">
+                    <div class="card" onClick="tools.showHideMenu(MNT_WPS)">
                         <div class="card-body">
                             <div class="block-icon">
                                 <img class="icon-suivi" src="apps/maddog/img/icon_mnt.png" alt="Icône MNT">
@@ -90,7 +91,7 @@
                             </h5>
                             <p class="card-text">Suivi surfacique de la morphologie de la zone littorale.</p>
                             <div class="align-right-link">
-                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-right"></i> Accéder</a>                            
+                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>                            
                             </div>                            
                         </div>
                     </div>
@@ -117,28 +118,25 @@
                         <!--Insérez ici les paramètres-->
                         <div class="row">
                             <nav class="navbar navbar-default toolbarMultiselect">
+                                <span class="col-xs-6" id="selectorTdc"></span>
                                 <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('selectAll')">
                                     Tout sélectionner
                                 </button>
                                 <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('deselectAll')">
                                     Tout désélectionner
                                 </button>
-                            </nav>
-                            <span class="col-xs-6" id="selectorTdc"></span>
-                        </div>
-                        <div class="row" style="margin-top: 40px;"> 
-
+                            </nav>                            
                         </div>
                         <div class="row">
                             <div id="alertTdcParams" class="alert alert-danger alert-dismissible" role="alert">
                                 <strong>Attention: </strong> Vous devez choisir un site et au moins 2 dates !
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 10px;" id="panelTDCParam" hidden>
+                        <div class="row" id="panelTDCParam" hidden>
                             <p class="text-small"><i>
                                 Sélectionner au minimum 2 traits de  côte - <strong>La date la plus ancienne est considérée comme le trait de côte de référence</strong>
                             </i></p>
-                            <div class="panel-group " id="accordion">
+                            <div class="panel-group " id="accordion" style="margin-top: 30px;">
                               <div class="panel panel-default panelTDC">
                                 <div class="panel-heading">
                                   <h4 class="panel-title">
@@ -176,6 +174,20 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-xs-3">
+                                            <label for="drawParam">
+                                                Ligne de référence
+                                                <span data-toggle="tooltip" data-placement="top" title="Dessiner une nouvelle ligne de référence">
+                                                    <i class="fas fa-info-circle"></i></span>
+                                            </label>
+                                            <!-- <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline('#btnDrawRefLine', mviewer.getLayer('drawRefline').layer.getSource())">
+                                                <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
+                                            </button> -->
+                                            <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline(this, 'drawRefline')">
+                                                <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
+                                            </button>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                               </div>
@@ -193,6 +205,10 @@
                             </div>
                             <p>Chargement des données ...</p>
                         </div>
+                        <div id="tdcGraph1"></div>
+                        <div id="titleChart1" class="titleChart"></div>                        
+                        <div id="tdcGraph2"></div>
+                        <div id="titleChart2" class="titleChart"></div> 
                     </div>
                 </div>
                 <!--/.Tab-->

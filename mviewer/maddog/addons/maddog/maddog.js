@@ -116,6 +116,7 @@ const maddog = (function () {
                     callback: tdcUtils.getRadiales,
                     wpsService: wpsService,
                     referenceLine: '',
+                    drawReferenceLine: '',
                     radialLength: 100,
                     radialDistance: 50,
                     radialDirection: true,

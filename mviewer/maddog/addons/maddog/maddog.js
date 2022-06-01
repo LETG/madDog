@@ -72,10 +72,12 @@ const maddog = (function () {
     const displayAutocompleteList = (inputEvt) => {
         const value = inputEvt.target.value;
         maddog.searchComm(value).then(communesResult => maddog.searchSite(value).then(sitesResult => {
+            const communesLabel = maddog.getCfg("config.options.communes.label");
+            const sitesLabel = maddog.getCfg("config.options.sites.label");
             const html = [
                 '<span id="test-autocomplete">',
-                ...createList(communesResult, maddog.getCfg("config.options.communes.idField"), 'nom',  'Communes', 'communes'),
-                ...createList(sitesResult, maddog.getCfg("config.options.sites.idField"), 'idsite', 'Sites', 'sites'),
+                ...createList(communesResult, maddog.getCfg("config.options.communes.idField"), communesLabel,  'Communes', 'communes'),
+                ...createList(sitesResult, maddog.getCfg("config.options.sites.idField"), sitesLabel, 'Sites', 'sites'),
                 '</span>'
             ];
             maddog.autocomplete.display(html.join(""), onSelect, onHover );

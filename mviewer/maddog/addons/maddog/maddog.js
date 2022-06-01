@@ -162,18 +162,10 @@ const maddog = (function () {
                     maxDist: 0,
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {
-                        console.log(response);
-                        // $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
-                        // maddog.charts.sediments = JSON.parse(response.responseDocument);
-                        // maddog.charts.sediments.result = maddog.charts.sediments.result.map(
-                        //     r => {
-                        //         const color = _.find(maddog.charts.sediments.features, ["properties.creationdate", r.date + "Z"])?.properties?.color;
-                        //         return { ...r, color: color };
-                        //     }
-                        // );
-                        // let csv = _.flatten(maddog.charts.sediments.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
-                        // maddog.sedimentsCSV = Papa.unparse(csv);
-                        // maddog.sedimentsReference = moment.min(maddog.charts.sediments.result.map(d => moment(d.date))).format("DD/MM/YYYY");
+                        $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
+                        maddog.charts.sediments = JSON.parse(response.responseDocument);
+                        let csv = _.flatten(maddog.charts.sediments.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
+                        maddog.sedimentsCSV = Papa.unparse(csv);
                         // prfUtils.sedimentsPlotyChart();
                     }
                 });

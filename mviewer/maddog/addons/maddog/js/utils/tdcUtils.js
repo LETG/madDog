@@ -27,6 +27,8 @@ const tdcUtils = (function() {
                             const p = JSON.parse(wpsParams)[0];
                             radialLength.value = p?.radial_length;
                             radialDistance.value = p?.radial_distance;
+                            tdcUtils.onParamChange(radialLength);
+                            tdcUtils.onParamChange(radialDistance);
                         })
                 );
         },

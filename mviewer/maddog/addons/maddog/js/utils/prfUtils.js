@@ -127,12 +127,12 @@ const prfUtils = (function() {
                 }
             }
             Plotly.newPlot('prfBilanSedChart', lines, {
-                showlegend: false,
+                autosize: true,
                 title: {
                     text: `Evolution du bilan sédimentaire de la plage pour le profil ${profile}`,
                     font: {
                         family: 'Roboto',
-                        size: 16
+                        size: 15
                     },
                     y: 0.9
                 },
@@ -143,8 +143,7 @@ const prfUtils = (function() {
                         pad: 2,
                         ...axesFont,
                     },
-                    showgrid: true,
-                    dtick: 5,
+                    showgrid: true
                 },
                 //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
                 yaxis: {
@@ -154,7 +153,7 @@ const prfUtils = (function() {
                         text: 'Bilan séd. (m3/m.l.)',
                         ...axesFont
                     },
-                    dtick: 2,
+                    // dtick: 2
                 }
             }, {
                 responsive: true,
@@ -384,7 +383,7 @@ const prfUtils = (function() {
                 prfBilanSedChart.remove();
             }
             $("#prfMultiselect").multiselect("refresh");
-            $('.prfNavTabs a[href="#prfTabDate"]').tab('show');
+            $('.ppNavTabs a[href="#ppTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();
             panelDrag.clean();
             panelDrag.hidden();

@@ -62,12 +62,6 @@ const tdcUtils = (function() {
             if (!maddog.refLine) return;
 
             let layer = mviewer.getLayer("refline").layer;
-            var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                })
-            });
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -75,7 +69,7 @@ const tdcUtils = (function() {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
-            features.forEach(f => f.setStyle(style));
+            features.forEach(f => f.setStyle(tools.refLineStyle));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);

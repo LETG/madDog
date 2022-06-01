@@ -1,8 +1,24 @@
 const tools = (function() {
     const eventName = "tools-componentLoaded";
-    var create = new Event(eventName);
+    const create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
     document.dispatchEvent(create);
+
+    const highlightStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: "#ffa43b",
+            width: 5
+        })
+    });
+
+    const refLineStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: "black",
+            width: 2
+        })
+    });
+
+    let highlightLR, selectedLR;
 
     return {
         view: () => mviewer.getMap().getView(),
@@ -162,14 +178,38 @@ const tools = (function() {
                 // enable feature selection for some features only
                 mviewer.getMap().forEachFeatureAtPixel(
                     evt.pixel,
-                    function (feature) {
-                        if (feature.getProperties()) {
-                            const props = feature.getProperties();
+                    f => {
+                        if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
+                        if (f.getProperties()) {
+                            selectedLR = f;
+                            const props = f.getProperties();
                             prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);
                         }
                     },
                     {
+                        hitTolerance: 10,
                         layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
+                    }
+                );
+            });
+        },
+        highlightFeature: () => {
+            mviewer.getMap().on('pointermove', function (e) {
+                if (highlightLR) {
+                    highlightLR.setStyle(refLineStyle);
+                    highlightLR = null;
+                }
+                mviewer.getMap().forEachFeatureAtPixel(
+                    e.pixel,
+                    f => {
+                        highlightLR = f;
+                        highlightLR.setStyle(highlightStyle);
+                        return true;
+                    },
+                    {
+                        hitTolerance: 10,
+                        layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
+                        
                     }
                 );
             });

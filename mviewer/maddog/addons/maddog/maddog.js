@@ -6,7 +6,10 @@ const maddog = (function () {
 
     let wpsService = null;
 
-    document.addEventListener("map-ready", () => tools.onClickAction("sitebuffer"));
+    document.addEventListener("map-ready", () => {
+        tools.onClickAction();
+        tools.highlightFeature();
+    });
 
     document.addEventListener("communes-ready", () => {
         tools.zoomToOGCLayerExtent();
@@ -159,7 +162,6 @@ const maddog = (function () {
                     maxDist: 0,
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {
-                        $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
                         maddog.charts.sediments = JSON.parse(response.responseDocument);
                         let csv = maddog.charts.sediments.result.map(s => ({
                             date: s.date,

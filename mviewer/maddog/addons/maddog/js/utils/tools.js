@@ -9,9 +9,9 @@ const tools = (function() {
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
-        zoomToWMSLayerExtent: (layer, workspace, asHome = false) => {
+        zoomToWMSLayerExtent: (layer, ns, asHome = false) => {
             if (!mviewer.getLayer(layer)) return;
-            const url = mviewer.getLayer(layer).url + "?service=WMS&version=1.1.0&request=GetCapabilities&workspace=" + workspace;
+            const url = mviewer.getLayer(layer).url + "?service=WMS&version=1.1.0&request=GetCapabilities&namespace=" + ns;
             fetch(url).then(function(response) {
                 return response.text();
                 }).then(function(text) {

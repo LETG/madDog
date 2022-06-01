@@ -126,7 +126,7 @@ const tools = (function() {
         findSiteOnClick: (coordinate) => {
             tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
                 if (feature) {
-                    tools.setIdSite(feature.properties.idsite);
+                    tools.setIdSite(feature.properties.idsite, feature.properties.namesite);
                     tools.zoomToJSONFeature(feature, "EPSG:3857");
                     // init service
                     tools.initServicebyMenu();
@@ -159,9 +159,9 @@ const tools = (function() {
                 );
             });
         },
-        setIdSite: (idsite) => {
+        setIdSite: (idsite, namesite) => {
             maddog.idsite = idsite;
-            document.getElementById("siteName").innerHTML = idsite;
+            document.getElementById("siteName").innerHTML = _.capitalize(namesite);
             document.getElementById("WPSnoselect").style.display = "none";
             document.getElementById("btn-wps-tdc").classList.remove("disabled");
             document.getElementById("btn-wps-pp").classList.remove("disabled");

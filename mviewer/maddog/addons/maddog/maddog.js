@@ -161,9 +161,12 @@ const maddog = (function () {
                     callback: (response) => {
                         $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
                         maddog.charts.sediments = JSON.parse(response.responseDocument);
-                        let csv = _.flatten(maddog.charts.sediments.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
+                        let csv = maddog.charts.sediments.result.map(s => ({
+                            date: s.date,
+                            ...Object.assign({}, ...maddog.charts.sediments.result[0].data)
+                        }));
                         maddog.sedimentsCSV = Papa.unparse(csv);
-                        // prfUtils.sedimentsPlotyChart();
+                        prfUtils.prfBilanSedChart();
                     }
                 });
             });

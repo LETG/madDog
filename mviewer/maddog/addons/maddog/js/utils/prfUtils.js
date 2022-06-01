@@ -89,31 +89,35 @@ const prfUtils = (function() {
                 type: "scatter",
                 mode: 'lines',
                 line: {
-                    color: data.color
+                    color: data.color || "#13344b"
                 },
                 width: 3
             };
             return line;
         },
-        prfBilanSedChart: (dates) => {
-            let labels;
-            let selected = maddog.charts.sediments.result;
+        orderDates: (selected, dateField) => {
+            return selected.sort((a, b) => {
+                return moment(a.isodate).diff(b.isodate);
+              });
+        },
+        prfBilanSedChart: () => {
+            const profile = maddog.charts.beachProfile.features[0].properties.idtype;
+            // clean previous chart
             $("#prfBilanSedChart").remove();
             const div = document.createElement("div");
             div.id = "prfBilanSedChart";
             document.getElementById("ppTabGraph").appendChild(div);
-
-            // get dates from selection or every dates
-            if (!_.isEmpty(dates)) {
-                selected = selected.filter(r => dates.includes(r.date))
-            };
-            // get uniq labels
-            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
-            labels = _.sortBy(labels);
+            // standardize date format
+            let selected = maddog.charts.sediments.result.map(item => ({ ...item, isodate: new Date(item.date) }));
+            selected = prfUtils.orderDates(selected, "isodate");
+            // get uniq labels already orderd by date
+            let labels = _.uniq(selected.map(s => new Date(s.isodate).toLocaleDateString()))
             // create one line by date
-            const lines = selected.map((s, i) => {
-                return prfUtils.createPlotlyLine(s, labels, "separateDist", s.color)
-            });
+            const lines = [prfUtils.createPlotlyLine({
+                x: labels,
+                y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
+                name: ""
+            })];
             // create chart
             const axesFont = {
                 font: {
@@ -125,7 +129,7 @@ const prfUtils = (function() {
             Plotly.newPlot('prfBilanSedChart', lines, {
                 showlegend: false,
                 title: {
-                    text: `Date de référence : ${maddog.sedimentsReference}`,
+                    text: `Evolution du bilan sédimentaire de la plage pour le profil ${profile}`,
                     font: {
                         family: 'Roboto',
                         size: 16
@@ -135,18 +139,19 @@ const prfUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Distance',
+                        text: ``,
                         pad: 2,
                         ...axesFont,
                     },
-                    showgrid: false,
+                    showgrid: true,
                     dtick: 5,
                 },
                 //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
                 yaxis: {
+                    showgrid: true,
                     gridcolor: "#afa8a7",
                     title: {
-                        text: 'Evolution cumulée (m)',
+                        text: 'Bilan séd. (m3/m.l.)',
                         ...axesFont
                     },
                     dtick: 2,
@@ -181,6 +186,7 @@ const prfUtils = (function() {
             });
         },
         prfChart: (features) => {
+            const profile = maddog.charts.beachProfile.features[0].properties.idtype;
             let selected = features || maddog.charts.beachProfile.features;
             $("#pofilesDatesChart").remove();
             const div = document.createElement("div");
@@ -194,7 +200,6 @@ const prfUtils = (function() {
                     x: s.properties.points.map(x => x[3]),
                     y: s.properties.points.map(x => x[2]),
                     name: `${s.id}-${s.properties.idtype}`
-                    
                 }
             });
             // create one line by date
@@ -213,7 +218,7 @@ const prfUtils = (function() {
                 showlegend: false,
                 autosize: true,
                 title: {
-                    text: `Date de référence : ${maddog.sedimentsReference}`,
+                    text: `Variations du profil transversal de la plage ${profile.toUpperCase()}`,
                     font: {
                         family: 'Roboto',
                         size: 16
@@ -223,23 +228,21 @@ const prfUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Distance',
+                        text: 'Distance (en m)',
                         pad: 2,
                         ...axesFont,
                     },
-                    showgrid: false,
-                    dtick: 5,
-                    autotick: true,
+                    showgrid: true
                 },
                 //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
                 yaxis: {
                     gridcolor: "#afa8a7",
                     title: {
-                        text: 'Evolution cumulée (m)',
+                        text: 'Hauteur (en cm)',
                         ...axesFont
                     },
                     dtick: 2,
-                    autotick: true,
+                    showgrid: true
                 }
             }, {
                 responsive: true,

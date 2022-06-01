@@ -128,7 +128,7 @@
             </layer>
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les sites avec un style transparent -->
             <layer id="tooltip-sites" name="Tooltip" visible="true" queryable="false"
-                tooltip="true" tooltipenabled="true" tooltipcontent="{{idsite}}"
+                tooltip="true" tooltipenabled="true" tooltipcontent="{{namesite}}"
                 showintoc="false"
                 type="customlayer" opacity="0.8"
                 scalemin="30000"

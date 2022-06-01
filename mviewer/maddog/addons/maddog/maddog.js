@@ -9,10 +9,7 @@ const maddog = (function () {
     document.addEventListener("map-ready", () => tools.onClickAction("sitebuffer"));
 
     document.addEventListener("communes-ready", () => {
-        const defaultZoomOptions = maddog.getCfg("config.options.defaultLayerZoom");
-        if (defaultZoomOptions && !_.isEmpty(defaultZoomOptions)) {
-            tools.zoomToWFSLayerExtent(defaultZoomOptions.layer, defaultZoomOptions.asHomeExtent);
-        }
+        tools.zoomToOGCLayerExtent();
     });
 
     const waitLib = (name, ready) => new Promise((resolve, reject) => {

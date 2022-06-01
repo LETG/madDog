@@ -18,9 +18,11 @@
     "options": {
         "server": "https://gis.jdev.fr/geoserver/maddog",
         "defaultLayerZoom": {
-            "type": "wfs",
+            "namespace": "maddog",
             "layer": "communewithsite",
-            "asHomeExtent": true
+            "asHomeExtent": true,
+            "type": "wfs",
+            "url": ""
         },
         "communes": {
             "url": "https://gis.jdev.fr/geoserver/maddog/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Acommunewithsite&outputFormat=application%2Fjson",

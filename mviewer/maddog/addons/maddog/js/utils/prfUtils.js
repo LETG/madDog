@@ -374,7 +374,8 @@ const prfUtils = (function() {
             $("#selectorPrf").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", maddog.charts.beachProfile.features[i].properties.color);
             });
-            $("#prfMultiselect").multiselect("selectAll", false);
+            $("#prfMultiselect").multiselect("selectAll", true);
+            $("#prfMultiselect").multiselect("updateButtonText");
 
             prfUtils.manageError();
         },

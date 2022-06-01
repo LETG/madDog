@@ -472,9 +472,17 @@ const tdcUtils = (function() {
             $("#selectorTdc").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
             });
-            $("#tdcMultiselect").multiselect("selectAll", false);
-
+            tdcUtils.multiSelectBtnReset("selectAll");
             tdcUtils.manageError();
+        },
+        multiSelectBtnReset: (action) => {
+            if (action === "selectAll") {
+                tdcUtils.multiSelectBtn('selectAll');
+            } else {
+                tdcUtils.multiSelectBtn('deselectAll');
+            }
+            $("#tdcMultiselect").multiselect("updateButtonText");
+
         },
         tdcReset: (cleanTdcLayer) => {
             $("#coastlinetrackingBtn").show();

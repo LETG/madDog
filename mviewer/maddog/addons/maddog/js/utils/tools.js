@@ -9,23 +9,38 @@ const tools = (function() {
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
-        zoomToWMSLayerExtent: (layer, ns, asHome = false) => {
-            if (!mviewer.getLayer(layer)) return;
-            const url = mviewer.getLayer(layer).url + "?service=WMS&version=1.1.0&request=GetCapabilities&namespace=" + ns;
-            fetch(url).then(function(response) {
-                return response.text();
-                }).then(function(text) {
-                    const reader = new ol.format.WMSCapabilities();
-                    const infos = reader.read(text);
-                    const extent = _.find(infos.Capability.Layer.Layer, ["Name", layer]).BoundingBox[0].extent;
-                    maddog.bbox = extent;
-                    // wait 2000 ms correct map size to zoom correctly
-                    tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
-                    if (asHome) {
-                        mviewer.zoomToInitialExtent = () => {
-                            tools.zoomToExtent(maddog.bbox);
-                        };
-                    }
+        zoomToOGCLayerExtent: () => {
+            const options = maddog.getCfg("config.options.defaultLayerZoom");
+            if (!mviewer.getLayer(options.layer)) return;
+            let url = options.url || mviewer.getLayer(options.layer).layer.getSource().getUrl() ;
+            if (options.type === "wms" && !options.url) {
+                url = url + "?service=WMS&version=1.1.0&request=GetCapabilities&namespace=" + options.namespace;
+            }
+            if (options.type === "wfs" && !options.url) {
+                url = url.replace("wms","wfs") + "?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&typeName=" + options.layer;
+            }
+            fetch(url).then(response => options.type === "wms" ? response.text() : response.json())
+            .then(function (response) {
+                let reader = options.type === "wms" ? new ol.format.WMSCapabilities() : new ol.format.GeoJSON();
+                let extent;
+                if (options.type === "wms") {
+                    const infos = reader.read(response);
+                    extent = _.find(infos.Capability.Layer.Layer, ["Name", options.layer]).BoundingBox[0].extent;
+                }
+                if (options.type === "wfs") {
+                    const layerExtentInit = new ol.source.Vector();
+                    const features = reader.readFeatures(response);
+                    layerExtentInit.addFeatures(features);
+                    extent = layerExtentInit.getExtent();
+                }
+                maddog.bbox = extent;
+                // wait 2000 ms correct map size to zoom correctly
+                tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
+                if (options.asHome) {
+                    mviewer.zoomToInitialExtent = () => {
+                        tools.zoomToExtent(maddog.bbox);
+                    };
+                }
             })
         },
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {

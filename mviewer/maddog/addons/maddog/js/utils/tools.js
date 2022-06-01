@@ -28,6 +28,35 @@ const tools = (function() {
                     }
             })
         },
+        zoomToWFSLayerExtent: (layer, asHome = false) => {
+            // generate a GetFeature request
+            const featureRequest = new ol.format.WFS().writeGetFeature({
+                srsName: 'EPSG:3857',
+                featureTypes: [layer],
+                outputFormat: 'application/json'
+            });
+        
+            // then post the request and add the received features to a layer
+            fetch(mviewer.getLayer(layer).url.replace("wms","wfs"), {
+                method: 'POST',
+                body: new XMLSerializer().serializeToString(featureRequest),
+            }).then(function(response) {
+                return response.json();
+            }).then(function(json) {
+                const layerExtentInit = new ol.source.Vector();
+                const features = new ol.format.GeoJSON().readFeatures(json);
+                layerExtentInit.addFeatures(features);
+                const extent = layerExtentInit.getExtent();
+                maddog.bbox = extent;
+                // wait 2000 ms correct map size to zoom correctly
+                tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
+                if (asHome) {
+                    mviewer.zoomToInitialExtent = () => {
+                        tools.zoomToExtent(maddog.bbox);
+                    };
+                }
+            });
+        },
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
             const outConfig = endProj && startProj ? {
                 dataProjection: startProj,

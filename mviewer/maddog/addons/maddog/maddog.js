@@ -11,7 +11,7 @@ const maddog = (function () {
     document.addEventListener("communes-ready", () => {
         const defaultZoomOptions = maddog.getCfg("config.options.defaultLayerZoom");
         if (defaultZoomOptions && !_.isEmpty(defaultZoomOptions)) {
-            tools.zoomToWMSLayerExtent(defaultZoomOptions.layer, defaultZoomOptions.workspace, defaultZoomOptions.asHomeExtent);
+            tools.zoomToWFSLayerExtent(defaultZoomOptions.layer, defaultZoomOptions.asHomeExtent);
         }
     });
 

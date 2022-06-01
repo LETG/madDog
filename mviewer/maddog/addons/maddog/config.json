@@ -18,7 +18,7 @@
     "options": {
         "server": "https://gis.jdev.fr/geoserver/maddog",
         "defaultLayerZoom": {
-            "workspace": "maddog",
+            "type": "wfs",
             "layer": "communewithsite",
             "asHomeExtent": true
         },

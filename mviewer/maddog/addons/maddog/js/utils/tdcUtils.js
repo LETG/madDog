@@ -6,7 +6,7 @@ const tdcUtils = (function() {
 
     return {
         getReferenceLine: (idsite) => {
-            // On cherche la ligne de référence, entité de base aux autres traitements
+            // search reference line as first step and required WPS infos
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'REF1'`)
                 .then(lineRef => {
@@ -14,17 +14,27 @@ const tdcUtils = (function() {
                     return lineRef.data.features ? lineRef.data.features[0] : []
                 })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
-                // A partir de la ligne de référence, on va maintenant calculer la radiale
+                // from reference line, we get radiale
                 .then(geojson => maddog.setDrawRadialConfig({
                     referenceLine: geojson
                 }))
-                .then(() => tdcUtils.getTDCByIdSite(idsite));
+                .then(() => tdcUtils.getTDCByIdSite(idsite))
+                .then(() => 
+                    // get WPS params for this reference line
+                    fetch(`https://gis.jdev.fr/maddogapi/wpstdcconf?id_site=eq.${idsite}`)
+                        .then(response => response.text())
+                        .then(wpsParams => {
+                            const p = JSON.parse(wpsParams)[0];
+                            radialLength.value = p?.radial_length;
+                            radialDistance.value = p?.radial_distance;
+                        })
+                );
         },
         getTDCByIdSite: (idsite) => {
-            // on récupère ensuite le trait de côte utile pour le coastline tracking
+            // next, we get TDC usefull to call coastline tracking WPS
             const tdcUrl = maddog.server +  "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
-                // récupération du TDC
+                // get TDC and calculate legend and char color
                 .then(tdc => {
                     maddog.charts.tdc = {
                         ...tdc.data,
@@ -38,11 +48,12 @@ const tdcUtils = (function() {
                             })
                         )
                     };
-                    // Affichage du multi select avec les dates des TDC
+                    // display multiselect from TDC dates
                     tdcUtils.setTdcFeatures(tdc.data.features)
                     tdcUtils.createTDCMultiSelect();
-                    // Affichage des TDC sur la carte
+                    // display TDC to map
                     tdcUtils.changeTdc()
+                    return tdc
                 })
         },
         drawRefLine: () => {
@@ -72,7 +83,7 @@ const tdcUtils = (function() {
 
             let layerTdc = mviewer.getLayer("tdc").layer;
 
-            // display radiales on map with EPSG:3857
+            // display TDC on map with EPSG:3857
             let featuresTdc = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
             }).readFeatures(featureJSON, {

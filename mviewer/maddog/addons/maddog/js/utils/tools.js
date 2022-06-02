@@ -21,6 +21,7 @@ const tools = (function() {
     let highlightLR, selectedLR;
 
     return {
+        refLineStyle: refLineStyle,
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),

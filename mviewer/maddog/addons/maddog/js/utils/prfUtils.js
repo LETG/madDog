@@ -430,6 +430,7 @@ const prfUtils = (function() {
          * Create bootstrap-multiselect for beach profile UI
          */
         createPrfMultiSelect: () => {
+            prfToolbar.hidden = false;
             const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
             // clean multi select if exists
             $(selectorPrf).empty()
@@ -480,6 +481,7 @@ const prfUtils = (function() {
          * @param {boolean} cleanPrfLayer 
          */
         prfReset: (cleanPrfLayer) => {
+            prfToolbar.hidden = true;
             if (document.getElementById("pofilesDatesChart")) {
                 pofilesDatesChart.remove();
             }

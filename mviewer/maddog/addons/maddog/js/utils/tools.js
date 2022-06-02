@@ -188,6 +188,7 @@ const tools = (function () {
                             const props = f.getProperties();
                             if (!PP_WPS.hidden) {
                                 prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);   
+                                prfToolbar.hidden = false;
                             }
                         }
                     },

@@ -5,6 +5,10 @@ const prfUtils = (function() {
     document.dispatchEvent(create);
 
     return {
+        /**
+         * Get PRF Ref Lines from WFS URL
+         * @param {String} idsite 
+         */
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher
@@ -18,10 +22,21 @@ const prfUtils = (function() {
                 // On affiche les lignes de références de profils pour selection
                 .then(() => prfUtils.drawPrfRefLines());
         },
+        /**
+         * Calculate distance from 2 points
+         * @param {Array} latlng1
+         * @param {Array} latlng2
+         * @returns <Number>
+         */
         getDistance: (latlng1, latlng2) => {
             var line = new ol.geom.LineString([latlng1, latlng2]);
             return Math.round(line.getLength() * 100) / 100;
         },
+        /**
+         * From entry, get map and WPS data
+         * @param {String} idSite 
+         * @param {String} idType 
+         */
         getPrfByProfilAndIdSite: (idSite, idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
             const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
@@ -59,6 +74,11 @@ const prfUtils = (function() {
                     prfUtils.changePrf()
                 })
         },
+        /**
+         * Create style for a given feature
+         * @param {ol.feature} feature
+         * @returns 
+         */
         profilsStyle: (feature) => {
             let last = feature.getGeometry().getCoordinates()[0];
             let first = feature.getGeometry().getCoordinates()[1];
@@ -79,6 +99,10 @@ const prfUtils = (function() {
                 return tools.refLineStyle(labels);
             }
         },
+        /**
+         * Draw ref line
+         * @returns null if not necessary
+         */
         drawPrfRefLines: () => {
             if (!maddog.prfRefLine) return;
 
@@ -95,6 +119,11 @@ const prfUtils = (function() {
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
         },
+        /**
+         * Create Poltly line
+         * @param {Array} data 
+         * @returns 
+         */
         createPlotlyLine: (data) => {
             const line = {
                 name: data.name,
@@ -109,11 +138,19 @@ const prfUtils = (function() {
             };
             return line;
         },
-        orderDates: (selected, dateField) => {
+        /**
+         * Order Array objects by date
+         * @param {Array} selected
+         * @returns ordered array
+         */
+        orderDates: (selected) => {
             return selected.sort((a, b) => {
                 return moment(a.isodate).diff(b.isodate);
-              });
+            });
         },
+        /**
+         * Create second tab Chart from WPS result
+         */
         prfBilanSedChart: () => {
             const profile = maddog.charts.beachProfile.features[0].properties.idtype;
             // clean previous chart
@@ -198,6 +235,10 @@ const prfUtils = (function() {
 
             });
         },
+        /**
+         * Create first tab Chart from selected profile
+         * @param {Array} features ol.feature<Array>
+         */
         prfChart: (features) => {
             const profile = maddog.charts.beachProfile.features[0].properties.idtype;
             let selected = features || maddog.charts.beachProfile.features;
@@ -286,6 +327,10 @@ const prfUtils = (function() {
 
             });
         },
+        /**
+         * From Request we create new PRF input according to WPS
+         * @param {Array} features <Aray>
+         */
         setPrfFeatures: (features) => {
             const crsInfo = `
                 "crs": {
@@ -301,6 +346,9 @@ const prfUtils = (function() {
             });
             $("#prftrackingBtn").prop('disabled', features.length < 2);
         },
+        /**
+         * On change beach profile entry
+         */
         changePrf: () => {
             let selected = [];
             // clean graph
@@ -322,7 +370,6 @@ const prfUtils = (function() {
                 maddog.prfCSV = Papa.unparse(csv);
             }
             prfUtils.prfChart(selected);
-
             // set legend content
             const legendHtml = selected.map(s => {
                 let color = "color:" + s.properties.color;
@@ -335,11 +382,18 @@ const prfUtils = (function() {
             }).join("");
             prfUtils.changeLegend($(`<p>Date(s) sélectionnée(s):</p><ul class="nobullet">${legendHtml}</ul>`));
         },
+        /**
+         * Update legend content
+         * @param {any} content 
+         */
         changeLegend: (content) => {
             panelDrag?.display();
             panelDrag?.clean();
             panelDrag?.change(content);
         },
+        /**
+         * Control params before allow to trigger WPS Beach Profil
+         */
         manageError: () => {
             const displayError = $('#prfMultiselect option:selected').length < 2;
             // manage trigger wps button
@@ -347,6 +401,9 @@ const prfUtils = (function() {
             panelPrfParam.hidden = displayError;
             alertPrfParams.hidden = !displayError;
         },
+        /**
+         * Create bootstrap-multiselect for beach profile UI
+         */
         createPrfMultiSelect: () => {
             const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
             // clean multi select if exists
@@ -393,23 +450,36 @@ const prfUtils = (function() {
 
             prfUtils.manageError();
         },
+        /**
+         * Reset Beach Profile UI and data
+         * @param {boolean} cleanPrfLayer 
+         */
         prfReset: (cleanPrfLayer) => {
+            if (document.getElementById("pofilesDatesChart")) {
+                pofilesDatesChart.remove();
+            }
             if (document.getElementById("prfBilanSedChart")) {
                 prfBilanSedChart.remove();
             }
             $("#prfMultiselect").multiselect("refresh");
             $('.ppNavTabs a[href="#ppTabDate"]').tab('show');
-            mviewer.getLayer("refline").layer.getSource().clear();
             panelDrag.clean();
             panelDrag.hidden();
-            if (!cleanPrfLayer) {
+            if (cleanPrfLayer) {
                 // TODO get idType frome PRF selection
-               prfUtils.getPrfByProfilAndIdSite(maddog.idsite, "PRF1");
+                mviewer.getLayer("refline").layer.getSource().clear();   
             }
         },
+        /**
+         * Init
+         */
         initPrf: () => {
             prfUtils.prfReset();
         },
+        /**
+         * Change param evt
+         * @param {any} e event or this html item
+         */
         onParamChange: (e) => {
             //TODO create a config for beach profile
         }

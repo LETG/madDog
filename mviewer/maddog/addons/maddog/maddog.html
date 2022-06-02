@@ -119,10 +119,10 @@
                         <div class="row">
                             <nav class="navbar navbar-default toolbarMultiselect">
                                 <span class="col-xs-6" id="selectorTdc"></span>
-                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtnReset('selectAll')">
+                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect','selectAll')">
                                     Tout sélectionner
                                 </button>
-                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtnReset('deselectAll')">
+                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect', 'deselectAll')">
                                     Tout désélectionner
                                 </button>
                             </nav>                            
@@ -244,8 +244,19 @@
                 <!--Tab-->
                 <div class="tab-content">
                     <div id="ppTabDate" class="tab-pane fade in active">
-                        <div class="row">
+                        <!-- <div class="row">
                             <span class="col-xs-6" id="selectorPrf"></span>
+                        </div> -->
+                        <div class="row">
+                            <nav class="navbar navbar-default toolbarMultiselect">
+                                <span class="col-xs-6" id="selectorPrf"></span>
+                                <button  id="prfMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('selectAll')">
+                                    Tout sélectionner
+                                </button>
+                                <button  id="prfMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('deselectAll')">
+                                    Tout désélectionner
+                                </button>
+                            </nav>                            
                         </div>
                         <div class="row" id="pofilesDates" style="margin-top: 40px;">
                             <div class="row" id="pofilesDatesChart" style="margin-top: 40px;">

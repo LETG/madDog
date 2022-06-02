@@ -229,6 +229,14 @@ const tools = (function () {
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
         },
+        multiSelectBtnReset: (id, action) => {
+            if (action === "selectAll") {
+                tdcUtils.multiSelectBtn('selectAll');
+            } else {
+                tdcUtils.multiSelectBtn('deselectAll');
+            }
+            $("#" + id).multiselect("updateButtonText");
+        },
         initServicebyMenu: () => {
             tdcUtils.tdcReset(true);
             if (maddog.idsite && !TDC_WPS.hidden) {

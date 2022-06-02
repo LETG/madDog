@@ -8,7 +8,7 @@ const tdcUtils = (function() {
         getReferenceLine: (idsite) => {
             // search reference line as first step and required WPS infos
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'REF1'`)
+            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'TDC1'`)
                 .then(lineRef => {
                     maddog.refLine = lineRef.data;
                     return lineRef.data.features ? lineRef.data.features[0] : []
@@ -473,17 +473,16 @@ const tdcUtils = (function() {
             $("#selectorTdc").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", orderedData[i].color);
             });
-            tdcUtils.multiSelectBtnReset("selectAll");
+            tools.multiSelectBtnReset("selectAll");
             tdcUtils.manageError();
         },
-        multiSelectBtnReset: (action) => {
+        multiSelectBtnReset: (id, action) => {
             if (action === "selectAll") {
                 tdcUtils.multiSelectBtn('selectAll');
             } else {
                 tdcUtils.multiSelectBtn('deselectAll');
             }
-            $("#tdcMultiselect").multiselect("updateButtonText");
-
+            $("#" + id).multiselect("updateButtonText");
         },
         tdcReset: (cleanTdcLayer) => {
             $("#coastlinetrackingBtn").show();

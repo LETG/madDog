@@ -304,6 +304,7 @@ const tools = (function () {
                 maddog.drawStart = false;
                 // close draw interaction
                 mviewer.getMap().removeInteraction(draw);
+                $("#coastlinetrackingBtn").show();
             } else {
                 btn.className = "btn btn-default btn-danger";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";

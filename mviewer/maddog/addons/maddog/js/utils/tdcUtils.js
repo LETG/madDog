@@ -69,7 +69,7 @@ const tdcUtils = (function() {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
-            features.forEach(f => f.setStyle(tools.refLineStyle));
+            features.forEach(f => f.setStyle(tools.refLineStyle()));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);

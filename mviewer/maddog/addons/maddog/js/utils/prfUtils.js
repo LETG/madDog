@@ -64,24 +64,19 @@ const prfUtils = (function() {
             let first = feature.getGeometry().getCoordinates()[1];
             return (f, res) => {
                 const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
-                return new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: "black",
-                        width: 2
-                    }),
-                    text: displayLabel ? new ol.style.Text({
-                        font: '18px Roboto',
-                        text: `${f.get('idtype')}`,
-                        placement: 'point',
-                        rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
-                        textAlign: 'center',
-                        offsetY: 3,
-                        textBaseline: "bottom",
-                        fill: new ol.style.Fill({
-                            color: 'black'
-                        })
-                    }) : null
-                })
+                const labels = displayLabel ? new ol.style.Text({
+                    font: '18px Roboto',
+                    text: `${f.get('idtype')}`,
+                    placement: 'point',
+                    rotation: -Math.atan((last[1] - first[1]) / (last[0] - first[0])),
+                    textAlign: 'center',
+                    offsetY: 3,
+                    textBaseline: "bottom",
+                    fill: new ol.style.Fill({
+                        color: 'black'
+                    })
+                }) : null;
+                return tools.refLineStyle(labels);
             }
         },
         drawPrfRefLines: () => {

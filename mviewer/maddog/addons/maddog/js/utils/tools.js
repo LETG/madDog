@@ -1,6 +1,6 @@
 const tools = (function () {
     // PRIVATE
-    let highlightLR, selectedLR, draw;
+    let highlightLR, selectedLR, defaultStyle, draw;
     const eventName = "tools-componentLoaded";
     const create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
@@ -13,16 +13,17 @@ const tools = (function () {
         })
     });
 
-    const refLineStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: "black",
-            width: 2
-        })
-    });
-
     return {
         // PUBLIC
-        refLineStyle: refLineStyle,
+        refLineStyle: (labels) => {
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "black",
+                    width: 2
+                }),
+                text: labels ? labels : null
+            })
+        },
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
@@ -185,7 +186,9 @@ const tools = (function () {
                         if (f.getProperties()) {
                             selectedLR = f;
                             const props = f.getProperties();
-                            prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);
+                            if (!PP_WPS.hidden) {
+                                prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);   
+                            }
                         }
                     },
                     {
@@ -198,13 +201,15 @@ const tools = (function () {
         highlightFeature: () => {
             mviewer.getMap().on('pointermove', function (e) {
                 if (highlightLR) {
-                    highlightLR.setStyle(refLineStyle);
+                    highlightLR.setStyle(defaultStyle[highlightLR.getId()]);
+                    delete defaultStyle[highlightLR.getId()];
                     highlightLR = null;
                 }
                 mviewer.getMap().forEachFeatureAtPixel(
                     e.pixel,
-                    f => {
+                    (f, layer) => {
                         highlightLR = f;
+                        defaultStyle = {...defaultStyle, [f.getId()]: f.getStyle()};
                         highlightLR.setStyle(highlightStyle);
                         return true;
                     },

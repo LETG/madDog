@@ -159,6 +159,7 @@ const tools = (function () {
         },
         findSiteOnClick: (coordinate) => {
             tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
+                if (feature && feature.properties.idsite === maddog.idsite) return;
                 if (feature) {
                     tools.setIdSite(feature.properties.idsite, feature.properties.namesite);
                     tools.zoomToJSONFeature(feature, "EPSG:3857");

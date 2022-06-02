@@ -388,6 +388,7 @@ const prfUtils = (function() {
                 selected.push(maddog.charts.beachProfile.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
             });
             // create beach profile tracking param
+            if (!selected.length) return;
             prfUtils.setPrfFeatures(selected);
             if (maddog.charts.beachProfile && maddog.charts.beachProfile.features.length) {
                 let csv = _.flatten(maddog.charts.beachProfile.features.map(x => x.properties));
@@ -400,11 +401,12 @@ const prfUtils = (function() {
                 let color = "color:" + s.properties.color;
                 return `<li>
                     <a class="labelDateLine">
-                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate).format("DD/MM/YYYY")}</label>
+                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate, "YYYY-MM-DDZ").format("DD/MM/YYYY")}</label>
                         <i class="fas fa-minus" style='${color}'></i>
                     </a>
                 </li>`
             }).join("");
+            console.log("change legend");
             prfUtils.changeLegend($(`<p>Date(s) sélectionnée(s):</p><ul class="nobullet">${legendHtml}</ul>`));
         },
         /**
@@ -461,7 +463,7 @@ const prfUtils = (function() {
             // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) =>
                 ({
-                    label: moment(d).format("DD/MM/YYYY"),
+                    label: moment(d, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
                     value: d
                 })
             );

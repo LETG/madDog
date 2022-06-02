@@ -59,16 +59,35 @@ const prfUtils = (function() {
                     prfUtils.changePrf()
                 })
         },
+        profilsStyle: (feature) => {
+            let last = feature.getGeometry().getCoordinates()[0];
+            let first = feature.getGeometry().getCoordinates()[1];
+            return (f, res) => {
+                const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "black",
+                        width: 2
+                    }),
+                    text: displayLabel ? new ol.style.Text({
+                        font: '18px Roboto',
+                        text: `${f.get('idtype')}`,
+                        placement: 'point',
+                        rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
+                        textAlign: 'center',
+                        offsetY: 3,
+                        textBaseline: "bottom",
+                        fill: new ol.style.Fill({
+                            color: 'black'
+                        })
+                    }) : null
+                })
+            }
+        },
         drawPrfRefLines: () => {
             if (!maddog.prfRefLine) return;
 
-            let layer = mviewer.getLayer("refline").layer;
-            var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                })
-            });
+            let layer = mviewer.getLayer("refline").layer;            
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -76,7 +95,7 @@ const prfUtils = (function() {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
-            features.forEach(f => f.setStyle(style));
+            features.forEach(f => f.setStyle(prfUtils.profilsStyle(f)));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);

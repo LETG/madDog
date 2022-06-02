@@ -473,7 +473,7 @@ const tdcUtils = (function() {
             $("#selectorTdc").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", orderedData[i].color);
             });
-            tools.multiSelectBtnReset("selectAll");
+            tools.multiSelectBtnReset('tdcMultiselect', 'selectAll', tdcUtils)
             tdcUtils.manageError();
         },
         multiSelectBtnReset: (id, action) => {

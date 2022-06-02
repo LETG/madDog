@@ -229,7 +229,7 @@ const tdcUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Profils',
+                        text: 'Radiales',
                         pad: 2,
                         ...axesFont,
                     },
@@ -282,7 +282,7 @@ const tdcUtils = (function() {
             const div = document.createElement("div");
             div.id = "tdcTauxChart";
             document.getElementById("tdcGraph2").appendChild(div);
-            const titleGraph = "<p><b>Évolution journalière de la cinématique du trait de côte (en %)</b><br><i>pour le site sélectionné</i><p>";
+            const titleGraph = "<p><b>Taux d'évolution du trait de côte (m/an)</b><br><i>pour le site sélectionné</i><p>";
             document.getElementById("titleChart2").innerHTML=titleGraph;
 
             // get dates from selection or every dates
@@ -310,7 +310,7 @@ const tdcUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Profils',
+                        text: 'Radiales',
                         pad: 2,
                         ...axesFont,
                     },
@@ -320,7 +320,7 @@ const tdcUtils = (function() {
                 yaxis: {
                     gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul (%/jour)',
+                        text: 'Taux de recul (m/an)',
                         ...axesFont
                     },
                     autotick: true,
@@ -368,7 +368,7 @@ const tdcUtils = (function() {
             $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
         orderDates: (selected) => {
-            selected = selected.map(s => ({ ...s.properties, isodate: new Date(s.properties.creationdate) }));
+            selected = selected.map(s => ({ ...s.properties, isodate: new Date(moment(s.properties.creationdate, "YYYY-MM-DDZ").format("YYYY-MM-DD")) }));
             return _.orderBy(selected, (o) => {
                 return moment(o.isodate);
               }, ['asc'])

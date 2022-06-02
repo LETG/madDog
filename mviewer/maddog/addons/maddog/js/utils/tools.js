@@ -1,4 +1,6 @@
-const tools = (function() {
+const tools = (function () {
+    // PRIVATE
+    let highlightLR, selectedLR;
     const eventName = "tools-componentLoaded";
     const create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
@@ -18,9 +20,8 @@ const tools = (function() {
         })
     });
 
-    let highlightLR, selectedLR;
-
     return {
+        // PUBLIC
         refLineStyle: refLineStyle,
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),

@@ -423,6 +423,16 @@ a.menu-link {
 	width: 100%;
 }
 
+.multiselect-container {
+	overflow-y: overlay;
+	max-height: 200px;
+}
+
+#panelDrag .panel-body {
+	max-height: 350px;
+	overflow-y: overlay;
+}
+
 .tdcParams, #radialDirection, .dirForm select  {
 	border-radius: 5px !important;
 }

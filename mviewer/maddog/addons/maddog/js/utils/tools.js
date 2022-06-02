@@ -229,11 +229,11 @@ const tools = (function () {
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
         },
-        multiSelectBtnReset: (id, action) => {
+        multiSelectBtnReset: (id, action, lib) => {
             if (action === "selectAll") {
-                tdcUtils.multiSelectBtn('selectAll');
+                lib.multiSelectBtn('selectAll');
             } else {
-                tdcUtils.multiSelectBtn('deselectAll');
+                lib.multiSelectBtn('deselectAll');
             }
             $("#" + id).multiselect("updateButtonText");
         },

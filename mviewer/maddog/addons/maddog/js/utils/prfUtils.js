@@ -139,6 +139,21 @@ const prfUtils = (function() {
             return line;
         },
         /**
+         * Create Poltly line
+         * @param {Array} data 
+         * @returns 
+         */
+        createPlotlyBar: (data) => {
+            const line = {
+                name: data.name,
+                x: data.x,
+                y: data.y,
+                type: "bar",
+                width: 3
+            };
+            return line;
+        },
+        /**
          * Order Array objects by date
          * @param {Array} selected
          * @returns ordered array
@@ -164,11 +179,18 @@ const prfUtils = (function() {
             // get uniq labels already orderd by date
             let labels = _.uniq(selected.map(s => new Date(s.isodate).toLocaleDateString()))
             // create one line by date
-            const lines = [prfUtils.createPlotlyLine({
-                x: labels,
-                y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
-                name: ""
-            })];
+            const data = [
+                prfUtils.createPlotlyLine({
+                    x: labels,
+                    y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
+                    name: ""
+                }),
+                prfUtils.createPlotlyBar({
+                    x: labels,
+                    y: selected.map(s => s.data.filter(i => i.diffWithPrevious)[0]?.diffWithPrevious),
+                    name: ""
+                })
+            ];
             // create chart
             const axesFont = {
                 font: {
@@ -177,35 +199,38 @@ const prfUtils = (function() {
                     color: '#7f7f7f'
                 }
             }
-            Plotly.newPlot('prfBilanSedChart', lines, {
-                autosize: true,
-                title: {
-                    text: `Evolution du bilan sédimentaire de la plage pour le profil ${profile}`,
-                    font: {
-                        family: 'Roboto',
-                        size: 15
-                    },
-                    y: 0.9
-                },
-                xaxis: {
+            Plotly.newPlot(
+                'prfBilanSedChart',
+                data,
+                {
+                    autosize: true,
                     title: {
-                        standoff: 40,
-                        text: ``,
-                        pad: 2,
-                        ...axesFont,
+                        text: `Evolution du bilan sédimentaire de la plage pour le profil ${profile}`,
+                        font: {
+                            family: 'Roboto',
+                            size: 15
+                        },
+                        y: 0.9
                     },
-                    showgrid: true
-                },
-                //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
-                yaxis: {
-                    showgrid: true,
-                    gridcolor: "#afa8a7",
-                    title: {
-                        text: 'Bilan séd. (m3/m.l.)',
-                        ...axesFont
+                    xaxis: {
+                        title: {
+                            standoff: 40,
+                            text: ``,
+                            pad: 2,
+                            ...axesFont,
+                        },
+                        showgrid: true
                     },
-                    // dtick: 2
-                }
+                    //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
+                    yaxis: {
+                        showgrid: true,
+                        gridcolor: "#afa8a7",
+                        title: {
+                            text: 'Bilan séd. (m3/m.l.)',
+                            ...axesFont
+                        },
+                        // dtick: 2
+                    }
             }, {
                 responsive: true,
                 modeBarButtonsToAdd: [{
@@ -482,6 +507,11 @@ const prfUtils = (function() {
          */
         onParamChange: (e) => {
             //TODO create a config for beach profile
+        },
+        multiSelectBtn: (action) => {
+            $("#prfMultiselect").multiselect(action, false);
+            prfUtils.changePrf();
+            prfUtils.manageError();
         }
     }
 })();

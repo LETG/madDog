@@ -159,6 +159,11 @@
    text-align: justify;
 }
 
+#help li {
+    font-size: 14px;
+	color: #555;
+}
+
 /* Bloc Actualité */
 
 .blockActu {

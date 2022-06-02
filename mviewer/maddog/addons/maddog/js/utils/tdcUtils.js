@@ -432,7 +432,8 @@ const tdcUtils = (function() {
         },
         createTDCMultiSelect: () => {
             // get dates from WPS result
-            const dates = tdcUtils.orderDates(maddog.charts.tdc.features).map(e => e.creationdate)
+            const orderedData = tdcUtils.orderDates(maddog.charts.tdc.features);
+            const dates = orderedData.map(e => e.creationdate);
             // clean multi select if exists
             $(selectorTdc).empty()
             // create multiselect HTML parent
@@ -470,7 +471,7 @@ const tdcUtils = (function() {
             $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
             $("#selectorTdc").find(".labelDateLine").each((i, x) => {
-                $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
+                $(x).find(".dateLine").css("color", orderedData[i].color);
             });
             tdcUtils.multiSelectBtnReset("selectAll");
             tdcUtils.manageError();

@@ -6,25 +6,37 @@ const tdcUtils = (function() {
 
     return {
         getReferenceLine: (idsite) => {
-            // On cherche la ligne de référence, entité de base aux autres traitements
+            // search reference line as first step and required WPS infos
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'REF1'`)
+            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'TDC1'`)
                 .then(lineRef => {
                     maddog.refLine = lineRef.data;
                     return lineRef.data.features ? lineRef.data.features[0] : []
                 })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
-                // A partir de la ligne de référence, on va maintenant calculer la radiale
+                // from reference line, we get radiale
                 .then(geojson => maddog.setDrawRadialConfig({
                     referenceLine: geojson
                 }))
-                .then(() => tdcUtils.getTDCByIdSite(idsite));
+                .then(() => tdcUtils.getTDCByIdSite(idsite))
+                .then(() => 
+                    // get WPS params for this reference line
+                    fetch(`https://gis.jdev.fr/maddogapi/wpstdcconf?id_site=eq.${idsite}`)
+                        .then(response => response.text())
+                        .then(wpsParams => {
+                            const p = JSON.parse(wpsParams)[0];
+                            radialLength.value = p?.radial_length;
+                            radialDistance.value = p?.radial_distance;
+                            tdcUtils.onParamChange(radialLength);
+                            tdcUtils.onParamChange(radialDistance);
+                        })
+                );
         },
         getTDCByIdSite: (idsite) => {
-            // on récupère ensuite le trait de côte utile pour le coastline tracking
+            // next, we get TDC usefull to call coastline tracking WPS
             const tdcUrl = maddog.server +  "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
-                // récupération du TDC
+                // get TDC and calculate legend and char color
                 .then(tdc => {
                     maddog.charts.tdc = {
                         ...tdc.data,
@@ -38,23 +50,18 @@ const tdcUtils = (function() {
                             })
                         )
                     };
-                    // Affichage du multi select avec les dates des TDC
+                    // display multiselect from TDC dates
                     tdcUtils.setTdcFeatures(tdc.data.features)
                     tdcUtils.createTDCMultiSelect();
-                    // Affichage des TDC sur la carte
+                    // display TDC to map
                     tdcUtils.changeTdc()
+                    return tdc
                 })
         },
         drawRefLine: () => {
             if (!maddog.refLine) return;
 
             let layer = mviewer.getLayer("refline").layer;
-            var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                })
-            });
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -62,7 +69,7 @@ const tdcUtils = (function() {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
-            features.forEach(f => f.setStyle(style));
+            features.forEach(f => f.setStyle(tools.refLineStyle()));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
@@ -72,7 +79,7 @@ const tdcUtils = (function() {
 
             let layerTdc = mviewer.getLayer("tdc").layer;
 
-            // display radiales on map with EPSG:3857
+            // display TDC on map with EPSG:3857
             let featuresTdc = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
             }).readFeatures(featureJSON, {
@@ -222,7 +229,7 @@ const tdcUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Profils',
+                        text: 'Radiales',
                         pad: 2,
                         ...axesFont,
                     },
@@ -275,7 +282,7 @@ const tdcUtils = (function() {
             const div = document.createElement("div");
             div.id = "tdcTauxChart";
             document.getElementById("tdcGraph2").appendChild(div);
-            const titleGraph = "<p><b>Évolution journalière de la cinématique du trait de côte (en %)</b><br><i>pour le site sélectionné</i><p>";
+            const titleGraph = "<p><b>Taux d'évolution du trait de côte (m/an)</b><br><i>pour le site sélectionné</i><p>";
             document.getElementById("titleChart2").innerHTML=titleGraph;
 
             // get dates from selection or every dates
@@ -303,7 +310,7 @@ const tdcUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Profils',
+                        text: 'Radiales',
                         pad: 2,
                         ...axesFont,
                     },
@@ -313,7 +320,7 @@ const tdcUtils = (function() {
                 yaxis: {
                     gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul (%/jour)',
+                        text: 'Taux de recul (m/an)',
                         ...axesFont
                     },
                     autotick: true,
@@ -361,7 +368,7 @@ const tdcUtils = (function() {
             $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
         orderDates: (selected) => {
-            selected = selected.map(s => ({ ...s.properties, isodate: new Date(s.properties.creationdate) }));
+            selected = selected.map(s => ({ ...s.properties, isodate: new Date(moment(s.properties.creationdate, "YYYY-MM-DDZ").format("YYYY-MM-DD")) }));
             return _.orderBy(selected, (o) => {
                 return moment(o.isodate);
               }, ['asc'])
@@ -425,7 +432,8 @@ const tdcUtils = (function() {
         },
         createTDCMultiSelect: () => {
             // get dates from WPS result
-            const dates = tdcUtils.orderDates(maddog.charts.tdc.features).map(e => e.creationdate)
+            const orderedData = tdcUtils.orderDates(maddog.charts.tdc.features);
+            const dates = orderedData.map(e => e.creationdate);
             // clean multi select if exists
             $(selectorTdc).empty()
             // create multiselect HTML parent
@@ -463,11 +471,18 @@ const tdcUtils = (function() {
             $("#tdcMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
             $("#selectorTdc").find(".labelDateLine").each((i, x) => {
-                $(x).find(".dateLine").css("color", maddog.charts.tdc.features[i].properties.color);
+                $(x).find(".dateLine").css("color", orderedData[i].color);
             });
-            $("#tdcMultiselect").multiselect("selectAll", false);
-
+            tools.multiSelectBtnReset('tdcMultiselect', 'selectAll', tdcUtils)
             tdcUtils.manageError();
+        },
+        multiSelectBtnReset: (id, action) => {
+            if (action === "selectAll") {
+                tdcUtils.multiSelectBtn('selectAll');
+            } else {
+                tdcUtils.multiSelectBtn('deselectAll');
+            }
+            $("#" + id).multiselect("updateButtonText");
         },
         tdcReset: (cleanTdcLayer) => {
             $("#coastlinetrackingBtn").show();
@@ -488,6 +503,8 @@ const tdcUtils = (function() {
             if (!cleanTdcLayer) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
+            // deactivate draw btn if activ
+            tools.btnDrawline(btnDrawRefLine, 'drawRefline', true)
         },
         initTDC: () => {
             tdcUtils.tdcReset();

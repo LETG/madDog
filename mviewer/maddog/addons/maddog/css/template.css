@@ -302,7 +302,7 @@ p.card-text {
 	border: 1px solid var(--mycolor);
 }
 
-#tdcMultiCleanBtn {
+#tdcMultiCleanBtn, #prfMultiCleanBtn {
 	margin-left: 14px;
 }
 
@@ -410,19 +410,29 @@ a.menu-link {
 
 /** MULTISELECT **/
 
-#selectorTdc .btn-group {
+#selectorTdc .btn-group, #selectorPrf .btn-group  {
 	margin-bottom: 5px;
 	width: 100%;
 }
 
-#selectorTdc {
+#selectorTdc, #selectorPrf {
 	padding-left: 0px;
 }
 
-#selectorTdc .multiselect-container, #selectorTdc .btn-group button  {
+#selectorTdc .multiselect-container, #selectorTdc .btn-group button, 
+#selectorPrf .multiselect-container, #selectorPrf .btn-group button {
 	width: 100%;
 }
 
+.multiselect-container {
+	overflow-y: scroll;
+	max-height: 350px;
+}
+
+#panelDrag .panel-body {
+	max-height: 350px;
+	overflow-y: scroll;
+}
 .tdcParams, #radialDirection, .dirForm select  {
 	border-radius: 5px !important;
 }
@@ -450,7 +460,7 @@ a.menu-link {
 	margin: 0; /* Remove margins */
 }
 	
-#tdcTabDate {
+#tdcTabDate, #ppTabDate {
 	padding: 20px;
 }
 

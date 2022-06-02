@@ -1,4 +1,30 @@
+/* width */
+::-webkit-scrollbar {
+    width: 8px !important;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px !important;
+    border: 1px solid transparent;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #b5b1b1 !important;
+    border-radius: 10px !important;
+    border: 1px solid transparent;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(40, 96, 144, 1) !important;
+  }
 
+  ::-webkit-scrollbar-button {
+    width: 8px;
+    height: 5px;
+}
 
 /**/
 .template-panel {

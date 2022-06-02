@@ -119,10 +119,10 @@
                         <div class="row">
                             <nav class="navbar navbar-default toolbarMultiselect">
                                 <span class="col-xs-6" id="selectorTdc"></span>
-                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('selectAll')">
+                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect','selectAll', tdcUtils)">
                                     Tout sélectionner
                                 </button>
-                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tdcUtils.multiSelectBtn('deselectAll')">
+                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect', 'deselectAll', tdcUtils)">
                                     Tout désélectionner
                                 </button>
                             </nav>                            
@@ -164,7 +164,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
                                                 <label for="dirParam">
-                                                    Direction
+                                                    Inverser l'orientation
                                                     <span data-toggle="tooltip" data-placement="top" title="Choix de l'orientaion des radiales par rapport à la ligne de référence">
                                                     <i class="fas fa-info-circle"></i></span>
                                                 </label>
@@ -244,8 +244,19 @@
                 <!--Tab-->
                 <div class="tab-content">
                     <div id="ppTabDate" class="tab-pane fade in active">
-                        <div class="row">
+                        <!-- <div class="row">
                             <span class="col-xs-6" id="selectorPrf"></span>
+                        </div> -->
+                        <div class="row">
+                            <nav id="prfToolbar" class="navbar navbar-default toolbarMultiselect">
+                                <span class="col-xs-6" id="selectorPrf"></span>
+                                <button  id="prfMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'selectAll', prfUtils)">
+                                    Tout sélectionner
+                                </button>
+                                <button  id="prfMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'deselectAll', prfUtils)">
+                                    Tout désélectionner
+                                </button>
+                            </nav>                            
                         </div>
                         <div class="row" id="pofilesDates" style="margin-top: 40px;">
                             <div class="row" id="pofilesDatesChart" style="margin-top: 40px;">
@@ -298,8 +309,7 @@
                           </div>                     
                     </div>
                     <div id="ppTabGraph" class="tab-pane fade">  
-                        <!--Insérez ici les résultats-->                     
-                        <p>Visualisation des résultats</p>
+                        <!--Insérez ici les résultats-->
                     </div>
                 </div>
                 <nav class="navbar navbar-default toolbarMenu">

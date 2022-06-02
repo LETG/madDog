@@ -1,31 +1,65 @@
-const tools = (function() {
+const tools = (function () {
+    // PRIVATE
+    let highlightLR, selectedLR, defaultStyle, draw;
     const eventName = "tools-componentLoaded";
-    var create = new Event(eventName);
+    const create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
     document.dispatchEvent(create);
 
+    const highlightStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: "#ffa43b",
+            width: 5
+        })
+    });
+
     return {
+        // PUBLIC
+        refLineStyle: (labels) => {
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "black",
+                    width: 2
+                }),
+                text: labels ? labels : null
+            })
+        },
         view: () => mviewer.getMap().getView(),
         setZoom: (z) => tools.view().setZoom(z),
         getZoom: () => tools.view().getZoom(),
         getMvLayerById: (id) => mviewer.getMap().getLayers().getArray().filter(l => l.get('mviewerid') === id)[0],
-        zoomToWMSLayerExtent: (layer, workspace, asHome = false) => {
-            if (!mviewer.getLayer(layer)) return;
-            const url = mviewer.getLayer(layer).url + "?service=WMS&version=1.1.0&request=GetCapabilities&workspace=" + workspace;
-            fetch(url).then(function(response) {
-                return response.text();
-                }).then(function(text) {
-                    const reader = new ol.format.WMSCapabilities();
-                    const infos = reader.read(text);
-                    const extent = _.find(infos.Capability.Layer.Layer, ["Name", layer]).BoundingBox[0].extent;
-                    maddog.bbox = extent;
-                    // wait 2000 ms correct map size to zoom correctly
-                    tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
-                    if (asHome) {
-                        mviewer.zoomToInitialExtent = () => {
-                            tools.zoomToExtent(maddog.bbox);
-                        };
-                    }
+        zoomToOGCLayerExtent: () => {
+            const options = maddog.getCfg("config.options.defaultLayerZoom");
+            if (!mviewer.getLayer(options.layer)) return;
+            let url = options.url || mviewer.getLayer(options.layer).layer.getSource().getUrl() ;
+            if (options.type === "wms" && !options.url) {
+                url = url + "?service=WMS&version=1.1.0&request=GetCapabilities&namespace=" + options.namespace;
+            }
+            if (options.type === "wfs" && !options.url) {
+                url = url.replace("wms","wfs") + "?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&typeName=" + options.layer;
+            }
+            fetch(url).then(response => options.type === "wms" ? response.text() : response.json())
+            .then(function (response) {
+                let reader = options.type === "wms" ? new ol.format.WMSCapabilities() : new ol.format.GeoJSON();
+                let extent;
+                if (options.type === "wms") {
+                    const infos = reader.read(response);
+                    extent = _.find(infos.Capability.Layer.Layer, ["Name", options.layer]).BoundingBox[0].extent;
+                }
+                if (options.type === "wfs") {
+                    const layerExtentInit = new ol.source.Vector();
+                    const features = reader.readFeatures(response);
+                    layerExtentInit.addFeatures(features);
+                    extent = layerExtentInit.getExtent();
+                }
+                maddog.bbox = extent;
+                // wait 2000 ms correct map size to zoom correctly
+                tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
+                if (options.asHomeExtent) {
+                    mviewer.zoomToInitialExtent = () => {
+                        tools.zoomToExtent(maddog.bbox);
+                    };
+                }
             })
         },
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
@@ -125,8 +159,9 @@ const tools = (function() {
         },
         findSiteOnClick: (coordinate) => {
             tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
+                if (feature && feature.properties.idsite === maddog.idsite) return;
                 if (feature) {
-                    tools.setIdSite(feature.properties.idsite);
+                    tools.setIdSite(feature.properties.idsite, feature.properties.namesite);
                     tools.zoomToJSONFeature(feature, "EPSG:3857");
                     // init service
                     tools.initServicebyMenu();
@@ -147,25 +182,62 @@ const tools = (function() {
                 // enable feature selection for some features only
                 mviewer.getMap().forEachFeatureAtPixel(
                     evt.pixel,
-                    function (feature) {
-                        if (feature.getProperties()) {
-                            const props = feature.getProperties();
-                            prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);
+                    f => {
+                        if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
+                        if (f.getProperties()) {
+                            selectedLR = f;
+                            const props = f.getProperties();
+                            if (!PP_WPS.hidden) {
+                                prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);   
+                                prfToolbar.hidden = false;
+                            }
                         }
                     },
                     {
+                        hitTolerance: 10,
                         layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
                     }
                 );
             });
         },
-        setIdSite: (idsite) => {
+        highlightFeature: () => {
+            mviewer.getMap().on('pointermove', function (e) {
+                if (highlightLR) {
+                    highlightLR.setStyle(defaultStyle[highlightLR.getId()]);
+                    delete defaultStyle[highlightLR.getId()];
+                    highlightLR = null;
+                }
+                mviewer.getMap().forEachFeatureAtPixel(
+                    e.pixel,
+                    (f, layer) => {
+                        highlightLR = f;
+                        defaultStyle = {...defaultStyle, [f.getId()]: f.getStyle()};
+                        highlightLR.setStyle(highlightStyle);
+                        return true;
+                    },
+                    {
+                        hitTolerance: 10,
+                        layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
+                        
+                    }
+                );
+            });
+        },
+        setIdSite: (idsite, namesite) => {
             maddog.idsite = idsite;
-            document.getElementById("siteName").innerHTML = idsite;
+            document.getElementById("siteName").innerHTML = _.capitalize(namesite);
             document.getElementById("WPSnoselect").style.display = "none";
             document.getElementById("btn-wps-tdc").classList.remove("disabled");
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
+        },
+        multiSelectBtnReset: (id, action, lib) => {
+            if (action === "selectAll") {
+                lib.multiSelectBtn('selectAll');
+            } else {
+                lib.multiSelectBtn('deselectAll');
+            }
+            $("#" + id).multiselect("updateButtonText");
         },
         initServicebyMenu: () => {
             tdcUtils.tdcReset(true);
@@ -200,16 +272,14 @@ const tools = (function() {
             pom.click();
         },
         addInteraction: (sourceLayer) => {
-            let draw;
             let feature;
+
+            sourceLayer.clear();
 
             draw = new ol.interaction.Draw({
                 source: sourceLayer,
-                type: 'LineString',
-                id:"test"
+                type: 'LineString'
             });
-
-            sourceLayer.clear();  
 
             draw.on('drawend', function (evt) {
                 // need to clone to keep default draw line
@@ -226,13 +296,14 @@ const tools = (function() {
                 });
                 // close draw interaction
                 mviewer.getMap().removeInteraction(draw);
+                $("#coastlinetrackingBtn").show();
             });
 
             mviewer.getMap().addInteraction(draw);
         },
-        btnDrawline: (btn, idLayer) => {
+        btnDrawline: (btn, idLayer, deactivate) => {
             const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
-            if (btn.className == "btn btn-default btn-danger") {
+            if (btn.className == "btn btn-default btn-danger" || deactivate) {
                 btn.className = "btn btn-default";
                 btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
                 sourceLayer.clear();  
@@ -241,6 +312,9 @@ const tools = (function() {
                     drawReferenceLine: null
                 });
                 maddog.drawStart = false;
+                // close draw interaction
+                mviewer.getMap().removeInteraction(draw);
+                $("#coastlinetrackingBtn").show();
             } else {
                 btn.className = "btn btn-default btn-danger";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";

@@ -5,6 +5,10 @@ const prfUtils = (function() {
     document.dispatchEvent(create);
 
     return {
+        /**
+         * Get PRF Ref Lines from WFS URL
+         * @param {String} idsite 
+         */
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher
@@ -18,10 +22,21 @@ const prfUtils = (function() {
                 // On affiche les lignes de références de profils pour selection
                 .then(() => prfUtils.drawPrfRefLines());
         },
+        /**
+         * Calculate distance from 2 points
+         * @param {Array} latlng1
+         * @param {Array} latlng2
+         * @returns <Number>
+         */
         getDistance: (latlng1, latlng2) => {
             var line = new ol.geom.LineString([latlng1, latlng2]);
             return Math.round(line.getLength() * 100) / 100;
         },
+        /**
+         * From entry, get map and WPS data
+         * @param {String} idSite 
+         * @param {String} idType 
+         */
         getPrfByProfilAndIdSite: (idSite, idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
             const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
@@ -59,16 +74,39 @@ const prfUtils = (function() {
                     prfUtils.changePrf()
                 })
         },
+        /**
+         * Create style for a given feature
+         * @param {ol.feature} feature
+         * @returns 
+         */
+        profilsStyle: (feature) => {
+            let last = feature.getGeometry().getCoordinates()[0];
+            let first = feature.getGeometry().getCoordinates()[1];
+            return (f, res) => {
+                const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
+                const labels = displayLabel ? new ol.style.Text({
+                    font: '18px Roboto',
+                    text: `${f.get('idtype')}`,
+                    placement: 'point',
+                    rotation: -Math.atan((last[1] - first[1]) / (last[0] - first[0])),
+                    textAlign: 'center',
+                    offsetY: 3,
+                    textBaseline: "bottom",
+                    fill: new ol.style.Fill({
+                        color: 'black'
+                    })
+                }) : null;
+                return tools.refLineStyle(labels);
+            }
+        },
+        /**
+         * Draw ref line
+         * @returns null if not necessary
+         */
         drawPrfRefLines: () => {
             if (!maddog.prfRefLine) return;
 
-            let layer = mviewer.getLayer("refline").layer;
-            var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "black",
-                    width: 2
-                })
-            });
+            let layer = mviewer.getLayer("refline").layer;            
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -76,11 +114,16 @@ const prfUtils = (function() {
                 dataProjection: 'EPSG:2154',
                 featureProjection: 'EPSG:3857'
             });
-            features.forEach(f => f.setStyle(style));
+            features.forEach(f => f.setStyle(prfUtils.profilsStyle(f)));
 
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
         },
+        /**
+         * Create Poltly line
+         * @param {Array} data 
+         * @returns 
+         */
         createPlotlyLine: (data) => {
             const line = {
                 name: data.name,
@@ -89,31 +132,65 @@ const prfUtils = (function() {
                 type: "scatter",
                 mode: 'lines',
                 line: {
-                    color: data.color
+                    color: data.color || "#13344b"
                 },
                 width: 3
             };
             return line;
         },
-        prfBilanSedChart: (dates) => {
-            let labels;
-            let selected = maddog.charts.sediments.result;
+        /**
+         * Create Poltly line
+         * @param {Array} data 
+         * @returns 
+         */
+        createPlotlyBar: (data) => {
+            const line = {
+                name: data.name,
+                x: data.x,
+                y: data.y,
+                type: "bar",
+                width: 3
+            };
+            return line;
+        },
+        /**
+         * Order Array objects by date
+         * @param {Array} selected
+         * @returns ordered array
+         */
+        orderDates: (selected) => {
+            return selected.sort((a, b) => {
+                return moment(a.isodate).diff(b.isodate);
+            });
+        },
+        /**
+         * Create second tab Chart from WPS result
+         */
+        prfBilanSedChart: () => {
+            const profile = maddog.charts.beachProfile.features[0].properties.idtype;
+            // clean previous chart
             $("#prfBilanSedChart").remove();
             const div = document.createElement("div");
             div.id = "prfBilanSedChart";
             document.getElementById("ppTabGraph").appendChild(div);
-
-            // get dates from selection or every dates
-            if (!_.isEmpty(dates)) {
-                selected = selected.filter(r => dates.includes(r.date))
-            };
-            // get uniq labels
-            labels = _.uniq(_.spread(_.union)(selected.map(s => s.data.map(d => d.radiale)))).sort();
-            labels = _.sortBy(labels);
+            // standardize date format
+            let selected = maddog.charts.sediments.result.map(item => ({ ...item, isodate: new Date(item.date) }));
+            selected = prfUtils.orderDates(selected, "isodate");
+            // get uniq labels already orderd by date
+            let labels = _.uniq(selected.map(s => new Date(s.isodate).toLocaleDateString()))
             // create one line by date
-            const lines = selected.map((s, i) => {
-                return prfUtils.createPlotlyLine(s, labels, "separateDist", s.color)
-            });
+            const data = [
+                prfUtils.createPlotlyLine({
+                    x: labels,
+                    y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
+                    name: ""
+                }),
+                prfUtils.createPlotlyBar({
+                    x: labels,
+                    y: selected.map(s => s.data.filter(i => i.diffWithPrevious)[0]?.diffWithPrevious),
+                    name: ""
+                })
+            ];
             // create chart
             const axesFont = {
                 font: {
@@ -122,35 +199,38 @@ const prfUtils = (function() {
                     color: '#7f7f7f'
                 }
             }
-            Plotly.newPlot('prfBilanSedChart', lines, {
-                showlegend: false,
-                title: {
-                    text: `Date de référence : ${maddog.sedimentsReference}`,
-                    font: {
-                        family: 'Roboto',
-                        size: 16
-                    },
-                    y: 0.9
-                },
-                xaxis: {
+            Plotly.newPlot(
+                'prfBilanSedChart',
+                data,
+                {
+                    autosize: true,
                     title: {
-                        standoff: 40,
-                        text: 'Distance',
-                        pad: 2,
-                        ...axesFont,
+                        text: `Evolution du bilan sédimentaire de la plage pour le profil ${profile}`,
+                        font: {
+                            family: 'Roboto',
+                            size: 15
+                        },
+                        y: 0.9
                     },
-                    showgrid: false,
-                    dtick: 5,
-                },
-                //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
-                yaxis: {
-                    gridcolor: "#afa8a7",
-                    title: {
-                        text: 'Evolution cumulée (m)',
-                        ...axesFont
+                    xaxis: {
+                        title: {
+                            standoff: 40,
+                            text: ``,
+                            pad: 2,
+                            ...axesFont,
+                        },
+                        showgrid: true
                     },
-                    dtick: 2,
-                }
+                    //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
+                    yaxis: {
+                        showgrid: true,
+                        gridcolor: "#afa8a7",
+                        title: {
+                            text: 'Bilan séd. (m3/m.l.)',
+                            ...axesFont
+                        },
+                        // dtick: 2
+                    }
             }, {
                 responsive: true,
                 modeBarButtonsToAdd: [{
@@ -180,7 +260,12 @@ const prfUtils = (function() {
 
             });
         },
+        /**
+         * Create first tab Chart from selected profile
+         * @param {Array} features ol.feature<Array>
+         */
         prfChart: (features) => {
+            const profile = maddog.charts.beachProfile.features[0].properties.idtype;
             let selected = features || maddog.charts.beachProfile.features;
             $("#pofilesDatesChart").remove();
             const div = document.createElement("div");
@@ -194,7 +279,6 @@ const prfUtils = (function() {
                     x: s.properties.points.map(x => x[3]),
                     y: s.properties.points.map(x => x[2]),
                     name: `${s.id}-${s.properties.idtype}`
-                    
                 }
             });
             // create one line by date
@@ -213,7 +297,7 @@ const prfUtils = (function() {
                 showlegend: false,
                 autosize: true,
                 title: {
-                    text: `Date de référence : ${maddog.sedimentsReference}`,
+                    text: `Variations du profil transversal de la plage ${profile.toUpperCase()}`,
                     font: {
                         family: 'Roboto',
                         size: 16
@@ -223,23 +307,21 @@ const prfUtils = (function() {
                 xaxis: {
                     title: {
                         standoff: 40,
-                        text: 'Distance',
+                        text: 'Distance (en m)',
                         pad: 2,
                         ...axesFont,
                     },
-                    showgrid: false,
-                    dtick: 5,
-                    autotick: true,
+                    showgrid: true
                 },
                 //TODO deux yaxis un bar pour evolution n-1 un ligne pour evolution cumulée
                 yaxis: {
                     gridcolor: "#afa8a7",
                     title: {
-                        text: 'Evolution cumulée (m)',
+                        text: 'Hauteur (en cm)',
                         ...axesFont
                     },
                     dtick: 2,
-                    autotick: true,
+                    showgrid: true
                 }
             }, {
                 responsive: true,
@@ -270,13 +352,28 @@ const prfUtils = (function() {
 
             });
         },
+        /**
+         * From Request we create new PRF input according to WPS
+         * @param {Array} features <Aray>
+         */
         setPrfFeatures: (features) => {
-            const prfGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
+            const crsInfo = `
+                "crs": {
+                    "type": "name",
+                    "properties": {
+                        "name": "EPSG:2154"
+                    }
+                }
+            `;
+            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":[${JSON.stringify(features)}]}]]>`;
             maddog.setBeachProfileTrackingConfig({
                 fc: prfGeojson
             });
             $("#prftrackingBtn").prop('disabled', features.length < 2);
         },
+        /**
+         * On change beach profile entry
+         */
         changePrf: () => {
             let selected = [];
             // clean graph
@@ -291,6 +388,7 @@ const prfUtils = (function() {
                 selected.push(maddog.charts.beachProfile.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
             });
             // create beach profile tracking param
+            if (!selected.length) return;
             prfUtils.setPrfFeatures(selected);
             if (maddog.charts.beachProfile && maddog.charts.beachProfile.features.length) {
                 let csv = _.flatten(maddog.charts.beachProfile.features.map(x => x.properties));
@@ -298,24 +396,31 @@ const prfUtils = (function() {
                 maddog.prfCSV = Papa.unparse(csv);
             }
             prfUtils.prfChart(selected);
-
             // set legend content
             const legendHtml = selected.map(s => {
                 let color = "color:" + s.properties.color;
                 return `<li>
                     <a class="labelDateLine">
-                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate).format("DD/MM/YYYY")}</label>
+                        <label style="display:inline;padding-right: 5px;">${moment(s.properties.creationdate, "YYYY-MM-DDZ").format("DD/MM/YYYY")}</label>
                         <i class="fas fa-minus" style='${color}'></i>
                     </a>
                 </li>`
             }).join("");
+            console.log("change legend");
             prfUtils.changeLegend($(`<p>Date(s) sélectionnée(s):</p><ul class="nobullet">${legendHtml}</ul>`));
         },
+        /**
+         * Update legend content
+         * @param {any} content 
+         */
         changeLegend: (content) => {
             panelDrag?.display();
             panelDrag?.clean();
             panelDrag?.change(content);
         },
+        /**
+         * Control params before allow to trigger WPS Beach Profil
+         */
         manageError: () => {
             const displayError = $('#prfMultiselect option:selected').length < 2;
             // manage trigger wps button
@@ -323,7 +428,11 @@ const prfUtils = (function() {
             panelPrfParam.hidden = displayError;
             alertPrfParams.hidden = !displayError;
         },
+        /**
+         * Create bootstrap-multiselect for beach profile UI
+         */
         createPrfMultiSelect: () => {
+            prfToolbar.hidden = false;
             const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
             // clean multi select if exists
             $(selectorPrf).empty()
@@ -354,7 +463,7 @@ const prfUtils = (function() {
             // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) =>
                 ({
-                    label: moment(d).format("DD/MM/YYYY"),
+                    label: moment(d, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
                     value: d
                 })
             );
@@ -364,29 +473,49 @@ const prfUtils = (function() {
             $("#selectorPrf").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", maddog.charts.beachProfile.features[i].properties.color);
             });
-            $("#prfMultiselect").multiselect("selectAll", false);
+            $("#prfMultiselect").multiselect("selectAll", true);
+            $("#prfMultiselect").multiselect("updateButtonText");
 
             prfUtils.manageError();
         },
+        /**
+         * Reset Beach Profile UI and data
+         * @param {boolean} cleanPrfLayer 
+         */
         prfReset: (cleanPrfLayer) => {
+            prfToolbar.hidden = true;
+            if (document.getElementById("pofilesDatesChart")) {
+                pofilesDatesChart.remove();
+            }
             if (document.getElementById("prfBilanSedChart")) {
                 prfBilanSedChart.remove();
             }
             $("#prfMultiselect").multiselect("refresh");
-            $('.prfNavTabs a[href="#prfTabDate"]').tab('show');
-            mviewer.getLayer("refline").layer.getSource().clear();
+            $('.ppNavTabs a[href="#ppTabDate"]').tab('show');
             panelDrag.clean();
             panelDrag.hidden();
-            if (!cleanPrfLayer) {
+            if (cleanPrfLayer) {
                 // TODO get idType frome PRF selection
-               prfUtils.getPrfByProfilAndIdSite(maddog.idsite, "PRF1");
+                mviewer.getLayer("refline").layer.getSource().clear();   
             }
         },
+        /**
+         * Init
+         */
         initPrf: () => {
             prfUtils.prfReset();
         },
+        /**
+         * Change param evt
+         * @param {any} e event or this html item
+         */
         onParamChange: (e) => {
             //TODO create a config for beach profile
+        },
+        multiSelectBtn: (action) => {
+            $("#prfMultiselect").multiselect(action, false);
+            prfUtils.changePrf();
+            prfUtils.manageError();
         }
     }
 })();

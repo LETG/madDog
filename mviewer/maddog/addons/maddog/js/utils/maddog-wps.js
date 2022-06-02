@@ -121,8 +121,8 @@ const wps = (function () {
             maxDist = 0,
             useSmallestDistance = true
         }) => {
-             if (!wpsService || _.isEmpty(fc)) return {};
-
+            $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
+            if (!wpsService || _.isEmpty(fc)) return {};
             let inputGenerator = new InputGenerator();
 
             let inputs = Object.values({
@@ -142,7 +142,7 @@ const wps = (function () {
 
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
-                "jsonString",
+                "result",
                 "application/json", 
                 null,
                 null,

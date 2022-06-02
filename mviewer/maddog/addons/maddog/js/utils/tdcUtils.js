@@ -504,6 +504,8 @@ const tdcUtils = (function() {
             if (!cleanTdcLayer) {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
+            // deactivate draw btn if activ
+            tools.btnDrawline(btnDrawRefLine, 'drawRefline', true)
         },
         initTDC: () => {
             tdcUtils.tdcReset();

@@ -1,6 +1,6 @@
 const tools = (function () {
     // PRIVATE
-    let highlightLR, selectedLR;
+    let highlightLR, selectedLR, draw;
     const eventName = "tools-componentLoaded";
     const create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
@@ -257,16 +257,14 @@ const tools = (function () {
             pom.click();
         },
         addInteraction: (sourceLayer) => {
-            let draw;
             let feature;
+
+            sourceLayer.clear();
 
             draw = new ol.interaction.Draw({
                 source: sourceLayer,
-                type: 'LineString',
-                id:"test"
+                type: 'LineString'
             });
-
-            sourceLayer.clear();  
 
             draw.on('drawend', function (evt) {
                 // need to clone to keep default draw line
@@ -283,13 +281,14 @@ const tools = (function () {
                 });
                 // close draw interaction
                 mviewer.getMap().removeInteraction(draw);
+                $("#coastlinetrackingBtn").show();
             });
 
             mviewer.getMap().addInteraction(draw);
         },
-        btnDrawline: (btn, idLayer) => {
+        btnDrawline: (btn, idLayer, deactivate) => {
             const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
-            if (btn.className == "btn btn-default btn-danger") {
+            if (btn.className == "btn btn-default btn-danger" || deactivate) {
                 btn.className = "btn btn-default";
                 btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
                 sourceLayer.clear();  
@@ -298,6 +297,8 @@ const tools = (function () {
                     drawReferenceLine: null
                 });
                 maddog.drawStart = false;
+                // close draw interaction
+                mviewer.getMap().removeInteraction(draw);
             } else {
                 btn.className = "btn btn-default btn-danger";
                 btn.innerHTML = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Annuler";

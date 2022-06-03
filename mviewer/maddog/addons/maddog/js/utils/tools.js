@@ -268,8 +268,9 @@ const tools = (function () {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
             if (maddog.idsite && !PP_WPS.hidden) {
+                prfUtils.prfReset(true);
                 prfUtils.getPrfRefLines(maddog.idsite);
-            }
+                prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');            }
         },
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;

@@ -491,8 +491,7 @@ const prfUtils = (function() {
             $("#prfMultiselect").multiselect("selectAll", true);
             $("#prfMultiselect").multiselect("updateButtonText");
 
-            prfUtils.manageError('Vous devez choisir un site, un profil et au moins 2 dates !');
-        },
+            prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');        },
         /**
          * Reset Beach Profile UI and data
          * @param {boolean} cleanPrfLayer 

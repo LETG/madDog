@@ -60,8 +60,8 @@ const tdcUtils = (function() {
         },
         drawRefLine: () => {
             if (!maddog.refLine) return;
-
             let layer = mviewer.getLayer("refline").layer;
+            layer.getSource().clear();
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -70,8 +70,6 @@ const tdcUtils = (function() {
                 featureProjection: 'EPSG:3857'
             });
             features.forEach(f => f.setStyle(tools.refLineStyle()));
-
-            layer.getSource().clear();
             layer.getSource().addFeatures(features);
         },
         drawTDC: (featureJSON) => {
@@ -156,7 +154,9 @@ const tdcUtils = (function() {
             wps.coastLineTracking(maddog.coastLinesTrackingConfig);
 
             // display ref line
-            tdcUtils.drawRefLine();
+            if (!mviewer.getLayer("drawRefline").layer.getSource().getFeatures().length) {
+                tdcUtils.drawRefLine();
+            }
         },
         createPlotlyLine: (dataDate, labels, field, color) => {
             const line = {

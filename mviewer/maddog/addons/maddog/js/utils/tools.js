@@ -286,6 +286,10 @@ const tools = (function () {
             });
 
             draw.on('drawend', function (evt) {
+                maddog.drawRefLine = evt.feature;
+                // clean layers
+                mviewer.getLayer("radiales").layer.getSource().clear();
+                mviewer.getLayer("refline").layer.getSource().clear();
                 // need to clone to keep default draw line
                 feature = evt.feature.clone();
                 // reproject draw line to work with WPS
@@ -310,7 +314,9 @@ const tools = (function () {
             if (btn.className == "btn btn-default btn-danger" || deactivate) {
                 btn.className = "btn btn-default";
                 btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
-                sourceLayer.clear();  
+                sourceLayer.clear();
+                // clean radiales
+                mviewer.getLayer("radiales").layer.getSource().clear();
                 info.enable(); 
                 maddog.setDrawRadialConfig({
                     drawReferenceLine: null

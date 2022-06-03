@@ -4,9 +4,10 @@
 . config.sh
 
 echo ">START PROCESS"
-idType="${1^^}" # MNT1 | PRF1 | TDC1 | REF1
-fileName="$2" # csv file with data
-idSite="$3" # VOUGOT ( 6 chars )
+idType="${1^^}" # MNT1 | PRF1 | TDC1 | REF1 | META
+fileName="$2" # csv or meta file with data
+fileNameWithoutExt="${fileName%.*}"
+codeSite="$3" # VOUGOT ( 6 chars )
 
 if [ -z $maddogDBHost ] || [ -z $maddogDBPort ] || [ -z $maddogDBUser ] || [ -z $maddogDBPassword ] || [ -z $maddogDBSchema ] || [ -z $maddogDBName ]
 then
@@ -14,10 +15,10 @@ then
     exit 1
 fi
 
-if [ -z $idType ] || [ -z $idSite ] || [ -z $fileName ]
+if [ -z $idType ] || [ -z $codeSite ] || [ -z $fileName ]
 then
     echo "-X-ARGS MISSING -> USE THIS REQUIRED ARGS ORDER :"
-    echo " type (REF1|MNT1|PRF1|TDC1) idSite sourceFileName"
+    echo " type (REF1|MNT1|PRF1|TDC1) codeSite sourceFileName"
     echo "-X-IMPORT FAIL -> END PROCESS"
     exit 1
 fi
@@ -31,19 +32,15 @@ vrtFile="$type/$type.vrt"
 # update SrcDataSource
 # create temporary vrt file for this layer source
 configuredVrt="current.vrt"
-
-
 cp -pr $vrtFile $configuredVrt
-echo "Using file : $fileName"
+echo "Using file : $fileName "
+
 escapedFileName=$(echo $fileName | sed 's_/_\\/_g')
 
 sed -i "s/LAYERNAME/$(basename ${fileName} .csv)/g" $configuredVrt
 sed -i "s/<SrcDataSource>/<SrcDataSource>$escapedFileName/g" $configuredVrt
 
-#echo ">Convert file to geoJson"
-#ogr2ogr -f "GEOJson" points.geojson $configuredVrt 
-
-## Add data to database
+## use temporary tables to create lines from data
 table="TMP$type"
 if [ $type = "MNT" ]
 then
@@ -56,7 +53,7 @@ if [[ $type == "REF" ]]
 then
     echo ">Create line for point in LineREF"
     ## Need to add date
-    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, idType, geom) SELECT '$idSite', idType, line FROM (SELECT idType, ST_Makeline(wkb_geometry ORDER BY linePosition) as line FROM $table GROUP BY idType) as allLines;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, idType, geom) SELECT '$codeSite', idType, line FROM (SELECT idType, ST_Makeline(wkb_geometry ORDER BY linePosition) as line FROM $table GROUP BY idType) as allLines;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
     #Update site buffer and communes
@@ -66,14 +63,14 @@ elif [[ $type == "TDC" ]]
 then
     echo ">Create line for point in Import TDC"
     ## Need to add date and TDC number
-    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO TDC(idSite, idType, creationDate, geom) SELECT '$idSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO TDC(idSite, idType, creationDate, geom) SELECT '$codeSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
 elif [[ $type == "PRF" ]]
 then
     echo ">Create line for point in Import PRF"
     ## Need to add date and PRF number
-    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO PRF(idSite, idType, creationDate, geom) SELECT '$idSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO PRF(idSite, idType, creationDate, geom) SELECT '$codeSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
 fi
@@ -81,6 +78,5 @@ fi
 # clean temporary VRT file
 echo ">Cleanning temporary file"
 rm $configuredVrt
-#rm points.geojson
 
 echo ">IMPORT SUCCESS"

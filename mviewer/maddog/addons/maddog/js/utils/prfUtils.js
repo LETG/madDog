@@ -190,7 +190,7 @@ const prfUtils = (function() {
             let selected = maddog.charts.sediments.result.map(item => ({ ...item, isodate: new Date(item.date) }));
             selected = prfUtils.orderDates(selected, "isodate");
             // get uniq labels already orderd by date
-            let labels = _.uniq(selected.map(s => new Date(s.isodate).toLocaleDateString()))
+            let labels = _.uniq(selected.map(s => moment(s.date, "YYYY-MM-DDZ").format("DD/MM/YYYY")))
             // create one line by date
             const data = [
                 prfUtils.createPlotlyLine({

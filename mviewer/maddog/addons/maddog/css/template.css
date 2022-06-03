@@ -34,7 +34,7 @@
 }
 
 .text-small {
-	font-size: 12px!important;
+	font-size: 12px !important;
 }
 
 
@@ -42,8 +42,8 @@
 	color: var(--mycolor);
 }
 
-.display-opacity{
-	opacity: 1!important;
+.display-opacity {
+	opacity: 1 !important;
 }
 
 /* Panel */
@@ -218,15 +218,15 @@ h4.submodal-title {
 
 #WPSnoselect {
 	background-color: #ffffffd4;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 
 /* Menu des types de suivi */
@@ -245,60 +245,63 @@ h4.submodal-title {
 }
 
 #selectWPS .blockCards {
-    margin-top:20px;
+	margin-top: 20px;
 }
 
 #selectWPS .card {
-    background-color: whitesmoke;
-    padding: 40px 20px;
-    border-radius: 5px;
+	background-color: whitesmoke;
+	padding: 40px 20px;
+	border-radius: 5px;
 	height: 100%;
 }
 
 #selectWPS .card:hover {
-    background-color: #6088bb1c;
-    
+	background-color: #6088bb1c;
+
 }
 
 #selectWPS .card-title {
-    color: var(--mycolor2);
+	color: var(--mycolor2);
 }
 
 
 p.card-text {
-    margin-bottom: 25px;
+	margin-bottom: 25px;
 }
 
 .card-link {
-    color: var(--mycolor2);
-    font-size: 14px;
-    border: 1px solid var(--mycolor2);
-    border-radius: 3px;padding: 7px;
+	color: var(--mycolor2);
+	font-size: 14px;
+	border: 1px solid var(--mycolor2);
+	border-radius: 3px;
+	padding: 7px;
 }
 
 .align-right-link {
 	text-align: right;
-    position: absolute;
-    bottom: 25px;
-    right: 40px;
+	position: absolute;
+	bottom: 25px;
+	right: 40px;
 }
 
 .toolbarMultiselect {
-	margin-bottom: 10px;	
+	margin-bottom: 10px;
 }
 
-.toolbarMenu, .toolbarMultiselect {
+.toolbarMenu,
+.toolbarMultiselect {
 	background-color: transparent;
-    border: none;
+	border: none;
 }
 
-.toolbarMenu .container-fluid{
+.toolbarMenu .container-fluid {
 	padding-left: 0px;
 }
 
-.refreshWps, .navbarBtn {
+.refreshWps,
+.navbarBtn {
 	color: var(--mycolor);
-    background-color: white;
+	background-color: white;
 	border: 1px solid var(--mycolor);
 }
 
@@ -308,22 +311,23 @@ p.card-text {
 
 .triggerWps {
 	color: white;
-    background-color: var(--mycolor);
+	background-color: var(--mycolor);
 	border: 1px solid var(--mycolor);
-    margin-right: 14px!important;
+	margin-right: 14px !important;
 }
 
 .triggerWps:hover {
 	background-color: var(--mycolor);
-    color: white;
-    opacity: 0.8;
-    border: 1px solid var(--mycolor);
+	color: white;
+	opacity: 0.8;
+	border: 1px solid var(--mycolor);
 }
 
-a.card-link:hover, button.card-link:hover {
-    color: white;
-    background-color: var(--mycolor2);
-    opacity:0.8;
+a.card-link:hover,
+button.card-link:hover {
+	color: white;
+	background-color: var(--mycolor2);
+	opacity: 0.8;
 }
 
 a.menu-link {
@@ -358,8 +362,8 @@ a.menu-link {
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:focus,
 .nav-tabs>li.active>a:hover {
-	border: none!important;
-	border-top: 2px solid var(--mycolor2)!important;
+	border: none !important;
+	border-top: 2px solid var(--mycolor2) !important;
 	border-radius: 0;
 	color: var(--mycolor2);
 }
@@ -393,18 +397,18 @@ a.menu-link {
 }
 
 .autocomplete-category-title {
-	overflow-x:hidden;
-	padding-top:5px;
+	overflow-x: hidden;
+	padding-top: 5px;
 	font-size: 15px;
 	color: var(--mycolor2);
 }
 
 .autocomplete-li {
-	overflow-x:hidden;
-	padding-top:5px;
+	overflow-x: hidden;
+	padding-top: 5px;
 }
 
-.autocomplete-li > a {
+.autocomplete-li>a {
 	font-size: 13px;
 }
 
@@ -433,7 +437,10 @@ a.menu-link {
 	max-height: 350px;
 	overflow-y: scroll;
 }
-.tdcParams, #radialDirection, .dirForm select  {
+
+.tdcParams,
+#radialDirection,
+.dirForm select {
 	border-radius: 5px !important;
 }
 
@@ -446,18 +453,22 @@ a.menu-link {
 	margin: 0 !important;
 }
 
-#panelTDCParam, #panelTDCParam .panel-title {
-    color: #555555;
+#panelTDCParam,
+#panelTDCParam .panel-title {
+	color: #555555;
 }
 
 #panelTDCParam label {
-    font-weight:400!important;
+	font-weight: 400 !important;
 }
 
 .nobullet {
-	list-style-type: none; /* Remove bullets */
-	padding: 0; /* Remove padding */
-	margin: 0; /* Remove margins */
+	list-style-type: none;
+	/* Remove bullets */
+	padding: 0;
+	/* Remove padding */
+	margin: 0;
+	/* Remove margins */
 }
 	
 #tdcTabDate, #ppTabDate {
@@ -478,7 +489,7 @@ a.menu-link {
 /* Légende - TDC */
 
 .labelDateLine label {
-    font-weight: 400;
+	font-weight: 400;
 }
 
 
@@ -510,13 +521,24 @@ a.menu-link {
 	content: "\002b";
 	-webkit-transform: rotate(90deg);
 	transform: rotate(90deg);
-  }
+}
+
+.titleChart {
+	text-align: center;
+}
+
+/* PP */
+
+#ppTabselect {
+	padding: 50px 25%;
+    text-align: center;
+}
 
 .titleChart{
 	  text-align: center;
   }
 
-  .error {
+.error {
 	  font-size: 15px;
 	  margin: 0;
-  }
+}

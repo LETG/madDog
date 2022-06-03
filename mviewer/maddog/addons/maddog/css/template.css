@@ -515,3 +515,8 @@ a.menu-link {
 .titleChart{
 	  text-align: center;
   }
+
+  .error {
+	  font-size: 15px;
+	  margin: 0;
+  }

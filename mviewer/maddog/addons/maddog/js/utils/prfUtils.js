@@ -16,11 +16,16 @@ const prfUtils = (function() {
             axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(prfRefLine => {
                     maddog.prfRefLine = prfRefLine.data;
-                    return prfRefLine.data.features ? prfRefLine.data.features[0] : []
+                    return prfRefLine.data.features;
                 })
-                .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // On affiche les lignes de références de profils pour selection
-                .then(() => prfUtils.drawPrfRefLines());
+                .then(features => {
+                    prfUtils.drawPrfRefLines();
+                    if (!features.length) {
+                        throw "Aucun profil disponible disponible pour ce site !";
+                    }
+                }).catch(e => prfUtils.manageError(e, "<i class='fas fa-eye-slash'></i>"));
+
         },
         /**
          * Calculate distance from 2 points
@@ -43,6 +48,9 @@ const prfUtils = (function() {
             axios.get(`${prfUrl}'${idSite}' AND idtype='${idType}'`)
                 // récupération du PRF
                 .then(prf => {
+                    if (!prf.data.features.length) {
+                        throw new Error(`Il n'y a aucune données à afficher pour le profile ${idType.toUpperCase()} !`);
+                    };
                     // get ref point (first by default)
                     const newFeatures = prf.data.features.map(p => {
                         let refPoint = null;
@@ -51,7 +59,7 @@ const prfUtils = (function() {
                                 refPoint = [...line, 0];
                                 return [...line, 0];
                             }
-                            return [...line, prfUtils.getDistance([line[0],line[1]], [refPoint[0],refPoint[1]])]
+                            return [...line, prfUtils.getDistance([line[0], line[1]], [refPoint[0], refPoint[1]])]
                         });
                         return {
                             ...p,
@@ -67,12 +75,17 @@ const prfUtils = (function() {
                         ...prf.data,
                         features: newFeatures
                     };
-                    // Affichage du multi select avec les dates des PRF
+                    // Création du multi select avec les dates des PRF
                     prfUtils.setPrfFeatures(prf.data.features)
                     prfUtils.createPrfMultiSelect();
+                    // affichage du multiselect et boutons
+                    prfToolbar.hidden = false;
                     // Affichage des Profils sur la carte
-                    prfUtils.changePrf()
+                    prfUtils.changePrf();
                 })
+                .catch(e => {
+                    prfUtils.manageError(e, "<i class='fas fa-times-circle'></i>");
+                });
         },
         /**
          * Create style for a given feature
@@ -406,7 +419,6 @@ const prfUtils = (function() {
                     </a>
                 </li>`
             }).join("");
-            console.log("change legend");
             prfUtils.changeLegend($(`<p>Date(s) sélectionnée(s):</p><ul class="nobullet">${legendHtml}</ul>`));
         },
         /**
@@ -421,8 +433,11 @@ const prfUtils = (function() {
         /**
          * Control params before allow to trigger WPS Beach Profil
          */
-        manageError: () => {
+        manageError: (msg = '', icon = '') => {
             const displayError = $('#prfMultiselect option:selected').length < 2;
+            if (msg) {
+                alertPrfParams.innerHTML = `${icon} ${msg}`;
+            }
             // manage trigger wps button
             $("#prftrackingBtn").prop("disabled", displayError);
             panelPrfParam.hidden = displayError;
@@ -476,21 +491,24 @@ const prfUtils = (function() {
             $("#prfMultiselect").multiselect("selectAll", true);
             $("#prfMultiselect").multiselect("updateButtonText");
 
-            prfUtils.manageError();
+            prfUtils.manageError('Vous devez choisir un site, un profil et au moins 2 dates !');
         },
         /**
          * Reset Beach Profile UI and data
          * @param {boolean} cleanPrfLayer 
          */
-        prfReset: (cleanPrfLayer) => {
+        prfReset: (cleanPrfLayer, msg) => {
             prfToolbar.hidden = true;
+            tools.setSelectedLR(null);
             if (document.getElementById("pofilesDatesChart")) {
                 pofilesDatesChart.remove();
             }
             if (document.getElementById("prfBilanSedChart")) {
                 prfBilanSedChart.remove();
             }
-            $("#prfMultiselect").multiselect("refresh");
+            if (document.getElementById("prfMultiselect")) {
+                prfMultiselect.remove();
+            }
             $('.ppNavTabs a[href="#ppTabDate"]').tab('show');
             panelDrag.clean();
             panelDrag.hidden();
@@ -498,6 +516,7 @@ const prfUtils = (function() {
                 // TODO get idType frome PRF selection
                 mviewer.getLayer("refline").layer.getSource().clear();   
             }
+            prfUtils.manageError(msg);
         },
         /**
          * Init
@@ -515,7 +534,7 @@ const prfUtils = (function() {
         multiSelectBtn: (action) => {
             $("#prfMultiselect").multiselect(action, false);
             prfUtils.changePrf();
-            prfUtils.manageError();
+            prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         }
     }
 })();

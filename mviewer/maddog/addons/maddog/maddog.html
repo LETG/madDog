@@ -128,7 +128,8 @@
                             </nav>                            
                         </div>
                         <div class="row">
-                            <div id="alertTdcParams" class="alert alert-danger alert-dismissible" role="alert">
+                            <div id="alertTdcParams" class="error alert alert-danger alert-dismissible" role="alert">
+                                <i class="fas fa-exclamation-circle"></i> 
                                 <strong>Attention: </strong> Vous devez choisir un site et au moins 2 dates !
                             </div>
                         </div>
@@ -247,8 +248,8 @@
                         <!-- <div class="row">
                             <span class="col-xs-6" id="selectorPrf"></span>
                         </div> -->
-                        <div class="row">
-                            <nav id="prfToolbar" class="navbar navbar-default toolbarMultiselect">
+                        <div class="row" id="prfToolbar" hidden>
+                            <nav class="navbar navbar-default toolbarMultiselect">
                                 <span class="col-xs-6" id="selectorPrf"></span>
                                 <button  id="prfMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'selectAll', prfUtils)">
                                     Tout sélectionner
@@ -258,14 +259,14 @@
                                 </button>
                             </nav>                            
                         </div>
-                        <div class="row" id="pofilesDates" style="margin-top: 40px;">
-                            <div class="row" id="pofilesDatesChart" style="margin-top: 40px;">
-                            
+                        <div class="row">
+                            <div id="alertPrfParams" class="error alert alert-danger alert-dismissible" role="alert">
+                                <i class="fas fa-exclamation-circle"></i> 
+                                <strong>Attention: </strong> Vous devez choisir un site, un profil et au moins 2 dates !
                             </div>
                         </div>
-                        <div class="row">
-                            <div id="alertPrfParams" class="alert alert-danger alert-dismissible" role="alert">
-                                <strong>Attention: </strong> Vous devez choisir un site, un profil et au moins 2 dates !
+                        <div class="row" id="pofilesDates" style="margin-top: 40px;">
+                            <div class="row" id="pofilesDatesChart" style="margin-top: 40px;">
                             </div>
                         </div>
                         <div class="row" style="margin-top: 10px;" id="panelPrfParam" hidden>

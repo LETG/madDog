@@ -159,7 +159,11 @@ const tools = (function () {
         },
         findSiteOnClick: (coordinate) => {
             tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
+                if (!feature) {
+                    document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
+                }
                 if (feature && feature.properties.idsite === maddog.idsite) return;
+                prfUtils.prfReset(true);
                 if (feature) {
                     tools.setIdSite(feature.properties.idsite, feature.properties.namesite);
                     tools.zoomToJSONFeature(feature, "EPSG:3857");
@@ -171,13 +175,13 @@ const tools = (function () {
                 }
             });
         },
+        setSelectedLR: (lr) => selectedLR = lr,
         onClickAction: () => {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
             mviewer.getMap().on('singleclick', function (evt) {
                 // don't use actions to avoid conflict with TDC draw refline
                 if (maddog.drawStart) return;
-                document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 tools.findSiteOnClick(evt.coordinate);
                 // enable feature selection for some features only
                 mviewer.getMap().forEachFeatureAtPixel(
@@ -188,8 +192,8 @@ const tools = (function () {
                             selectedLR = f;
                             const props = f.getProperties();
                             if (!PP_WPS.hidden) {
+                                prfUtils.prfReset();
                                 prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);   
-                                prfToolbar.hidden = false;
                             }
                         }
                     },
@@ -257,7 +261,7 @@ const tools = (function () {
                 tdcUtils.tdcReset(true);
             }
             if (PP_WPS.hidden) {
-                prfUtils.prfReset(true);
+                prfUtils.prfReset(true, '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             }
         },
         downloadBlob: (content, filename, contentType) => {

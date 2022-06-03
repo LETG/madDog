@@ -15,10 +15,10 @@ const tools = (function () {
 
     return {
         // PUBLIC
-        refLineStyle: (labels) => {
+        refLineStyle: (labels, color) => {
             return new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: "black",
+                    color: color || "black",
                     width: 2
                 }),
                 text: labels ? labels : null
@@ -158,12 +158,15 @@ const tools = (function () {
             });
         },
         findSiteOnClick: (coordinate) => {
+            let res = mviewer.getMap().getView().getResolution();
+            if (res < mviewer.getLayer("sitebuffer").layer.getMinResolution()) {
+                return;
+            }
             tools.getGFIUrl(coordinate, "sitebuffer", (feature) => {
                 if (!feature) {
                     document.getElementById("siteName").innerHTML = "Aucun site sélectionné !";
                 }
                 if (feature && feature.properties.idsite === maddog.idsite) return;
-                prfUtils.prfReset(true);
                 if (feature) {
                     tools.setIdSite(feature.properties.idsite, feature.properties.namesite);
                     tools.zoomToJSONFeature(feature, "EPSG:3857");
@@ -175,7 +178,15 @@ const tools = (function () {
                 }
             });
         },
-        setSelectedLR: (lr) => selectedLR = lr,
+        resetSelectedLR: () => {
+            if (tools.getSelectedLR()) {
+                tools.setSelectedLR(
+                    tools.getSelectedLR().setStyle(prfUtils.profilsStyle(tools.getSelectedLR()))
+                );
+            }
+        },
+        getSelectedLR: () => selectedLR,
+        setSelectedLR: (lr) => { selectedLR = lr },
         onClickAction: () => {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
@@ -189,12 +200,18 @@ const tools = (function () {
                     f => {
                         if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
                         if (f.getProperties()) {
-                            selectedLR = f;
                             const props = f.getProperties();
                             if (!PP_WPS.hidden) {
                                 prfUtils.prfReset();
-                                prfUtils.getPrfByProfilAndIdSite(props.idsite, props.idtype);   
+                                prfUtils.getPrfByProfilAndIdSite(props.idtype);
+                                // change style on mouse hover PRF feature
+                                selectedLR = f;
+                                selectedLR.setStyle(prfUtils.profilsStyle(f, maddog.getCfg("config.options.select.prf"), true));
+                                return true;
                             }
+                        }
+                        if (selectedLR && !f.getProperties()) {
+                            selectedLR.setStyle(prfUtils.profilsStyle(selectedLR));
                         }
                     },
                     {
@@ -206,17 +223,18 @@ const tools = (function () {
         },
         highlightFeature: () => {
             mviewer.getMap().on('pointermove', function (e) {
+                if (selectedLR) return;
                 if (highlightLR) {
-                    highlightLR.setStyle(defaultStyle[highlightLR.getId()]);
-                    delete defaultStyle[highlightLR.getId()];
+                    highlightLR.setStyle(defaultStyle);
                     highlightLR = null;
                 }
                 mviewer.getMap().forEachFeatureAtPixel(
                     e.pixel,
                     (f, layer) => {
+                        // change style on mouse hover PRF feature
                         highlightLR = f;
-                        defaultStyle = {...defaultStyle, [f.getId()]: f.getStyle()};
-                        highlightLR.setStyle(highlightStyle);
+                        defaultStyle = f.getStyle();
+                        highlightLR.setStyle(prfUtils.profilsStyle(f, maddog.getCfg("config.options.highlight.prf"), true));
                         return true;
                     },
                     {

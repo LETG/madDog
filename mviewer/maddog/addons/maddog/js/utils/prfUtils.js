@@ -42,10 +42,10 @@ const prfUtils = (function() {
          * @param {String} idSite 
          * @param {String} idType 
          */
-        getPrfByProfilAndIdSite: (idSite, idType) => {
+        getPrfByProfilAndIdSite: (idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
             const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
-            axios.get(`${prfUrl}'${idSite}' AND idtype='${idType}'`)
+            axios.get(`${prfUrl}'${maddog.idsite}' AND idtype='${idType}'`)
                 // récupération du PRF
                 .then(prf => {
                     if (!prf.data.features.length) {
@@ -92,13 +92,13 @@ const prfUtils = (function() {
          * @param {ol.feature} feature
          * @returns 
          */
-        profilsStyle: (feature) => {
+        profilsStyle: (feature, color, hover) => {
             let last = feature.getGeometry().getCoordinates()[0];
             let first = feature.getGeometry().getCoordinates()[1];
             return (f, res) => {
                 const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
                 const labels = displayLabel ? new ol.style.Text({
-                    font: '18px Roboto',
+                    font: hover ? '20px Roboto' : '18px Roboto',
                     text: `${f.get('idtype')}`,
                     placement: 'point',
                     rotation: -Math.atan((last[1] - first[1]) / (last[0] - first[0])),
@@ -106,10 +106,10 @@ const prfUtils = (function() {
                     offsetY: 3,
                     textBaseline: "bottom",
                     fill: new ol.style.Fill({
-                        color: 'black'
+                        color: color || 'black'
                     })
                 }) : null;
-                return tools.refLineStyle(labels);
+                return tools.refLineStyle(labels, color);
             }
         },
         /**
@@ -499,7 +499,6 @@ const prfUtils = (function() {
          */
         prfReset: (cleanPrfLayer, msg) => {
             prfToolbar.hidden = true;
-            tools.setSelectedLR(null);
             if (document.getElementById("pofilesDatesChart")) {
                 pofilesDatesChart.remove();
             }
@@ -517,6 +516,7 @@ const prfUtils = (function() {
                 mviewer.getLayer("refline").layer.getSource().clear();   
             }
             prfUtils.manageError(msg);
+            tools.resetSelectedLR();
         },
         /**
          * Init

@@ -16,6 +16,12 @@
     "html": "maddog.html",
     "target": "page-content-wrapper",
     "options": {
+        "highlight": {
+            "prf": "#ffa43b" 
+        },
+        "select": {
+            "prf": "red"
+        },
         "server": "https://gis.jdev.fr/geoserver/maddog",
         "defaultLayerZoom": {
             "namespace": "maddog",

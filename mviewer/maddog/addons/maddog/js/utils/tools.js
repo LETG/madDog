@@ -183,6 +183,7 @@ const tools = (function () {
                 tools.setSelectedLR(
                     tools.getSelectedLR().setStyle(prfUtils.profilsStyle(tools.getSelectedLR()))
                 );
+                prfUtils.prfReset();
             }
         },
         getSelectedLR: () => selectedLR,
@@ -194,10 +195,11 @@ const tools = (function () {
                 // don't use actions to avoid conflict with TDC draw refline
                 if (maddog.drawStart) return;
                 tools.findSiteOnClick(evt.coordinate);
+                tools.resetSelectedLR();
                 // enable feature selection for some features only
                 mviewer.getMap().forEachFeatureAtPixel(
                     evt.pixel,
-                    f => {
+                    (f) => {
                         if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
                         if (f.getProperties()) {
                             const props = f.getProperties();
@@ -211,7 +213,7 @@ const tools = (function () {
                             }
                         }
                         if (selectedLR && !f.getProperties()) {
-                            selectedLR.setStyle(prfUtils.profilsStyle(selectedLR));
+                            selectedLR.setStyle(prfUtils.profilsStyle(defaultStyle));
                         }
                     },
                     {
@@ -223,7 +225,7 @@ const tools = (function () {
         },
         highlightFeature: () => {
             mviewer.getMap().on('pointermove', function (e) {
-                if (selectedLR) return;
+                if (selectedLR && highlightLR && selectedLR.get("ogc_fid") == highlightLR.get("ogc_fid")) return;
                 if (highlightLR) {
                     highlightLR.setStyle(defaultStyle);
                     highlightLR = null;

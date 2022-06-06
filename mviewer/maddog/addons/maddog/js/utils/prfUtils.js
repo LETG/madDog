@@ -22,6 +22,7 @@ const prfUtils = (function() {
                 .then(features => {
                     prfUtils.drawPrfRefLines();
                     if (!features.length) {
+                        console.log("error");
                         throw "Aucun profil disponible disponible pour ce site !";
                     }
                 }).catch(e => prfUtils.manageError(e, "<i class='fas fa-eye-slash'></i>"));
@@ -49,6 +50,7 @@ const prfUtils = (function() {
                 // récupération du PRF
                 .then(prf => {
                     if (!prf.data.features.length) {
+                        console.log("error");
                         throw new Error(`Il n'y a aucune données à afficher pour le profile ${idType.toUpperCase()} !`);
                     };
                     // get ref point (first by default)
@@ -425,7 +427,9 @@ const prfUtils = (function() {
                 selected.push(maddog.charts.beachProfile.features.filter(feature => feature.properties.creationdate === $(el).val())[0]);
             });
             // create beach profile tracking param
-            if (!selected.length) return;
+            if (!selected.length) {
+                return prfUtils.changeLegend($(`<p>Aucune date n'a été sélectionnée !</p>`));
+            };
             prfUtils.setPrfFeatures(selected);
             if (maddog.charts.beachProfile && maddog.charts.beachProfile.features.length) {
                 let csv = _.flatten(maddog.charts.beachProfile.features.map(x => x.properties));
@@ -472,7 +476,12 @@ const prfUtils = (function() {
          */
         createPrfMultiSelect: () => {
             prfToolbar.hidden = false;
-            const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
+            //const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
+            // get dates from WPS result
+            let data = maddog.charts.beachProfile.features
+                .map(f => f.properties)
+                .map(item => ({ ...item, isodate: new Date(item.date) }));
+            let dates = prfUtils.orderDates(data);
             // clean multi select if exists
             $(selectorPrf).empty()
             // create multiselect HTML parent
@@ -502,8 +511,8 @@ const prfUtils = (function() {
             // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) =>
                 ({
-                    label: moment(d, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
-                    value: d
+                    label: moment(d.creationdate, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
+                    value: d.creationdate
                 })
             );
             // insert options into multiselect

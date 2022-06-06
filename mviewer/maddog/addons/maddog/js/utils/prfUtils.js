@@ -21,12 +21,12 @@ const prfUtils = (function() {
                 .then( prfSelect => {                    
                     prfSelect = maddog.prfRefLine.features;
                     var elMainSelect = document.getElementById('selectProfil');
-                    function optionsGenerator(id) {
+                    function optionsGenerator(value, text) {
                         const elOption = document.createElement('option');
-                        elOption.text = id;
-                        elOption.value = id;
+                        elOption.text = value || text;
+                        elOption.value = value;
                         elMainSelect.appendChild(elOption);
-                    };                    
+                    };                   
                     // List empty
                     document.getElementById("selectProfil").innerHTML = "";                    
                     if (!prfSelect.length) {                        
@@ -37,7 +37,7 @@ const prfUtils = (function() {
                         // show list
                         document.getElementById('ppTabselect').style.display = "block";
                         // first option is null
-                        optionsGenerator("Sélectionner un profil");                        
+                        optionsGenerator("", "Sélectionner un profil");                        
                         // add other options by profile
                         prfSelect.forEach(feature => optionsGenerator(feature.properties.idtype));
                     }
@@ -51,6 +51,9 @@ const prfUtils = (function() {
         // Manage display profile selected
         onSelectLr: (id) => {
             prfUtils.prfReset();
+            if (!id) {
+                return tools.resetSelectedLR();
+            }
             prfUtils.getPrfByProfilAndIdSite(id);            
             let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];            
             feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));

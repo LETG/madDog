@@ -201,16 +201,10 @@ const tools = (function () {
                     evt.pixel,
                     (f) => {
                         if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
-                        if (f.getProperties()) {
-                            const props = f.getProperties();
-                            if (!PP_WPS.hidden) {
-                                prfUtils.prfReset();
-                                prfUtils.getPrfByProfilAndIdSite(props.idtype);
-                                // change style on mouse hover PRF feature
-                                selectedLR = f;
-                                selectedLR.setStyle(prfUtils.profilsStyle(f, maddog.getCfg("config.options.select.prf"), true));
-                                return true;
-                            }
+                        if (f.getProperties() && !PP_WPS.hidden) {
+                            prfUtils.onSelectLr(f.get("idtype"));  
+                            document.getElementById('selectProfil').value = f.get("idtype");
+                            return true;   
                         }
                         if (selectedLR && !f.getProperties()) {
                             selectedLR.setStyle(prfUtils.profilsStyle(defaultStyle));

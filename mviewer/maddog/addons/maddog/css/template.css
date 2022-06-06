@@ -527,18 +527,19 @@ a.menu-link {
 	text-align: center;
 }
 
+.error {
+	font-size: 15px;
+	margin: 0;
+}
+
 /* PP */
 
-#ppTabselect {
-	padding: 50px 25%;
-    text-align: center;
+#selectProfil.form-control {
+    border-radius: 4px!important;
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%)!important;
+    font-size: 14px;
+    color: #555;
 }
 
-.titleChart{
-	  text-align: center;
-  }
 
-.error {
-	  font-size: 15px;
-	  margin: 0;
-}
+

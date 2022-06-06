@@ -577,7 +577,7 @@ const prfUtils = (function() {
                 // TODO get idType frome PRF selection
                 mviewer.getLayer("refline").layer.getSource().clear();   
             }            
-            prfUtils.manageError(msg);
+            prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
         },
         /**

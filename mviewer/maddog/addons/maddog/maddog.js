@@ -1,7 +1,7 @@
-const maddog = (function () {
+const maddog = (function() {
     let typingTimer; //timer identifier
     let zoomFeatureExtent = null;
-    const doneTypingInterval = 500;  //time in ms, 5 second for example
+    const doneTypingInterval = 500; //time in ms, 5 second for example
     const GEOJSON = new ol.format.GeoJSON();
 
     let wpsService = null;
@@ -18,7 +18,9 @@ const maddog = (function () {
     const waitLib = (name, ready) => new Promise((resolve, reject) => {
         if (!ready) {
             document.addEventListener(name, resolve(true));
-        } else {resolve(true)}
+        } else {
+            resolve(true)
+        }
     });
 
     const createList = (r, attrId, attrTitle, msg, type) => {
@@ -40,13 +42,13 @@ const maddog = (function () {
 
     const onInput = (e) => {
         //user is "finished typing," do something
-        function doneTyping () {
+        function doneTyping() {
             return displayAutocompleteList(e);
         }
         //on input, clear the countdown 
-        $(e.target).on('input', function () {
+        $(e.target).on('input', function() {
             clearTimeout(typingTimer);
-            typingTimer=setTimeout(doneTyping, doneTypingInterval);
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
         });
     };
 
@@ -76,11 +78,11 @@ const maddog = (function () {
             const sitesLabel = maddog.getCfg("config.options.sites.label");
             const html = [
                 '<span id="test-autocomplete">',
-                ...createList(communesResult, maddog.getCfg("config.options.communes.idField"), communesLabel,  'Communes', 'communes'),
+                ...createList(communesResult, maddog.getCfg("config.options.communes.idField"), communesLabel, 'Communes', 'communes'),
                 ...createList(sitesResult, maddog.getCfg("config.options.sites.idField"), sitesLabel, 'Sites', 'sites'),
                 '</span>'
             ];
-            maddog.autocomplete.display(html.join(""), onSelect, onHover );
+            maddog.autocomplete.display(html.join(""), onSelect, onHover);
         }));
     }
 
@@ -88,7 +90,7 @@ const maddog = (function () {
         searchComm: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "communes") : "",
         searchSite: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "sites") : "",
         getCfg: (i) => _.get(mviewer.customComponents.maddog, i),
-        init: function () {
+        init: function() {
             // wait all plugin as required dependancies
             let waitAll = [
                 waitLib(`tools-componentLoaded`, typeof tools !== 'undefined'),
@@ -109,11 +111,9 @@ const maddog = (function () {
                     }
                 });
                 // create WPS service from wps-js
-                wpsService = wps.createWpsService(
-                    {
-                        ...maddog.getCfg("config.options.wps")
-                    }
-                );
+                wpsService = wps.createWpsService({
+                    ...maddog.getCfg("config.options.wps")
+                });
                 maddog.setDrawRadialConfig({
                     callback: tdcUtils.getRadiales,
                     wpsService: wpsService,
@@ -141,10 +141,16 @@ const maddog = (function () {
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => {
                                 const color = _.find(maddog.charts.tdc.features, ["properties.creationdate", r.date + "Z"])?.properties?.color;
-                                return { ...r, color: color };
+                                return {
+                                    ...r,
+                                    color: color
+                                };
                             }
                         );
-                        let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data.map(z => ({...z, date: x.date}))));
+                        let csv = _.flatten(maddog.charts.coastLines.result.filter(c => c.data.length).map(x => x.data.map(z => ({
+                            ...z,
+                            date: x.date
+                        }))));
                         maddog.tdcCSV = Papa.unparse(csv);
                         maddog.tdcReference = moment.min(maddog.charts.coastLines.result.map(d => moment(d.date))).format("DD/MM/YYYY");
                         tdcUtils.tdcPlotyChart();
@@ -177,7 +183,10 @@ const maddog = (function () {
             if (!maddog.drawRadialConfig) {
                 maddog.drawRadialConfig = {};
             }
-            maddog.drawRadialConfig = { ...maddog.drawRadialConfig, ...param };
+            maddog.drawRadialConfig = {
+                ...maddog.drawRadialConfig,
+                ...param
+            };
         },
         drawRadialConfig: {},
         coastLinesTrackingConfig: {},
@@ -186,20 +195,25 @@ const maddog = (function () {
             if (!maddog.coastLinesTrackingConfig) {
                 maddog.coastLinesTrackingConfig = {};
             }
-            maddog.coastLinesTrackingConfig = { ...maddog.coastLinesTrackingConfig, ...param };
+            maddog.coastLinesTrackingConfig = {
+                ...maddog.coastLinesTrackingConfig,
+                ...param
+            };
         },
         setBeachProfileTrackingConfig: (param) => {
             if (!maddog.beachProfileTrackingConfig) {
                 maddog.beachProfileTrackingConfig = {};
             }
-            maddog.beachProfileTrackingConfig = { ...maddog.beachProfileTrackingConfig, ...param };
+            maddog.beachProfileTrackingConfig = {
+                ...maddog.beachProfileTrackingConfig,
+                ...param
+            };
         },
         radiales2154: [],
         charts: {},
         server: mviewer.customComponents.maddog.config.options?.server,
         bbox: []
     };
-
 })();
 
 new CustomComponent("maddog", maddog.init);

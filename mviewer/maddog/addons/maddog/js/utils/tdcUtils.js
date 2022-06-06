@@ -19,22 +19,22 @@ const tdcUtils = (function() {
                     referenceLine: geojson
                 }))
                 .then(() => tdcUtils.getTDCByIdSite(idsite))
-                .then(() => 
+                .then(() =>
                     // get WPS params for this reference line
                     fetch(`${maddog.getCfg("config.options.postgrestapi")}/wpstdcconf?id_site=eq.${idsite}`)
-                        .then(response => response.text())
-                        .then(wpsParams => {
-                            const p = JSON.parse(wpsParams)[0];
-                            radialLength.value = p?.radial_length;
-                            radialDistance.value = p?.radial_distance;
-                            tdcUtils.onParamChange(radialLength);
-                            tdcUtils.onParamChange(radialDistance);
-                        })
+                    .then(response => response.text())
+                    .then(wpsParams => {
+                        const p = JSON.parse(wpsParams)[0];
+                        radialLength.value = p?.radial_length;
+                        radialDistance.value = p?.radial_distance;
+                        tdcUtils.onParamChange(radialLength);
+                        tdcUtils.onParamChange(radialDistance);
+                    })
                 );
         },
         getTDCByIdSite: (idsite) => {
             // next, we get TDC usefull to call coastline tracking WPS
-            const tdcUrl = maddog.server +  "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
+            const tdcUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
             axios.get(`${tdcUrl}'${idsite}'`)
                 // get TDC and calculate legend and char color
                 .then(tdc => {
@@ -94,14 +94,13 @@ const tdcUtils = (function() {
             });
             layerTdc.getSource().clear();
             layerTdc.getSource().addFeatures(featuresTdc);
-            
         },
         radialesStyle: (feature) => {
             let last = feature.getGeometry().getCoordinates()[0];
             let first = feature.getGeometry().getCoordinates()[1];
             return (f, res) => {
                 const displayLabel = res < mviewer.getLayer("sitebuffer").layer.getMinResolution();
-                const labelOffset = res > 4 ? -20 : Math.round(res > 3.5 ? res/-2*10 : -30);
+                const labelOffset = res > 4 ? -20 : Math.round(res > 3.5 ? res / -2 * 10 : -30);
                 return new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: "black",
@@ -111,7 +110,7 @@ const tdcUtils = (function() {
                         font: '18px Roboto',
                         text: `${f.get('name')}`,
                         placement: 'point',
-                        rotation: -Math.atan((last[1] - first[1])/(last[0] - first[0])),
+                        rotation: -Math.atan((last[1] - first[1]) / (last[0] - first[0])),
                         textAlign: 'start',
                         offsetX: labelOffset,
                         offsetY: 3,
@@ -194,7 +193,7 @@ const tdcUtils = (function() {
             div.id = "tdcDistanceChart";
             document.getElementById("tdcGraph1").appendChild(div);
             const titleGraph = "<p><b>Évolution de la cinématique du trait de côte (en mètres) </b><br><i>pour le site sélectionné</i><p>";
-            document.getElementById("titleChart1").innerHTML=titleGraph;
+            document.getElementById("titleChart1").innerHTML = titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -283,7 +282,7 @@ const tdcUtils = (function() {
             div.id = "tdcTauxChart";
             document.getElementById("tdcGraph2").appendChild(div);
             const titleGraph = "<p><b>Taux d'évolution du trait de côte (m/an)</b><br><i>pour le site sélectionné</i><p>";
-            document.getElementById("titleChart2").innerHTML=titleGraph;
+            document.getElementById("titleChart2").innerHTML = titleGraph;
 
             // get dates from selection or every dates
             if (!_.isEmpty(dates)) {
@@ -368,10 +367,13 @@ const tdcUtils = (function() {
             $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
         orderDates: (selected) => {
-            selected = selected.map(s => ({ ...s.properties, isodate: new Date(moment(s.properties.creationdate, "YYYY-MM-DDZ").format("YYYY-MM-DD")) }));
+            selected = selected.map(s => ({
+                ...s.properties,
+                isodate: new Date(moment(s.properties.creationdate, "YYYY-MM-DDZ").format("YYYY-MM-DD"))
+            }));
             return _.orderBy(selected, (o) => {
                 return moment(o.isodate);
-              }, ['asc'])
+            }, ['asc'])
         },
         changeTdc: () => {
             $("#coastlinetrackingBtn").show();

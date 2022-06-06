@@ -11,22 +11,53 @@ const prfUtils = (function() {
          */
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
-            // Permettant ensuite de filter les profils a afficher
+            // Permettant ensuite de filter les profils a afficher sur la carte et dans la liste de sélection
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
             axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(prfRefLine => {
                     maddog.prfRefLine = prfRefLine.data;
                     return prfRefLine.data.features;
                 })
-                // On affiche les lignes de références de profils pour selection
+                .then( prfSelect => {                    
+                    prfSelect = maddog.prfRefLine.features;
+                    var elMainSelect = document.getElementById('selectProfil');
+                    function optionsGenerator(value, text) {
+                        const elOption = document.createElement('option');
+                        elOption.text = value || text;
+                        elOption.value = value;
+                        elMainSelect.appendChild(elOption);
+                    };                   
+                    // List empty
+                    document.getElementById("selectProfil").innerHTML = "";                    
+                    if (!prfSelect.length) {                        
+                        // hide list
+                        document.getElementById('ppTabselect').style.display = "none";
+                        throw "Aucun profil n'est disponible pour ce site";                        
+                    } else {
+                        // show list
+                        document.getElementById('ppTabselect').style.display = "block";
+                        // first option is null
+                        optionsGenerator("", "Sélectionner un profil");                        
+                        // add other options by profile
+                        prfSelect.forEach(feature => optionsGenerator(feature.properties.idtype));
+                    }
+                })
+                // Add profile line in map
                 .then(features => {
                     prfUtils.drawPrfRefLines();
-                    if (!features.length) {
-                        console.log("error");
-                        throw "Aucun profil disponible disponible pour ce site !";
-                    }
                 }).catch(e => prfUtils.manageError(e, "<i class='fas fa-eye-slash'></i>"));
 
+        },
+        // Manage display profile selected
+        onSelectLr: (id) => {
+            prfUtils.prfReset();
+            if (!id) {
+                return tools.resetSelectedLR();
+            }
+            prfUtils.getPrfByProfilAndIdSite(id);            
+            let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];            
+            feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));
+            tools.setSelectedLR(feature);
         },
         /**
          * Calculate distance from 2 points
@@ -50,8 +81,7 @@ const prfUtils = (function() {
                 // récupération du PRF
                 .then(prf => {
                     if (!prf.data.features.length) {
-                        console.log("error");
-                        throw new Error(`Il n'y a aucune données à afficher pour le profile ${idType.toUpperCase()} !`);
+                        throw new Error(`Données non disponibles pour le profil ${idType.toUpperCase()}`);
                     };
                     // get ref point (first by default)
                     const newFeatures = prf.data.features.map(p => {
@@ -546,15 +576,15 @@ const prfUtils = (function() {
             if (cleanPrfLayer) {
                 // TODO get idType frome PRF selection
                 mviewer.getLayer("refline").layer.getSource().clear();   
-            }
-            prfUtils.manageError(msg);
+            }            
+            prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
         },
         /**
          * Init
          */
         initPrf: () => {
-            prfUtils.prfReset();
+            prfUtils.prfReset();            
         },
         /**
          * Change param evt

@@ -231,8 +231,13 @@
 
         <!-- Profil de plage -->
         <div class="row col-sm-12" id="PP_WPS" hidden>
-            <h3 class="modal-title">Profil de plage</h3>     
-            <div class="tab-block">
+            <h3 class="modal-title">Profil de plage</h3> 
+            <div div class="tab-block" id="ppTabselect">
+                <p>Sélectionner un profil sur la carte ou dans la liste de sélection</p>
+                <select onchange="prfUtils.onSelectLr(this.value)" class="form-control" name="" id="selectProfil">
+                </select>
+            </div>                
+            <div class="tab-block" id="ppTab">
                 <!--NavTab-->
                 <ul class="nav nav-tabs nav-justified ppNavTabs">
                     <li class="active"><a href="#ppTabDate" data-toggle="tab">Choix des dates</a></li>

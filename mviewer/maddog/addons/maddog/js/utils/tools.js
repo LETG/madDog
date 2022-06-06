@@ -1,4 +1,4 @@
-const tools = (function () {
+const tools = (function() {
     // PRIVATE
     let highlightLR, selectedLR, defaultStyle, draw;
     const eventName = "tools-componentLoaded";
@@ -31,36 +31,38 @@ const tools = (function () {
         zoomToOGCLayerExtent: () => {
             const options = maddog.getCfg("config.options.defaultLayerZoom");
             if (!mviewer.getLayer(options.layer)) return;
-            let url = options.url || mviewer.getLayer(options.layer).layer.getSource().getUrl() ;
+            let url = options.url || mviewer.getLayer(options.layer).layer.getSource().getUrl();
             if (options.type === "wms" && !options.url) {
                 url = url + "?service=WMS&version=1.1.0&request=GetCapabilities&namespace=" + options.namespace;
             }
             if (options.type === "wfs" && !options.url) {
-                url = url.replace("wms","wfs") + "?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&typeName=" + options.layer;
+                url = url.replace("wms", "wfs") + "?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&typeName=" + options.layer;
             }
             fetch(url).then(response => options.type === "wms" ? response.text() : response.json())
-            .then(function (response) {
-                let reader = options.type === "wms" ? new ol.format.WMSCapabilities() : new ol.format.GeoJSON();
-                let extent;
-                if (options.type === "wms") {
-                    const infos = reader.read(response);
-                    extent = _.find(infos.Capability.Layer.Layer, ["Name", options.layer]).BoundingBox[0].extent;
-                }
-                if (options.type === "wfs") {
-                    const layerExtentInit = new ol.source.Vector();
-                    const features = reader.readFeatures(response);
-                    layerExtentInit.addFeatures(features);
-                    extent = layerExtentInit.getExtent();
-                }
-                maddog.bbox = extent;
-                // wait 2000 ms correct map size to zoom correctly
-                tools.zoomToExtent(maddog.bbox, {duration: 0}, 2000);
-                if (options.asHomeExtent) {
-                    mviewer.zoomToInitialExtent = () => {
-                        tools.zoomToExtent(maddog.bbox);
-                    };
-                }
-            })
+                .then(function(response) {
+                    let reader = options.type === "wms" ? new ol.format.WMSCapabilities() : new ol.format.GeoJSON();
+                    let extent;
+                    if (options.type === "wms") {
+                        const infos = reader.read(response);
+                        extent = _.find(infos.Capability.Layer.Layer, ["Name", options.layer]).BoundingBox[0].extent;
+                    }
+                    if (options.type === "wfs") {
+                        const layerExtentInit = new ol.source.Vector();
+                        const features = reader.readFeatures(response);
+                        layerExtentInit.addFeatures(features);
+                        extent = layerExtentInit.getExtent();
+                    }
+                    maddog.bbox = extent;
+                    // wait 2000 ms correct map size to zoom correctly
+                    tools.zoomToExtent(maddog.bbox, {
+                        duration: 0
+                    }, 2000);
+                    if (options.asHomeExtent) {
+                        mviewer.zoomToInitialExtent = () => {
+                            tools.zoomToExtent(maddog.bbox);
+                        };
+                    }
+                })
         },
         zoomToJSONFeature: (jsonFeature, startProj, endProj) => {
             const outConfig = endProj && startProj ? {
@@ -81,8 +83,7 @@ const tools = (function () {
             const displayTime = 3000;
             const fit = () => {
                 mviewer.getMap().getView().fit(
-                    extent,
-                    {
+                    extent, {
                         size: mviewer.getMap().getSize(),
                         padding: [100, 100, 100, 100],
                         duration: duration,
@@ -187,11 +188,13 @@ const tools = (function () {
             }
         },
         getSelectedLR: () => selectedLR,
-        setSelectedLR: (lr) => { selectedLR = lr },
+        setSelectedLR: (lr) => {
+            selectedLR = lr
+        },
         onClickAction: () => {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
-            mviewer.getMap().on('singleclick', function (evt) {
+            mviewer.getMap().on('singleclick', function(evt) {
                 // don't use actions to avoid conflict with TDC draw refline
                 if (maddog.drawStart) return;
                 tools.findSiteOnClick(evt.coordinate);
@@ -202,15 +205,14 @@ const tools = (function () {
                     (f) => {
                         if (selectedLR && f.get("ogc_fid") == selectedLR.get("ogc_fid")) return;
                         if (f.getProperties() && !PP_WPS.hidden) {
-                            prfUtils.onSelectLr(f.get("idtype"));  
+                            prfUtils.onSelectLr(f.get("idtype"));
                             document.getElementById('selectProfil').value = f.get("idtype");
-                            return true;   
+                            return true;
                         }
                         if (selectedLR && !f.getProperties()) {
                             selectedLR.setStyle(prfUtils.profilsStyle(defaultStyle));
                         }
-                    },
-                    {
+                    }, {
                         hitTolerance: 10,
                         layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
                     }
@@ -218,7 +220,7 @@ const tools = (function () {
             });
         },
         highlightFeature: () => {
-            mviewer.getMap().on('pointermove', function (e) {
+            mviewer.getMap().on('pointermove', function(e) {
                 if (selectedLR) return;
                 if (highlightLR) {
                     highlightLR.setStyle(defaultStyle);
@@ -232,11 +234,10 @@ const tools = (function () {
                         defaultStyle = f.getStyle();
                         highlightLR.setStyle(prfUtils.profilsStyle(f, maddog.getCfg("config.options.highlight.prf"), true));
                         return true;
-                    },
-                    {
+                    }, {
                         hitTolerance: 10,
                         layerFilter: (l) => ["refline"].includes(l.getProperties().mviewerid)
-                        
+
                     }
                 );
             });
@@ -266,7 +267,8 @@ const tools = (function () {
             if (maddog.idsite && !PP_WPS.hidden) {
                 prfUtils.prfReset(true);
                 prfUtils.getPrfRefLines(maddog.idsite);
-                prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');            }
+                prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+            }
         },
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
@@ -281,9 +283,11 @@ const tools = (function () {
         },
         downloadBlob: (content, filename, contentType) => {
             // Create a blob
-            var blob = new Blob([content], { type: contentType });
+            var blob = new Blob([content], {
+                type: contentType
+            });
             var url = URL.createObjectURL(blob);
-          
+
             // Create a link to download it
             var pom = document.createElement('a');
             pom.href = url;
@@ -300,7 +304,7 @@ const tools = (function () {
                 type: 'LineString'
             });
 
-            draw.on('drawend', function (evt) {
+            draw.on('drawend', function(evt) {
                 maddog.drawRefLine = evt.feature;
                 // clean layers
                 mviewer.getLayer("radiales").layer.getSource().clear();
@@ -310,9 +314,13 @@ const tools = (function () {
                 // reproject draw line to work with WPS
                 feature.getGeometry().transform("EPSG:3857", "EPSG:2154");
                 // WPS only works if properties is not null
-                feature.setProperties({ time: new Date().toISOString() });
+                feature.setProperties({
+                    time: new Date().toISOString()
+                });
                 // create JSON
-                const featureJSON = new ol.format.GeoJSON({ defaultDataProjection: "EPSG:2154" }).writeFeature(feature);
+                const featureJSON = new ol.format.GeoJSON({
+                    defaultDataProjection: "EPSG:2154"
+                }).writeFeature(feature);
                 // set drawRadial config
                 maddog.setDrawRadialConfig({
                     drawReferenceLine: `<![CDATA[{"type":"FeatureCollection","features":[${featureJSON}]}]]>`
@@ -328,11 +336,11 @@ const tools = (function () {
             const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
             if (btn.className == "btn btn-default btn-danger" || deactivate) {
                 btn.className = "btn btn-default";
-                btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner"; 
+                btn.innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner";
                 sourceLayer.clear();
                 // clean radiales
                 mviewer.getLayer("radiales").layer.getSource().clear();
-                info.enable(); 
+                info.enable();
                 maddog.setDrawRadialConfig({
                     drawReferenceLine: null
                 });

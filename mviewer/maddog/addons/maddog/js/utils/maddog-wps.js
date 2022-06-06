@@ -1,9 +1,9 @@
-const wps = (function () {
+const wps = (function() {
     const eventName = "maddog-wps-componentLoaded";
     var create = new Event(eventName);
     document.addEventListener(eventName, () => console.log("maddog-wps lib loaded !"))
     document.dispatchEvent(create);
-    
+
     return {
         init: (component) => {
             this.getCfg = (i) => _.get(mviewer.customComponents[component], i);
@@ -54,7 +54,7 @@ const wps = (function () {
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
                 "resulFeatureCollection",
-                "application/json", 
+                "application/json",
                 null,
                 null,
                 null,
@@ -74,7 +74,7 @@ const wps = (function () {
             lineage = false,
             tdc = {} // geojson in <![CDATA]> like <![CDATA{geojson}]>
         }) => {
-             if (!wpsService || _.isEmpty(radiales) || _.isEmpty(tdc)) return {};
+            if (!wpsService || _.isEmpty(radiales) || _.isEmpty(tdc)) return {};
 
             let inputGenerator = new InputGenerator();
 
@@ -99,7 +99,7 @@ const wps = (function () {
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
                 "jsonString",
-                "application/json", 
+                "application/json",
                 null,
                 null,
                 null,
@@ -143,7 +143,7 @@ const wps = (function () {
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
                 "result",
-                "application/json", 
+                "application/json",
                 null,
                 null,
                 null,

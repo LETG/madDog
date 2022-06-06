@@ -219,7 +219,7 @@ const tools = (function () {
         },
         highlightFeature: () => {
             mviewer.getMap().on('pointermove', function (e) {
-                if (selectedLR && highlightLR && selectedLR.get("ogc_fid") == highlightLR.get("ogc_fid")) return;
+                if (selectedLR) return;
                 if (highlightLR) {
                     highlightLR.setStyle(defaultStyle);
                     highlightLR = null;

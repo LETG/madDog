@@ -48,6 +48,7 @@
             "idField": "idsite",
             "label": "namesite"
         },
+        "postgrestapi": "https://gis.jdev.fr/maddogapi",
         "searchLimit": 10,
         "wps": {
             "url": "https://gis.jdev.fr/geoserver/ows",

@@ -21,7 +21,7 @@ const tdcUtils = (function() {
                 .then(() => tdcUtils.getTDCByIdSite(idsite))
                 .then(() => 
                     // get WPS params for this reference line
-                    fetch(`https://gis.jdev.fr/maddogapi/wpstdcconf?id_site=eq.${idsite}`)
+                    fetch(`${maddog.getCfg("config.options.postgrestapi")}/wpstdcconf?id_site=eq.${idsite}`)
                         .then(response => response.text())
                         .then(wpsParams => {
                             const p = JSON.parse(wpsParams)[0];

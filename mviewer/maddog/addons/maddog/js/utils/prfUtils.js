@@ -18,26 +18,27 @@ const prfUtils = (function() {
                     maddog.prfRefLine = prfRefLine.data;
                     return prfRefLine.data.features;
                 })
-                .then( prfSelect => {                    
+                .then(prfSelect => {
                     prfSelect = maddog.prfRefLine.features;
                     var elMainSelect = document.getElementById('selectProfil');
+
                     function optionsGenerator(value, text) {
                         const elOption = document.createElement('option');
                         elOption.text = value || text;
                         elOption.value = value;
                         elMainSelect.appendChild(elOption);
-                    };                   
+                    };
                     // List empty
-                    document.getElementById("selectProfil").innerHTML = "";                    
-                    if (!prfSelect.length) {                        
+                    document.getElementById("selectProfil").innerHTML = "";
+                    if (!prfSelect.length) {
                         // hide list
                         document.getElementById('ppTabselect').style.display = "none";
-                        throw "Aucun profil n'est disponible pour ce site";                        
+                        throw "Aucun profil n'est disponible pour ce site";
                     } else {
                         // show list
                         document.getElementById('ppTabselect').style.display = "block";
                         // first option is null
-                        optionsGenerator("", "Sélectionner un profil");                        
+                        optionsGenerator("", "Sélectionner un profil");
                         // add other options by profile
                         prfSelect.forEach(feature => optionsGenerator(feature.properties.idtype));
                     }
@@ -54,8 +55,8 @@ const prfUtils = (function() {
             if (!id) {
                 return tools.resetSelectedLR();
             }
-            prfUtils.getPrfByProfilAndIdSite(id);            
-            let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];            
+            prfUtils.getPrfByProfilAndIdSite(id);
+            let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];
             feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));
             tools.setSelectedLR(feature);
         },
@@ -151,7 +152,7 @@ const prfUtils = (function() {
         drawPrfRefLines: () => {
             if (!maddog.prfRefLine) return;
 
-            let layer = mviewer.getLayer("refline").layer;            
+            let layer = mviewer.getLayer("refline").layer;
             // display radiales on map with EPSG:3857
             let features = new ol.format.GeoJSON({
                 defaultDataProjection: 'EPSG:2154'
@@ -219,13 +220,15 @@ const prfUtils = (function() {
             div.id = "prfBilanSedChart";
             document.getElementById("ppTabGraph").appendChild(div);
             // standardize date format
-            let selected = maddog.charts.sediments.result.map(item => ({ ...item, isodate: new Date(item.date) }));
+            let selected = maddog.charts.sediments.result.map(item => ({
+                ...item,
+                isodate: new Date(item.date)
+            }));
             selected = prfUtils.orderDates(selected, "isodate");
             // get uniq labels already orderd by date
             let labels = _.uniq(selected.map(s => moment(s.date, "YYYY-MM-DDZ").format("DD/MM/YYYY")));
             const datesX = _.uniq(selected.map(s => new Date(moment(s.date, "YYYY-MM-DDZ"))));
-            var data = [
-                {
+            var data = [{
                     x: datesX,
                     y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
                     name: "Evolution cumulée"
@@ -244,8 +247,7 @@ const prfUtils = (function() {
                     color: '#7f7f7f'
                 }
             };
-            var layout =
-            {
+            var layout = {
                 autosize: true,
                 showlegend: true,
                 legend: {
@@ -260,26 +262,24 @@ const prfUtils = (function() {
                         size: 15
                     },
                     y: 0.9
-                },                xaxis:
-                {
+                },
+                xaxis: {
                     type: 'date',
                     tickvals: datesX,
                     ticktext: labels,
-                    tickfont:
-                    {
-                        color:"rgb(107, 107, 107)",
-                        size:11
+                    tickfont: {
+                        color: "rgb(107, 107, 107)",
+                        size: 11
                     },
-                    ticks:"outside",
-                    tickwidth:1,
-                    tickangle:40,
-                    ticklen:5,
-                    showticklabels:true,
-                    showline:true,
+                    ticks: "outside",
+                    tickwidth: 1,
+                    tickangle: 40,
+                    ticklen: 5,
+                    showticklabels: true,
+                    showline: true,
                     showgrid: false
                 },
-                yaxis:
-                {
+                yaxis: {
                     ticktext: selected.map(s => s.data.filter(i => i.volume)[0].volume),
                     autorange: true,
                     showgrid: true,
@@ -298,9 +298,8 @@ const prfUtils = (function() {
             Plotly.newPlot(
                 'prfBilanSedChart',
                 data,
-                layout,
-                {
-                    scrollZoom: true ,
+                layout, {
+                    scrollZoom: true,
                     responsive: true,
                     modeBarButtonsToAdd: [{
                         name: 'Export SVG',
@@ -326,10 +325,9 @@ const prfUtils = (function() {
                             tools.downloadBlob(maddog.sedimentsCSV, 'exportSediments.csv', 'text/csv;charset=utf-8;')
                         }
                     }]
-    
+
                 }
             )
-
         },
         /**
          * Create first tab Chart from selected profile
@@ -510,7 +508,10 @@ const prfUtils = (function() {
             // get dates from WPS result
             let data = maddog.charts.beachProfile.features
                 .map(f => f.properties)
-                .map(item => ({ ...item, isodate: new Date(item.date) }));
+                .map(item => ({
+                    ...item,
+                    isodate: new Date(item.date)
+                }));
             let dates = prfUtils.orderDates(data);
             // clean multi select if exists
             $(selectorPrf).empty()
@@ -554,7 +555,8 @@ const prfUtils = (function() {
             $("#prfMultiselect").multiselect("selectAll", true);
             $("#prfMultiselect").multiselect("updateButtonText");
 
-            prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');        },
+            prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+        },
         /**
          * Reset Beach Profile UI and data
          * @param {boolean} cleanPrfLayer 
@@ -575,8 +577,8 @@ const prfUtils = (function() {
             panelDrag.hidden();
             if (cleanPrfLayer) {
                 // TODO get idType frome PRF selection
-                mviewer.getLayer("refline").layer.getSource().clear();   
-            }            
+                mviewer.getLayer("refline").layer.getSource().clear();
+            }
             prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
         },
@@ -584,7 +586,7 @@ const prfUtils = (function() {
          * Init
          */
         initPrf: () => {
-            prfUtils.prfReset();            
+            prfUtils.prfReset();
         },
         /**
          * Change param evt

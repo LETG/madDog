@@ -1,0 +1,15 @@
+<OGRVRTDataSource>
+    <OGRVRTLayer name="LAYERNAME">
+        <SrcDataSource></SrcDataSource>
+        <Field name="num_measure" src="id"/>
+        <Field name="coord_x" src="x" type="Real"/>
+        <Field name="coord_y" src="y" type="Real"/>
+        <Field name="coord_z" src="z" type="Real"/>
+        <Field name="pro_epsg" src="epsg" type="String"/>
+        <Field name="date_measure" src="date" type="Date"/>
+        <Field name="description_measure" src="identifiant" type="String"/>
+        <Field name="id_equipment" type="String"/>
+        <Field name="id_operator" type="String"/>
+        <Field name="id_survey" type="String"/>       
+    </OGRVRTLayer>
+</OGRVRTDataSource>

@@ -2,11 +2,13 @@
 
 ### Install
 To use VRT you need to install GDAL
+For this project we use Postgresql 13.7 with Postgis 3.2.1, we need at least version 3.0.4 of gdal.
 
-* On debian : 
+* On debian 11 : 
 
 ```
-apt install gdal-bin
+apt  install gdal-bin
+ogrinfo --version 
 ```
 
 ### VRT -> GEOJson

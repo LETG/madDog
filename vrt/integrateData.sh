@@ -39,10 +39,16 @@ function importData {
     for data in $1/*.csv    
     do
         if [ -f "$data" ]; then
-            data=${data%*/}      
-            echo "---- Import des données de ${data##*/}"   
+            data=${data%*/}    
+            
+            #-- Integrate spatiale data used for maddog application  
+            echo "---- Import des données de ${data##*/} en base spatiale"   
             echo "${idSubSite##*/} $data ${idSite##*/}"
             ./vrt2Postgis.sh ${idSubSite##*/} $data ${idSite##*/}
+
+            #-- Integrate date in maddog data model (not used by application)
+             echo "---- Import des données de ${data##*/} en base attributaire"   
+            ./modelData2Postgres.sh $data
         fi
     done
 } 

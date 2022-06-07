@@ -6,7 +6,7 @@
         mouseposition="false" 
         logo="apps/maddog/img/logo_maddog.png" 
         help="apps/maddog/accueil.html" 
-        showhelp="false" 
+        showhelp="true" 
         titlehelp=" " 
         iconhelp="home"
         measuretools="true" 

@@ -305,7 +305,7 @@ p.card-text {
 	border: 1px solid var(--mycolor);
 }
 
-#tdcMultiCleanBtn, #prfMultiCleanBtn {
+#tdcMultiCleanBtn, #prfMultiCleanBtn, #mntMultiCleanBtn {
 	margin-left: 14px;
 }
 
@@ -471,7 +471,7 @@ a.menu-link {
 	/* Remove margins */
 }
 	
-#tdcTabDate, #ppTabDate {
+#tdcTabDate, #ppTabDate, #mntTab {
 	padding: 20px;
 }
 

@@ -1,378 +1,432 @@
 <!-- Template Dekstop -->
 <div class="template-panel panel">
-   <div class="panel-body">
+    <div class="panel-body">
        <!-- Selection de la zone -->
        <div class="row blockContainer" id="selectZone">
-           <h3 class="modal-title">Sélectionner un site d'étude</h3>
-           <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
-           <!--INPUT FIELD-->
-           <div class="row col-sm-12 pad-0" style="margin-top: 10px;">
-               <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
-                   <div class="form-group form-autocomplete">
-                       <div class="input-group">
-                           <span class="input-group-addon search-picto"><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
-                           </span>
-                           <input id="input-autocomplete" type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Plouguerneau">
-                       </div>
-                       <!-- <p class="italic text-small">Lancer la recherche avec la loupe</p> -->
+          <h3 class="modal-title">Sélectionner un site d'étude</h3>
+          <p class="italic">Sélectionner un site d'étude sur la carte ou rechercher un site à l'aide de la barre de recherche</p>
+          <!--INPUT FIELD-->
+          <div class="row col-sm-12 pad-0" style="margin-top: 10px;">
+             <div class="col-sm-10 col-md-7 autocomplete" id="search-input">
+                <div class="form-group form-autocomplete">
+                   <div class="input-group">
+                      <span class="input-group-addon search-picto"><i class="fas fa-search result"></i><i class="fas fa-times delete" style="display:none;"></i>
+                      </span>
+                      <input id="input-autocomplete" type="text" class="form-control search-input input-search input-text" autocomplete="off" placeholder="Exemple: Plouguerneau">
                    </div>
-                   <div class="autocomplete-result col-sm-12" style="display:none;"></div>
-               </div>
-           </div>
-           <!--/.INPUT FIELD-->
-           <div class="row col-sm-12 pad-0 select-info mbt-0">
-            <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> 
-             <span id="siteName">Aucun site sélectionné</span></p>
-            </div>
+                   <!-- <p class="italic text-small">Lancer la recherche avec la loupe</p> -->
+                </div>
+                <div class="autocomplete-result col-sm-12" style="display:none;"></div>
+             </div>
+          </div>
+          <!--/.INPUT FIELD-->
+          <div class="row col-sm-12 pad-0 select-info mbt-0">
+             <p><span class="color1 bold"> <i class="fas fa-map-marker-alt"></i> Site d'étude sélectionné :</span> 
+                <span id="siteName">Aucun site sélectionné</span>
+             </p>
+          </div>
        </div>
        <!-- /.Selection de la zone -->
-
        <!-- Visualisation des résultats -->
        <div class="row blockContainer" id="resultZone">
-
-        <!-- Menu des suivis -->
-        <div class="row col-sm-12" id="selectWPS">
-            <div id="WPSnoselect"></div>
-            <h3 class="modal-title">Sélectionner un type de suivi</h3>
-            <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
-            <div class="row row-for-cards blockCards">
+          <!-- Menu des suivis -->
+          <div class="row col-sm-12" id="selectWPS">
+             <div id="WPSnoselect"></div>
+             <h3 class="modal-title">Sélectionner un type de suivi</h3>
+             <p class="italic">Cliquez sur un suivi pour paramétrer et visualiser les données sur le site d'étude</p>
+             <div class="row row-for-cards blockCards">
                 <div class="col-sm-4">
-                    <div class="card" onClick="tools.showHideMenu(TDC_WPS)">
-                        <div class="card-body">
-                            <div class="block-icon">
-                                <img class="icon-suivi" src="apps/maddog/img/icon_tdc.png" alt="Icône Trait de côte">
-                            </div>                            
-                            <h5 class="card-title">                            
-                                Trait de côte 
-                                <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé d'un indicateur bio-morphologique ou 
-                                hydrologique servant à identifier le trait de côte : limite de végétation dunaire, sommet de falaise dunaire ou rocheuse, 
-                                pied de dune ou de falaise, ligne d'un niveau d'eau extrait d'un MNT">
-                                    <i class="fas fa-info-circle"></i></span>
-                                </span>
-                            </h5>
-                            <p class="card-text">Suivi en plan de la position du trait de côte. </p>
-                            <div class="align-right-link">
-                                <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
-                            </div>                            
-                        </div>
-                    </div>
+                   <div class="card" onClick="tools.showHideMenu(TDC_WPS)">
+                      <div class="card-body">
+                         <div class="block-icon">
+                            <img class="icon-suivi" src="apps/maddog/img/icon_tdc.png" alt="Icône Trait de côte">
+                         </div>
+                         <h5 class="card-title">                            
+                            Trait de côte 
+                            <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé d'un indicateur bio-morphologique ou 
+                               hydrologique servant à identifier le trait de côte : limite de végétation dunaire, sommet de falaise dunaire ou rocheuse, 
+                               pied de dune ou de falaise, ligne d'un niveau d'eau extrait d'un MNT">
+                            <i class="fas fa-info-circle"></i></span>
+                            </span>
+                         </h5>
+                         <p class="card-text">Suivi en plan de la position du trait de côte. </p>
+                         <div class="align-right-link">
+                            <a href="#" id ="btn-wps-tdc" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
+                         </div>
+                      </div>
+                   </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card" onClick="tools.showHideMenu(PP_WPS)">
-                        <div class="card-body">
-                            <div class="block-icon">
-                                <img class="icon-suivi" src="apps/maddog/img/icon_pp.png" alt="Icône Profil de plage">
-                            </div>                        
-                            <h5 class="card-title">
-                                Profil de plage 
-                                <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé altitudinal des différences 
-                                morphologiques de la zone littorale (supratidale, intertidale, et subtidale proche), le long d'un profil perpendiculaire au trait de côte ">
-                                <i class="fas fa-info-circle"></i></span>
-                            </h5>
-                            <p class="card-text">Suivi des altitudes le long d'un profil perpendiculaire au trait de côte.</p>
-                            <div class="align-right-link">
-                                <a href="#" id ="btn-wps-pp" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
-                            </div>                            
-                        </div>
-                    </div>
+                   <div class="card" onClick="tools.showHideMenu(PP_WPS)">
+                      <div class="card-body">
+                         <div class="block-icon">
+                            <img class="icon-suivi" src="apps/maddog/img/icon_pp.png" alt="Icône Profil de plage">
+                         </div>
+                         <h5 class="card-title">
+                            Profil de plage 
+                            <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé altitudinal des différences 
+                               morphologiques de la zone littorale (supratidale, intertidale, et subtidale proche), le long d'un profil perpendiculaire au trait de côte ">
+                            <i class="fas fa-info-circle"></i></span>
+                         </h5>
+                         <p class="card-text">Suivi des altitudes le long d'un profil perpendiculaire au trait de côte.</p>
+                         <div class="align-right-link">
+                            <a href="#" id ="btn-wps-pp" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>
+                         </div>
+                      </div>
+                   </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card" onClick="tools.showHideMenu(MNT_WPS)">
-                        <div class="card-body">
-                            <div class="block-icon">
-                                <img class="icon-suivi" src="apps/maddog/img/icon_mnt.png" alt="Icône MNT">
-                            </div>                            
-                            <h5 class="card-title" >
-                                Modèle Numérique de Terrain 
-                                <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé surfacique en 3 dimensions 
-                                    (X, Y, Z) de la morphologie de la zone littorale (supratidale, intertidale, et subtidale proche) ">
-                                        <i class="fas fa-info-circle"></i>
-                                </span>    
-                            </h5>
-                            <p class="card-text">Suivi surfacique de la morphologie de la zone littorale.</p>
-                            <div class="align-right-link">
-                                <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>                            
-                            </div>                            
-                        </div>
-                    </div>
+                   <div class="card" onClick="tools.showHideMenu(MNT_WPS)">
+                      <div class="card-body">
+                         <div class="block-icon">
+                            <img class="icon-suivi" src="apps/maddog/img/icon_mnt.png" alt="Icône MNT">
+                         </div>
+                         <h5 class="card-title" >
+                            Modèle Numérique de Terrain 
+                            <span data-toggle="tooltip" data-placement="top" title="Suivi reposant sur le relevé surfacique en 3 dimensions 
+                               (X, Y, Z) de la morphologie de la zone littorale (supratidale, intertidale, et subtidale proche) ">
+                            <i class="fas fa-info-circle"></i>
+                            </span>    
+                         </h5>
+                         <p class="card-text">Suivi surfacique de la morphologie de la zone littorale.</p>
+                         <div class="align-right-link">
+                            <a href="#" id ="btn-wps-mnt" class="card-link btn disabled" ><i class="fas fa-arrow-right"></i> Accéder</a>                            
+                         </div>
+                      </div>
+                   </div>
                 </div>
-            </div>
-        </div>
-        <!-- /.Menu des suivis -->
-
-        <!-- Trait de côte -->
-        <div class="row col-sm-12" id="TDC_WPS" hidden>
-            <h3 class="modal-title">Calcul de la cinématique du trait de côte</h3>
-            <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>
-            <div class="tab-block">
+             </div>
+          </div>
+          <!-- /.Menu des suivis -->
+          <!-- Trait de côte -->
+          <div class="row col-sm-12" id="TDC_WPS" hidden>
+             <h3 class="modal-title">Calcul de la cinématique du trait de côte</h3>
+             <h4 class="submodal-title">(Méthode ligne de référence et radiale)</h4>
+             <div class="tab-block">
                 <!--NavTab-->
                 <ul class="nav nav-tabs nav-justified tdcNavTabs">
-                    <li class="active"><a href="#tdcTabDate" data-toggle="tab">Choix des dates</a></li>
-                    <li><a href="#tdcTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
+                   <li class="active"><a href="#tdcTabDate" data-toggle="tab">Choix des dates</a></li>
+                   <li><a href="#tdcTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
                 </ul>
                 <!--/.NavTab-->
                 <!--Loader-->
                 <!--Tab-->
                 <div class="tab-content">
-                    <div id="tdcTabDate" class="tab-pane fade in active">
-                        <!--Insérez ici les paramètres-->
-                        <div class="row">
-                            <nav class="navbar navbar-default toolbarMultiselect">
-                                <span class="col-xs-6" id="selectorTdc"></span>
-                                <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect','selectAll', tdcUtils)">
-                                    Tout sélectionner
-                                </button>
-                                <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect', 'deselectAll', tdcUtils)">
-                                    Tout désélectionner
-                                </button>
-                            </nav>                            
-                        </div>
-                        <div class="row">
-                            <div id="alertTdcParams" class="error alert alert-danger alert-dismissible" role="alert">
-                                <i class="fas fa-exclamation-circle"></i> 
-                                <strong>Attention: </strong> Vous devez choisir un site et au moins 2 dates !
-                            </div>
-                        </div>
-                        <div class="row" id="panelTDCParam" hidden>
-                            <p class="text-small"><i>
-                                Sélectionner au minimum 2 traits de  côte - <strong>La date la plus ancienne est considérée comme le trait de côte de référence</strong>
-                            </i></p>
-                            <div class="panel-group " id="accordion" style="margin-top: 30px;">
-                              <div class="panel panel-default panelTDC panelParams">
-                                <div class="panel-heading">
+                   <div id="tdcTabDate" class="tab-pane fade in active">
+                      <!--Insérez ici les paramètres-->
+                      <div class="row">
+                         <nav class="navbar navbar-default toolbarMultiselect">
+                            <span class="col-xs-6" id="selectorTdc"></span>
+                            <button  id="tdcMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect','selectAll', tdcUtils)">
+                            Tout sélectionner
+                            </button>
+                            <button  id="tdcMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('tdcMultiselect', 'deselectAll', tdcUtils)">
+                            Tout désélectionner
+                            </button>
+                         </nav>
+                      </div>
+                      <div class="row">
+                         <div id="alertTdcParams" class="error alert alert-danger alert-dismissible" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            <strong>Attention: </strong> Vous devez choisir un site et au moins 2 dates !
+                         </div>
+                      </div>
+                      <div class="row" id="panelTDCParam" hidden>
+                         <p class="text-small"><i>
+                            Sélectionner au minimum 2 traits de  côte - <strong>La date la plus ancienne est considérée comme le trait de côte de référence</strong>
+                            </i>
+                         </p>
+                         <div class="panel-group " id="accordion" style="margin-top: 30px;">
+                            <div class="panel panel-default panelTDC panelParams">
+                               <div class="panel-heading">
                                   <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTdcParam" aria-expanded="false" aria-controls="collapseTdcParam">Paramètres avancés de la radiale</a>
+                                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTdcParam" aria-expanded="false" aria-controls="collapseTdcParam">Paramètres avancés de la radiale</a>
                                   </h4>
-                                </div>
-                                <div id="collapseTdcParam" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="col-xs-3" style="padding-left: 5px">
-                                            <label for="longParam">
-                                                Longueur (m) 
-                                                <span data-toggle="tooltip" data-placement="top" title="Fixer la longueur de la radiale de traitement à partir de la ligne de référence">
-                                                <i class="fas fa-info-circle"></i></span>
+                               </div>
+                               <div id="collapseTdcParam" class="panel-collapse collapse">
+                                  <div class="panel-body">
+                                     <div class="col-xs-3" style="padding-left: 5px">
+                                        <label for="longParam">
+                                        Longueur (m) 
+                                        <span data-toggle="tooltip" data-placement="top" title="Fixer la longueur de la radiale de traitement à partir de la ligne de référence">
+                                        <i class="fas fa-info-circle"></i></span>
                                         </label>
-                                            <input onchange="tdcUtils.onParamChange(this)" value="100" type="number" class="form-control tdcParams" id="radialLength" aria-describedby="basic-addon3">
+                                        <input onchange="tdcUtils.onParamChange(this)" value="100" type="number" class="form-control tdcParams" id="radialLength" aria-describedby="basic-addon3">
+                                     </div>
+                                     <div class="col-xs-3">
+                                        <label for="spaceParam">
+                                        Espacement (m)
+                                        <span data-toggle="tooltip" data-placement="top" title="Fixer l'équidistance entre les radiales de traitement le long de la ligne de référence">
+                                        <i class="fas fa-info-circle"></i></span>
+                                        </label>
+                                        <input onchange="tdcUtils.onParamChange(this)" value="50" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
+                                     </div>
+                                     <div class="col-md-3">
+                                        <div class="form-group form-group-analyses dirForm">
+                                           <label for="dirParam">
+                                           Inverser l'orientation
+                                           <span data-toggle="tooltip" data-placement="top" title="Choix de l'orientaion des radiales par rapport à la ligne de référence">
+                                           <i class="fas fa-info-circle"></i></span>
+                                           </label>
+                                           <select onchange="tdcUtils.onParamChange(this)" class="form-control" name="" id="radialDirection">
+                                              <option label="oui" selected value="true">Oui</option>
+                                              <option label="non" value="false">Non</option>
+                                           </select>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <label for="spaceParam">
-                                                Espacement (m)
-                                                <span data-toggle="tooltip" data-placement="top" title="Fixer l'équidistance entre les radiales de traitement le long de la ligne de référence">
-                                                    <i class="fas fa-info-circle"></i></span>
-                                            </label>
-                                            <input onchange="tdcUtils.onParamChange(this)" value="50" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-analyses dirForm">
-                                                <label for="dirParam">
-                                                    Inverser l'orientation
-                                                    <span data-toggle="tooltip" data-placement="top" title="Choix de l'orientaion des radiales par rapport à la ligne de référence">
-                                                    <i class="fas fa-info-circle"></i></span>
-                                                </label>
-                                                <select onchange="tdcUtils.onParamChange(this)" class="form-control" name="" id="radialDirection">
-                                                    <option label="oui" selected value="true">Oui</option>
-                                                    <option label="non" value="false">Non</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <label for="drawParam">
-                                                Ligne de référence
-                                                <span data-toggle="tooltip" data-placement="top" title="Dessiner une nouvelle ligne de référence">
-                                                    <i class="fas fa-info-circle"></i></span>
-                                            </label>
-                                            <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline(this, 'drawRefline')">
-                                                <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
-                                            </button>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
+                                     </div>
+                                     <div class="col-xs-3">
+                                        <label for="drawParam">
+                                        Ligne de référence
+                                        <span data-toggle="tooltip" data-placement="top" title="Dessiner une nouvelle ligne de référence">
+                                        <i class="fas fa-info-circle"></i></span>
+                                        </label>
+                                        <button id="btnDrawRefLine" type="button" class="btn btn-default btn-drawline" onclick="tools.btnDrawline(this, 'drawRefline')">
+                                        <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Dessiner
+                                        </button>
+                                     </div>
+                                  </div>
+                               </div>
                             </div>
-                          </div>
-                    </div>
-                    <div id="tdcTabGraph" class="tab-pane fade">  
-                        <!--Insérez ici les résultats-->
-                        <div class="col-sm-12 text-center load-panel" id="tdcLoader" hidden>
-                            <div class="loader-sig" id="loader-6">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                            <p>Chargement des données ...</p>
-                        </div>
-                        <div id="tdcGraph1"></div>
-                        <div id="titleChart1" class="titleChart"></div>                        
-                        <div id="tdcGraph2"></div>
-                        <div id="titleChart2" class="titleChart"></div> 
-                    </div>
+                         </div>
+                      </div>
+                   </div>
+                   <div id="tdcTabGraph" class="tab-pane fade">
+                      <!--Insérez ici les résultats-->
+                      <div class="col-sm-12 text-center load-panel" id="tdcLoader" hidden>
+                         <div class="loader-sig" id="loader-6">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                         </div>
+                         <p>Chargement des données ...</p>
+                      </div>
+                      <div id="tdcGraph1"></div>
+                      <div id="titleChart1" class="titleChart"></div>
+                      <div id="tdcGraph2"></div>
+                      <div id="titleChart2" class="titleChart"></div>
+                   </div>
                 </div>
                 <!--/.Tab-->
-            </div>
-            <nav class="navbar navbar-default toolbarMenu">
+             </div>
+             <nav class="navbar navbar-default toolbarMenu">
                 <div class="container-fluid">
-                    <button type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(TDC_WPS)">
-                        <i class="fas fa-arrow-left"></i>
-                        Revenir à la liste des suivis
-                    </button>
-                    <button  hidden id="tdcResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="tdcUtils.tdcReset()">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        Réinitialiser
-                    </button>
-                    <button id="coastlinetrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
-                        Lancer le traitement
-                    </button>
+                   <button type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(TDC_WPS)">
+                   <i class="fas fa-arrow-left"></i>
+                   Revenir à la liste des suivis
+                   </button>
+                   <button  hidden id="tdcResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="tdcUtils.tdcReset()">
+                   <i class="fa-solid fa-rotate-right"></i>
+                   Réinitialiser
+                   </button>
+                   <button id="coastlinetrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.drawRadial(maddog.drawRadialConfig)">
+                   Lancer le traitement
+                   </button>
                 </div>
-            </nav>
-        </div>
-        <!-- /.Trait de côte -->
-
-        <!-- Profil de plage -->
-        <div class="row col-sm-12" id="PP_WPS" hidden>
-            <h3 class="modal-title">Profil de plage</h3> 
-            <div div class="tab-block" id="ppTabselect">
+             </nav>
+          </div>
+          <!-- /.Trait de côte -->
+          <!-- Profil de plage -->
+          <div class="row col-sm-12" id="PP_WPS" hidden>
+             <h3 class="modal-title">Profil de plage</h3>
+             <div div class="tab-block" id="ppTabselect">
                 <p>Sélectionner un profil sur la carte ou dans la liste de sélection</p>
                 <select onchange="prfUtils.onSelectLr(this.value)" class="form-control" name="" id="selectProfil">
                 </select>
-            </div>                
-            <div class="tab-block" id="ppTab">
+             </div>
+             <div class="tab-block" id="ppTab">
                 <!--NavTab-->
                 <ul class="nav nav-tabs nav-justified ppNavTabs">
-                    <li class="active"><a href="#ppTabDate" data-toggle="tab">Choix des dates</a></li>
-                    <li><a href="#ppTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
+                   <li class="active"><a href="#ppTabDate" data-toggle="tab">Choix des dates</a></li>
+                   <li><a href="#ppTabGraph" data-toggle="tab">Visualisation des résultats</a></li>
                 </ul>
                 <!--/.NavTab-->
                 <!--Tab-->
                 <div class="tab-content">
-                    <div id="ppTabDate" class="tab-pane fade in active">
-                        <!-- <div class="row">
+                   <div id="ppTabDate" class="tab-pane fade in active">
+                      <div class="row" id="prfToolbar" hidden>
+                         <nav class="navbar navbar-default toolbarMultiselect">
                             <span class="col-xs-6" id="selectorPrf"></span>
-                        </div> -->
-                        <div class="row" id="prfToolbar" hidden>
-                            <nav class="navbar navbar-default toolbarMultiselect">
-                                <span class="col-xs-6" id="selectorPrf"></span>
-                                <button  id="prfMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'selectAll', prfUtils)">
-                                    Tout sélectionner
-                                </button>
-                                <button  id="prfMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'deselectAll', prfUtils)">
-                                    Tout désélectionner
-                                </button>
-                            </nav>                            
-                        </div>
-                        <div class="row">
-                            <div id="alertPrfParams" class="error alert alert-danger alert-dismissible" role="alert">
-                                <i class="fas fa-exclamation-circle"></i> 
-                                <strong>Attention: </strong> Vous devez choisir un site, un profil et au moins 2 dates !
-                            </div>
-                        </div>
-                        <div class="row" id="pofilesDates">
-                            <div class="row" id="pofilesDatesChart">
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 10px;" id="panelPrfParam" hidden>
-                            <p class="text-small"><i>
-                                Sélectionner au minimum 2 profiles - <strong>La date la plus ancienne est considérée comme le profil de référence</strong>
-                            </i></p>
-                            <div class="panel-group">
-                              <div class="panel panel-default panelPRF panelParams">
-                                <div class="panel-heading">
+                            <button  id="prfMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'selectAll', prfUtils)">
+                            Tout sélectionner
+                            </button>
+                            <button  id="prfMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('prfMultiselect', 'deselectAll', prfUtils)">
+                            Tout désélectionner
+                            </button>
+                         </nav>
+                      </div>
+                      <div class="row">
+                         <div id="alertPrfParams" class="error alert alert-danger alert-dismissible" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            <strong>Attention: </strong> Vous devez choisir un site, un profil et au moins 2 dates !
+                         </div>
+                      </div>
+                      <div class="row" id="pofilesDates">
+                         <div class="row" id="pofilesDatesChart">
+                         </div>
+                      </div>
+                      <div class="row" style="margin-top: 10px;" id="panelPrfParam" hidden>
+                         <p class="text-small"><i>
+                            Sélectionner au minimum 2 profiles - <strong>La date la plus ancienne est considérée comme le profil de référence</strong>
+                            </i>
+                         </p>
+                         <div class="panel-group">
+                            <div class="panel panel-default panelPRF panelParams">
+                               <div class="panel-heading">
                                   <h4 class="panel-title" >
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsePrfParam" aria-expanded="false" aria-controls="collapsePrfParam">Paramètres avancés du traitement</a>
+                                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsePrfParam" aria-expanded="false" aria-controls="collapsePrfParam">Paramètres avancés du traitement</a>
                                   </h4>
-                                </div>
-                                <div id="collapsePrfParam" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <!--<div class="col-xs-3" style="padding-left: 5px">
-                                            <label for="intervalInterpolation">Intervalle d'interpolation <i class="fa fa-info-circle" aria-hidden="true"></i></label>
-                                            <input onchange="prfUtils.onParamChange(this)" value="0.1" type="number" class="form-control tdcParams" id="interval" aria-describedby="basic-addon3">
+                               </div>
+                               <div id="collapsePrfParam" class="panel-collapse collapse">
+                                  <div class="panel-body">
+                                     <!--<div class="col-xs-3" style="padding-left: 5px">
+                                        <label for="intervalInterpolation">Intervalle d'interpolation <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                        <input onchange="prfUtils.onParamChange(this)" value="0.1" type="number" class="form-control tdcParams" id="interval" aria-describedby="basic-addon3">
                                         </div>-->
-                                        <div class="col-xs-3">
-                                            <label for="spaceParam">Distance minimum 
-                                                <span data-toggle="tooltip" data-placement="top" title="Choix de la distance minimale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
-                                                <i class="fas fa-info-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
+                                     <div class="col-xs-3">
+                                        <label for="spaceParam">Distance minimum 
+                                        <span data-toggle="tooltip" data-placement="top" title="Choix de la distance minimale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
+                                        <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        </label>
+                                        <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
+                                     </div>
+                                     <div class="col-xs-3">
+                                        <label for="spaceParam">Distance maximum
+                                        <span data-toggle="tooltip" data-placement="top" title="Choix de la distance maximale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
+                                        <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        </label>
+                                        <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
+                                     </div>
+                                     <div class="col-md-3">
+                                        <div class="form-group form-group-analyses dirForm">
+                                           <label for="useSmallestDist">Smallest Distance 
+                                           <span data-toggle="tooltip" data-placement="top" title="Calcul des bilans sédimentaires réalisé sur la section du profil définie, à partir du profil le plus court de la série">
+                                           <i class="fas fa-info-circle"></i>
+                                           </span>
+                                           </label>
+                                           <select onchange="prfUtils.onParamChange(this)" class="form-control" name="" id="useSmallestDistance">
+                                              <option label="oui" selected value="true">oui</option>
+                                              <option label="non" value="false">non</option>
+                                           </select>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <label for="spaceParam">Distance maximum
-                                                <span data-toggle="tooltip" data-placement="top" title="Choix de la distance maximale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
-                                                <i class="fas fa-info-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-analyses dirForm">
-                                                <label for="useSmallestDist">Smallest Distance 
-                                                    <span data-toggle="tooltip" data-placement="top" title="Calcul des bilans sédimentaires réalisé sur la section du profil définie, à partir du profil le plus court de la série">
-                                                    <i class="fas fa-info-circle"></i>
-                                                    </span>
-                                                </label>
-                                                <select onchange="prfUtils.onParamChange(this)" class="form-control" name="" id="useSmallestDistance">
-                                                    <option label="oui" selected value="true">oui</option>
-                                                    <option label="non" value="false">non</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
+                                     </div>
+                                  </div>
+                               </div>
                             </div>
-                          </div>                     
-                    </div>
-                    <div id="ppTabGraph" class="tab-pane fade">  
-                        <!--Insérez ici les résultats-->
-                    </div>
+                         </div>
+                      </div>
+                   </div>
+                   <div id="ppTabGraph" class="tab-pane fade">
+                      <!--Insérez ici les résultats-->
+                   </div>
                 </div>
                 <nav class="navbar navbar-default toolbarMenu">
-                    <div class="container-fluid">
-                        <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(PP_WPS)">
-                            <i class="fas fa-arrow-left"></i>
-                            Revenir à la liste des suivis
-                        </button>
-                        <button  hidden id="prfResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="prfUtils.prfReset()">
-                            <i class="fa-solid fa-rotate-right"></i>
-                            Réinitialiser
-                        </button>
-                        <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking(maddog.beachProfileTrackingConfig)">
-                            Lancer le traitement
-                        </button>
-                    </div>
+                   <div class="container-fluid">
+                      <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(PP_WPS)">
+                      <i class="fas fa-arrow-left"></i>
+                      Revenir à la liste des suivis
+                      </button>
+                      <button  hidden id="prfResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="prfUtils.prfReset()">
+                      <i class="fa-solid fa-rotate-right"></i>
+                      Réinitialiser
+                      </button>
+                      <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking(maddog.beachProfileTrackingConfig)">
+                      Lancer le traitement
+                      </button>
+                   </div>
                 </nav>
                 <!--/.Tab-->
-            </div>            
-        </div>
-        <!-- /.Profil de plage -->
-
-        <!-- Modèle numérique de terrain -->
-        <div class="row col-sm-12" id="MNT_WPS" hidden>
-            <h3 class="modal-title">Modèle numérique de terrain</h3>     
-            <p><br>Insérer ici les paramètres <br><br></p>  
-            
-            <a href="#" class="card-link" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
-        </div>
-        <!-- /.Modèle numérique de terrain -->
+             </div>
+          </div>
+          <!-- /.Profil de plage -->
+          <!-- Modèle numérique de terrain -->
+          <div class="row col-sm-12" id="MNT_WPS" hidden>
+            <h3 class="modal-title">Modèle numérique de terrain</h3>
+             <div id="mntTab">
+                <div class="row" id="mntToolbar">
+                   <p><br>Sélectionner des dates de MNT à comparer :<br><br></p>
+                   <nav class="navbar navbar-default toolbarMultiselect">
+                      <span class="col-xs-6" id="selectorMnt"></span>
+                      <button  id="mntMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="">
+                      Tout sélectionner
+                      </button>
+                      <button  id="mntMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="">
+                      Tout désélectionner
+                      </button>
+                   </nav>
+                </div>
+                <div class="row">
+                    <div id="alertMntParams" class="error alert alert-danger alert-dismissible" role="alert">
+                       <i class="fas fa-exclamation-circle"></i> 
+                       <strong>Attention: </strong> Vous devez sélectionner 2 dates
+                    </div>
+                 </div>
+                <div class="row" style="margin-top: 50px;" id="panelMntParam">
+                   <p class="text-small"><i>
+                      Sélectionner 2 dates - <strong>La date la plus ancienne est considérée comme la date de référence</strong>
+                      </i>
+                   </p>
+                   <div class="panel-group">
+                      <div class="panel panel-default panelMNT panelParams">
+                         <div class="panel-heading">
+                            <h4 class="panel-title" >
+                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseMntParam" aria-expanded="false" aria-controls="collapseMntParam">Paramètres avancés du traitement</a>
+                            </h4>
+                         </div>
+                         <div id="collapseMntParam" class="panel-collapse collapse">
+                            <div class="panel-body">
+                               <div class="col-xs-3">
+                                  <label for="spaceParam">Paramètre 1 <i class="fas fa-info-circle"></i>
+                                  </label>
+                                  <input onchange="" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
+                               </div>
+                               <div class="col-xs-3">
+                                  <label for="spaceParam">Paramètre 2 <i class="fas fa-info-circle"></i>
+                                  </label>
+                                  <input onchange="" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+                <nav class="navbar navbar-default toolbarMenu">
+                   <div class="container-fluid">
+                      <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(MNT_WPS)">
+                      <i class="fas fa-arrow-left"></i>
+                      Revenir à la liste des suivis
+                      </button>
+                      <button  hidden id="" type="button" class="navbar-right btn btn-default refreshWps" onClick="">
+                      <i class="fa-solid fa-rotate-right"></i>
+                      Réinitialiser
+                      </button>
+                      <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="">
+                      Lancer le traitement
+                      </button>
+                   </div>
+                </nav>
+             </div>
+          </div>
+          <!-- /.Modèle numérique de terrain -->
        </div>
        <!-- /.Visualisation des résultats -->
-   </div>
-</div>
-<!-- /.Template Dekstop -->
-<!-- Template Mobile -->
-<div class="modal fade" id="template-modal" role="dialog">
-   <div class="modal-dialog">
+    </div>
+ </div>
+ <!-- /.Template Dekstop -->
+ <!-- Template Mobile -->
+ <div class="modal fade" id="template-modal" role="dialog">
+    <div class="modal-dialog">
        <!-- Modal content-->
        <div class="modal-content">
-           <div class="modal-header">
-               <button type="button" id="template-modal-close" class="close" data-dismiss="modal">×</button>
-           </div>
-           <div class="modal-body">
-               <p>Volet d'information - mode mobile</p>
-           </div>
+          <div class="modal-header">
+             <button type="button" id="template-modal-close" class="close" data-dismiss="modal">×</button>
+          </div>
+          <div class="modal-body">
+             <p>Volet d'information - mode mobile</p>
+          </div>
        </div>
-   </div>
-</div>
-<!-- /.Template Mobile -->
-
+    </div>
+ </div>
+ <!-- /.Template Mobile -->

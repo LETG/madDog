@@ -1,12 +1,15 @@
 # Description
 
 Ce module est une mise à jour de l'outil MADDOG.
+
 L'ensemble de cette documentation est réservée à l'extension mviewer maddog uniquement et ne renseigne aucune informations sur les services backend WPS localisés ici : 
 
 https://github.com/jdev-org/madDog
 
 
 ## Installation
+
+Ce module a été développé avec mviewer *3.8.x*.
 
 * Les librairies ou extensions localisées dans `/mviewer/maddog/addons` sont obligatoires pour faire fonctionner l'outil MADDOG en plus des librairies incluses dans le coeur mviewer (dans `mviewer/js/lib`).
 

@@ -516,7 +516,7 @@ const prfUtils = (function () {
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,
-                    isodate: new Date(item.creationdate)
+                    isodate: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
                 }));
             let dates = prfUtils.orderDates(data);
             // clean multi select if exists

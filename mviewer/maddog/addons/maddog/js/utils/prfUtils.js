@@ -265,8 +265,7 @@ const prfUtils = (function() {
                 },
                 xaxis: {
                     type: 'date',
-                    tickvals: datesX,
-                    ticktext: labels,
+                    autorange: true,
                     tickfont: {
                         color: "rgb(107, 107, 107)",
                         size: 11

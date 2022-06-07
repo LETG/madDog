@@ -1,21 +1,54 @@
-const wps = (function() {
+const wps = (function () {
+    // This allow to display a browser console message when this file is correctly loaded
     const eventName = "maddog-wps-componentLoaded";
     var create = new Event(eventName);
-    document.addEventListener(eventName, () => console.log("maddog-wps lib loaded !"))
+    document.addEventListener(eventName, () => console.log("maddog-wps lib loaded !"));
+    // required and waiting by maddog.js PromisesAll
     document.dispatchEvent(create);
 
     return {
+        /**
+         * 
+         * @param {string} component mviewer id
+         */
         init: (component) => {
             this.getCfg = (i) => _.get(mviewer.customComponents[component], i);
         },
+        /**
+         * 
+         * @param {string} type REST as POST or GET
+         * @param {any} cb callback function
+         * @param {*} wps 52North WPS instance
+         * @returns get capabilities response
+         */
         getCapabilities: (type = "GET", cb = (response) => {}, wps) => {
             if (!wps) return {};
             return wps.getCapabilities_POST(cb);
         },
+        /**
+         * Create a new 52North WPS instance for a specifif config
+         * @param {any} config object
+         * @returns wps instance
+         */
         createWpsService: (config) => new WpsService(config),
+        /**
+         * To get describe process
+         * @param {*} process 
+         * @param {*} wps 
+         * @param {*} cb 
+         * @returns 
+         */
         describe: (process, wps, cb = () => {}) => {
             return wps.describeProcess_POST(cb, process);
         },
+        /**
+         * Draw Radial WPS.
+         * - Config object is define in maddog.js.
+         * - This WPS is trigger when user click on button and pass drawRadialConfig object
+         * Execute a callback pass from maddog.js file.
+         * @param {Object} drawRadialConfig an object wich contain every WPS params
+         * @returns nothing
+         */
         drawRadial: ({
             callback = () => {},
             wpsService = null,
@@ -65,6 +98,14 @@ const wps = (function() {
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
             $("#coastlinetrackingBtn").hide();
         },
+        /**
+         * Coast Line tracking WPS.
+         * - Config object is define in maddog.js.
+         * - This WPS is trigger when user click on button and pass coastLinesTrackingConfig object
+         * Execute a callback pass from maddog.js file.
+         * @param {Object} coastLinesTrackingConfig an object wich contain every WPS params
+         * @returns nothing
+         */
         coastLineTracking: ({
             callback = () => {},
             wpsService = null,
@@ -77,7 +118,7 @@ const wps = (function() {
             if (!wpsService || _.isEmpty(radiales) || _.isEmpty(tdc)) return {};
 
             let inputGenerator = new InputGenerator();
-
+            // INPUTS
             let inputs = Object.values({
                 radiales: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
                     "radiales",
@@ -96,6 +137,7 @@ const wps = (function() {
                     tdc
                 )
             });
+            // OUTPUTS
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
                 "jsonString",
@@ -107,8 +149,17 @@ const wps = (function() {
                 null,
                 null);
             var outputs = [complexOutput];
+            // EXECUTE
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
         },
+        /**
+         * Beach profile tracking WPS.
+         * - Config object is define in maddog.js.
+         * - This WPS is trigger when user click on button and pass beachProfileTrackingConfig object
+         * Execute a callback pass from maddog.js file.
+         * @param {Object} beachProfileTrackingConfig an object wich contain every WPS params
+         * @returns nothing
+         */
         beachProfileTracking: ({
             callback = () => {},
             wpsService = null,
@@ -124,7 +175,7 @@ const wps = (function() {
             $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
             if (!wpsService || _.isEmpty(fc)) return {};
             let inputGenerator = new InputGenerator();
-
+            // INPUTS
             let inputs = Object.values({
                 fc: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
                     "fc",
@@ -139,7 +190,7 @@ const wps = (function() {
                 minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("minDist", null, null, minDist),
                 maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, minDist)
             });
-
+            // OUTPUTS
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
                 "result",
@@ -151,6 +202,7 @@ const wps = (function() {
                 null,
                 null);
             var outputs = [complexOutput];
+            // EXECUTE WPS with 42North lib
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
         }
     }

@@ -1,17 +1,12 @@
 const tools = (function() {
     // PRIVATE
+    // This allow to display a browser console message when this file is correctly loaded
     let highlightLR, selectedLR, defaultStyle, draw;
     const eventName = "tools-componentLoaded";
     const create = new Event(eventName);
-    document.addEventListener(eventName, () => console.log("Tools lib loaded !"))
+    document.addEventListener(eventName, () => console.log("Tools lib loaded !"));
+    // required and waiting by maddog.js PromisesAll
     document.dispatchEvent(create);
-
-    const highlightStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: "#ffa43b",
-            width: 5
-        })
-    });
 
     return {
         // PUBLIC
@@ -76,6 +71,13 @@ const tools = (function() {
                 tools.zoomToExtent(features[0].getGeometry().getExtent());
             }
         },
+        /**
+         * Zoom to a specific map extent - EPSG:3857 required by default
+         * @param {Array} extent 
+         * @param {object} props to override default extent animaitons or others options
+         * @param {Number} time in ms
+         * @returns 
+         */
         zoomToExtent: (extent, props, time) => {
             // NEED REPROJECTION FOR EMPRISE !
             const overlay = tools.getMvLayerById("featureoverlay");
@@ -100,11 +102,19 @@ const tools = (function() {
             }
             setTimeout(() => overlay.getSource().clear(), displayTime);
         },
+        /**
+         * Create an overlay from feature
+         * @param {ol.Feature} feature 
+         */
         featureToOverlay: (feature) => {
             const overlay = tools.getMvLayerById("featureoverlay").getSource();
             overlay.clear();
             overlay.addFeature(feature);
         },
+        /**
+         * Init this file
+         * @param {string} component mviewer id
+         */
         init: (component) => {
             this.getCfg = (i) => _.get(mviewer.customComponents[component], i);
         },
@@ -124,7 +134,7 @@ const tools = (function() {
         }),
         /**
          * Init Fuse Search by layer
-         * @returns 
+         * @returns nothing
          */
         initFuseSearch: (id) => wfs2Fuse.initSearch(
             getCfg(`config.options.${id}.url`),
@@ -134,8 +144,14 @@ const tools = (function() {
                 maddog[id] = d
             }
         ),
+        /**
+         * From a layer id we return a geoserver GFI Url
+         * @param {Array} coordinate 
+         * @param {string} layerId mviewer layer id
+         * @param {Function} callback 
+         */
         getGFIUrl: (coordinate, layerId, callback) => {
-            const viewResolution = /** @type {number} */ (mviewer.getMap().getView().getResolution());
+            const viewResolution = mviewer.getMap().getView().getResolution();
             const urlSite = mviewer.getLayer(layerId).layer.getSource().getFeatureInfoUrl(
                 coordinate,
                 viewResolution,
@@ -151,6 +167,10 @@ const tools = (function() {
                     });
             }
         },
+        /**
+         * From coordinates, we request commune WFS layer
+         * @param {Array} coordinate 
+         */
         findCommuneOnClick: (coordinate) => {
             tools.getGFIUrl(coordinate, "communewithsite", (feature) => {
                 if (feature) {
@@ -158,6 +178,10 @@ const tools = (function() {
                 }
             });
         },
+        /**
+         * From coordinates, we sites WFS layer
+         * @param {Array} coordinate 
+         */
         findSiteOnClick: (coordinate) => {
             let res = mviewer.getMap().getView().getResolution();
             if (res < mviewer.getLayer("sitebuffer").layer.getMinResolution()) {
@@ -179,6 +203,9 @@ const tools = (function() {
                 }
             });
         },
+        /**
+         * Reset selected Reference Line feature style
+         */
         resetSelectedLR: () => {
             if (tools.getSelectedLR()) {
                 tools.setSelectedLR(
@@ -187,10 +214,22 @@ const tools = (function() {
                 prfUtils.prfReset();
             }
         },
+        /**
+         * Get selected Ref Line
+         * @returns ol.Feature Ref Line selected
+         */
         getSelectedLR: () => selectedLR,
+        /**
+         * Set new selected Ref Line as
+         * @param {ol.Feature} lr feature clicked
+         */
         setSelectedLR: (lr) => {
             selectedLR = lr
         },
+        /**
+         * Create singleclick event to search commune, site or select Ref Line
+         * @returns nothing
+         */
         onClickAction: () => {
             if (maddog.singleclick) return;
             maddog.singleclick = true;
@@ -219,6 +258,9 @@ const tools = (function() {
                 );
             });
         },
+        /**
+         * Highlight feature Ref Line only if Beach Profile is open
+         */
         highlightFeature: () => {
             mviewer.getMap().on('pointermove', function(e) {
                 if (selectedLR) return;
@@ -242,6 +284,11 @@ const tools = (function() {
                 );
             });
         },
+        /**
+         * Change many UI info to display selected site
+         * @param {String} idsite 
+         * @param {String} namesite 
+         */
         setIdSite: (idsite, namesite) => {
             maddog.idsite = idsite;
             document.getElementById("siteName").innerHTML = _.capitalize(namesite);
@@ -250,6 +297,12 @@ const tools = (function() {
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
         },
+        /**
+         * Select or deselect all values for a given multiselect component
+         * @param {any} id
+         * @param {String} action
+         * @param {any} lib as prfUtils or tdcUtils
+         */
         multiSelectBtnReset: (id, action, lib) => {
             if (action === "selectAll") {
                 lib.multiSelectBtn('selectAll');
@@ -258,6 +311,9 @@ const tools = (function() {
             }
             $("#" + id).multiselect("updateButtonText");
         },
+        /**
+         * Init service according to clicked menu
+         */
         initServicebyMenu: () => {
             tdcUtils.tdcReset(true);
             if (maddog.idsite && !TDC_WPS.hidden) {
@@ -270,6 +326,10 @@ const tools = (function() {
                 prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
             }
         },
+        /**
+         * Manage UI according to clicked card
+         * @param {any} ele element HTML clicked
+         */
         showHideMenu: (ele) => {
             ele.hidden = !ele.hidden;
             selectWPS.hidden = !selectWPS.hidden;
@@ -281,6 +341,12 @@ const tools = (function() {
                 prfUtils.prfReset(true, '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             }
         },
+        /**
+         * From a content file we create and download file as CSV
+         * @param {any} content file
+         * @param {String} filename 
+         * @param {String} contentType 
+         */
         downloadBlob: (content, filename, contentType) => {
             // Create a blob
             var blob = new Blob([content], {
@@ -294,6 +360,10 @@ const tools = (function() {
             pom.setAttribute('download', filename);
             pom.click();
         },
+        /**
+         * Manage draw reference line for TDC param
+         * @param {ol.source} sourceLayer 
+         */
         addInteraction: (sourceLayer) => {
             let feature;
 
@@ -332,6 +402,12 @@ const tools = (function() {
 
             mviewer.getMap().addInteraction(draw);
         },
+        /**
+         * Callback triggerd on TDC Ref Line draw click button
+         * @param {any} btn clicked
+         * @param {String} idLayer mviewer layer id
+         * @param {Boolean} deactivate
+         */
         btnDrawline: (btn, idLayer, deactivate) => {
             const sourceLayer = mviewer.getLayer(idLayer).layer.getSource();
             if (btn.className == "btn btn-default btn-danger" || deactivate) {

@@ -1,7 +1,10 @@
-const prfUtils = (function() {
-    const eventName = "tools-componentLoaded";
+const prfUtils = (function () {
+    // PRIVATE
+    // This allow to display a browser console message when this file is correctly loaded
+    const eventName = "prfUtils-componentLoaded";
     var create = new Event(eventName);
-    document.addEventListener(eventName, () => console.log("PRF Utils lib loaded !"))
+    document.addEventListener(eventName, () => console.log("PRF Utils lib loaded !"));
+    // required and waiting by maddog.js PromisesAll
     document.dispatchEvent(create);
 
     return {

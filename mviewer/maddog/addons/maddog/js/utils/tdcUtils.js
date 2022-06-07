@@ -1,7 +1,10 @@
-const tdcUtils = (function() {
-    const eventName = "tools-componentLoaded";
+const tdcUtils = (function () {
+    // PRIVATE
+    // This allow to display a browser console message when this file is correctly loaded
+    const eventName = "tdcUtils-componentLoaded";
     var create = new Event(eventName);
-    document.addEventListener(eventName, () => console.log("TDC Utils lib loaded !"))
+    document.addEventListener(eventName, () => console.log("TDC Utils lib loaded !"));
+    // required and waiting by maddog.js PromisesAll
     document.dispatchEvent(create);
 
     return {

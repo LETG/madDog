@@ -6,15 +6,18 @@ const maddog = (function() {
 
     let wpsService = null;
 
+    // wait map ready
     document.addEventListener("map-ready", () => {
         tools.onClickAction();
         tools.highlightFeature();
     });
 
+    // wait communes layer ready
     document.addEventListener("communes-ready", () => {
         tools.zoomToOGCLayerExtent();
     });
 
+    // wait many lib to avoid race condition errors
     const waitLib = (name, ready) => new Promise((resolve, reject) => {
         if (!ready) {
             document.addEventListener(name, resolve(true));
@@ -23,6 +26,7 @@ const maddog = (function() {
         }
     });
 
+    // create autocomplete list selector
     const createList = (r, attrId, attrTitle, msg, type) => {
         let listContent = [];
         if (!r.length) {
@@ -40,6 +44,7 @@ const maddog = (function() {
         ];
     };
 
+    // Autocomplete list input event
     const onInput = (e) => {
         //user is "finished typing," do something
         function doneTyping() {
@@ -52,6 +57,10 @@ const maddog = (function() {
         });
     };
 
+    /**
+     * Display overlay on feature hover
+     * @param {any} i return by event
+     */
     const onHover = (i) => {
         const type = i.target.getAttribute("type");
         const idField = maddog.getCfg(`config.options.${type}.idField`);
@@ -60,8 +69,12 @@ const maddog = (function() {
         feature = GEOJSON.readFeature(feature);
         tools.featureToOverlay(feature);
         zoomFeatureExtent = feature.getGeometry().getExtent();
-    }
+    };
 
+    /**
+     * On select feature callback
+     * @param {*} i return by event
+     */
     const onSelect = (i) => {
         tools.zoomToExtent(zoomFeatureExtent);
         const type = i.target.getAttribute("type");
@@ -71,6 +84,10 @@ const maddog = (function() {
         }
     };
 
+    /**
+     * To create and display <options> in autocomplete list
+     * @param {any} inputEvt on user input text
+     */
     const displayAutocompleteList = (inputEvt) => {
         const value = inputEvt.target.value;
         maddog.searchComm(value).then(communesResult => maddog.searchSite(value).then(sitesResult => {
@@ -87,9 +104,13 @@ const maddog = (function() {
     }
 
     return {
+        // search commune with fuse
         searchComm: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "communes") : "",
+        // search site with fuse
         searchSite: (t) => typeof wfs2Fuse != "undefined" ? wfs2Fuse.search(t, "sites") : "",
+        // utils func to get params from config like maddog.getcfg("options.server")
         getCfg: (i) => _.get(mviewer.customComponents.maddog, i),
+        // on init
         init: function() {
             // wait all plugin as required dependancies
             let waitAll = [
@@ -99,6 +120,7 @@ const maddog = (function() {
                 waitLib(`maddog-wps-componentLoaded`, typeof wps !== 'undefined'),
                 waitLib(`bootstrap-multiselect-componentLoaded`, true)
             ];
+            // execute a callback only if every promises are resolved
             Promise.all(waitAll).then(responses => {
                 tools.init("maddog");
                 tools.initFuseSearch("communes", maddog.searchComm);
@@ -114,7 +136,9 @@ const maddog = (function() {
                 wpsService = wps.createWpsService({
                     ...maddog.getCfg("config.options.wps")
                 });
+                // init default draw radial config
                 maddog.setDrawRadialConfig({
+                    // callback exec in WPS response
                     callback: tdcUtils.getRadiales,
                     wpsService: wpsService,
                     referenceLine: '',
@@ -127,6 +151,7 @@ const maddog = (function() {
                     executionMode: "async",
                     lineage: false
                 });
+                // init default coast line tracking config
                 maddog.setCoastLinesTrackingConfig({
                     wpsService: wpsService,
                     responseFormat: "raw",
@@ -136,6 +161,7 @@ const maddog = (function() {
                     tdc: {},
                     processIdentifier: "coa:coastLinesTracking",
                     callback: (response) => {
+                        // callback exec in WPS response
                         tdcLoader.hidden = true;
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
@@ -179,6 +205,10 @@ const maddog = (function() {
                 });
             });
         },
+        /**
+         * change, add one many drawRadialConfig config keys
+         * @param {any} param initial config before change
+         */
         setDrawRadialConfig: (param) => {
             if (!maddog.drawRadialConfig) {
                 maddog.drawRadialConfig = {};
@@ -191,6 +221,10 @@ const maddog = (function() {
         drawRadialConfig: {},
         coastLinesTrackingConfig: {},
         beachProfileTrackingConfig: {},
+        /**
+         * change, add one many coastLinesTrackingConfig config keys
+         * @param {any} param initial config before change
+         */
         setCoastLinesTrackingConfig: (param) => {
             if (!maddog.coastLinesTrackingConfig) {
                 maddog.coastLinesTrackingConfig = {};
@@ -200,6 +234,10 @@ const maddog = (function() {
                 ...param
             };
         },
+        /**
+         * change, add one many beachProfileTrackingConfig config keys
+         * @param {any} param initial config before change
+         */
         setBeachProfileTrackingConfig: (param) => {
             if (!maddog.beachProfileTrackingConfig) {
                 maddog.beachProfileTrackingConfig = {};

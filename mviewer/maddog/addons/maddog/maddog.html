@@ -284,21 +284,33 @@
                                 </div>
                                 <div id="collapsePrfParam" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                        <div class="col-xs-3" style="padding-left: 5px">
+                                        <!--<div class="col-xs-3" style="padding-left: 5px">
                                             <label for="intervalInterpolation">Intervalle d'interpolation <i class="fa fa-info-circle" aria-hidden="true"></i></label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0.1" type="number" class="form-control tdcParams" id="interval" aria-describedby="basic-addon3">
-                                        </div>
+                                        </div>-->
                                         <div class="col-xs-3">
-                                            <label for="spaceParam">Distance de départ <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <label for="spaceParam">Distance minimum 
+                                                <span data-toggle="tooltip" data-placement="top" title="Choix de la distance minimale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
+                                                <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="minDist" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-xs-3">
-                                            <label for="spaceParam">Distance maximum <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                            <label for="spaceParam">Distance maximum
+                                                <span data-toggle="tooltip" data-placement="top" title="Choix de la distance maximale pour le calcul des bilans sédimentaires sur une section de profil prédéfinie">
+                                                <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
-                                                <label for="useSmallestDist">Smallest Distance <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                                                <label for="useSmallestDist">Smallest Distance 
+                                                    <span data-toggle="tooltip" data-placement="top" title="Calcul des bilans sédimentaires réalisé sur la section du profil définie, à partir du profil le plus court de la série">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    </span>
+                                                </label>
                                                 <select onchange="prfUtils.onParamChange(this)" class="form-control" name="" id="useSmallestDistance">
                                                     <option label="oui" selected value="true">oui</option>
                                                     <option label="non" value="false">non</option>

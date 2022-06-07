@@ -204,10 +204,15 @@ const prfUtils = (function() {
          * @param {Array} selected
          * @returns ordered array
          */
-        orderDates: (selected) => {
+        orderDatesOld: (selected) => {
             return selected.sort((a, b) => {
                 return moment(a.isodate).diff(b.isodate);
             });
+        },
+        orderDates: (selected) => {
+            return _.orderBy(selected, (o) => {
+                return moment(o.isodate);
+            }, ['asc'])
         },
         /**
          * Create second tab Chart from WPS result
@@ -226,7 +231,6 @@ const prfUtils = (function() {
             }));
             selected = prfUtils.orderDates(selected, "isodate");
             // get uniq labels already orderd by date
-            let labels = _.uniq(selected.map(s => moment(s.date, "YYYY-MM-DDZ").format("DD/MM/YYYY")));
             const datesX = _.uniq(selected.map(s => new Date(moment(s.date, "YYYY-MM-DDZ"))));
             var data = [{
                     x: datesX,
@@ -509,7 +513,7 @@ const prfUtils = (function() {
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,
-                    isodate: new Date(item.date)
+                    isodate: new Date(item.creationdate)
                 }));
             let dates = prfUtils.orderDates(data);
             // clean multi select if exists

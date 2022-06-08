@@ -359,7 +359,7 @@ const tdcUtils = (function () {
                 }]
 
             });
-
+            document.dispatchEvent(wps.stopEvent);
         },
         tdcPlotyChart: (dates) => {
             // create or re generate chart div
@@ -493,20 +493,8 @@ const tdcUtils = (function () {
             }
             $("#" + id).multiselect("updateButtonText");
         },
-        tdcRefreshChart: () => {
-            // clean graph
-            if (document.getElementById("tdcTauxChart")) {
-                tdcTauxChart.remove();
-                titleChart2.innerHTML = "";
-            }
-            if (document.getElementById("tdcDistanceChart")) {
-                tdcDistanceChart.remove();
-                titleChart1.innerHTML = "";
-            }
-        },
         tdcReset: (cleanTdcLayer) => {
             $("#coastlinetrackingBtn").show();
-            tdcUtils.tdcRefreshChart();
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();

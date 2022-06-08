@@ -117,6 +117,8 @@ const tools = (function() {
          */
         init: (component) => {
             this.getCfg = (i) => _.get(mviewer.customComponents[component], i);
+            document.addEventListener("start-wps", tools.onStartWPS);
+            document.addEventListener("stop-wps", tools.onStopWps);
         },
         /**
          * Check or wait a plugin or lib
@@ -431,6 +433,28 @@ const tools = (function() {
                 tools.addInteraction(sourceLayer);
                 info.disable();
             }
-        }
+        },
+        onStartWPS: () => {
+            if (document.getElementById("titleChart1")) {
+                document.getElementById("titleChart1").innerHTML = "";
+            }
+            if (document.getElementById("titleChart2")) {
+                document.getElementById("titleChart2").innerHTML = "";
+            }
+            if (document.getElementById("tdcTauxChart")) {
+                tdcTauxChart.remove();
+            }
+            if (document.getElementById("tdcDistanceChart")) {
+                tdcDistanceChart.remove();
+            }
+            if (document.getElementById("prfBilanSedChart")) {
+                prfBilanSedChart.remove();
+            }
+            if (document.getElementById("pofilesDatesChart")) {
+                $("#pofilesDates").empty();
+            }
+            [...document.getElementsByClassName("loaderWps")].forEach(e => { e.hidden = false });
+        },
+        onStopWps: () => [...document.getElementsByClassName("loaderWps")].forEach(e => { e.hidden = true })
     }
 })();

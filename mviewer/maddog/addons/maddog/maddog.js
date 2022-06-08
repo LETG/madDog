@@ -162,7 +162,6 @@ const maddog = (function() {
                     processIdentifier: "coa:coastLinesTracking",
                     callback: (response) => {
                         // callback exec in WPS response
-                        tdcLoader.hidden = true;
                         maddog.charts.coastLines = JSON.parse(response.responseDocument);
                         maddog.charts.coastLines.result = maddog.charts.coastLines.result.map(
                             r => {

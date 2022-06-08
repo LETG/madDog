@@ -60,3 +60,13 @@ function addOptionsSelect(url,field,idField,idSelect) {
 
 // Add all options for config object
 config.forEach(el => addOptionsSelect(el.url, el.field, el.idField, el.idSelect));
+
+
+// Gestion de l'affichage du select Profil
+function showDivProfil(elem){
+    if(elem.value == 'PRF'){
+        document.getElementById('selectProfilId').style.display = "block";
+    } else {
+        document.getElementById('selectProfilId').style.display = "none";
+    }    
+ }

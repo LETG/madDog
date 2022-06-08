@@ -52,7 +52,7 @@
                <div class="row mb-4">
                   <div class="mb-3">
                      <label for="" class="form-label">Sélectionner un suivi :</label>
-                     <select id="selectSuivi" class="form-select" ></select>
+                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)"></select>
                   </div>
                </div>               
                <h3>Site d'étude</h3>
@@ -61,7 +61,7 @@
                      <label for="" class="form-label">Sélectionner un site d'étude :</label>
                      <select id="selectSite" class="form-select"></select>
                   </div>
-                  <div class="mb-3 col-md-6">
+                  <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
                      <label for="" class="form-label">Sélectionner un profil de plage :</label>
                      <select id="selectProfil" class="form-select"></select>
                   </div>

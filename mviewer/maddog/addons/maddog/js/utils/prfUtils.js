@@ -556,7 +556,7 @@ const prfUtils = (function () {
             $("#prfMultiselect").multiselect('dataprovider', datesOptions);
             // change picto color according to chart and legend
             $("#selectorPrf").find(".labelDateLine").each((i, x) => {
-                $(x).find(".dateLine").css("color", maddog.charts.beachProfile.features[i].properties.color);
+                $(x).find(".dateLine").css("color", dates[i].color);
             });
             $("#prfMultiselect").multiselect("selectAll", true);
             $("#prfMultiselect").multiselect("updateButtonText");

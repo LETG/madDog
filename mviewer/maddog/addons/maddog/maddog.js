@@ -195,9 +195,9 @@ const maddog = (function() {
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {
                         maddog.charts.sediments = JSON.parse(response.responseDocument);
-                        let csv = maddog.charts.sediments.result.map(s => ({
+                        let csv = maddog.charts.sediments.result.map((s,i) => ({
                             date: s.date,
-                            ...Object.assign({}, ...maddog.charts.sediments.result[0].data)
+                            ...Object.assign({}, ...maddog.charts.sediments.result[i].data)
                         }));
                         maddog.sedimentsCSV = Papa.unparse(csv);
                         prfUtils.prfBilanSedChart();

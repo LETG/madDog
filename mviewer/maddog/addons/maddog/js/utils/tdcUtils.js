@@ -28,10 +28,14 @@ const tdcUtils = (function () {
                     .then(response => response.text())
                     .then(wpsParams => {
                         const p = JSON.parse(wpsParams)[0];
-                        radialLength.value = p?.radial_length;
-                        radialDistance.value = p?.radial_distance;
-                        tdcUtils.onParamChange(radialLength);
-                        tdcUtils.onParamChange(radialDistance);
+                        if (p?.radial_length) {
+                            radialLength.value = p?.radial_length;
+                            tdcUtils.onParamChange(radialLength);
+                        }
+                        if (p?.radial_distance) {
+                            radialDistance.value = p?.radial_distance;
+                            tdcUtils.onParamChange(radialDistance);
+                        }
                     })
                 );
         },

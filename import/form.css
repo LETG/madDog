@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+/******
+	Définition des propriétés de style CSS
+	Application LETG - Maddog
+---
+******/
+
+
+/*  PARAMÈTRES GLOBAUX  */
+
+
+/* Imports des fonts - Poppins Family GoogleFont */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Définition des variables */
+
+:root {
+   --mycolor: #13344B;
+   --mycolor2: #6088bbff;
+   --myfont: 'Roboto', sans-serif;
+}
+
+
+/* Paramètres globaux */
+
+main > .container {
+   padding: 60px 15px 0;
+}
+
+body{
+   font-family: var(--myfont);   
+}
+
+h1,h2,h3,h4,h5 {
+   color: var(--mycolor);
+}
+
+p, label, select, input, footer {
+   color: #494949!important;
+   font-weight: 300!important;
+}
+
+select, input {
+   border-color: #4949493d!important;
+}
+
+/* Navbar */
+
+.navbar {
+   background-color: var(--mycolor);
+   color: white;
+   height: 65px;
+}
+ 
+
+.btn-primary {
+   background-color: var(--mycolor);
+   border: var(--mycolor);
+}
+.btn-primary:hover, .btn-primary:focus {
+   color: #fff;
+   background-color: var(--mycolor);
+   border-color: var(--mycolor);
+}
+
+.card {
+   background-color: #f1f1f1;
+   border: none!important;
+   padding: 10px;
+}

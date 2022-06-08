@@ -237,12 +237,12 @@ const prfUtils = (function () {
             const datesX = _.uniq(selected.map(s => new Date(moment(s.date, "YYYY-MM-DDZ"))));
             var data = [{
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.volume)[0].volume),
+                    y: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
                     name: "Evolution cumulée"
                 },
                 {
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.diffWithPrevious)[0]?.diffWithPrevious),
+                    y: selected.map(s => s.data.filter(i => i.previousEvolutionPercent)[0]?.previousEvolutionPercent),
                     type: "bar",
                     name: "Evolution de date à date"
                 }
@@ -286,15 +286,15 @@ const prfUtils = (function () {
                     showgrid: false
                 },
                 yaxis: {
-                    ticktext: selected.map(s => s.data.filter(i => i.volume)[0].volume),
+                    ticktext: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
                     autorange: true,
-                    showgrid: true,
+                    showgrid: false,
                     zeroline: false,
-                    autotick: false,
+                    autotick: true,
                     ticks: 'outside',
                     gridcolor: "#afa8a7",
                     showticklabels: true,
-                    showline: true,
+                    showline: false,
                     title: {
                         text: 'Bilan séd. (m3/m.l.)',
                         ...axesFont

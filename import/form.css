@@ -42,6 +42,15 @@ p, label, select, input, footer {
    font-weight: 300!important;
 }
 
+a {
+   color: var(--mycolor2);
+}
+
+a:hover {
+   color: var(--mycolor2);
+   font-weight: 400;
+}
+
 select, input {
    border-color: #4949493d!important;
 }
@@ -69,4 +78,8 @@ select, input {
    background-color: #f1f1f1;
    border: none!important;
    padding: 10px;
+}
+
+.card-title {
+   color: var(--mycolor2);
 }

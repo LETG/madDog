@@ -52,52 +52,36 @@
                <div class="row mb-4">
                   <div class="mb-3">
                      <label for="" class="form-label">Sélectionner un suivi :</label>
-                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                     </select>
+                     <select id="selectSuivi" class="form-select" ></select>
                   </div>
                </div>               
                <h3>Site d'étude</h3>
                <div class="row mb-4">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un site d'étude :</label>
-                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                     </select>
+                     <select id="selectSite" class="form-select"></select>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un profil de plage :</label>
-                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                     </select>
+                     <select id="selectProfil" class="form-select"></select>
                   </div>
                </div>
                <h3>Informations sur le relevé</h3>
                <div class="row">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un opérateur :</label>
-                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                     </select>
+                     <select id="selectOper" class="form-select"></select>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un équipement de relevé :</label>
-                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                     </select>
+                     <select id="selectEquip" class="form-select"></select>
                   </div>
                </div>
                <div class="row mb-4">   
                   <div class="mb-3 col-md-6">
-                     <label for="" class="form-label">Sélectionner une projection (EPSG) :</label>
+                     <label for="" class="form-label">Sélectionner une projection :</label>
                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
+                        <option selected>EPSG:2154</option>
                      </select>
                   </div>
                   <div class="mb-3 col-md-6">
@@ -129,9 +113,10 @@
       <!-- Footer -->
       <footer class="footer mt-auto py-3 bg-light">
          <div class="container text-center">
-            <span class="text-muted">Un problème ? Contactez-nous par mail à l'adresse </span>
+            <span class="text-muted">Un problème ? Contactez-nous par mail à <a href="mailto:maddog@indigeo.fr">maddog@indigeo.fr</a> </span>
          </div>
       </footer>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <script src="form.js"></script>
    </body>
 </html>

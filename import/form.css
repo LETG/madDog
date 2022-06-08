@@ -3,6 +3,7 @@
 /******
 	Définition des propriétés de style CSS
 	Application LETG - Maddog
+   Module Import des données
 ---
 ******/
 
@@ -37,7 +38,7 @@ h1,h2,h3,h4,h5 {
    color: var(--mycolor);
 }
 
-p, label, select, input, footer {
+p, label, select, input, footer, option {
    color: #494949!important;
    font-weight: 300!important;
 }
@@ -63,6 +64,7 @@ select, input {
    height: 65px;
 }
  
+/* Bouton */
 
 .btn-primary {
    background-color: var(--mycolor);
@@ -74,6 +76,8 @@ select, input {
    border-color: var(--mycolor);
 }
 
+/* Bloc d'information */
+
 .card {
    background-color: #f1f1f1;
    border: none!important;
@@ -82,4 +86,10 @@ select, input {
 
 .card-title {
    color: var(--mycolor2);
+}
+
+/* Select & options */
+
+option {
+   padding: 10px!important;
 }

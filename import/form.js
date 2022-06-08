@@ -1,27 +1,32 @@
 const config = [{
         url: "https://gis.jdev.fr/maddogapi/measure_type",
+        idField :"id_measure_type",
         field: "type_measure",
-        id: "selectSuivi"
+        idSelect: "selectSuivi"
     },
     {
         url: "https://gis.jdev.fr/maddogapi/site",
+        idField :"id_site",
         field: "name_site",
-        id: "selectSite"
+        idSelect: "selectSite"
     },
     {
         url: "https://gis.jdev.fr/maddogapi/profil",
+        idField :"",
         field: "",
-        id: "selectProfil"
+        idSelect: "selectProfil"
     },
     {
         url: "https://gis.jdev.fr/maddogapi/operator",
+        idField :"id_operator",
         field: "type_operator",
-        id: "selectOper"
+        idSelect: "selectOper"
     },
     {
         url: "https://gis.jdev.fr/maddogapi/equipment",
+        idField :"id_equipment",
         field: "name_equipment",
-        id: "selectEquip"
+        idSelect: "selectEquip"
     }
 ]
 
@@ -34,15 +39,24 @@ function optionsGenerator(value, text, select) {
     elMainSelect.appendChild(elOption);
 };
 
-function addOptionsSelect(url, field, idSelect) {
+function addOptionsSelect(url,field,idField,idSelect) {
     fetch(url)
         .then(function(response) {
             return response.json()
         })
-        .then(function(json) {
-            json.forEach(feature => optionsGenerator(feature[field], "", idSelect));
+        .then(function(json) {            
+            json.forEach(function(feature){
+                // If field as null display id field
+                if (feature[field] !== null && feature[field] !== "") {
+                    fieldSelect = feature[field];
+                } else {
+                    fieldSelect = feature[idField];
+                }
+                // Create select's option for all feature
+                optionsGenerator(fieldSelect, "", idSelect)
+            });
         });
 };
 
-// Boucle sur l'ensemble des objets du config
-config.forEach(el => addOptionsSelect(el.url, el.field, el.id));
+// Add all options for config object
+config.forEach(el => addOptionsSelect(el.url, el.field, el.idField, el.idSelect));

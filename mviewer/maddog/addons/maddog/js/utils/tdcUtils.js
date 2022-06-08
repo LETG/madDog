@@ -493,15 +493,20 @@ const tdcUtils = (function () {
             }
             $("#" + id).multiselect("updateButtonText");
         },
-        tdcReset: (cleanTdcLayer) => {
-            $("#coastlinetrackingBtn").show();
+        tdcRefreshChart: () => {
             // clean graph
             if (document.getElementById("tdcTauxChart")) {
                 tdcTauxChart.remove();
+                titleChart2.innerHTML = "";
             }
             if (document.getElementById("tdcDistanceChart")) {
                 tdcDistanceChart.remove();
+                titleChart1.innerHTML = "";
             }
+        },
+        tdcReset: (cleanTdcLayer) => {
+            $("#coastlinetrackingBtn").show();
+            tdcUtils.tdcRefreshChart();
             $("#tdcMultiselect").multiselect("refresh");
             $('.tdcNavTabs a[href="#tdcTabDate"]').tab('show');
             mviewer.getLayer("refline").layer.getSource().clear();

@@ -30,6 +30,7 @@ const config = [{
     }
 ]
 
+// Intégration des options dans les selects via l'API Maddog 
 // Functions to add option in select
 function optionsGenerator(value, text, select) {
     const elMainSelect = document.getElementById(select);
@@ -70,3 +71,42 @@ function showDivProfil(elem){
         document.getElementById('selectProfilId').style.display = "none";
     }    
  }
+
+
+// Réinitialisation du formulaire 
+ function resetForm (){
+    document.getElementById("formSuivi").reset();
+} 
+
+// Test du format du fichier uploader
+function validationFormat() { 
+    var fichier = document.getElementById('formFile'); 
+    var valeur = fichier.value; 
+    var extensions = /(\.csv)$/i; 
+        if (!extensions.exec(valeur))
+        { 
+            alert('Format de fichier non valide, sélectionner un fichier .csv'); 
+            fichier.value = ''; 
+            return false; 
+        } 
+} 
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()

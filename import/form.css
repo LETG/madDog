@@ -26,9 +26,6 @@
 
 /* Paramètres globaux */
 
-main > .container {
-   padding: 60px 15px 0;
-}
 
 body{
    font-family: var(--myfont);   
@@ -56,6 +53,19 @@ select, input {
    border-color: #4949493d!important;
 }
 
+.fs-7 {
+   font-size: 0.9rem!important;
+}
+
+/* Container */
+
+#containerForm {
+   background-color: #f8f9fa;
+   padding: 60px;
+   border-radius: 1rem;
+   margin: 20px auto;
+}
+
 /* Navbar */
 
 .navbar {
@@ -74,22 +84,18 @@ select, input {
    color: #fff;
    background-color: var(--mycolor);
    border-color: var(--mycolor);
-}
-
-/* Bloc d'information */
-
-.card {
-   background-color: #f1f1f1;
-   border: none!important;
-   padding: 10px;
-}
-
-.card-title {
-   color: var(--mycolor2);
+   opacity: 0.9;
 }
 
 /* Select & options */
 
 option {
    padding: 10px!important;
+}
+
+/* Validation du formulaire */
+
+.invalid-feedback {
+   text-align: end;
+   color: #f44336;
 }

@@ -7,6 +7,7 @@
       <meta name="author" content="">
       <title>MADDOG - Interface de saisie</title>
       <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
       <!-- Bootstrap core CSS -->
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <style>
@@ -27,39 +28,23 @@
       <link href="form.css" rel="stylesheet">
    </head>
    <body class="d-flex flex-column h-100">
-      <header>
-         <!-- Fixed navbar -->
-         <nav class="navbar navbar-expand-md fixed-top">
-            <div class="container-fluid">
-               <a class="navbar-brand" href="#"><img src="logo_Maddog.png" class="img-fluid" style="width: 165px;"></a>                              
-            </div>
-         </nav>
-      </header>
-
       <!-- Contain -->
       <main class="flex-shrink-0">
          <div class="container" id="containerForm">
-            <h1 class="mt-5 mb-4">Importer des données de suivi</h1>
-            <div class="card mb-4">               
-               <div class="card-body">
-                  <h5 class="card-title">Informations</h5>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-               </div>
-             </div>
-            <div class="form">
+            <h1 class="mt-1 mb-4">Importer des données de suivi</h1>            
+            <form id="formSuivi" class="form needs-validation" novalidate>
                <h3>Type de suivi</h3>
                <div class="row mb-4">
                   <div class="mb-3">
-                     <label for="" class="form-label">Sélectionner un suivi :</label>
-                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)"></select>
+                     <label for="" class="form-label">Sélectionner un type de suivi :</label>
+                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required></select>
                   </div>
                </div>               
                <h3>Site d'étude</h3>
                <div class="row mb-4">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un site d'étude :</label>
-                     <select id="selectSite" class="form-select"></select>
+                     <select id="selectSite" class="form-select" required></select>
                   </div>
                   <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
                      <label for="" class="form-label">Sélectionner un profil de plage :</label>
@@ -70,50 +55,54 @@
                <div class="row">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un opérateur :</label>
-                     <select id="selectOper" class="form-select"></select>
+                     <select id="selectOper" class="form-select" required></select>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un équipement de relevé :</label>
-                     <select id="selectEquip" class="form-select"></select>
+                     <select id="selectEquip" class="form-select" required></select>
                   </div>
                </div>
                <div class="row mb-4">   
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner une projection :</label>
-                     <select class="form-select" aria-label="Default select example">
+                     <select id="selectProj" class="form-select" required>
                         <option selected>EPSG:2154</option>
                      </select>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner une date :</label>
                      <div class="input-group date" id="datepicker">
-                        <input id="startDate" class="form-control" type="date" />
+                        <input id="startDate" class="form-control" type="date" required/>
                         <span id="startDateSelected"></span>
-                      </div>
+                        <div class="invalid-feedback">Veuillez sélectionner une date</div>
+                     </div>
+                     
                   </div>
                </div>
                <h3>Télécharger votre donnée</h3>
                <div class="row mb-4">
-                  <div class="input-group mb-1">
-                     <input type="file" class="form-control" id="inputGroupFile01">
+                  <div class="mb-1">
+                     <label for="formFile" class="form-label">Sélectionner le fichier à importer :</label>
+                     <input class="form-control" type="file" id="formFile" onchange="return validationFormat()" required>
+                     <div class="invalid-feedback">Veuillez sélectionner un fichier .csv</div>
                   </div>
-                  <p><i>Le fichier téléchargé doit être au format .csv</i></p>
+                  <p class="fs-7"><i>Le fichier téléchargé doit être au format .csv</i></p>
                </div>
-               <div class="row mb-5 mt-4">
+               <div class="row mb-1 mt-4">
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                     <button type="button" class="btn ">Réinitialiser</button>
-                     <button type="button" class="btn btn-primary">Télécharger</button>
+                     <button type="button" class="btn" onclick="resetForm()"><i class="bi bi-arrow-clockwise"></i> Réinitialiser</button>
+                     <button type="submit" class="btn btn-primary" ><i class="bi bi-box-arrow-up"></i> Télécharger</button>
                   </div>   
                </div>
-            </div>            
+            </form>            
          </div>
       </main>
 
 
       <!-- Footer -->
-      <footer class="footer mt-auto py-3 bg-light">
+      <footer class="footer mt-auto py-3">
          <div class="container text-center">
-            <span class="text-muted">Un problème ? Contactez-nous par mail à <a href="mailto:maddog@indigeo.fr">maddog@indigeo.fr</a> </span>
+            <span class="text-muted">Un problème ? Contactez-nous par mail à <a href="mailto:maddog@indigeo.fr">maddog@indigeo.fr</a> <i class="bi bi-pause"></i>  Accéder au <a href="https://portail.indigeo.fr/mviewer/?config=apps/maddog.xml#" target="_blank">visualiseur Maddog</a></span>
          </div>
       </footer>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

@@ -46,7 +46,10 @@ function addOptionsSelect(url,field,idField,idSelect) {
             return response.json()
         })
         .then(function(json) {            
-            json.forEach(function(feature){
+            json.forEach(function(feature, index){
+                if (index == "0") {
+                    optionsGenerator("Sélectionner ...", "", idSelect)
+                }
                 // If field as null display id field
                 if (feature[field] !== null && feature[field] !== "") {
                     fieldSelect = feature[field];
@@ -91,13 +94,11 @@ function validationFormat() {
         } 
 } 
 
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+// Disabling form submissions if there are invalid fields
 (() => {
   'use strict'
-
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   const forms = document.querySelectorAll('.needs-validation')
-
   // Loop over them and prevent submission
   Array.from(forms).forEach(form => {
     form.addEventListener('submit', event => {
@@ -105,7 +106,6 @@ function validationFormat() {
         event.preventDefault()
         event.stopPropagation()
       }
-
       form.classList.add('was-validated')
     }, false)
   })

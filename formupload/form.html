@@ -6,11 +6,10 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <title>MADDOG - Interface de saisie</title>
+      <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
       <!-- Bootstrap core CSS -->
-      <link href="lib/bootstrap.min.css" rel="stylesheet">
-      <!-- Custom styles for this template -->
-      <link href="form.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <style>
          .bd-placeholder-img {
          font-size: 1.125rem;
@@ -24,7 +23,9 @@
          font-size: 3.5rem;
          }
          }
-      </style>      
+      </style>
+      <!-- Custom styles for this template -->
+      <link href="form.css" rel="stylesheet">
    </head>
    <body class="d-flex flex-column h-100">
       <!-- Contain -->
@@ -36,43 +37,29 @@
                <div class="row mb-4">
                   <div class="mb-3">
                      <label for="" class="form-label">Sélectionner un type de suivi :</label>
-                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required>
-                     <option selected disabled value="">Sélectionner ...</option>
-                     </select>
-                     <div class="invalid-feedback">Veuillez sélectionner un type de suivi</div>
+                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required></select>
                   </div>
                </div>               
                <h3>Site d'étude</h3>
                <div class="row mb-4">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un site d'étude :</label>
-                     <select id="selectSite" class="form-select" required>
-                        <option selected disabled value="">Sélectionner ...</option>
-                     </select>
-                     <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
+                     <select id="selectSite" class="form-select" required></select>
                   </div>
                   <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
                      <label for="" class="form-label">Sélectionner un profil de plage :</label>
-                     <select id="selectProfil" class="form-select">
-                        <option selected disabled value="">Sélectionner ...</option>
-                     </select>  
+                     <select id="selectProfil" class="form-select"></select>
                   </div>
                </div>
                <h3>Informations sur le relevé</h3>
                <div class="row">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un opérateur :</label>
-                     <select id="selectOper" class="form-select" required>
-                        <option selected disabled value="">Sélectionner ...</option>
-                     </select>
-                     <div class="invalid-feedback">Veuillez sélectionner un opérateur</div>
+                     <select id="selectOper" class="form-select" required></select>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un équipement de relevé :</label>
-                     <select id="selectEquip" class="form-select" required>
-                        <option selected disabled value="">Sélectionner ...</option>
-                     </select>
-                     <div class="invalid-feedback">Veuillez sélectionner un équipement</div>
+                     <select id="selectEquip" class="form-select" required></select>
                   </div>
                </div>
                <div class="row mb-4">   
@@ -101,7 +88,6 @@
                   </div>
                   <p class="fs-7"><i>Le fichier téléchargé doit être au format .csv</i></p>
                </div>
-               <div id="liveAlertPlaceholder"></div>
                <div class="row mb-1 mt-4">
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                      <button type="button" class="btn" onclick="resetForm()"><i class="bi bi-arrow-clockwise"></i> Réinitialiser</button>
@@ -119,7 +105,7 @@
             <span class="text-muted">Un problème ? Contactez-nous par mail à <a href="mailto:maddog@indigeo.fr">maddog@indigeo.fr</a> <i class="bi bi-pause"></i>  Accéder au <a href="https://portail.indigeo.fr/mviewer/?config=apps/maddog.xml#" target="_blank">visualiseur Maddog</a></span>
          </div>
       </footer>
-      <script src="lib/bootstrap.bundle.min.js"></script>
-      <script src="js/form.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <script src="form.js"></script>
    </body>
 </html>

@@ -36,29 +36,43 @@
                <div class="row mb-4">
                   <div class="mb-3">
                      <label for="" class="form-label">Sélectionner un type de suivi :</label>
-                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required></select>
+                     <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required>
+                     <option selected disabled value="">Sélectionner ...</option>
+                     </select>
+                     <div class="invalid-feedback">Veuillez sélectionner un type de suivi</div>
                   </div>
                </div>               
                <h3>Site d'étude</h3>
                <div class="row mb-4">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un site d'étude :</label>
-                     <select id="selectSite" class="form-select" required></select>
+                     <select id="selectSite" class="form-select" required>
+                        <option selected disabled value="">Sélectionner ...</option>
+                     </select>
+                     <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
                   </div>
                   <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
                      <label for="" class="form-label">Sélectionner un profil de plage :</label>
-                     <select id="selectProfil" class="form-select"></select>
+                     <select id="selectProfil" class="form-select">
+                        <option selected disabled value="">Sélectionner ...</option>
+                     </select>  
                   </div>
                </div>
                <h3>Informations sur le relevé</h3>
                <div class="row">
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un opérateur :</label>
-                     <select id="selectOper" class="form-select" required></select>
+                     <select id="selectOper" class="form-select" required>
+                        <option selected disabled value="">Sélectionner ...</option>
+                     </select>
+                     <div class="invalid-feedback">Veuillez sélectionner un opérateur</div>
                   </div>
                   <div class="mb-3 col-md-6">
                      <label for="" class="form-label">Sélectionner un équipement de relevé :</label>
-                     <select id="selectEquip" class="form-select" required></select>
+                     <select id="selectEquip" class="form-select" required>
+                        <option selected disabled value="">Sélectionner ...</option>
+                     </select>
+                     <div class="invalid-feedback">Veuillez sélectionner un équipement</div>
                   </div>
                </div>
                <div class="row mb-4">   

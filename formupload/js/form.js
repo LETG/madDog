@@ -1,3 +1,4 @@
+// Create config
 const config = [{
         url: "https://gis.jdev.fr/maddogapi/measure_type",
         idField :"id_measure_type",
@@ -47,9 +48,6 @@ function addOptionsSelect(url,field,idField,idSelect) {
         })
         .then(function(json) {            
             json.forEach(function(feature, index){
-                if (index == "0") {
-                    optionsGenerator("Sélectionner ...", "", idSelect)
-                }
                 // If field as null display id field
                 if (feature[field] !== null && feature[field] !== "") {
                     fieldSelect = feature[field];
@@ -73,7 +71,7 @@ function showDivProfil(elem){
     } else {
         document.getElementById('selectProfilId').style.display = "none";
     }    
- }
+}
 
 
 // Réinitialisation du formulaire 
@@ -110,3 +108,4 @@ function validationFormat() {
     }, false)
   })
 })()
+

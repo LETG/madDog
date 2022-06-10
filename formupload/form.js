@@ -1,3 +1,4 @@
+// Create config
 const config = [{
         url: "https://gis.jdev.fr/maddogapi/measure_type",
         idField :"id_measure_type",
@@ -47,9 +48,6 @@ function addOptionsSelect(url,field,idField,idSelect) {
         })
         .then(function(json) {            
             json.forEach(function(feature, index){
-                if (index == "0") {
-                    optionsGenerator("Sélectionner ...", "", idSelect)
-                }
                 // If field as null display id field
                 if (feature[field] !== null && feature[field] !== "") {
                     fieldSelect = feature[field];
@@ -81,14 +79,27 @@ function showDivProfil(elem){
     document.getElementById("formSuivi").reset();
 } 
 
-// Test du format du fichier uploader
+// Test du format du fichier uploader + Alerte
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const alert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+      `   <div>${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      '</div>'
+    ].join('')
+
+    alertPlaceholder.append(wrapper)
+}
+
 function validationFormat() { 
     var fichier = document.getElementById('formFile'); 
     var valeur = fichier.value; 
     var extensions = /(\.csv)$/i; 
         if (!extensions.exec(valeur))
         { 
-            alert('Format de fichier non valide, sélectionner un fichier .csv'); 
+            alert('Format de fichier non valide, sélectionner un fichier .csv', 'danger'); 
             fichier.value = ''; 
             return false; 
         } 

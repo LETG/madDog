@@ -1,0 +1,4 @@
+AuthName "Pour accéder au module de saisie Maddog, veuillez vous connecter :"
+AuthType Basic
+AuthUserFile "Lien vers le fichier .htpasswd"
+Require valid-user

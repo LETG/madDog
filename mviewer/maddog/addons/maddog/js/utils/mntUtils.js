@@ -41,12 +41,6 @@ const mntUtils = (function () {
             const params = mntSrc().getParams();
             delete params["CQL_FILTER"];
             delete params["TIME"];
-            if (!close) {
-                changeSourceParams({
-                    // we change location attribute calculate by imageMosaic
-                    CQL_FILTER: `location like '%${maddog.idsite}%'`
-                });   
-            }
             mntUtils.getDates();
         },
         /**
@@ -70,18 +64,38 @@ const mntUtils = (function () {
                     // clean select list
                     document.getElementById("dateMnt").innerHTML = "";
                     // dates are already ordered by date type in postgresql view
-                    const datesJson = JSON.parse(response)
+                    let datesJson = JSON.parse(response)
                     mntUtils.dates = datesJson;
-                    // create first empty option as placeholder
-                    $('#dateMnt').append(`<option value="">Choisir une date...</option>`);
+
+                    // TODO comment this to use dates from API
+                    // =====> comment this
+                    if (maddog.idsite === "BOUTRO") {
+                        mntUtils.dates = [
+                            { date_survey: "2007-03-07" },
+                            { date_survey: "2007-02-16" },
+                            { date_survey: "2007-02-05" },
+                            { date_survey: "2006-12-20" },
+                            { date_survey: "2006-12-08" },
+                            { date_survey: "2006-11-28" },                           
+                        ];
+                    }
+                    if (maddog.idsite === "VOUGOT") {
+                        mntUtils.dates = [
+                            { date_survey: "2017-08-25" },
+                            { date_survey: "2005-07-01" },                            
+                        ];
+                    }
+                    datesJson = mntUtils.dates;
+                    // <=============== END TO COMMENT
+                    
                     // add dates to list
                     $('#dateMnt').append(
                         datesJson.map((date, i) => {
+                            const dateText = new Date(moment(date.date_survey, "YYYY-MM-DD")).toLocaleDateString();
                             if (i < 1) {
                                 mntUtils.date = date.date_survey;
                             }
-                            const dateText = new Date(moment(date.date_survey, "YYYY-MM-DD")).toLocaleDateString();
-                            return `<option value="${date.date_survey}">${dateText}</option>`
+                            return `<option value="${date.date_survey}" ${i === 0 ? "selected" : ""}>${dateText}</option>`
                         })
                         .join("")
                     );

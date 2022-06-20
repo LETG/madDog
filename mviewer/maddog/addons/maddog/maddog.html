@@ -358,10 +358,26 @@
 
         <!-- Modèle numérique de terrain -->
         <div class="row col-sm-12" id="MNT_WPS" hidden>
-            <h3 class="modal-title">Modèle numérique de terrain</h3>     
-            <p><br>Insérer ici les paramètres <br><br></p>  
-            
-            <a href="#" class="card-link" onClick="tools.showHideMenu(MNT_WPS)"><i class="fas fa-arrow-left"></i> Revenir à la liste des suivis</a>
+            <h3 class="modal-title">Modèle numérique de terrain</h3>
+            <p><br>Veuillez choisir une date : <br><br></p>
+            <row>
+                <select onchange="mntUtils.dateChange(this)" style="margin-bottom: 10px;" class="form-control" name="" id="dateMnt"></select>
+            </row>
+            <nav class="navbar navbar-default toolbarMenu">
+                <div class="container-fluid">
+                    <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(MNT_WPS)">
+                        <i class="fas fa-arrow-left"></i>
+                        Revenir à la liste des suivis
+                    </button>
+                    <button  hidden id="prfResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="mntUtlis.mntReset()">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Réinitialiser
+                    </button>
+                    <!-- <button id="prftrackingBtn" disabled type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.beachProfileTracking(maddog.beachProfileTrackingConfig)">
+                        Lancer le traitement
+                    </button> -->
+                </div>
+            </nav>
         </div>
         <!-- /.Modèle numérique de terrain -->
        </div>

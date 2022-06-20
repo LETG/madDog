@@ -298,6 +298,7 @@ const tools = (function() {
             document.getElementById("btn-wps-tdc").classList.remove("disabled");
             document.getElementById("btn-wps-pp").classList.remove("disabled");
             document.getElementById("btn-wps-mnt").classList.remove("disabled");
+            if (!MNT_WPS.hidden) mntUtils.siteChange();
         },
         /**
          * Select or deselect all values for a given multiselect component
@@ -341,6 +342,11 @@ const tools = (function() {
             }
             if (PP_WPS.hidden) {
                 prfUtils.prfReset(true, '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
+            }
+            if (!MNT_WPS.hidden) {
+                mntUtils.init();
+            } else {
+                mntUtils.onClose();
             }
         },
         /**

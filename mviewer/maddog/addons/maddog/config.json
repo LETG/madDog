@@ -2,6 +2,7 @@
     "js": [
         "js/utils/tdcUtils.js",
         "js/utils/prfUtils.js",
+        "js/utils/mntUtils.js",
         "js/utils/tools.js",
         "js/utils/autocomplete.js",
         "js/utils/maddog-wps.js",

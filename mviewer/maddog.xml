@@ -135,6 +135,12 @@
                 toplayer="true"
                 url="apps/maddog/customlayers/tooltip-sites.js">
             </layer>
+            <layer id="mnt" name="mnt" visible="true" queryable="false"
+                showintoc="false"
+                type="customlayer" opacity="0.8"
+                scalemax="30000"
+                url="apps/maddog/customlayers/mnt.js">
+            </layer>
         </theme>
     </themes>
 </config>

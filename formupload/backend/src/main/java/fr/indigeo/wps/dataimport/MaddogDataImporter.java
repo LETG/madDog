@@ -25,6 +25,8 @@ import org.geotools.text.Text;
 
 import com.opencsv.CSVWriter;
 
+import net.sf.json.JSONObject;
+
 /**
  * @author Pierre Jego https://jdev.fr
  *
@@ -39,7 +41,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
 
 	public MaddogDataImporter() {
-		super(Text.text("Import Maddog data"), "import", MaddogDataImporter.class);
+		super(Text.text("Import Maddog data"), "imp", MaddogDataImporter.class);
 	}
 
 
@@ -54,9 +56,8 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         @DescribeParameter(name = "idEquipement", description = "Equipement Code") final String idEquipement,
         @DescribeParameter(name = "idOperator", description = "Operator information") final String idOperator,
         @DescribeParameter(name = "csvContent", description = "Data content of the csv file") final String csvContent) {
-            
-            String result = "ok";
 
+            boolean isSuccess = true;
             StringBuffer finalDataType = new StringBuffer(measureType);
             if(numProfil<1 || numProfil >10){
                 numProfil=1;
@@ -75,9 +76,14 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                     uploadCSVContent(dataFileName.toString(), csvContent);
                 } catch (IOException e) {
                     LOGGER.error("Erreur while writing csv file" + e.getMessage());
+                    isSuccess = false;
                 }
             }
-	    return result;
+
+            JSONObject result = new JSONObject();
+            result.put("succes", isSuccess);
+            
+	    return result.toString();
 	}
 
     private static void uploadCSVContent(String fileName, String csvContent) throws IOException {      

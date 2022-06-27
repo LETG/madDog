@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -18,7 +17,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.geoserver.wps.gs.GeoServerProcess;
-import org.geoserver.wps.ppio.CSVPPIO;
 import org.geotools.process.factory.DescribeParameter;
 import org.geotools.process.factory.DescribeProcess;
 import org.geotools.process.factory.DescribeResult;

@@ -1,6 +1,7 @@
 -- materialized vue used to filter communes
 DROP MATERIALIZED VIEW IF EXISTS communewithsite;
 DROP MATERIALIZED VIEW IF EXISTS sitebuffer;
+DROP MATERIALIZED VIEW IF EXISTS sitesurveydate;
 
 -- imported communes information via json
 DROP TABLE IF EXISTS communes;
@@ -14,8 +15,6 @@ DROP SEQUENCE IF EXISTS tdc_ogc_fid_seq;
 
 DROP TABLE IF EXISTS prf;
 DROP SEQUENCE IF EXISTS prf_ogc_fid_seq;
-
-DROP TABLE IF EXISTS mnt;
 
 -- Application tables
 DROP TABLE IF EXISTS profil;

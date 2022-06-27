@@ -36,3 +36,14 @@ CREATE MATERIALIZED VIEW communewithsite AS
 		FROM communes, sitebuffer where ST_Intersects(sitebuffer.geom, communes.wkb_geometry)
 	) AS commune ;
 
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS sitesurveydate AS
+ SELECT survey.id_site,
+    site.code_site,
+    site.name_site,
+    to_date(to_char(survey.date_survey::timestamp with time zone, 'YYYY-MM-DD'::text), 'YYYY-MM-DD'::text) AS date_survey
+   FROM survey,
+    site
+  WHERE survey.id_site = site.id_site
+  ORDER BY (to_date(to_char(survey.date_survey::timestamp with time zone, 'YYYY-MM-DD'::text), 'YYYY-MM-DD'::text)) DESC
+WITH DATA;

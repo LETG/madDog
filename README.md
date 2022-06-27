@@ -7,7 +7,7 @@ Version initial : http://menir.univ-brest.fr/maddog/
 Description des répertoires : 
 - mviewer : Configuration de l'application
 - vrt : les fichiers de description permettant l'import des données en base
-- wps : le code des services nécessaire aux calculs
+- api : le binaire de postrest pour accès aux données via API Rest
 - data : élements supplémentaires nécessaire au rendu ou à l'installation
 - database : script de création des tables et vues nécessaire à l'application
  

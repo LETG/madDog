@@ -57,7 +57,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         @DescribeParameter(name = "idOperator", description = "Operator information") final String idOperator,
         @DescribeParameter(name = "csvContent", description = "Data content of the csv file") final String csvContent) {
 
-            boolean isSuccess = true;
+            boolean isSuccess = false;
             StringBuffer finalDataType = new StringBuffer(measureType);
             if(numProfil<1 || numProfil >10){
                 numProfil=1;
@@ -74,10 +74,10 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                     dataFileName.append(".csv");
 
                     uploadCSVContent(dataFileName.toString(), csvContent);
+                    isSuccess = true;
                 } catch (IOException e) {
                     LOGGER.error("Erreur while writing csv file" + e.getMessage());
-                    isSuccess = false;
-                }
+                }  
             }
 
             JSONObject result = new JSONObject();

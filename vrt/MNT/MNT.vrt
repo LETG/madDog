@@ -3,9 +3,12 @@
         <SrcDataSource></SrcDataSource>
         <GeometryType>wkbPoint25D</GeometryType>
         <LayerSRS>EPSG:2154</LayerSRS>
-         <Field name="position" src="id"/>
-        <Field name="identifiant" type="String"/>
-        <Field name="date" type="Date"/>
+        <Field name="id" type="Integer" src="id"/>
+        <Field name="identifiant" type="String" src="identifiant"/>
+        <Field name="date" type="Date" src="date"/>
+        <Field name="x" type="Real" src="x"/>
+        <Field name="y" type="Real" src="y"/>
+        <Field name="z" type="Real" src="z"/>
         <GeometryField encoding="PointFromColumns" x="x" y="y" z="z"/>
     </OGRVRTLayer>
 </OGRVRTDataSource>

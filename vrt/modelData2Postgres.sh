@@ -85,7 +85,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     echo "--idSurvey :  $idSurvey"
 
     # Add profil
-    `PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO profil (id_survey, id_measure_type_survey, num_profil) VALUES ('$idSurvey', '$idMeasureType', '$numProfil');"`
+    `PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO profil (id_survey, id_measure_type, num_profil) VALUES ('$idSurvey', '$idMeasureType', '$numProfil');"`
     echo "--numProfil : $num_profil"
     
     # Measure import Solution 1 was too slow

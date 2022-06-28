@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# lecture du fichier de configuration des connexions
+# This script will insert data from csv to database or tiff
+
+# Read conf file
 . config.sh
 
 echo "--START PROCESS"
@@ -52,16 +54,18 @@ then
     mntOutput="$mntDirectory/${codeSite}_$mntDate.tiff"
 
     echo "mnt filename : $mntOutput"
-    
+    # First step with json to filter unwanted pc point
     ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "\"identifiant\" NOT LIKE 'pc%'"
+    # Create tiff file
     gdal_grid -zfield z -a invdist:$gdalGridIndivParm -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
     echo "-- Update value for file $mntOutput"
+    # issue on imagemosaic and gdal_grid ymin and ymax are inversed
     gdalwarp $mntOutputTmp  $mntOutput
 
+    # File has to be readeable by geoserver to index it
     chown -R tomcat:tomcat $mntOutput
    
     #update mosaic index
-    echo curl -v -u $geoserverLogin:$geoserverMdp -XPOST $geoserverUrl -H "\"Content-type: text/plain\"" -d "\"file://$mntDirectory\""
     curl -v -u $geoserverLogin:$geoserverMdp -XPOST $geoserverUrl -H "\"Content-type: text/plain\"" -d "\"file://$mntDirectory\"" 
 
     rm $mntGeoJson

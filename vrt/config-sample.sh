@@ -13,7 +13,8 @@ maddogDBPassword=maddog
 gdalGridIndivParm="power=6.0:smothing=7.0:radius1=30.0:radius2=30.0:angle=90.0:max_points=0:min_points=1:nodata=-100.0"
 
 # geoserver dir for image mosaic
-mntDirectory=/srv/data/maddog/mnt
+# this folder have to already exist
+mntDirectory=/data/MADDOG/imagemosaic
 
 # geoserver dir for image mosaic
 geoserverLogin=admin 

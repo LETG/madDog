@@ -2,14 +2,18 @@
 
 Création d'une application cartographique basée sur le Mviewer pour le suivi littoral en Bretagne
 
-Version initial : http://menir.univ-brest.fr/maddog/
+En remplacement du site : http://menir.univ-brest.fr/maddog/  
+
+Nouvelle application -> https://portail.indigeo.fr/mviewer/#maddog
+
 
 Description des répertoires : 
-- mviewer : Configuration de l'application
-- vrt : les fichiers de description permettant l'import des données en base
+- mviewer : Configuration de l'application mviewer
+- vrt : script permettant l'intégration des données en base
 - api : le binaire de postrest pour accès aux données via API Rest
 - data : élements supplémentaires nécessaire au rendu ou à l'installation
 - database : script de création des tables et vues nécessaire à l'application
+- formupload : la page et le wps permettant l'upload des données
  
 La plateforme MADDOG adossée à l’Infrastructure de Données Géographiques INDIGEO permet la mise à disposition et la visualisation des données relatives à l’évolution du trait de côte (falaises, plages, systèmes dunaires, embouchures). 
 

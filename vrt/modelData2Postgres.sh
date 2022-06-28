@@ -39,6 +39,8 @@ if test -f "${fileNameWithoutExt}.meta"; then
     codeSite=${metaFields[0]}
     typeMeasure=${metaFields[1]}
     numProfil=${metaFields[2]}
+    # if not set set to 1
+    if [ -z "$numProfil" ]; then numProfil=1; fi
     dateSurvey=${metaFields[3]}
     epsg=${metaFields[4]}
     nameEquiement=${metaFields[5]}
@@ -119,6 +121,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     rm $tmpData
 
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "REFRESH MATERIALIZED VIEW sitemntdate;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "REFRESH MATERIALIZED VIEW sitemeasureprofil;"
 
     echo "-IMPORT DATA MODEL SUCCESS"
 else

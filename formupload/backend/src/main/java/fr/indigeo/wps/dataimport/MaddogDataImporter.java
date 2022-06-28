@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -13,7 +12,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.geoserver.wps.gs.GeoServerProcess;
@@ -36,7 +34,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
 	private static final Logger LOGGER = Logger.getLogger(MaddogDataImporter.class);
 
-    private static final String DATA_FOLDER_KEY="data.folder";
+    private static final String DATA_FOLDER = "/data/MADDOG/";
     private static final String DATE_PATTERN="yyyyMMddHHmmssSSSSSSS"; 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
 
@@ -50,7 +48,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 	public static String importData(
 		@DescribeParameter(name = "codeSite", description = "codeSite") final String codeSite,
 		@DescribeParameter(name = "measureType", description = "Type of data, TDC, PRF, MNT") final String measureType,
-        @DescribeParameter(name = "numProfil", description = "Profil number (between 1 and 9") Integer numProfil,
+        @DescribeParameter(name = "numProfil", description = "Profil number (between 1 and 9", min = 0) Integer numProfil,
         @DescribeParameter(name = "surveyDate", description = "Survey Date ") final String surveyDate,
         @DescribeParameter(name = "epsg", description = "Projection 2154 without EPSG: ") final String epsg,
         @DescribeParameter(name = "idEquipement", description = "Equipement Code") final String idEquipement,
@@ -59,7 +57,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
             boolean isSuccess = false;
             StringBuffer finalDataType = new StringBuffer(measureType);
-            if(numProfil<1 || numProfil >10){
+            if(numProfil == null || numProfil<1 || numProfil >9){
                 numProfil=1;
             }
             finalDataType.append(numProfil);
@@ -162,18 +160,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         Path folderPath = null;
         // check or create site folder
         try {
-            InputStream input = MaddogDataImporter.class.getClassLoader().getResourceAsStream("config.properties");
-            Properties prop = new Properties();      
-            if (input == null) {
-                LOGGER.error("Unable to find config.properties");
-            }
-            //load a properties file from class path, inside static method
-            prop.load(input);
-            final String DATA_FOLDER = prop.getProperty(DATA_FOLDER_KEY);
-            if (DATA_FOLDER == null) {
-                LOGGER.error("Unable to find folder in configuration");
-            }
-
+            
             Path pathSite = Paths.get(DATA_FOLDER, codeSite);
                 
             LOGGER.debug("Check folder and create : " + pathSite.toString());

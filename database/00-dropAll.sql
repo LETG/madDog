@@ -2,6 +2,7 @@
 DROP MATERIALIZED VIEW IF EXISTS communewithsite;
 DROP MATERIALIZED VIEW IF EXISTS sitebuffer;
 DROP MATERIALIZED VIEW IF EXISTS sitemntdate;
+DROP MATERIALIZED VIEW IF EXISTS sitemeasureprofil;
 
 -- imported communes information via json
 DROP TABLE IF EXISTS communes;

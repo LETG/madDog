@@ -37,8 +37,8 @@ CREATE MATERIALIZED VIEW communewithsite AS
 	) AS commune ;
 
 
--- Create siteSurveyDate
--- Used to get mnt date information 
+-- Create sitemntDate
+-- Used to get mnt date information for mviewer mnt date search
 CREATE MATERIALIZED VIEW IF NOT EXISTS sitemntdate AS
  SELECT survey.id_site,
     site.code_site,
@@ -48,4 +48,16 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS sitemntdate AS
     site
   WHERE survey.id_site = site.id_site AND survey.id_measure_type_survey = 1
   ORDER BY (to_date(to_char(survey.date_survey::timestamp with time zone, 'YYYY-MM-DD'::text), 'YYYY-MM-DD'::text)) DESC
+WITH DATA;
+
+
+-- Create sitemeasureprofil
+-- Used to get num profil depending on site and measuretype
+CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
+ SELECT DISTINCT 
+ 	num_profil,
+    survey.id_site,
+    id_measure_type
+   FROM survey, profil
+  WHERE survey.id_survey = profil.id_survey AND survey.id_measure_type_survey = profil.id_measure_type
 WITH DATA;

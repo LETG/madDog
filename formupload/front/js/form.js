@@ -12,9 +12,11 @@ const config = [{
     idSelect: "codeSite"
 },
 {
-    url: "https://gis.jdev.fr/maddogapi/profil",
-    idField: "",
-    field: "",
+    // TODO this should be change to be call when display select
+    // add parameter id site and measuretype
+    url: "https://gis.jdev.fr/maddogapi/sitemeasureprofil",
+    idField: "num_profil",
+    field: "num_profil",
     idSelect: "numProfil"
 },
 {

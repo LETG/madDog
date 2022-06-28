@@ -18,9 +18,9 @@ const tdcUtils = (function () {
                 })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // from reference line, we get radiale
-                .then(geojson => maddog.setDrawRadialConfig({
+                .then(geojson => maddog.setConfig({
                     referenceLine: geojson
-                }))
+                }, "drawRadialConfig"))
                 .then(() => tdcUtils.getTDCByIdSite(idsite))
                 .then(() =>
                     // get WPS params for this reference line
@@ -150,9 +150,9 @@ const tdcUtils = (function () {
             layer.getSource().clear();
             layer.getSource().addFeatures(features);
             // on garde la radiale en config pour le coastline tracking
-            maddog.setCoastLinesTrackingConfig({
+            maddog.setConfig({
                 radiales: `<![CDATA[${JSON.stringify(r.responseDocument)}]]>`
-            });
+            }, "coastLinesTrackingConfig");
             // on zoom sur l'extent de la radiale
             tools.zoomToExtent(layer.getSource().getExtent());
 
@@ -368,9 +368,9 @@ const tdcUtils = (function () {
         },
         setTdcFeatures: (features) => {
             const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
-            maddog.setCoastLinesTrackingConfig({
+            maddog.setConfig({
                 tdc: tdcGeojson
-            });
+            }, "coastLinesTrackingConfig");
             $("#drawRadialBtn").prop('disabled', features.length < 2);
         },
         orderDates: (selected) => {
@@ -512,9 +512,9 @@ const tdcUtils = (function () {
             tdcUtils.tdcReset();
         },
         onParamChange: (e) => {
-            maddog.setDrawRadialConfig({
+            maddog.setConfig({
                 [e.id]: e.type === "number" ? parseInt(e.value) : e.value
-            });
+            }, "drawRadialConfig");
             $("#coastlinetrackingBtn").show();
         }
     }

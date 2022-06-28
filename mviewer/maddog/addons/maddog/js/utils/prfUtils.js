@@ -440,9 +440,9 @@ const prfUtils = (function () {
                 }
             `;
             const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":[${JSON.stringify(features)}]}]]>`;
-            maddog.setBeachProfileTrackingConfig({
+            maddog.setConfig({
                 fc: prfGeojson
-            });
+            }, "beachProfileTrackingConfig");
             $("#prftrackingBtn").prop('disabled', features.length < 2);
         },
         /**

@@ -76,7 +76,7 @@ const mntUtils = (function () {
                             { date_survey: "2007-02-05" },
                             { date_survey: "2006-12-20" },
                             { date_survey: "2006-12-08" },
-                            { date_survey: "2006-11-28" },                           
+                            { date_survey: "2006-11-28" },
                         ];
                     }
                     if (maddog.idsite === "VOUGOT") {

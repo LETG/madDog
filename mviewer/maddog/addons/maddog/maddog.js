@@ -137,7 +137,7 @@ const maddog = (function() {
                     ...maddog.getCfg("config.options.wps")
                 });
                 // init default draw radial config
-                maddog.setDrawRadialConfig({
+                maddog.setConfig({
                     // callback exec in WPS response
                     callback: tdcUtils.getRadiales,
                     wpsService: wpsService,
@@ -150,9 +150,9 @@ const maddog = (function() {
                     responseFormat: "raw",
                     executionMode: "async",
                     lineage: false
-                });
+                }, "drawRadialConfig");
                 // init default coast line tracking config
-                maddog.setCoastLinesTrackingConfig({
+                maddog.setConfig({
                     wpsService: wpsService,
                     responseFormat: "raw",
                     executionMode: "async",
@@ -180,8 +180,8 @@ const maddog = (function() {
                         maddog.tdcReference = moment.min(maddog.charts.coastLines.result.map(d => moment(d.date))).format("DD/MM/YYYY");
                         tdcUtils.tdcPlotyChart();
                     }
-                });
-                maddog.setBeachProfileTrackingConfig({
+                }, "coastLinesTrackingConfig");
+                maddog.setConfig({
                     wpsService: wpsService,
                     responseFormat: "raw",
                     executionMode: "async",
@@ -201,51 +201,27 @@ const maddog = (function() {
                         maddog.sedimentsCSV = Papa.unparse(csv);
                         prfUtils.prfBilanSedChart();
                     }
-                });
+                }, "beachProfileTrackingConfig");
             });
         },
         /**
-         * change, add one many drawRadialConfig config keys
+         * change, add one or many config config keys for a WPS config object
          * @param {any} param initial config before change
          */
-        setDrawRadialConfig: (param) => {
-            if (!maddog.drawRadialConfig) {
-                maddog.drawRadialConfig = {};
+        setConfig: (param, configWps) => {
+            const config = maddog[configWps];
+            if (!config) {
+                maddog[configWps] = {};
             }
-            maddog.drawRadialConfig = {
-                ...maddog.drawRadialConfig,
+            maddog[configWps] = {
+                ...maddog[configWps],
                 ...param
             };
         },
         drawRadialConfig: {},
         coastLinesTrackingConfig: {},
+        compareRasterMNTConfig: {},
         beachProfileTrackingConfig: {},
-        /**
-         * change, add one many coastLinesTrackingConfig config keys
-         * @param {any} param initial config before change
-         */
-        setCoastLinesTrackingConfig: (param) => {
-            if (!maddog.coastLinesTrackingConfig) {
-                maddog.coastLinesTrackingConfig = {};
-            }
-            maddog.coastLinesTrackingConfig = {
-                ...maddog.coastLinesTrackingConfig,
-                ...param
-            };
-        },
-        /**
-         * change, add one many beachProfileTrackingConfig config keys
-         * @param {any} param initial config before change
-         */
-        setBeachProfileTrackingConfig: (param) => {
-            if (!maddog.beachProfileTrackingConfig) {
-                maddog.beachProfileTrackingConfig = {};
-            }
-            maddog.beachProfileTrackingConfig = {
-                ...maddog.beachProfileTrackingConfig,
-                ...param
-            };
-        },
         radiales2154: [],
         charts: {},
         server: mviewer.customComponents.maddog.config.options?.server,

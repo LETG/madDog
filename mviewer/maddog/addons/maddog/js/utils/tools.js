@@ -400,9 +400,9 @@ const tools = (function() {
                     defaultDataProjection: "EPSG:2154"
                 }).writeFeature(feature);
                 // set drawRadial config
-                maddog.setDrawRadialConfig({
+                maddog.setConfig({
                     drawReferenceLine: `<![CDATA[{"type":"FeatureCollection","features":[${featureJSON}]}]]>`
-                });
+                }, "drawRadialConfig");
                 // close draw interaction
                 mviewer.getMap().removeInteraction(draw);
                 $("#coastlinetrackingBtn").show();
@@ -425,9 +425,9 @@ const tools = (function() {
                 // clean radiales
                 mviewer.getLayer("radiales").layer.getSource().clear();
                 info.enable();
-                maddog.setDrawRadialConfig({
+                maddog.setConfig({
                     drawReferenceLine: null
-                });
+                }, "drawRadialConfig");
                 maddog.drawStart = false;
                 // close draw interaction
                 mviewer.getMap().removeInteraction(draw);

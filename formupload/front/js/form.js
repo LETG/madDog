@@ -94,14 +94,26 @@ alertPlaceholder.append(wrapper)
 }
 
 function validationFormat() {
-var fichier = document.getElementById('csvContent');
-var valeur = fichier.value;
-var extensions = /(\.csv)$/i;
-if (!extensions.exec(valeur)) {
-    alert('Format de fichier non valide, veuillez sélectionner un fichier .csv', 'danger');
-    fichier.value = '';
-    return false;
-}
+    var csvFile = document.getElementById('csvFile');
+    var valeur = csvFile.value;
+    var extensions = /(\.csv)$/i;
+    if (!extensions.exec(valeur)) {
+        alert('Format de fichier non valide, veuillez sélectionner un fichier .csv', 'danger');
+        csvFile.value = '';
+        return false;
+    } else {
+        // Read csv file to string
+        var files = csvFile.files;
+        if (files.length === 0) {
+            console.log('No file is selected');
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            csvContent = event.target.result;
+        };
+        reader.readAsText(files[0]);
+    }
 }
 
 // Disabling form submissions if there are invalid fields

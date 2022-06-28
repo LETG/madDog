@@ -45,7 +45,7 @@
           <div class="row mb-4">
             <div class="mb-3">
               <label for="" class="form-label">Sélectionner un type de suivi :</label>
-              <select id="selectSuivi" class="form-select" onchange="showDivProfil(this)" required>
+              <select id="measureType" class="form-select" onchange="showDivProfil(this)" required>
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un type de suivi</div>
@@ -55,14 +55,14 @@
           <div class="row mb-4">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Sélectionner un site d'étude :</label>
-              <select id="selectSite" class="form-select" required>
+              <select id="codeSite" class="form-select" required>
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
             </div>
             <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
               <label for="" class="form-label">Sélectionner un profil de plage :</label>
-              <select id="selectProfil" class="form-select" required>
+              <select id="numProfil" class="form-select" required>
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un profil de plage</div>
@@ -72,14 +72,14 @@
           <div class="row">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Sélectionner un opérateur :</label>
-              <select id="selectOper" class="form-select" required>
+              <select id="idOperator" class="form-select" required>
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un opérateur</div>
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Sélectionner un équipement de relevé :</label>
-              <select id="selectEquip" class="form-select" required>
+              <select id="idEquipement" class="form-select" required>
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un équipement</div>
@@ -88,14 +88,14 @@
           <div class="row mb-4">
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Sélectionner une projection :</label>
-              <select id="selectProj" class="form-select" required>
+              <select id="epsg" class="form-select" required>
                 <option selected>EPSG:2154</option>
               </select>
             </div>
             <div class="mb-3 col-md-6">
               <label for="" class="form-label">Sélectionner une date :</label>
               <div class="input-group date" id="datepicker">
-                <input id="startDate" class="form-control" type="date" required />
+                <input id="surveyDate" class="form-control" type="date" required />
                 <span id="startDateSelected"></span>
                 <div class="invalid-feedback">Veuillez sélectionner une date</div>
               </div>
@@ -105,7 +105,7 @@
           <div class="row mb-4">
             <div class="mb-1">
               <label for="formFile" class="form-label">Sélectionner le fichier à importer :</label>
-              <input class="form-control" type="file" id="formFile" onchange="return validationFormat()" required>
+              <input class="form-control" type="file" id="csvContent" onchange="return validationFormat()" required>
               <div class="invalid-feedback">Veuillez sélectionner un fichier .csv</div>
             </div>
             <p class="fs-7">
@@ -117,7 +117,7 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn" onclick="resetForm()">
                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser </button>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" onclick="importDataWPS()">
                 <i class="bi bi-box-arrow-up"></i> Télécharger </button>
             </div>
           </div>
@@ -136,7 +136,10 @@
         </div>
       </div>
     </main>
+    <script src="lib/jquery-3.6.0.min.js"></script>
     <script src="lib/bootstrap.bundle.min.js"></script>
+    <script src="lib/wps-js-all.min.js"></script>
     <script src="js/form.js"></script>
+    <script src="js/wps-form.js"></script>
   </body>
 </html>

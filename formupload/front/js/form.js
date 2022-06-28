@@ -3,31 +3,31 @@ const config = [{
     url: "https://gis.jdev.fr/maddogapi/measure_type",
     idField: "id_measure_type",
     field: "type_measure",
-    idSelect: "selectSuivi"
+    idSelect: "measureType"
 },
 {
     url: "https://gis.jdev.fr/maddogapi/site",
     idField: "id_site",
     field: "name_site",
-    idSelect: "selectSite"
+    idSelect: "codeSite"
 },
 {
     url: "https://gis.jdev.fr/maddogapi/profil",
     idField: "",
     field: "",
-    idSelect: "selectProfil"
+    idSelect: "numProfil"
 },
 {
     url: "https://gis.jdev.fr/maddogapi/operator",
     idField: "id_operator",
     field: "type_operator",
-    idSelect: "selectOper"
+    idSelect: "idOperator"
 },
 {
     url: "https://gis.jdev.fr/maddogapi/equipment",
     idField: "id_equipment",
     field: "name_equipment",
-    idSelect: "selectEquip"
+    idSelect: "idEquipement"
 }
 ]
 
@@ -94,7 +94,7 @@ alertPlaceholder.append(wrapper)
 }
 
 function validationFormat() {
-var fichier = document.getElementById('formFile');
+var fichier = document.getElementById('csvContent');
 var valeur = fichier.value;
 var extensions = /(\.csv)$/i;
 if (!extensions.exec(valeur)) {

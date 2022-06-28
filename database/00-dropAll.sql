@@ -1,7 +1,7 @@
 -- materialized vue used to filter communes
 DROP MATERIALIZED VIEW IF EXISTS communewithsite;
 DROP MATERIALIZED VIEW IF EXISTS sitebuffer;
-DROP MATERIALIZED VIEW IF EXISTS sitesurveydate;
+DROP MATERIALIZED VIEW IF EXISTS sitemntdate;
 
 -- imported communes information via json
 DROP TABLE IF EXISTS communes;

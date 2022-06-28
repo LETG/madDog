@@ -84,7 +84,11 @@ if test -f "${fileNameWithoutExt}.meta"; then
     idSurvey=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO survey (date_survey, id_measure_type_survey, id_site) VALUES ('$dateSurvey', '$idMeasureType', '$idSite') RETURNING id_survey;"`
     echo "--idSurvey :  $idSurvey"
 
-    # Measure Solution 1 too slow
+    # Add profil
+    `PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO profil (id_survey, id_measure_type_survey, num_profil) VALUES ('$idSurvey', '$idMeasureType', '$numProfil');"`
+    echo "--numProfil : $num_profil"
+    
+    # Measure import Solution 1 was too slow
     #echo ">Import file to postgresql in table : $tableMeasure"
     #VRT not working here beacause of additional field need idOperator, idSurvey, idEquipement
     #exec <  $fileName || exit 1
@@ -92,8 +96,6 @@ if test -f "${fileNameWithoutExt}.meta"; then
     #while IFS=\; read id x y z desc dateM; do
     #    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO measure (num_measure, coord_x, coord_y, coord_z, proj_epsg, date_measure, description_measure, id_equipment, id_operator, id_survey) VALUES ('$id', '$x', '$y', '$z', '$epsg', '$dateM', '$desc', '$idEquipment', '$idOperator', '$idSurvey');"
     # done
-
-
     # Measure Solution 2 with vrt by updating csv input
     tmpData=tempDataModel.csv
     echo "add additional information in csv file"
@@ -115,6 +117,8 @@ if test -f "${fileNameWithoutExt}.meta"; then
 
     rm $configuredVrt
     rm $tmpData
+
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "REFRESH MATERIALIZED VIEW sitemntdate;"
 
     echo "-IMPORT DATA MODEL SUCCESS"
 else

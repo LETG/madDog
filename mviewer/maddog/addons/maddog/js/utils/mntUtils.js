@@ -63,7 +63,7 @@ const mntUtils = (function () {
         getDates: () => {
             if (!maddog.idsite) return [];
             // get all dates by idsite
-            fetch(`${maddog.getCfg("config.options.postgrestapi")}/sitesurveydate?code_site=eq.${maddog.idsite}`)
+            fetch(`${maddog.getCfg("config.options.postgrestapi")}/sitemntdate?code_site=eq.${maddog.idsite}`)
                 .then(response => response.text())
                 .then(response => {
                     // clean select list
@@ -71,28 +71,7 @@ const mntUtils = (function () {
                     // dates are already ordered by date type in postgresql view
                     let datesJson = JSON.parse(response)
                     mntUtils.dates = datesJson;
-
-                    // TODO comment this to use dates from API
-                    // =====> comment this
-                    if (maddog.idsite === "BOUTRO") {
-                        mntUtils.dates = [
-                            { date_survey: "2007-03-07" },
-                            { date_survey: "2007-02-16" },
-                            { date_survey: "2007-02-05" },
-                            { date_survey: "2006-12-20" },
-                            { date_survey: "2006-12-08" },
-                            { date_survey: "2006-11-28" },
-                        ];
-                    }
-                    if (maddog.idsite === "VOUGOT") {
-                        mntUtils.dates = [
-                            { date_survey: "2017-08-25" },
-                            { date_survey: "2005-07-01" },                            
-                        ];
-                    }
-                    datesJson = mntUtils.dates;
-                    // <=============== END COMMENT
-                    
+                   
                     // add dates to list
                     $('#dateMnt').append(
                         datesJson.map((date, i) => {

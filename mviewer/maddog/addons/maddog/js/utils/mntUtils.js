@@ -35,9 +35,6 @@ const mntUtils = (function () {
             mviewer.getLayer("mnt").layer.setVisible(true);
             mntSrc().refresh();
             mntUtils.onBaseLayerChange();
-            mviewer.getMap().addEventListener("moveend", () => {
-                mntUtils.syncMapView();
-            })
         },
         /**
          * To reset MNT
@@ -166,13 +163,9 @@ const mntUtils = (function () {
                     source: new ol.source.OSM()
                   })
                 ],
-                view: new ol.View({
-                  center: mviewer.getMap().getView().getCenter(),
-                  zoom: mviewer.getMap().getView().getZoom()
-                })
+                view: mviewer.getMap().getView()
             });
             mntUtils.syncBaseLayer()
-            mntUtils.syncMapView();
         },
         onBaseLayerChange: (e) => {
             document.getElementById("basemapslist")
@@ -203,14 +196,6 @@ const mntUtils = (function () {
             });
             mntUtils.map.addLayer(activeBL)
         },
-        syncMapView: () => {
-            if (!mntUtils.map || !mntUtils.syncMap) return;
-            const center = mviewer.getMap().getView().getCenter();
-            const zoom = mviewer.getMap().getView().getZoom();
-            mntUtils.map.getView().setZoom(zoom);
-            mntUtils.map.getView().setCenter(center)
-        },
         map: null,
-        syncMap: true
     }
 })()

@@ -206,6 +206,47 @@ const wps = (function () {
             // EXECUTE WPS with 42North lib
             wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
         },
+        /**
+         * MNT Raster Compare WPS.
+         * - Config object is define in maddog.js.
+         * Execute a callback pass from maddog.js file.
+         * @param {Object} compareMNT an object wich contain every WPS params
+         * @returns nothing
+         */
+         compareRasterMNT: ({
+            callback = () => {},
+            wpsService = null,
+            processIdentifier = "mnt:compareMNT",
+            executionMode = "async",
+            lineage = false,
+            codeSite = "",
+            initDate = "",
+            dateToCompare = ""
+        }) => {
+            document.dispatchEvent(wps.startEvent);
+            if (!wpsService || _.isEmpty(codeSite) || _.isEmpty(mnt2)) return {};
+            let inputGenerator = new InputGenerator();
+            // INPUTS
+            let inputs = Object.values({
+                interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("codeSite", null, null, codeSite),
+                useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("initDate", null, null, initDate),
+                minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare)
+            });
+            // OUTPUTS
+            var outputGenerator = new OutputGenerator();
+            var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
+                "rasterResult",
+                "application/json",
+                null,
+                null,
+                null,
+                false,
+                null,
+                null);
+            var outputs = [complexOutput];
+            // EXECUTE WPS with 42North lib
+            wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
+        },
         startEvent: new Event("start-wps"),
         stopEvent: new Event("stop-wps")
     }

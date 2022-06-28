@@ -22,6 +22,8 @@ const mntUtils = (function () {
         mntSrc().updateParams({ ...mntSrc().getParams(), ...newParams });
         mntSrc().refresh();
     };
+
+    const getBaseLayerById = (map, id) => map.getLayers().getArray().filter(i => i.getProperties().blid === id)
     // PUBLIC
     return {
         // dates from postgREST table
@@ -32,6 +34,10 @@ const mntUtils = (function () {
             mntUtils.siteChange();
             mviewer.getLayer("mnt").layer.setVisible(true);
             mntSrc().refresh();
+            mntUtils.onBaseLayerChange();
+            mviewer.getMap().addEventListener("moveend", () => {
+                mntUtils.syncMapView();
+            })
         },
         /**
          * To reset MNT
@@ -41,12 +47,14 @@ const mntUtils = (function () {
             const params = mntSrc().getParams();
             delete params["CQL_FILTER"];
             delete params["TIME"];
+            mntUtils.removeMap();
             mntUtils.getDates();
         },
         /**
          * On close MNT panel
          */
         onClose: () => {
+            mntUtils.removeMap();
             mviewer.getLayer("mnt").layer.setVisible(false);
             mntSrc().refresh();
         },
@@ -86,7 +94,7 @@ const mntUtils = (function () {
                         ];
                     }
                     datesJson = mntUtils.dates;
-                    // <=============== END TO COMMENT
+                    // <=============== END COMMENT
                     
                     // add dates to list
                     $('#dateMnt').append(
@@ -95,7 +103,7 @@ const mntUtils = (function () {
                             if (i < 1) {
                                 mntUtils.date = date.date_survey;
                             }
-                            return `<option value="${date.date_survey}" ${i === 0 ? "selected" : ""}>${dateText}</option>`
+                            return `<option value="${date.date_survey.replace("-","")}" ${i === 0 ? "selected" : ""}>${dateText}</option>`
                         })
                         .join("")
                     );
@@ -140,6 +148,69 @@ const mntUtils = (function () {
             // change custom layer params to add CQL
             if (!maddog.idsite) return;
             mntUtils.updateLayer();
-        }
+        },
+        addMap: () => {
+            // change height to 50% id="map"
+            // add second div with bottom 0
+            mntUtils.removeMap();
+            const newMap = document.createElement('div');
+            newMap.id = "mntMap";
+            newMap.classList.add("map")
+            map.appendChild(newMap);
+            map.style = "height:50%";
+            // create ol map
+            mntUtils.map = new ol.Map({
+                target: 'mntMap',
+                layers: [
+                  new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                  })
+                ],
+                view: new ol.View({
+                  center: mviewer.getMap().getView().getCenter(),
+                  zoom: mviewer.getMap().getView().getZoom()
+                })
+            });
+            mntUtils.syncBaseLayer()
+            mntUtils.syncMapView();
+        },
+        onBaseLayerChange: (e) => {
+            document.getElementById("basemapslist")
+                .addEventListener(
+                    "click",
+                    (e) => mntUtils.syncBaseLayer()
+                )
+        },
+        removeMap: () => {
+            if (document.getElementById("mntMap")) {
+                mntMap.remove();
+                mntUtils.map = null;
+            }
+            map.style = "height:100%";
+        },
+        
+        syncBaseLayer: () => {
+            if (!mntUtils.map) {
+                return;
+            }
+            // get all baseLayers from initial mv map
+            mntUtils.map.getLayers().getArray().forEach(e => mntUtils.map.removeLayer(e))
+            const BL = mviewer.getMap().getLayers().getArray().filter(i => i.getProperties().blid === mviewer.getActiveBaseLayer())[0].getSource();
+            const activeBL = new ol.layer.Tile({
+                visible: true,
+                source: BL,
+                blid: mviewer.getActiveBaseLayer()
+            });
+            mntUtils.map.addLayer(activeBL)
+        },
+        syncMapView: () => {
+            if (!mntUtils.map || !mntUtils.syncMap) return;
+            const center = mviewer.getMap().getView().getCenter();
+            const zoom = mviewer.getMap().getView().getZoom();
+            mntUtils.map.getView().setZoom(zoom);
+            mntUtils.map.getView().setCenter(center)
+        },
+        map: null,
+        syncMap: true
     }
 })()

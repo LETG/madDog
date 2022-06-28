@@ -216,7 +216,7 @@ const wps = (function () {
          compareRasterMNT: ({
             callback = () => {},
             wpsService = null,
-            processIdentifier = "mnt:compareMNT",
+            processIdentifier = "mnt:compareRasterMNT",
             executionMode = "async",
             lineage = false,
             codeSite = "",
@@ -224,13 +224,13 @@ const wps = (function () {
             dateToCompare = ""
         }) => {
             document.dispatchEvent(wps.startEvent);
-            if (!wpsService || _.isEmpty(codeSite) || _.isEmpty(mnt2)) return {};
+            if (!wpsService || !initDate || !dateToCompare) return {};
             let inputGenerator = new InputGenerator();
             // INPUTS
             let inputs = Object.values({
-                interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("codeSite", null, null, codeSite),
-                useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("initDate", null, null, initDate),
-                minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare)
+                codeSite: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("codeSite", null, null, codeSite || maddog.idsite),
+                initDate: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("initDate", null, null, initDate),
+                dateToCompare: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare)
             });
             // OUTPUTS
             var outputGenerator = new OutputGenerator();

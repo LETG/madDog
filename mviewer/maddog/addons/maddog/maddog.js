@@ -202,6 +202,17 @@ const maddog = (function() {
                         prfUtils.prfBilanSedChart();
                     }
                 }, "beachProfileTrackingConfig");
+                // 
+                maddog.setConfig({
+                    wpsService: wpsService,
+                    callback: () => {
+                        mntUtils.addMap();
+                    },
+                    codeSite: maddog.idSite,
+                    processIdentifier: "mnt:compareRasterMNT",
+                    initDate: "20170825",
+                    dateToCompare: "20050701"
+                }, "compareRasterMNTConfig")
             });
         },
         /**
@@ -218,6 +229,7 @@ const maddog = (function() {
                 ...param
             };
         },
+        idsite: "",
         drawRadialConfig: {},
         coastLinesTrackingConfig: {},
         compareRasterMNTConfig: {},

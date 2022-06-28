@@ -69,3 +69,8 @@
     left: 0px;
     top: 5px;
 }
+
+#mntMap {
+  height: 100%;
+  width: 100%;
+}

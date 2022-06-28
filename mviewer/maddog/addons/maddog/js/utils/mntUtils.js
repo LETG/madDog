@@ -155,6 +155,7 @@ const mntUtils = (function () {
             newMap.classList.add("map")
             map.appendChild(newMap);
             map.style = "height:50%";
+            mviewer.getMap().updateSize();
             // create ol map
             mntUtils.map = new ol.Map({
                 target: 'mntMap',
@@ -165,7 +166,7 @@ const mntUtils = (function () {
                 ],
                 view: mviewer.getMap().getView()
             });
-            mntUtils.syncBaseLayer()
+            mntUtils.syncBaseLayer();
         },
         onBaseLayerChange: (e) => {
             document.getElementById("basemapslist")
@@ -180,6 +181,7 @@ const mntUtils = (function () {
                 mntUtils.map = null;
             }
             map.style = "height:100%";
+            mviewer.getMap().updateSize();
         },
         
         syncBaseLayer: () => {

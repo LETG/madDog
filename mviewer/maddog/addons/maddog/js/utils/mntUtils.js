@@ -28,6 +28,7 @@
 
     const vectorLayerId = "mntCompareLayer";
 
+     // COLOR CLASS FOR RESULT COMPARE MNT LAYER
     const getDiffColor = (n) => [{
             "color": "#30123b",
             condition: () => n <= -5,
@@ -102,6 +103,10 @@
             }),
         });
     };
+     /**
+      * Create compare vector layer
+      * @returns ol.layer.vector
+      */
     const createCompareLayer = () => new ol.layer.Vector({
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON()
@@ -217,6 +222,9 @@
             if (!maddog.idsite) return;
             mntUtils.updateLayer();
         },
+        /**
+         * Create and add second map to display compare result
+         */
         addMap: () => {
             // change height to 50% id="map"
             // add second div with bottom 0
@@ -239,6 +247,10 @@
             });
             mntUtils.syncBaseLayer();
         },
+        /**
+         * Trigger when user change initial mviewer map base layer
+         * @param {*} e event 
+         */
         onBaseLayerChange: (e) => {
             document.getElementById("basemapslist")
                 .addEventListener(
@@ -246,6 +258,9 @@
                     (e) => mntUtils.syncBaseLayer()
                 )
         },
+        /**
+         * To delete second MNT map
+         */
         removeMap: () => {
             if (document.getElementById("mntMap")) {
                 mntMap.remove();
@@ -254,7 +269,10 @@
             map.style = "height:100%";
             mviewer.getMap().updateSize();
         },
-
+        /**
+         * Will catch original mviewer base layer and add it to the second result MNT map
+         * @returns nothing
+         */
         syncBaseLayer: () => {
             if (!mntUtils.map) {
                 return;
@@ -270,7 +288,12 @@
             mntUtils.map.addLayer(activeBL)
             mntUtils.map.addLayer(createCompareLayer());
         },
+        // second MNT map
         map: null,
+        /**
+         * Trigger when use change MNT WPS advanced params
+         * @param {*} e event callback
+         */
         onParamChange: (e) => {
             maddog.setConfig({
                 [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
@@ -326,6 +349,9 @@
 
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
+        /**
+         * To display or hide alert message
+         */
         manageError: () => {
             const datesSelected = $('#mntMultiselect option:selected').length;
             const displayError = datesSelected !== 2;
@@ -334,6 +360,9 @@
             panelMNTParam.hidden = displayError;
             alertMntParams.hidden = !displayError;
         },
+        /**
+         * Trigger when user change dates into multiselect list
+         */
         changeDates: () => {
             let datesSelected = $('#mntMultiselect option:selected');
             const initDate = datesSelected[0] ? moment(datesSelected[0].value, "YYYY-MM-DD").format("YYYYMMDD") : null;
@@ -345,6 +374,10 @@
             }, "compareRasterMNTConfig");
             mntUtils.updateLayer();
         },
+        /**
+         * Trigger when user click on select or unselect all button
+         * @param {string} action 
+         */
         multiSelectBtn: (action) => {
             $("#mntMultiselect").multiselect(action, false);
             mntUtils.changeDates();
@@ -370,11 +403,21 @@
             // add layer to map
             mntUtils.map.addLayer(layer);
         },
+        /**
+         * Callback on WPS response
+         * @param {*} response object from WPS
+         */
         onWpsSuccess: (response) => {
             mntUtils.features = response?.responseDocument;
+            // create second map
             mntUtils.addMap();
+            // add result to second map
             mntUtils.addToCompareLayer();
         },
+        /**
+         * Will change the legend panel
+         * @param {string} content 
+         */
         changeLegend: (content) => {
             panelDrag?.display();
             panelDrag?.clean();
@@ -382,6 +425,10 @@
                 panelDrag?.change(content)
             };
         },
+        /**
+         * will update legend according to second resolution
+         * @param {*} event 
+         */
         syncLegend: (event) => {
             if (MNT_WPS.hidden) {
                 panelDrag.hidden();

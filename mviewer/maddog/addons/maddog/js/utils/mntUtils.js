@@ -156,7 +156,10 @@
         getDates: () => {
             if (!maddog.idsite) return [];
             // get all dates by idsite
-            fetch(`${maddog.getCfg("config.options.postgrestapi")}/sitemntdate?code_site=eq.${maddog.idsite}`)
+            const postgrestAPI = maddog.getCfg("config.options.postgrestapi");
+            const table = maddog.getCfg("config.options.mntApi.table");
+            const field = maddog.getCfg("config.options.mntApi.field");
+            fetch(`${postgrestAPI}/${table}?${field}=eq.${maddog.idsite}`)
                 .then(response => response.text())
                 .then(response => { // dates are already ordered by date type in postgresql view
                     let datesJson = JSON.parse(response);

@@ -56,7 +56,7 @@ Voici les paramètres du fichiers `/addons/maddog/config.json` à utiliser dans 
 | postgrestapi                  | <string> URL de l'API postgREST à utiliser.                                                                                                                      |
 | mntApi                  | <string> Ensemble de paramètres pour la récupération des dates par MNT via postgREST                                                                                                                     |
 | mntApi.table                  | <string> Nom de la vue ou table pour récupérer les dates à utiliser.                                                                                                                      |
-| mntApi.field                  | <string> Nom du champ contenant les dates à utiliser.                                                                                                                      |
+| mntApi.field                  | <string> Nom du champ contenant les codes sites                                                                                                                      |
 | searchLimit                   | Nombre de résultats à retourner lors de l'utilisation de l'autocompletion                                                                                        |
 | wps                           | Paramètres globaux pour utiliser les WPS                                                                                                                         |
 | wps.url                       | <string> URL du GeoServer cible contenant TOUS les WPS                                                                                                           |

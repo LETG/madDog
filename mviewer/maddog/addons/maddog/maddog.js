@@ -205,9 +205,7 @@ const maddog = (function() {
                 // 
                 maddog.setConfig({
                     wpsService: wpsService,
-                    callback: () => {
-                        mntUtils.addMap();
-                    },
+                    callback: mntUtils.onWpsSuccess,
                     codeSite: maddog.idSite,
                     processIdentifier: "mnt:compareRasterMNT",
                     initDate: null,

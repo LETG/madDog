@@ -23,7 +23,90 @@ const mntUtils = (function () {
         mntSrc().refresh();
     };
 
-    const getBaseLayerById = (map, id) => map.getLayers().getArray().filter(i => i.getProperties().blid === id)
+    const vectorLayerId = "mntCompareLayer";
+
+    const getDiffColor = (n) =>  [
+        {
+          "color": "#30123b",
+          condition: () => n <= -5,
+          "label": "5.0000"
+        },
+        {
+          "color": "#455bcd",
+          condition: () => n <= -4,
+          "label": "4.0000"
+        },
+        {
+          "color": "#3e9cfe",
+          condition: () => n <= -3,
+          "label": "3.0000"
+        },
+        {
+          "color": "#18d7cb",
+          condition: () => n <= -2,
+          "label": "2.0000"
+        },
+        {
+          "color": "#48f882",
+          condition: () => n <= -1,
+          "label": "1.0000"
+        },
+        {
+          "color": "#a4fc3c",
+          condition: () => n <= 0,
+          "label": "0.0000"
+        },
+        {
+          "color": "#e2dc38",
+          condition: () => n <= 1,
+          "label": "1.0000"
+        },
+        {
+          "color": "#fea331",
+          condition: () => n <= 2,
+          "label": "2.0000"
+        },
+        {
+          "color": "#ef5911",
+          condition: () => n <= 3,
+          "label": "3.0000"
+        },
+        {
+          "color": "#c22403",
+          condition: () => n <= 4,
+          "label": "4.0000"
+        },
+        {
+          "color": "#7a0403",
+          condition: () => n <= 5,
+          "label": "5.0000"
+        }
+      ].filter((e) => e.condition())[0];
+
+    const pointStyle = (feature) => {
+        let color = getDiffColor(feature.getProperties()?.elevationDiff);
+
+        return new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 5,
+                stroke: new ol.style.Stroke({
+                    color: "white",
+                    width: 2
+                }),
+                fill: new ol.style.Fill({
+                    color: color.color,
+                    width: 2
+                }),
+            }),
+        });
+    };
+    const createCompareLayer = () => new ol.layer.Vector({
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON()
+        }),
+        id: vectorLayerId,
+        style: pointStyle
+    });
     // PUBLIC
     return {
         // dates from postgREST table
@@ -125,11 +208,7 @@ const mntUtils = (function () {
             // create ol map
             mntUtils.map = new ol.Map({
                 target: 'mntMap',
-                layers: [
-                  new ol.layer.Tile({
-                    source: new ol.source.OSM()
-                  })
-                ],
+                layers: [],
                 view: mviewer.getMap().getView()
             });
             mntUtils.syncBaseLayer();
@@ -163,6 +242,7 @@ const mntUtils = (function () {
                 blid: mviewer.getActiveBaseLayer()
             });
             mntUtils.map.addLayer(activeBL)
+            mntUtils.map.addLayer(createCompareLayer());
         },
         map: null,
         onParamChange: (e) => {
@@ -229,19 +309,43 @@ const mntUtils = (function () {
         },
         changeDates: () => {
             let datesSelected = $('#mntMultiselect option:selected');
-            if (!datesSelected.length) {
-                datesSelected = [null, null];
-            };
+            const initDate = datesSelected[0] ? moment(datesSelected[0].value, "YYYY-MM-DD").format("YYYYMMDD") : null;
+            mntUtils.date = datesSelected[0].value;
+            $("#mntMultiselect").multiselect("updateButtonText")
             maddog.setConfig({
-                initDate: moment(datesSelected[0].value, "YYYY-MM-DD").format("YYYYMMDD"),
-                dateToCompare: datesSelected[1] ? moment(datesSelected[1].value, "YYYY-MM-DD").format("YYYYMMDD") : null
+                initDate: initDate,
+                dateToCompare: datesSelected[1] ? moment(datesSelected[1]?.value, "YYYY-MM-DD").format("YYYYMMDD") : null
             }, "compareRasterMNTConfig");
             mntUtils.updateLayer();
         },
         multiSelectBtn: (action) => {
             $("#mntMultiselect").multiselect(action, false);
-            mntMultiselect.changeDates();
+            mntUtils.changeDates();
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+        },
+        addToCompareLayer: () => {
+            // remove layer if exist
+            mntUtils.map.getLayers().getArray()
+                .filter(lyr => lyr.getProperties().id === vectorLayerId)
+                .forEach(el => mntUtils.map.removeLayer(el));
+            if (!mntUtils.features) return;
+            // create layer and add points
+            const layer = createCompareLayer();
+            let features = new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:2154'
+            }).readFeatures(mntUtils.features, {
+                dataProjection: 'EPSG:2154',
+                featureProjection: 'EPSG:3857'
+            });
+            features.forEach(f => f.setStyle(pointStyle(f)));
+            layer.getSource().addFeatures(features);
+            // add layer to map
+            mntUtils.map.addLayer(layer);
+        },
+        onWpsSuccess: (response) => {
+            mntUtils.features = response?.responseDocument;
+            mntUtils.addMap();
+            mntUtils.addToCompareLayer();
         }
     }
 })()

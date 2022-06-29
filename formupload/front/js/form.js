@@ -85,13 +85,17 @@ selectMeasure.addEventListener('change', (event) => {
                 var codeSite = event.target.value;
                 let responseSite = await fetch(url + "/maddogapi/site");
                 let jsonSite = await responseSite.json();
+                // Filter site by code site
                 var filtered_jsonSite = find_in_object(JSON.parse(JSON.stringify(jsonSite)), {code_site: codeSite});
                 var idSite = filtered_jsonSite[0].id_site;
                 // Get Profils for selected site
                 let responsePRF = await fetch(url + "/maddogapi/sitemeasureprofil");
                 let jsonPRF = await responsePRF.json();
+                // Filter profiles by site id
                 var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
+                // Filter profiles by the type of measurement
                 var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '2'});
+                // Display option if not profil
                 if (!$.isArray(PRF) ||  !PRF.length){                    
                     optionsGenerator('', "Aucun profil n'est disponible pour le site sélectionné", 'numProfil');
                 } else {

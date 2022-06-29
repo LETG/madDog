@@ -1,7 +1,7 @@
 /**
  * This file is usefull to manage MNT panels interaction and MNT WMS layer.
  */
-const mntUtils = (function () {
+ const mntUtils = (function() {
     // PRIVATE
     // This allow to display a browser console message when this file is correctly loaded
     const eventName = "mntUtils-componentLoaded";
@@ -19,69 +19,71 @@ const mntUtils = (function () {
      * @param {any} newParams 
      */
     const changeSourceParams = (newParams) => {
-        mntSrc().updateParams({ ...mntSrc().getParams(), ...newParams });
+        mntSrc().updateParams({
+            ...mntSrc().getParams(),
+            ...newParams
+        });
         mntSrc().refresh();
     };
 
     const vectorLayerId = "mntCompareLayer";
 
-    const getDiffColor = (n) =>  [
-        {
-          "color": "#30123b",
-          condition: () => n <= -5,
-          "label": "5.0000"
+    const getDiffColor = (n) => [{
+            "color": "#30123b",
+            condition: () => n <= -5,
+            "label": "5.0000"
         },
         {
-          "color": "#455bcd",
-          condition: () => n <= -4,
-          "label": "4.0000"
+            "color": "#455bcd",
+            condition: () => n <= -4,
+            "label": "4.0000"
         },
         {
-          "color": "#3e9cfe",
-          condition: () => n <= -3,
-          "label": "3.0000"
+            "color": "#3e9cfe",
+            condition: () => n <= -3,
+            "label": "3.0000"
         },
         {
-          "color": "#18d7cb",
-          condition: () => n <= -2,
-          "label": "2.0000"
+            "color": "#18d7cb",
+            condition: () => n <= -2,
+            "label": "2.0000"
         },
         {
-          "color": "#48f882",
-          condition: () => n <= -1,
-          "label": "1.0000"
+            "color": "#48f882",
+            condition: () => n <= -1,
+            "label": "1.0000"
         },
         {
-          "color": "#a4fc3c",
-          condition: () => n <= 0,
-          "label": "0.0000"
+            "color": "#a4fc3c",
+            condition: () => n <= 0,
+            "label": "0.0000"
         },
         {
-          "color": "#e2dc38",
-          condition: () => n <= 1,
-          "label": "1.0000"
+            "color": "#e2dc38",
+            condition: () => n <= 1,
+            "label": "1.0000"
         },
         {
-          "color": "#fea331",
-          condition: () => n <= 2,
-          "label": "2.0000"
+            "color": "#fea331",
+            condition: () => n <= 2,
+            "label": "2.0000"
         },
         {
-          "color": "#ef5911",
-          condition: () => n <= 3,
-          "label": "3.0000"
+            "color": "#ef5911",
+            condition: () => n <= 3,
+            "label": "3.0000"
         },
         {
-          "color": "#c22403",
-          condition: () => n <= 4,
-          "label": "4.0000"
+            "color": "#c22403",
+            condition: () => n <= 4,
+            "label": "4.0000"
         },
         {
-          "color": "#7a0403",
-          condition: () => n <= 5,
-          "label": "5.0000"
+            "color": "#7a0403",
+            condition: () => n <= 5,
+            "label": "5.0000"
         }
-      ].filter((e) => e.condition())[0];
+    ].filter((e) => e.condition())[0];
 
     const pointStyle = (feature) => {
         let color = getDiffColor(feature.getProperties()?.elevationDiff);
@@ -136,6 +138,7 @@ const mntUtils = (function () {
             mntUtils.getDates();
             mntToolbar.hidden = true;
             mntUtils.features = null;
+            mntUtils.addToCompareLayer();
         },
         /**
          * On close MNT panel
@@ -155,12 +158,16 @@ const mntUtils = (function () {
             // get all dates by idsite
             fetch(`${maddog.getCfg("config.options.postgrestapi")}/sitemntdate?code_site=eq.${maddog.idsite}`)
                 .then(response => response.text())
-                .then(response => {                    // dates are already ordered by date type in postgresql view
+                .then(response => { // dates are already ordered by date type in postgresql view
                     let datesJson = JSON.parse(response);
-                    // add dates to list
-                    mntUtils.createMntMultiSelect(datesJson);
-                    // update layer with first list value by default
-                    mntUtils.updateLayer();
+                    if (datesJson.length) {
+                        // add dates to list
+                        mntUtils.createMntMultiSelect(datesJson);
+                        // update layer with first list value by default
+                        mntUtils.updateLayer();
+                    }
+                    mntPanel.hidden = !datesJson.length;
+                    mntNoDatesPanel.hidden = datesJson.length > 0;
                 })
         },
         /**
@@ -174,7 +181,7 @@ const mntUtils = (function () {
          */
         dateChange: (d) => {
             mntUtils.date = d?.value;
-            if (!maddog.idsite || ! mntUtils.date) {
+            if (!maddog.idsite || !mntUtils.date) {
                 return mntUtils.mntReset();
             };
             // create CQL - use searchParametersURL API
@@ -188,7 +195,9 @@ const mntUtils = (function () {
                 CQL_FILTER: `location like '%${maddog.idsite}%'`
             });
             if (mntUtils.date) {
-                changeSourceParams({ time:  mntUtils.date });
+                changeSourceParams({
+                    time: mntUtils.date
+                });
             }
         },
         /**
@@ -196,6 +205,8 @@ const mntUtils = (function () {
          * @returns update WMS layer with correct id site or correct date
          */
         siteChange: () => {
+            mntUtils.features = null;
+            mntUtils.addToCompareLayer();
             mntUtils.getDates();
             // change custom layer params to add CQL
             if (!maddog.idsite) return;
@@ -216,9 +227,9 @@ const mntUtils = (function () {
                 target: 'mntMap',
                 layers: [],
                 view: mviewer.getMap().getView(),
-                controls : ol.control.defaults({
-                    attribution : false,
-                    zoom : false,
+                controls: ol.control.defaults({
+                    attribution: false,
+                    zoom: false,
                 }),
             });
             mntUtils.syncBaseLayer();
@@ -238,7 +249,7 @@ const mntUtils = (function () {
             map.style = "height:100%";
             mviewer.getMap().updateSize();
         },
-        
+
         syncBaseLayer: () => {
             if (!mntUtils.map) {
                 return;
@@ -262,8 +273,8 @@ const mntUtils = (function () {
             $("#mntCompareBtn").show();
         },
         /**
-        * Create bootstrap-multiselect for beach profile UI
-        */
+         * Create bootstrap-multiselect for beach profile UI
+         */
         createMntMultiSelect: (dates) => {
             mntToolbar.hidden = false;
             // clean multi select if exists
@@ -334,6 +345,7 @@ const mntUtils = (function () {
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
         addToCompareLayer: () => {
+            if (!mntUtils.map) return;
             // remove layer if exist
             mntUtils.map.getLayers().getArray()
                 .filter(lyr => lyr.getProperties().id === vectorLayerId)
@@ -360,7 +372,7 @@ const mntUtils = (function () {
         changeLegend: (content) => {
             panelDrag?.display();
             panelDrag?.clean();
-            if(content) {
+            if (content) {
                 panelDrag?.change(content)
             };
         },

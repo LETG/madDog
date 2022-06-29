@@ -161,6 +161,7 @@
                 .then(response => { // dates are already ordered by date type in postgresql view
                     let datesJson = JSON.parse(response);
                     if (datesJson.length) {
+                        mntUtils.defaultDate = datesJson[0].date_survey;
                         // add dates to list
                         mntUtils.createMntMultiSelect(datesJson);
                         // update layer with first list value by default
@@ -192,7 +193,8 @@
          */
         updateLayer: () => {
             changeSourceParams({
-                CQL_FILTER: `location like '%${maddog.idsite}%'`
+                CQL_FILTER: `location like '%${maddog.idsite}%'`,
+                time: ""
             });
             if (mntUtils.date) {
                 changeSourceParams({
@@ -316,6 +318,7 @@
             $("#selectorPrf").find(".labelDateLine").each((i, x) => {
                 $(x).find(".dateLine").css("color", dates[i].color);
             });
+            $("#mntMultiselect").multiselect("select", dates[0]?.date_survey);
             $("#mntMultiselect").multiselect("updateButtonText");
 
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
@@ -331,7 +334,7 @@
         changeDates: () => {
             let datesSelected = $('#mntMultiselect option:selected');
             const initDate = datesSelected[0] ? moment(datesSelected[0].value, "YYYY-MM-DD").format("YYYYMMDD") : null;
-            mntUtils.date = datesSelected[0].value;
+            mntUtils.date = datesSelected[0]?.value;
             $("#mntMultiselect").multiselect("updateButtonText")
             maddog.setConfig({
                 initDate: initDate,

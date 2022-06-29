@@ -1,98 +1,130 @@
+// Declare url for api and wps Maddog 
+const url = "https://gis.jdev.fr"
 // Create config
 const config = [{
-    url: "https://gis.jdev.fr/maddogapi/measure_type",
+    url: url + "/maddogapi/measure_type",
     idField: "id_measure_type",
     field: "type_measure",
     idSelect: "measureType"
 },
 {
-    url: "https://gis.jdev.fr/maddogapi/site",
+    url: url + "/maddogapi/site",
     idField: "id_site",
-    field: "name_site",
+    field: "code_site",
+    textfield: "name_site",
     idSelect: "codeSite"
 },
 {
-    // TODO this should be change to be call when display select
-    // add parameter id site and measuretype
-    url: "https://gis.jdev.fr/maddogapi/sitemeasureprofil",
-    idField: "num_profil",
-    field: "num_profil",
-    idSelect: "numProfil"
-},
-{
-    url: "https://gis.jdev.fr/maddogapi/operator",
+    url: url + "/maddogapi/operator",
     idField: "id_operator",
     field: "type_operator",
     idSelect: "idOperator"
 },
 {
-    url: "https://gis.jdev.fr/maddogapi/equipment",
+    url: url + "/maddogapi/equipment",
     idField: "id_equipment",
     field: "name_equipment",
     idSelect: "idEquipement"
 }
 ]
 
-// Intégration des options dans les selects via l'API Maddog 
-// Functions to add option in select
-function optionsGenerator(value, text, select) {
-const elMainSelect = document.getElementById(select);
-const elOption = document.createElement('option');
-elOption.text = value || text;
-elOption.value = value;
-elMainSelect.appendChild(elOption);
+// Function to filter Json by value
+function find_in_object(object, my_criteria){
+    return object.filter(function(obj) {
+      return Object.keys(my_criteria).every(function(c) {
+        return obj[c] == my_criteria[c];
+      });
+    });  
 };
 
-function addOptionsSelect(url, field, idField, idSelect) {
+
+// Function to add option in select
+function optionsGenerator(value, text, select) {
+    const elMainSelect = document.getElementById(select);
+    const elOption = document.createElement('option');
+    elOption.text = text;
+    elOption.value = value;
+    elMainSelect.appendChild(elOption);
+};
+
+// Function to add all options in select by API
+function addOptionsSelect(url, field, textfield, idField, idSelect) {
 fetch(url)
     .then(function(response) {
         return response.json()
     })
     .then(function(json) {
         json.forEach(function(feature, index) {
-            // If field as null display id field
-            if (feature[field] !== null && feature[field] !== "") {
-                fieldSelect = feature[field];
-            } else {
-                fieldSelect = feature[idField];
-            }
+            // If field as null display id field            
+            let fieldSelect = feature[field] ? feature[field] : feature[idField];
+            let fieldText = feature[textfield] ? feature[textfield] : fieldSelect;
             // Create select's option for all feature
-            optionsGenerator(fieldSelect, "", idSelect)
+            optionsGenerator(fieldSelect, fieldText, idSelect)
         });
     });
 };
 
 // Add all options for config object
-config.forEach(el => addOptionsSelect(el.url, el.field, el.idField, el.idSelect));
+config.forEach(el => addOptionsSelect(el.url, el.field, el.textfield, el.idField, el.idSelect));
 
 
-// Gestion de l'affichage du select Profil
-function showDivProfil(elem) {
-if (elem.value == 'PRF') {
-    document.getElementById('selectProfilId').style.display = "block";
-} else {
-    document.getElementById('selectProfilId').style.display = "none";
-}
-}
+// Management of the display of the select Profile
+const selectMeasure = document.querySelector('#measureType');
+selectMeasure.addEventListener('change', (event) => {
+    var value = event.target.value;
+    if (value == 'PRF') {        
+        // Integrate the profile numbers according to the selected site
+        const selectSite = document.querySelector('#codeSite');
+        selectSite.addEventListener('change', (event) => { 
+            // Display PRF select
+            document.getElementById('selectProfilId').style.display = "block";
+            // Remove options from select
+            document.getElementById('numProfil').innerHTML = "";
+            const fetchUrl = async () => {
+                // Get ID site with code site
+                var codeSite = event.target.value;
+                let responseSite = await fetch(url + "/maddogapi/site");
+                let jsonSite = await responseSite.json();
+                // Filter site by code site
+                var filtered_jsonSite = find_in_object(JSON.parse(JSON.stringify(jsonSite)), {code_site: codeSite});
+                var idSite = filtered_jsonSite[0].id_site;
+                // Get Profils for selected site
+                let responsePRF = await fetch(url + "/maddogapi/sitemeasureprofil");
+                let jsonPRF = await responsePRF.json();
+                // Filter profiles by site id
+                var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
+                // Filter profiles by the type of measurement
+                var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '2'});
+                // Display option if not profil
+                if (!$.isArray(PRF) ||  !PRF.length){                    
+                    optionsGenerator('', "Aucun profil n'est disponible pour le site sélectionné", 'numProfil');
+                } else {
+                    PRF.forEach(el => optionsGenerator(el.num_profil, el.num_profil, 'numProfil'));
+                }                
+            }             
+            fetchUrl();
+        });
+    } else {
+        document.getElementById('selectProfilId').style.display = "none";
+    }
+});
 
-
-// Réinitialisation du formulaire 
+// Reset form
 function resetForm() {
-document.getElementById("formSuivi").reset();
+    document.getElementById("formSuivi").reset();
 }
 
-// Test du format du fichier uploader + Alerte
+// Uploader file format test + Alert
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 const alert = (message, type) => {
-const wrapper = document.createElement('div')
-wrapper.innerHTML = [
-    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-    `   <div>${message}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    '</div>'
-].join('')
-
-alertPlaceholder.append(wrapper)
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('')
+    alertPlaceholder.append(wrapper)
 }
 
 function validationFormat() {

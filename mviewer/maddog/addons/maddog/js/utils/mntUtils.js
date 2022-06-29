@@ -118,6 +118,11 @@ const mntUtils = (function () {
             mviewer.getLayer("mnt").layer.setVisible(true);
             mntSrc().refresh();
             mntUtils.onBaseLayerChange();
+            // init legend and sync on view change
+            mntUtils.syncLegend();
+            mviewer.getMap().getView().on('change:resolution', (event) => {
+                mntUtils.syncLegend(event);
+            });
         },
         /**
          * To reset MNT
@@ -130,6 +135,7 @@ const mntUtils = (function () {
             mntUtils.removeMap();
             mntUtils.getDates();
             mntToolbar.hidden = true;
+            mntUtils.features = null;
         },
         /**
          * On close MNT panel
@@ -209,7 +215,11 @@ const mntUtils = (function () {
             mntUtils.map = new ol.Map({
                 target: 'mntMap',
                 layers: [],
-                view: mviewer.getMap().getView()
+                view: mviewer.getMap().getView(),
+                controls : ol.control.defaults({
+                    attribution : false,
+                    zoom : false,
+                }),
             });
             mntUtils.syncBaseLayer();
         },
@@ -346,6 +356,23 @@ const mntUtils = (function () {
             mntUtils.features = response?.responseDocument;
             mntUtils.addMap();
             mntUtils.addToCompareLayer();
+        },
+        changeLegend: (content) => {
+            panelDrag?.display();
+            panelDrag?.clean();
+            if(content) {
+                panelDrag?.change(content)
+            };
+        },
+        syncLegend: (event) => {
+            if (MNT_WPS.hidden) {
+                panelDrag.hidden();
+            } else {
+                const resolution = event ? event.target.getResolution() : null;
+                const src = mviewer.getLayer("mnt").layer.getSource();
+                const graphicUrl = src.getLegendUrl(resolution);
+                mntUtils.changeLegend($(`<div><img src="${graphicUrl}" id="legendMnt"/></div>`));
+            }
         }
     }
 })()

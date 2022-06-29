@@ -28,7 +28,7 @@ La refonte de cette plateforme est réalisée grâce au projet INTERREG AGEO (Pl
 
 ## Fonctionnement MNT
 
-* Fichiers d'entrées
+### Fichiers d'entrées
 
 Un MNT est affiché via un Raster (.TIF) généré à partir d'un fichiers de points (CSV). 
 
@@ -36,7 +36,7 @@ Ces CSV sont localisées dans les répertoires MNT de chaque site (e.g /data/MAD
 
 > Comme prévu, le CSV doit être accompagné d'un fichier .meta pour être correctement calculé et utilisable.
 
-* Interpolation
+### Interpolation
 
 A partir des CSV, Ce TIF est obtenu par interpolation (IDW) via l'outil [gdal_grid](https://gdal.org/programs/gdal_grid.html) de la bibliothèque JAVA GDAL.
 
@@ -50,9 +50,9 @@ Vous trouverez la commande et le script ici :
 
 https://github.com/jdev-org/madDog/blob/main/vrt/vrt2Postgis.sh#L60
 
-En fin de process, les TIF sont disponibles dans le répertoire `/MADDOG/imagemosaic/mnt`.
+En fin de process, les TIF sont disponibles dans le répertoire `/data/MADDOG/imagemosaic/mnt`.
 
-* Imagemosaic
+### Imagemosaic
 
 La fonctionnalité Image mosaic de GeoServer est utilisée pour exploiter tous les MNT (.TIF) au sein d'un seul entrepôt. 
 Avec ce système, il devient possible d'iinterroger un flux WMS par date (dimension temporelle) et par localisation (voir [documentation GeoServer](https://docs.geoserver.org/stable/en/user/data/raster/imagemosaic/)) à l'aide d'une requête WMS classique, d'un filtre CQL et du paramètre `TIME` : 
@@ -102,3 +102,38 @@ file:///data/MADDOG/imagemosaic/mnt/
 7. Choisir le style dans l'onglet "Publication"
 
 8. Sauvegarder
+
+### Nettoyer et relancer le calcul des fichiers et des tables
+
+Avec des droits `root` :
+
+1. Nettoyer le répertoire /imagemosaic/mnt
+
+```
+cd /data/MADDOG/imagemosaic/mnt
+rm mnt.*
+rm *.tiff
+rm *.dat
+```
+
+2. Rajouter les fichiers indexer.properties et timeregex.properties si absents
+
+3. Vider le fichier /app/madDog/vrt/lastUpdateDate.lock
+
+```
+>/app/madDog/vrt/lastUpdateDate.lock
+```
+
+4. Génération des tables en base de données
+
+```
+cd /app/madDog/database
+./createdatabase.sh
+```
+
+5. Génération des données et fichiers
+
+```
+cd /app/madDog/vrt
+./integrateData.sh
+```

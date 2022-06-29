@@ -40,13 +40,13 @@ Ces CSV sont localisées dans les répertoires MNT de chaque site (e.g /data/MAD
 
 A partir des CSV, Ce TIF est obtenu par interpolation (IDW) via l'outil [gdal_grid](https://gdal.org/programs/gdal_grid.html) de la bibliothèque JAVA GDAL.
 
-Les CSV sont donc transformer en GeoJSON via un VRT ([voir ce fichier](https://github.com/jdev-org/madDog/tree/main/vrt/MNT)) afin que les champs x, y et z soient correctement exploité par l'outil `gdal_grid` qui nécessite la valeur d'élévation en tant que champ disponible pour l'interpolation.
+Les CSV sont donc transformés en GeoJSON via un VRT ([voir ce fichier](https://github.com/jdev-org/madDog/tree/main/vrt/MNT)) afin que les champs x, y et z soient correctement exploités par l'outil `gdal_grid` car la valeur d'élévation est nécessaire en tant que champ disponible pour l'interpolation.
 
-La configuration est localisée ici : 
+- La configuration est localisée ici : 
 
 https://github.com/jdev-org/madDog/blob/main/vrt/config-sample.sh
 
-Vous trouverez la commande et le script ici : 
+- Vous trouverez la commande d'interpolation GDAL et le script ici : 
 
 https://github.com/jdev-org/madDog/blob/main/vrt/vrt2Postgis.sh#L60
 
@@ -55,7 +55,7 @@ En fin de process, les TIF sont disponibles dans le répertoire `/data/MADDOG/im
 ### Imagemosaic
 
 La fonctionnalité Image mosaic de GeoServer est utilisée pour exploiter tous les MNT (.TIF) au sein d'un seul entrepôt. 
-Avec ce système, il devient possible d'iinterroger un flux WMS par date (dimension temporelle) et par localisation (voir [documentation GeoServer](https://docs.geoserver.org/stable/en/user/data/raster/imagemosaic/)) à l'aide d'une requête WMS classique, d'un filtre CQL et du paramètre `TIME` : 
+Avec ce système, il devient possible d'iinterroger un flux WMS par date (dimension temporelle) et par localisation (voir [documentation GeoServer](https://docs.geoserver.org/stable/en/user/data/raster/imagemosaic/)) à l'aide d'une requête WMS classique (+ filtre CQL + paramètre `TIME`) : 
 
 > &TIME="2017-05-01"&CQL_FILTER=location like '%VOUGOT%'
 
@@ -63,9 +63,12 @@ Avec ce système, il devient possible d'iinterroger un flux WMS par date (dimens
 
 1. les TIF doivent être dans le même répertoire `/imagemosaic/mnt` (vidé au préalable)
 
-2. Une expression régulière doit permettre de récupérer la date dans le nom du TIFF
+2. Une expression régulière doit permettre de récupérer la date dans le nom du TIFF 
 
-La RegEx est localisée dans le fichier timeregex.properties, lui même dit être dans le même répertoire que les TIF (`/imagemosaic/mnt`).
+> Ex: VOUGOT_20020115
+> regex=[0-9]{8}
+
+La RegEx est localisée dans le fichier timeregex.properties, lui même doit être dans le même répertoire que les TIF (`/imagemosaic/mnt`).
 Les noms des TIF doivent avoit la même structure.
 
 3. Le fichier de configuration indexer.properties doit permettre d'indexer tous les fichiers
@@ -78,10 +81,12 @@ GeoServer s'occupera de générer un SHP contenant les informations `location` e
 Le champ `location` est utilisable dans le `CQL_FIlter`.
 Le cahmp `ingestion` est utilisable dans le paramètre `TIME` de l'URL via la dimension temporelle de la couche.
 
+> Il est possible d'utiliser une table à la place du SHP (Voir la documentation pour plus d'infos)
+
 5. Configuration de l'entrepôt imagemosaic
 
 - Paramètre de connexion URL (se termine avec un `/`) :
-file:///data/MADDOG/imagemosaic/mnt/
+`file:///data/MADDOG/imagemosaic/mnt/`
 
 6. Configuration de la couche 
 

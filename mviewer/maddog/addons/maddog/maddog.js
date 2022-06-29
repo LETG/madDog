@@ -210,8 +210,9 @@ const maddog = (function() {
                     },
                     codeSite: maddog.idSite,
                     processIdentifier: "mnt:compareRasterMNT",
-                    initDate: "20170825",
-                    dateToCompare: "20050701"
+                    initDate: null,
+                    dateToCompare: null,
+                    evaluationInterval: 10.0
                 }, "compareRasterMNTConfig")
             });
         },

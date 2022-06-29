@@ -485,14 +485,6 @@ const tdcUtils = (function () {
             tools.multiSelectBtnReset('tdcMultiselect', 'selectAll', tdcUtils)
             tdcUtils.manageError();
         },
-        multiSelectBtnReset: (id, action) => {
-            if (action === "selectAll") {
-                tdcUtils.multiSelectBtn('selectAll');
-            } else {
-                tdcUtils.multiSelectBtn('deselectAll');
-            }
-            $("#" + id).multiselect("updateButtonText");
-        },
         tdcReset: (cleanTdcLayer) => {
             $("#coastlinetrackingBtn").show();
             $("#tdcMultiselect").multiselect("refresh");

@@ -46,6 +46,7 @@ const mntUtils = (function () {
             delete params["TIME"];
             mntUtils.removeMap();
             mntUtils.getDates();
+            mntToolbar.hidden = true;
         },
         /**
          * On close MNT panel
@@ -65,24 +66,10 @@ const mntUtils = (function () {
             // get all dates by idsite
             fetch(`${maddog.getCfg("config.options.postgrestapi")}/sitemntdate?code_site=eq.${maddog.idsite}`)
                 .then(response => response.text())
-                .then(response => {
-                    // clean select list
-                    document.getElementById("dateMnt").innerHTML = "";
-                    // dates are already ordered by date type in postgresql view
-                    let datesJson = JSON.parse(response)
-                    mntUtils.dates = datesJson;
-                   
+                .then(response => {                    // dates are already ordered by date type in postgresql view
+                    let datesJson = JSON.parse(response);
                     // add dates to list
-                    $('#dateMnt').append(
-                        datesJson.map((date, i) => {
-                            const dateText = new Date(moment(date.date_survey, "YYYY-MM-DD")).toLocaleDateString();
-                            if (i < 1) {
-                                mntUtils.date = date.date_survey;
-                            }
-                            return `<option value="${date.date_survey.replace("-","")}" ${i === 0 ? "selected" : ""}>${dateText}</option>`
-                        })
-                        .join("")
-                    );
+                    mntUtils.createMntMultiSelect(datesJson);
                     // update layer with first list value by default
                     mntUtils.updateLayer();
                 })
@@ -178,5 +165,83 @@ const mntUtils = (function () {
             mntUtils.map.addLayer(activeBL)
         },
         map: null,
+        onParamChange: (e) => {
+            maddog.setConfig({
+                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
+            }, "compareRasterMNTConfig");
+            $("#mntCompareBtn").show();
+        },
+        /**
+        * Create bootstrap-multiselect for beach profile UI
+        */
+        createMntMultiSelect: (dates) => {
+            mntToolbar.hidden = false;
+            // clean multi select if exists
+            $(selectorMnt).empty();
+            // create multiselect HTML parent
+            let multiSelectComp = document.createElement("select");
+            multiSelectComp.id = "mntMultiselect";
+            multiSelectComp.setAttribute("multiple", "multiple");
+            selectorMnt.appendChild(multiSelectComp);
+            // create multiselect
+            $("#mntMultiselect").multiselect({
+                enableFiltering: true,
+                filterBehavior: 'value',
+                allSelectedText: 'Tous',
+                nonSelectedText: 'Rechercher une date',
+                templates: {
+                    li: `
+                        <li>
+                            <a class="labelDateLine">
+                                <label style="display:inline;padding-right: 5px;"></label>
+                            </a>
+                        </li>`
+                },
+                onChange: () => {
+                    mntUtils.changeDates();
+                    mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+                },
+            });
+            // create options with multiselect dataprovider
+            let datesOptions = dates.map((d, i) =>
+                ({
+                    label: moment(d.date_survey, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
+                    value: d.date_survey
+                })
+            );
+            // insert options into multiselect
+            $("#mntMultiselect").multiselect('dataprovider', datesOptions);
+            // change picto color according to chart and legend
+            $("#selectorPrf").find(".labelDateLine").each((i, x) => {
+                $(x).find(".dateLine").css("color", dates[i].color);
+            });
+            $("#mntMultiselect").multiselect("updateButtonText");
+
+            mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+        },
+        manageError: () => {
+            const datesSelected = $('#mntMultiselect option:selected').length;
+            const displayError = datesSelected !== 2;
+            // manage trigger wps button
+            mntCompareBtn.disabled = displayError;
+            panelMNTParam.hidden = displayError;
+            alertMntParams.hidden = !displayError;
+        },
+        changeDates: () => {
+            let datesSelected = $('#mntMultiselect option:selected');
+            if (!datesSelected.length) {
+                datesSelected = [null, null];
+            };
+            maddog.setConfig({
+                initDate: moment(datesSelected[0].value, "YYYY-MM-DD").format("YYYYMMDD"),
+                dateToCompare: datesSelected[1] ? moment(datesSelected[1].value, "YYYY-MM-DD").format("YYYYMMDD") : null
+            }, "compareRasterMNTConfig");
+            mntUtils.updateLayer();
+        },
+        multiSelectBtn: (action) => {
+            $("#mntMultiselect").multiselect(action, false);
+            mntMultiselect.changeDates();
+            mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+        }
     }
 })()

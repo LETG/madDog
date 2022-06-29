@@ -160,7 +160,7 @@
                                                 <span data-toggle="tooltip" data-placement="top" title="Fixer l'équidistance entre les radiales de traitement le long de la ligne de référence">
                                                     <i class="fas fa-info-circle"></i></span>
                                             </label>
-                                            <input onchange="tdcUtils.onParamChange(this)" value="50" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
+                                            <input onchange="tdcUtils.onParamChange(this)" value="10" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
@@ -190,7 +190,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                        </div>
                     </div>
                     <div id="tdcTabGraph" class="tab-pane fade">  
                         <!--Insérez ici les résultats-->
@@ -247,9 +247,6 @@
                 <!--Tab-->
                 <div class="tab-content">
                     <div id="ppTabDate" class="tab-pane fade in active">
-                        <!-- <div class="row">
-                            <span class="col-xs-6" id="selectorPrf"></span>
-                        </div> -->
                         <div class="row" id="prfToolbar" hidden>
                             <nav class="navbar navbar-default toolbarMultiselect">
                                 <span class="col-xs-6" id="selectorPrf"></span>
@@ -360,9 +357,51 @@
         <div class="row col-sm-12" id="MNT_WPS" hidden>
             <h3 class="modal-title">Modèle numérique de terrain</h3>
             <p><br>Veuillez choisir une date : <br><br></p>
-            <row>
-                <select onchange="mntUtils.dateChange(this)" style="margin-bottom: 10px;" class="form-control" name="" id="dateMnt"></select>
-            </row>
+            <div class="row">
+                <p class="text-small"><i>
+                    Sélectionner au minimum 2 traits de  côte - <strong>La date la plus ancienne est considérée comme le trait de côte de référence</strong>
+                </i></p>
+                <div class="" id="mntToolbar">
+                    <nav class="navbar navbar-default toolbarMultiselect">
+                        <span class="col-xs-6" id="selectorMnt"></span>
+                        <button  id="mntMultiAllBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('mntMultiselect', 'selectAll', mntUtils)">
+                            Tout sélectionner
+                        </button>
+                        <button  id="mntMultiCleanBtn" type="button" class="navbar-left btn btn-default navbarBtn" onClick="tools.multiSelectBtnReset('mntMultiselect', 'deselectAll', mntUtils)">
+                            Tout désélectionner
+                        </button>
+                    </nav>                            
+                </div>
+                <div class="col-xs-12">
+                    <div id="alertMntParams" class="error alert alert-danger alert-dismissible" role="alert">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        <strong>Attention: </strong> Vous devez choisir 2 dates pour lancer la comparaison !
+                    </div>
+                </div>
+                <div class="col-xs-12" id="panelMNTParam">
+                    <div class="panel-group " id="accordion">
+                    <div class="panel panel-default panelMNT panelParams">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseMNTParam" aria-expanded="false" aria-controls="collapseMNTParam">Paramètres avancés</a>
+                        </h4>
+                        </div>
+                        <div id="collapseMNTParam" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="col-xs-3" style="padding-left: 5px">
+                                    <label for="longParam">
+                                        Résolution (cm)
+                                        <span data-toggle="tooltip" data-placement="top" title="Saisir une valeur pour la résolution de la maille de calcul de différence (en cm)">
+                                        <i class="fas fa-info-circle"></i></span>
+                                </label>
+                                    <input onchange="mntUtils.onParamChange(this)" min="1" value="10" type="number" class="form-control mntParams" id="evaluationInterval" aria-describedby="basic-addon3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
             <nav class="navbar navbar-default toolbarMenu">
                 <div class="container-fluid">
                     <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(MNT_WPS)">

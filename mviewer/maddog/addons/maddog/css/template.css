@@ -414,7 +414,7 @@ a.menu-link {
 
 /** MULTISELECT **/
 
-#selectorTdc .btn-group, #selectorPrf .btn-group  {
+#selectorTdc .btn-group, #selectorPrf .btn-group, #selectorMnt .btn-group  {
 	margin-bottom: 5px;
 	width: 100%;
 }
@@ -424,7 +424,8 @@ a.menu-link {
 }
 
 #selectorTdc .multiselect-container, #selectorTdc .btn-group button, 
-#selectorPrf .multiselect-container, #selectorPrf .btn-group button {
+#selectorPrf .multiselect-container, #selectorPrf .btn-group button,
+#selectorMnt .multiselect-container, #selectorMnt .btn-group button {
 	width: 100%;
 }
 
@@ -542,4 +543,6 @@ a.menu-link {
 }
 
 
-
+#alertMntParams {
+	margin-bottom: 10px;
+}

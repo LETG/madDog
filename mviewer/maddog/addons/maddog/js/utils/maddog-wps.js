@@ -221,7 +221,8 @@ const wps = (function () {
             lineage = false,
             codeSite = "",
             initDate = "",
-            dateToCompare = ""
+            dateToCompare = "",
+            evaluationInterval = 10.0
         }) => {
             document.dispatchEvent(wps.startEvent);
             if (!wpsService || !initDate || !dateToCompare) return {};
@@ -230,7 +231,8 @@ const wps = (function () {
             let inputs = Object.values({
                 codeSite: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("codeSite", null, null, codeSite || maddog.idsite),
                 initDate: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("initDate", null, null, initDate),
-                dateToCompare: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare)
+                dateToCompare: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare),
+                evaluationInterval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("evaluationInterval", null, null, evaluationInterval)
             });
             // OUTPUTS
             var outputGenerator = new OutputGenerator();

@@ -54,6 +54,9 @@ Voici les paramètres du fichiers `/addons/maddog/config.json` à utiliser dans 
 | sites                         | Identique Aux paramètres pour les communes, mais pour les sites.                                                                                                 |
 |                               | Voir l'exemple plus bas pour voir les paramètres possibles.                                                                                                      |
 | postgrestapi                  | <string> URL de l'API postgREST à utiliser.                                                                                                                      |
+| mntApi                  | <string> Ensemble de paramètres pour la récupération des dates par MNT via postgREST                                                                                                                     |
+| mntApi.table                  | <string> Nom de la vue ou table pour récupérer les dates à utiliser.                                                                                                                      |
+| mntApi.field                  | <string> Nom du champ contenant les dates à utiliser.                                                                                                                      |
 | searchLimit                   | Nombre de résultats à retourner lors de l'utilisation de l'autocompletion                                                                                        |
 | wps                           | Paramètres globaux pour utiliser les WPS                                                                                                                         |
 | wps.url                       | <string> URL du GeoServer cible contenant TOUS les WPS                                                                                                           |
@@ -98,6 +101,10 @@ Voici un exemple complet de configuration :
             "label": "namesite"
         },
         "postgrestapi": "https://gis.jdev.fr/maddogapi",
+        "mntApi": {
+            "table": "sitemntdate",
+            "field": "code_site"
+        },
         "searchLimit": 10,
         "wps": {
             "url": "https://gis.jdev.fr/geoserver/ows",

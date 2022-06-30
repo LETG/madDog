@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.geoserver.wps.gs.GeoServerProcess;
@@ -56,28 +57,31 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         @DescribeParameter(name = "csvContent", description = "Data content of the csv file") final String csvContent) {
 
             boolean isSuccess = false;
-            StringBuffer finalDataType = new StringBuffer(measureType);
-            if(numProfil == null || numProfil<1 || numProfil >9){
-                numProfil=1;
-            }
-            finalDataType.append(numProfil);
-           
-            Path folderPath = createMaddogFolder(codeSite, finalDataType.toString());
+
+            if(codeSite.matches("^[A-Z]{6}") && measureType.matches("^[A-Z]{3}") && surveyDate.matches("^[0-9]{8}") && epsg.matches("^[0-9]{4}")){
+                 
+                StringBuffer finalDataType = new StringBuffer(measureType);
+                if(numProfil == null || numProfil<1 || numProfil >9){
+                    numProfil=1;
+                }
+                finalDataType.append(numProfil);
             
-            if (folderPath != null){
-                try {
-                    createMetaDataFile(folderPath, codeSite, measureType, numProfil, surveyDate, epsg, idEquipement, idOperator);
+                Path folderPath = createMaddogFolder(codeSite, finalDataType.toString());
+                
+                if (folderPath != null){
+                    try {
+                        createMetaDataFile(folderPath, codeSite, measureType, numProfil, surveyDate, epsg, idEquipement, idOperator);
 
-                    StringBuffer dataFileName = createFileBaseName(folderPath.toString(), measureType, numProfil, codeSite, surveyDate);
-                    dataFileName.append(".csv");
+                        StringBuffer dataFileName = createFileBaseName(folderPath.toString(), measureType, numProfil, codeSite, surveyDate);
+                        dataFileName.append(".csv");
 
-                    uploadCSVContent(dataFileName.toString(), csvContent);
-                    isSuccess = true;
-                } catch (IOException e) {
-                    LOGGER.error("Erreur while writing csv file" + e.getMessage());
-                }  
+                        uploadCSVContent(dataFileName.toString(), csvContent);
+                        isSuccess = true;
+                    } catch (IOException e) {
+                        LOGGER.error("Erreur while writing csv file" + e.getMessage());
+                    }  
+                }
             }
-
             JSONObject result = new JSONObject();
             result.put("succes", isSuccess);
             

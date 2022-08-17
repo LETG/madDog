@@ -112,10 +112,12 @@ selectMeasure.addEventListener('change', (event) => {
 // Reset form
 function resetForm() {
     document.getElementById("formSuivi").reset();
+    document.getElementById("formSuivi").classList.remove('was-validated');
+    document.getElementById('liveAlertPlaceholder').innerHTML = "";
 }
 
 // Uploader file format test + Alert
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 const alert = (message, type) => {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [

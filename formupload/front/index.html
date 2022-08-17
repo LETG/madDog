@@ -6,9 +6,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>MADDOG - Interface de saisie</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap v5.2.0 core CSS -->
     <link href="lib/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="form.css" rel="stylesheet">
@@ -40,7 +39,7 @@
                <h1><i class="bi bi-cloud-upload"></i></h1>
             </div>
          </div>        
-        <form id="formSuivi" class="form needs-validation" novalidate>
+        <form id="formSuivi" class="form needs-validation"  novalidate>
           <h3>Type de suivi</h3>
           <div class="row mb-4">
             <div class="mb-3">
@@ -117,7 +116,7 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn" onclick="resetForm()">
                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser </button>
-              <button type="submit" class="btn btn-primary" onclick="importDataWPS()">
+              <button type="submit" class="btn btn-primary" onclick="validateForm()">
                 <i class="bi bi-box-arrow-up"></i> Télécharger </button>
             </div>
           </div>

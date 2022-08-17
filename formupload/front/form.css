@@ -99,3 +99,10 @@ option {
    text-align: end;
    color: #f44336;
 }
+
+/* Alert */
+
+#liveAlertPlaceholder .alert {
+   background-color: #7593be87;
+   color: var(--mycolor);
+}

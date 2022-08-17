@@ -7,6 +7,7 @@ function getValSelect(selectId){
     return value;
 }
 
+
 // Function to import Maddog Data with wps
 function importDataWPS() {
     ExecuteResponse_v1_xml = ExecuteResponse_v1_xml.extend({
@@ -37,3 +38,36 @@ function importDataWPS() {
         // do on return
     }, "imp:importData", "raw", "async", false, inputs, outputs);
 }
+
+
+
+// Function to validate form and display alert 
+
+function validateForm(){ 
+    if(document.getElementById("measureType").value == "") { 
+      return false;
+    }
+    if(document.getElementById("codeSite").value == "") { 
+        return false;
+    }
+    if(document.getElementById("surveyDate").value == "") { 
+        return false;
+    }
+    if(document.getElementById("epsg").value == "") { 
+        return false;
+    }
+    if(document.getElementById("idEquipement").value == "") { 
+        return false;
+    }
+    if(document.getElementById("idOperator").value == "") { 
+        return false;
+    }
+    if(document.getElementById("csvFile").value == "") { 
+        return false;
+    }
+    else {
+      alert("<b>Les données saisies ont été téléchargées avec succès ! </b></br><i>Pour effectuer une nouvelle saisie, cliquez sur Réinitialiser ou recharger la page.</i>");
+      importDataWPS();
+      return true;      
+    }
+  }

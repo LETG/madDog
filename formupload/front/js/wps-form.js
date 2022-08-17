@@ -66,7 +66,7 @@ function validateForm(){
         return false;
     }
     else {
-      alert("<b>Les données saisies ont été téléchargées avec succès ! </b></br><i>Pour effectuer une nouvelle saisie, cliquez sur Réinitialiser ou recharger la page.</i>");
+      alert("<b>Les données saisies ont été téléchargées avec succès ! </b></br><i>Pour effectuer une nouvelle saisie, cliquez sur Réinitialiser ou recharger la page.</i>", 'primary');
       importDataWPS();
       return true;      
     }

@@ -58,11 +58,23 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
             boolean isSuccess = false;
 
-            if(codeSite.matches("^[A-Z]{6}") && measureType.matches("^[A-Z]{3}") && surveyDate.matches("^[0-9]{8}") && epsg.matches("^[0-9]{4}")){
+            if (LOGGER.isDebugEnabled()){
+                LOGGER.debug("codeSite : " + codeSite);
+                LOGGER.debug("measureType : " + measureType);
+                LOGGER.debug("numProfil : " +  numProfil);
+                LOGGER.debug("surveyDate : " +  surveyDate);
+                LOGGER.debug("epsg : " + epsg);
+                LOGGER.debug("idEquipement : " + idEquipement);
+                LOGGER.debug("idOperator : " + idOperator);
+                LOGGER.debug("csvContent : " + csvContent); 
+            }
+            
+            if(codeSite.matches("^[A-Z]{6}") && measureType.matches("^[A-Z]{3}") && surveyDate.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}") && epsg.matches("^[0-9]{4}")){
                  
                 StringBuffer finalDataType = new StringBuffer(measureType);
                 if(numProfil == null || numProfil<1 || numProfil >9){
                     numProfil=1;
+                    LOGGER.debug("numProfil update to: " +  numProfil);
                 }
                 finalDataType.append(numProfil);
             
@@ -80,7 +92,11 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                     } catch (IOException e) {
                         LOGGER.error("Erreur while writing csv file" + e.getMessage());
                     }  
+                }else{
+                    LOGGER.warn("Error while creating folder");
                 }
+            }else{
+                LOGGER.warn("Error in input parameters");
             }
             JSONObject result = new JSONObject();
             result.put("succes", isSuccess);

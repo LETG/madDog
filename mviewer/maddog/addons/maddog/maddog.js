@@ -16,8 +16,10 @@ const maddog = (function() {
     document.addEventListener("communes-ready", () => {
         let { x, y, z } = API;
         if (!x || !y || !z) {
-            tools.zoomToOGCLayerExtent();   
+            return tools.zoomToOGCLayerExtent();   
         }
+        const thisView = mviewer.getMap().getView();
+        return thisView.setZoom(thisView.getZoom() - 1);
     });
 
     // wait many lib to avoid race condition errors

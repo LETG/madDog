@@ -592,7 +592,8 @@ const prfUtils = (function () {
             // reset config
             let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
             document.getElementById("interval").value = interval;
-            document.getElementById("radialLength").value = useSmallestDistance;
+            console.log(useSmallestDistance);
+            document.getElementById("useSmallestDistance").value = useSmallestDistance;
             document.getElementById("minDist").value = minDist;
             document.getElementById("maxDist").value = maxDist;
             maddog.setConfig({

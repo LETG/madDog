@@ -14,7 +14,10 @@ const maddog = (function() {
 
     // wait communes layer ready
     document.addEventListener("communes-ready", () => {
-        tools.zoomToOGCLayerExtent();
+        let { x, y, z } = API;
+        if (!x || !y || !z) {
+            tools.zoomToOGCLayerExtent();   
+        }
     });
 
     // wait many lib to avoid race condition errors

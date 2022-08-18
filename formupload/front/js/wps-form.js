@@ -34,40 +34,36 @@ function importDataWPS() {
     });
     // output
     const outputs = null;    
-    wpsService.execute(() => {
-        // do on return
+    wpsService.execute(
+        (response) => {  
+            var xmlResponse = response.responseDocument;
+            var wpsStatus = xmlResponse.documentElement.getElementsByTagName("wps:Status")[0].childNodes[0].tagName;
+            console.log(wpsStatus);
+            // Process failed 
+            if (wpsStatus == "wps:ProcessFailed"){
+                document.getElementById('liveAlertPlaceholder').innerHTML="";
+                alert("<b>Erreur de téléchargement</b></br>Veuillez vérifier votre saisie et votre fichier .csv (non nul)", 'danger');
+            }
+            // Process succeded
+            else{
+                var xmlResult = xmlResponse.documentElement.getElementsByTagName("wps:LiteralData");
+                var wpsSuccesResponse = xmlResult[0].innerHTML;
+                console.log(wpsSuccesResponse);
+                // Succes true = download ok !
+                if (wpsSuccesResponse == '{"succes":true}'){  
+                    document.getElementById('liveAlertPlaceholder').innerHTML="";
+                    resetForm();
+                    window.alert("Les données saisies ont été téléchargées avec succès !");
+                } 
+                // Succes false = error !
+                else {
+                    document.getElementById('liveAlertPlaceholder').innerHTML="";
+                    alert("<b>Erreur de téléchargement</b></br>Veuillez retenter ultérieurement.Si le problème persiste, merci de nous contacter.", 'danger');
+                }
+            }            
+            // do on return
     }, "imp:importData", "raw", "async", false, inputs, outputs);
 }
 
 
 
-// Function to validate form and display alert 
-
-function validateForm(){ 
-    if(document.getElementById("measureType").value == "") { 
-      return false;
-    }
-    if(document.getElementById("codeSite").value == "") { 
-        return false;
-    }
-    if(document.getElementById("surveyDate").value == "") { 
-        return false;
-    }
-    if(document.getElementById("epsg").value == "") { 
-        return false;
-    }
-    if(document.getElementById("idEquipement").value == "") { 
-        return false;
-    }
-    if(document.getElementById("idOperator").value == "") { 
-        return false;
-    }
-    if(document.getElementById("csvFile").value == "") { 
-        return false;
-    }
-    else {
-      alert("<b>Les données saisies ont été téléchargées avec succès ! </b></br><i>Pour effectuer une nouvelle saisie, cliquez sur Réinitialiser ou recharger la page.</i>", 'primary');
-      importDataWPS();
-      return true;      
-    }
-  }

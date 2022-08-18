@@ -104,7 +104,7 @@
           <div class="row mb-4">
             <div class="mb-1">
               <label for="formFile" class="form-label">Sélectionner le fichier à importer :</label>
-              <input class="form-control" type="file" id="csvFile" onchange="return validationFormat()" required>
+              <input class="form-control" type="file" id="csvFile" onchange="return validationFormat()" required/>
               <div class="invalid-feedback">Veuillez sélectionner un fichier .csv</div>
             </div>
             <p class="fs-7">
@@ -116,7 +116,7 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn" onclick="resetForm()">
                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser </button>
-              <button type="submit" class="btn btn-primary" onclick="validateForm()">
+              <button type="submit" class="btn btn-primary" onclick="importDataWPS()">
                 <i class="bi bi-box-arrow-up"></i> Télécharger </button>
             </div>
           </div>

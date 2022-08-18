@@ -126,7 +126,7 @@ const maddog = (function() {
                 waitLib(`bootstrap-multiselect-componentLoaded`, true)
             ];
             // execute a callback only if every promises are resolved
-            Promise.all(waitAll).then(responses => {
+            var generalPromise = Promise.allSettled(waitAll).then(responses => {
                 tools.init("maddog");
                 tools.initFuseSearch("communes", maddog.searchComm);
                 tools.initFuseSearch("sites", maddog.searchSite);

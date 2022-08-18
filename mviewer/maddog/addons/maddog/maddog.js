@@ -143,9 +143,7 @@ const maddog = (function() {
                     wpsService: wpsService,
                     referenceLine: '',
                     drawReferenceLine: '',
-                    radialLength: 100,
-                    radialDistance: 50,
-                    radialDirection: true,
+                    ...tdcUtils.defaultParams,
                     processIdentifier: "coa:drawRadial",
                     responseFormat: "raw",
                     executionMode: "async",
@@ -187,10 +185,7 @@ const maddog = (function() {
                     executionMode: "async",
                     lineage: false,
                     fc: {},
-                    interval: 2,
-                    useSmallestDistance: true,
-                    minDist: 0,
-                    maxDist: 0,
+                    ...prfUtils.defaultParams,
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {
                         maddog.charts.sediments = JSON.parse(response.responseDocument);
@@ -208,9 +203,7 @@ const maddog = (function() {
                     callback: mntUtils.onWpsSuccess,
                     codeSite: maddog.idSite,
                     processIdentifier: "mnt:compareRasterMNT",
-                    initDate: null,
-                    dateToCompare: null,
-                    evaluationInterval: 10.0
+                    ...mntUtils.defaultParams
                 }, "compareRasterMNTConfig")
             });
         },

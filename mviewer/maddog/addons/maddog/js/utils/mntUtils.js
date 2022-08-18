@@ -144,6 +144,12 @@
             mntToolbar.hidden = true;
             mntUtils.features = null;
             mntUtils.addToCompareLayer();
+
+            document.getElementById("evaluationInterval").value = mntUtils.defaultParams.evaluationInterval;
+            maddog.setConfig({
+                ...mntUtils.defaultParams
+            }, "beachProfileTrackingConfig");
+            
         },
         /**
          * On close MNT panel
@@ -438,6 +444,11 @@
                 const graphicUrl = src.getLegendUrl(resolution);
                 mntUtils.changeLegend($(`<div><img src="${graphicUrl}" id="legendMnt"/></div>`));
             }
+        },
+        defaultParams: {
+            evaluationInterval: 10.0,
+            initDate: null,
+            dateToCompare: null
         }
     }
 })()

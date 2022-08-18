@@ -56,6 +56,7 @@ const prfUtils = (function () {
         onSelectLr: (id) => {
             prfUtils.prfReset();
             if (!id) {
+                console.log("CLEAN SELECT LR");
                 return tools.resetSelectedLR();
             }
             prfUtils.getPrfByProfilAndIdSite(id);
@@ -588,6 +589,16 @@ const prfUtils = (function () {
             }
             prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
+            // reset config
+            let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
+            document.getElementById("interval").value = interval;
+            document.getElementById("radialLength").value = useSmallestDistance;
+            document.getElementById("minDist").value = minDist;
+            document.getElementById("maxDist").value = maxDist;
+            maddog.setConfig({
+                fc: {},
+                ...prfUtils.defaultParams
+            }, "beachProfileTrackingConfig");
         },
         /**
          * Init
@@ -596,16 +607,32 @@ const prfUtils = (function () {
             prfUtils.prfReset();
         },
         /**
+         * Reset config, selected layer
+         * And reset initial profile value
+         */
+        prfResetAll: () => {
+            prfUtils.prfReset();
+            document.getElementById("selectProfil").value = "";
+        },
+        /**
          * Change param evt
          * @param {any} e event or this html item
          */
         onParamChange: (e) => {
-            //TODO create a config for beach profile
+            maddog.setConfig({
+                [e.id]: e.type === "number" ? parseInt(e.value) : e.value
+            }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
             $("#prfMultiselect").multiselect(action, false);
             prfUtils.changePrf();
             prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
+        },
+        defaultParams: {
+            interval: 2,
+            useSmallestDistance: true,
+            minDist: 0,
+            maxDist: 0
         }
     }
 })();

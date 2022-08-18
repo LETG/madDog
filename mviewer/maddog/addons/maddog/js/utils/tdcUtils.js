@@ -498,7 +498,19 @@ const tdcUtils = (function () {
                 tdcUtils.getTDCByIdSite(maddog.idsite);
             }
             // deactivate draw btn if activ
-            tools.btnDrawline(btnDrawRefLine, 'drawRefline', true)
+            tools.btnDrawline(btnDrawRefLine, 'drawRefline', true);
+
+            // reset config
+            let { radialLength, radialDirection, radialDistance } = tdcUtils.defaultParams;
+            document.getElementById("radialLength").value = radialLength;
+            document.getElementById("radialDirection").value = radialDirection;
+            document.getElementById("radialDistance").value = radialDistance;
+
+            maddog.setConfig({
+                referenceLine: '',
+                drawReferenceLine: '',
+                ...tdcUtils.defaultParams
+            }, "drawRadialConfig");
         },
         initTDC: () => {
             tdcUtils.tdcReset();
@@ -508,6 +520,11 @@ const tdcUtils = (function () {
                 [e.id]: e.type === "number" ? parseInt(e.value) : e.value
             }, "drawRadialConfig");
             $("#coastlinetrackingBtn").show();
+        },
+        defaultParams: {
+            radialLength: 100,
+            radialDistance: 50,
+            radialDirection: true
         }
     }
 })();

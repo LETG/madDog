@@ -51,19 +51,42 @@ function importDataWPS() {
                 console.log(wpsSuccesResponse);
                 // Succes true = download ok !
                 if (wpsSuccesResponse == '{"succes":true}'){  
-                    document.getElementById('liveAlertPlaceholder').innerHTML="";
-                    resetForm();
-                    window.alert("Les données saisies ont été téléchargées avec succès !");
+                    alert("Les données saisies ont été téléchargées avec succès !",'info');
                 } 
                 // Succes false = error !
                 else {
-                    document.getElementById('liveAlertPlaceholder').innerHTML="";
+                    //document.getElementById('liveAlertPlaceholder').innerHTML="";
                     alert("<b>Erreur de téléchargement</b></br>Veuillez retenter ultérieurement.Si le problème persiste, merci de nous contacter.", 'danger');
                 }
             }            
-            // do on return
     }, "imp:importData", "raw", "async", false, inputs, outputs);
 }
 
-
-
+// Function to validate form and display alert 
+function validateForm(){ 
+    if(document.getElementById("measureType").value == "") { 
+        return false;
+      }
+      if(document.getElementById("codeSite").value == "") { 
+          return false;
+      }
+      if(document.getElementById("surveyDate").value == "") { 
+          return false;
+      }
+      if(document.getElementById("epsg").value == "") { 
+          return false;
+      }
+      if(document.getElementById("idEquipement").value == "") { 
+          return false;
+      }
+      if(document.getElementById("idOperator").value == "") { 
+          return false;
+      }
+      if(document.getElementById("csvFile").value == "") { 
+          return false;
+      }
+      else {
+        importDataWPS();
+        return true;      
+      }
+  }

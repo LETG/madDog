@@ -240,8 +240,18 @@ const tdcUtils = (function () {
                         ...axesFont,
                     },
                     showgrid: false,
-                    //autotick: true,
-                    dtick: 1,
+                    autorange: true,
+                    tickfont: {
+                        color: "rgb(107, 107, 107)",
+                        size: 11
+                    },
+                    ticks: "outside",
+                    tickwidth: 1,
+                    tickangle: 40,
+                    ticklen: 5,
+                    showticklabels: true,
+                    showline: true,
+                    showgrid: false
                 },
                 yaxis: {
                     gridcolor: "#555",
@@ -249,8 +259,14 @@ const tdcUtils = (function () {
                         text: 'Distance (m)',
                         ...axesFont
                     },
+                    autorange: true,
+                    showgrid: false,
+                    zeroline: false,
                     autotick: true,
-                    dtick: 1,
+                    ticks: 'outside',
+                    gridcolor: "#afa8a7",
+                    showticklabels: true,
+                    showline: false,
                 }
             }, {
                 responsive: true,
@@ -320,8 +336,13 @@ const tdcUtils = (function () {
                         pad: 2,
                         ...axesFont,
                     },
-                    showgrid: false,
-                    dtick: 1,
+                    ticks: "outside",
+                    tickwidth: 1,
+                    tickangle: 40,
+                    ticklen: 5,
+                    showticklabels: true,
+                    showline: true,
+                    showgrid: false
                 },
                 yaxis: {
                     gridcolor: "#555",
@@ -329,8 +350,12 @@ const tdcUtils = (function () {
                         text: 'Taux de recul (m/an)',
                         ...axesFont
                     },
+                    autorange: true,
+                    zeroline: false,
                     autotick: true,
-                    dtick: 1,
+                    ticks: 'outside',
+                    showticklabels: true,
+                    showline: false
                 }
             }, {
                 responsive: true,

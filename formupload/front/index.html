@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="agathe.adam@jdev.fr">
     <title>MADDOG - Interface de saisie</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
     <!-- Bootstrap v5.2.0 core CSS -->
     <link href="lib/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="form.css" rel="stylesheet">
+    <link href="css/form.css" rel="stylesheet">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -61,7 +61,7 @@
             </div>
             <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">
               <label for="" class="form-label">Sélectionner un profil de plage :</label>
-              <select id="numProfil" class="form-select" required>
+              <select id="numProfil" class="form-select">
                 <option selected disabled value="">Sélectionner ...</option>
               </select>
               <div class="invalid-feedback">Veuillez sélectionner un profil de plage</div>
@@ -104,19 +104,18 @@
           <div class="row mb-4">
             <div class="mb-1">
               <label for="formFile" class="form-label">Sélectionner le fichier à importer :</label>
-              <input class="form-control" type="file" id="csvFile" onchange="return validationFormat()" required>
-              <div class="invalid-feedback">Veuillez sélectionner un fichier .csv</div>
+              <input class="form-control" type="file" id="csvFile" onchange="validationFormat()" required>
+              <div class="invalid-feedback"></div>
             </div>
             <p class="fs-7">
               <i>Le fichier téléchargé doit être au format .csv</i>
             </p>
           </div>
-          <div id="liveAlertPlaceholder"></div>
           <div class="row mb-1 mt-4">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn" onclick="resetForm()">
                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser </button>
-              <button type="submit" class="btn btn-primary" onclick="validateForm()">
+              <button type="submit" class="btn btn-primary">
                 <i class="bi bi-box-arrow-up"></i> Télécharger </button>
             </div>
           </div>

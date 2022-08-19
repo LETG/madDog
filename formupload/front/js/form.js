@@ -1,5 +1,6 @@
 // Declare url for api and wps Maddog 
 const url = "https://gis.jdev.fr"
+
 // Create config
 const config = [{
     url: url + "/maddogapi/measure_type",
@@ -72,6 +73,7 @@ config.forEach(el => addOptionsSelect(el.url, el.field, el.textfield, el.idField
 const selectMeasure = document.querySelector('#measureType');
 selectMeasure.addEventListener('change', (event) => {
     var value = event.target.value;
+    // IF PRF display numProfil information
     if (value == 'PRF') {        
         // Integrate the profile numbers according to the selected site
         const selectSite = document.querySelector('#codeSite');
@@ -80,6 +82,7 @@ selectMeasure.addEventListener('change', (event) => {
             document.getElementById('selectProfilId').style.display = "block";
             // Remove options from select
             document.getElementById('numProfil').innerHTML = "";
+            document.getElementById('numProfil').required = true;
             const fetchUrl = async () => {
                 // Get ID site with code site
                 var codeSite = event.target.value;
@@ -105,6 +108,7 @@ selectMeasure.addEventListener('change', (event) => {
             fetchUrl();
         });
     } else {
+        document.getElementById('numProfil').required = false;
         document.getElementById('selectProfilId').style.display = "none";
     }
 });
@@ -113,37 +117,29 @@ selectMeasure.addEventListener('change', (event) => {
 function resetForm() {
     document.getElementById("formSuivi").reset();
     document.getElementById("formSuivi").classList.remove('was-validated');
-    document.getElementById('liveAlertPlaceholder').innerHTML = "";
 }
 
-// Uploader file format test + Alert
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-const alert = (message, type) => {
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-    ].join('')
-    alertPlaceholder.append(wrapper)
-}
-
+// Set csvContent parm if input is valid
 function validationFormat() {
     var csvFile = document.getElementById('csvFile');
+
+    // check extension
     var valeur = csvFile.value;
     var extensions = /(\.csv)$/i;
     if (!extensions.exec(valeur)) {
-        alert('Format de fichier non valide, veuillez sélectionner un fichier .csv', 'danger');
+        csvFile.setCustomValidity("Format de fichier non valide, veuillez sélectionner un fichier .csv");
+        csvFile.reportValidity();
         csvFile.value = '';
-        return false;
-    } else {
+        return ;
+    } else {   
         // Read csv file to string
         var files = csvFile.files;
         if (files.length === 0) {
-            console.log('No file is selected');
-            return;
+            csvFile.setCustomValidity("Le fichier ne doit pas être vide");
+            csvFile.reportValidity();
+            return ;
         }
+        csvFile.setCustomValidity("");
         var reader = new FileReader();
         reader.onload = function(event) {
             csvContent = event.target.result;
@@ -154,17 +150,19 @@ function validationFormat() {
 
 // Disabling form submissions if there are invalid fields
 (() => {
-'use strict'
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-const forms = document.querySelectorAll('.needs-validation')
-// Loop over them and prevent submission
-Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
+    'use strict'
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const formSuivi = document.getElementById("formSuivi");
+
+    formSuivi.addEventListener('submit', event => { 
+
+        event.preventDefault();
+        if (!formSuivi.checkValidity()) {           
+            event.stopPropagation();
+        }else{
+            importDataWPS()
         }
-        form.classList.add('was-validated')
+        formSuivi.classList.add('was-validated')
     }, false)
-})
+
 })()

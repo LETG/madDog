@@ -13,7 +13,7 @@ dateFileName="lastUpdateDate.lock"
 
 # startDate used to caculate script duration
 # this will also be the date set in lastUpdateDate.lock when integration finish
-startDate=$(date +"%Y%m%d%H%M%N")
+startDate=$(date -u +"%Y%m%d%H%M%N")
 # read last update date in file
 lastUpdatedDate=$(head -n 1 $dateFileName)
 lastUpdatedDate=${lastUpdatedDate:-0}
@@ -77,7 +77,7 @@ do
 done
 
 
-endDate=$(date +"%Y%m%d%H%M%N")
+endDate=$(date -u +"%Y%m%d%H%M%N")
 executionTime=$((((endDate-startDate)) / 10000000 ))
 echo "Temps de traitement - $(($executionTime / 3600))hrs $((($executionTime / 60) % 60))min $(($executionTime % 60))sec"
 

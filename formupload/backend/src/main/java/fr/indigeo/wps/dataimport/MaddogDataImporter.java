@@ -10,9 +10,9 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.geoserver.wps.gs.GeoServerProcess;
@@ -37,7 +37,8 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
     private static final String DATA_FOLDER = "/data/MADDOG/";
     private static final String DATE_PATTERN="yyyyMMddHHmmssSSSSSSS"; 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
 
 	public MaddogDataImporter() {
 		super(Text.text("Import Maddog data"), "imp", MaddogDataImporter.class);
@@ -45,12 +46,12 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
 
 	@DescribeProcess(title = "Add Maddog data", description = "Add maddog data from given items")
-	@DescribeResult(name = "resultFeatureCollection", description = "the result of drawing radials in reference Line")
+	@DescribeResult(name = "resultFeatureCollection", description = "result of file upload on server")
 	public static String importData(
 		@DescribeParameter(name = "codeSite", description = "codeSite") final String codeSite,
 		@DescribeParameter(name = "measureType", description = "Type of data, TDC, PRF, MNT") final String measureType,
         @DescribeParameter(name = "numProfil", description = "Profil number (between 1 and 9", min = 0) Integer numProfil,
-        @DescribeParameter(name = "surveyDate", description = "Survey Date ") final String surveyDate,
+        @DescribeParameter(name = "surveyDate", description = "Survey Date ") String surveyDate,
         @DescribeParameter(name = "epsg", description = "Projection 2154 without EPSG: ") final String epsg,
         @DescribeParameter(name = "idEquipement", description = "Equipement Code") final String idEquipement,
         @DescribeParameter(name = "idOperator", description = "Operator information") final String idOperator,
@@ -69,7 +70,10 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 LOGGER.debug("csvContent : " + csvContent); 
             }
             
-            if(codeSite.matches("^[A-Z]{6}") && measureType.matches("^[A-Z]{3}") && surveyDate.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}") && epsg.matches("^[0-9]{4}")){
+            if(codeSite.matches("^[A-Z]{6}") 
+                && measureType.matches("^[A-Z]{3}") 
+                && surveyDate.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}") 
+                && epsg.matches("^[0-9]{4}")){
                  
                 StringBuffer finalDataType = new StringBuffer(measureType);
                 if(numProfil == null || numProfil<1 || numProfil >9){
@@ -82,6 +86,8 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 
                 if (folderPath != null){
                     try {
+                        // update date form YYYY-MM-DD to YYYYMMDD
+                        surveyDate = surveyDate.replaceAll("-","");
                         createMetaDataFile(folderPath, codeSite, measureType, numProfil, surveyDate, epsg, idEquipement, idOperator);
 
                         StringBuffer dataFileName = createFileBaseName(folderPath.toString(), measureType, numProfil, codeSite, surveyDate);
@@ -190,7 +196,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
             LOGGER.debug("Check folder and create : " + pathDataType.toString());
             Files.createDirectories(pathDataType);  
 
-            Path pathDate = Paths.get(pathDataType.toString(), DATE_FORMAT.format(new Date()));
+            Path pathDate = Paths.get(pathDataType.toString(), LocalDateTime.now().format(formatter));
             LOGGER.info("Check folder and create : " + pathDate.toString());
             folderPath = Files.createDirectories(pathDate);  
 

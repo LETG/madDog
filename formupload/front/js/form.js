@@ -1,5 +1,5 @@
 // Declare url for api and wps Maddog 
-const url = "https://gis.jdev.fr"
+const url = "https://portail.indigeo.fr"
 
 // Create config
 const config = [{

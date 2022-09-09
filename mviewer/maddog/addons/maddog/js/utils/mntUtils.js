@@ -92,10 +92,6 @@
         return new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 5,
-                stroke: new ol.style.Stroke({
-                    color: "white",
-                    width: 2
-                }),
                 fill: new ol.style.Fill({
                     color: color.color,
                     width: 2

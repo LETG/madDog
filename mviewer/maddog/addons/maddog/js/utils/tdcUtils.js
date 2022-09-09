@@ -245,6 +245,8 @@ const tdcUtils = (function () {
                         color: "rgb(107, 107, 107)",
                         size: 11
                     },
+                    tickmode: "auto",
+                    nticks: 30,
                     ticks: "outside",
                     tickwidth: 1,
                     tickangle: 40,
@@ -336,6 +338,8 @@ const tdcUtils = (function () {
                         pad: 2,
                         ...axesFont,
                     },
+                    tickmode: "auto",
+                    nticks: 30,
                     ticks: "outside",
                     tickwidth: 1,
                     tickangle: 40,

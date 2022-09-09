@@ -2,6 +2,9 @@
  * This file is usefull to manage MNT panels interaction and MNT WMS layer.
  */
  const mntUtils = (function() {
+
+    const MNTLayerName = "mnt";
+
     // PRIVATE
     // This allow to display a browser console message when this file is correctly loaded
     const eventName = "mntUtils-componentLoaded";
@@ -13,7 +16,7 @@
      * Get MNT WMS openLayers source
      * @returns ol.source
      */
-    const mntSrc = () => mviewer.getLayer("mnt").layer.getSource();
+    const mntSrc = () => mviewer.getLayer(MNTLayerName).layer.getSource();
     /**
      * Add or change MNT WMS request params like location CQL or TIME param.
      * @param {any} newParams 
@@ -118,7 +121,7 @@
             // create selector options
             mntUtils.getDates();
             mntUtils.siteChange();
-            mviewer.getLayer("mnt").layer.setVisible(true);
+            mviewer.getLayer(MNTLayerName).layer.setVisible(true);
             mntSrc().refresh();
             mntUtils.onBaseLayerChange();
             // init legend and sync on view change
@@ -144,7 +147,7 @@
             document.getElementById("evaluationInterval").value = mntUtils.defaultParams.evaluationInterval;
             maddog.setConfig({
                 ...mntUtils.defaultParams
-            }, "beachProfileTrackingConfig");
+            }, "beachProfileTrackingConfig"); // <-- see with Gaetan why beachProfilTracking
             
         },
         /**
@@ -152,7 +155,7 @@
          */
         onClose: () => {
             mntUtils.removeMap();
-            mviewer.getLayer("mnt").layer.setVisible(false);
+            mviewer.getLayer(MNTLayerName).layer.setVisible(false);
             mntSrc().refresh();
         },
         /**
@@ -171,7 +174,7 @@
                 .then(response => { // dates are already ordered by date type in postgresql view
                     let datesJson = JSON.parse(response);
                     if (datesJson.length) {
-                        mntUtils.defaultDate = datesJson[0].date_survey;
+                        mntUtils.date = datesJson[0].date_survey;
                         // add dates to list
                         mntUtils.createMntMultiSelect(datesJson);
                         // update layer with first list value by default
@@ -201,15 +204,16 @@
         /**
          * Update WMS MNT params according selected site and selected date (first by default)
          */
-        updateLayer: () => {
-            changeSourceParams({
-                CQL_FILTER: `location like '%${maddog.idsite}%'`,
-                time: ""
-            });
-            if (mntUtils.date) {
+        updateLayer: () => {           
+            if (mntUtils.date) {  
+                mviewer.getLayer(MNTLayerName).layer.setVisible(true);            
                 changeSourceParams({
+                    CQL_FILTER: `location like '%${maddog.idsite}%'`,
                     time: mntUtils.date
                 });
+            }else{
+                // no date selected remove layer visibility
+                mviewer.getLayer(MNTLayerName).layer.setVisible(false);
             }
         },
         /**
@@ -436,7 +440,7 @@
                 panelDrag.hidden();
             } else {
                 const resolution = event ? event.target.getResolution() : null;
-                const src = mviewer.getLayer("mnt").layer.getSource();
+                const src = mviewer.getLayer(MNTLayerName).layer.getSource();
                 const graphicUrl = src.getLegendUrl(resolution);
                 mntUtils.changeLegend($(`<div><img src="${graphicUrl}" id="legendMnt"/></div>`));
             }

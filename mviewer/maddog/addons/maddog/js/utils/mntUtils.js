@@ -355,11 +355,11 @@
          * To display or hide alert message
          */
         manageError: () => {
-            const datesSelected = $('#mntMultiselect option:selected').length;
-            const displayError = datesSelected !== 2;
+            const displayError = $('#mntMultiselect option:selected').length !== 2;
             // manage trigger wps button
             mntCompareBtn.disabled = displayError;
             panelMNTParam.hidden = displayError;
+            // error message
             alertMntParams.hidden = !displayError;
         },
         /**

@@ -295,10 +295,46 @@ const tools = (function() {
             maddog.idsite = idsite;
             document.getElementById("siteName").innerHTML = _.capitalize(namesite);
             document.getElementById("WPSnoselect").style.display = "none";
-            document.getElementById("btn-wps-tdc").classList.remove("disabled");
-            document.getElementById("btn-wps-pp").classList.remove("disabled");
-            document.getElementById("btn-wps-mnt").classList.remove("disabled");
-            if (!MNT_WPS.hidden) mntUtils.siteChange();
+            // reset all information when changing site
+            document.getElementById("serviceCardMnt").style.pointerEvents  = "auto";
+            document.getElementById("btn-wps-mnt").classList.add("disabled");
+            document.getElementById("serviceCardTdc").style.pointerEvents  = "auto";
+            document.getElementById("btn-wps-tdc").classList.add("disabled");
+            document.getElementById("serviceCardPrf").style.pointerEvents  = "auto";
+            document.getElementById("btn-wps-pp").classList.add("disabled");
+            
+            // get site info
+            fetch(`${maddog.getCfg("config.options.postgrestapi")}/measuretypebysite?select=type_measure&code_site=eq.${maddog.idsite}`)
+            .then(function(response) {
+                
+                if(response.ok) {
+                    response.text().then(function(measureTypes){
+                        let measureTypesJson = JSON.parse(measureTypes);
+
+                        measureTypesJson.forEach(measure => {
+                            if(measure.type_measure == "MNT"){
+                                document.getElementById("serviceCardMnt").style.pointerEvents  = "auto";
+                                document.getElementById("btn-wps-mnt").classList.remove("disabled");
+                                if (!MNT_WPS.hidden) mntUtils.siteChange();  
+                            }
+                            if(measure.type_measure == "TDC"){
+                                document.getElementById("serviceCardTdc").style.pointerEvents  = "auto";
+                                document.getElementById("btn-wps-tdc").classList.remove("disabled");
+                            }
+                            if(measure.type_measure == "PRF"){
+                                document.getElementById("serviceCardPrf").style.pointerEvents  = "auto";
+                                document.getElementById("btn-wps-pp").classList.remove("disabled");
+                            }
+                        });                          
+                    })
+                  } else {
+                    console.log('Mauvaise réponse du réseau');
+                  }
+                })
+                .catch(function(error) {
+                  console.log('Il y a eu un problème avec la récupération des types de mesures par site: ' + error.message);
+                });
+
         },
         /**
          * Select or deselect all values for a given multiselect component

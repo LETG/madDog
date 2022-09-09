@@ -61,3 +61,11 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
    FROM survey, profil
   WHERE survey.id_survey = profil.id_survey AND survey.id_measure_type_survey = profil.id_measure_type
 WITH DATA;
+
+
+CREATE OR REPLACE VIEW IF NOT EXISTS measuretypebysite
+ AS
+ SELECT DISTINCT measure_type.type_measure,
+    site.code_site
+   FROM survey, site, measure_type
+   WHERE survey.id_site = site.id_site and survey.id_measure_type_survey = measure_type.id_measure_type ;

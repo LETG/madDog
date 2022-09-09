@@ -35,5 +35,10 @@ public class TestMaddogDataImporter {
 
 		LOGGER.debug("date : " + LocalDateTime.now().format(formatter));
 		LOGGER.debug("date : " + DATE_FORMAT.format(new Date()));
+
+		String surveyDate = "2022-08-02";
+		surveyDate = surveyDate.replaceAll("-","");
+		LOGGER.debug("date : " + surveyDate);
+
 	}
 }

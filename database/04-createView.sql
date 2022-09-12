@@ -63,7 +63,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
 WITH DATA;
 
 
-CREATE OR REPLACE VIEW IF NOT EXISTS measuretypebysite
+CREATE OR REPLACE VIEW measuretypebysite
  AS
  SELECT DISTINCT measure_type.type_measure,
     site.code_site

@@ -45,8 +45,9 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS sitemntdate AS
     site.name_site,
     to_date(to_char(survey.date_survey::timestamp with time zone, 'YYYY-MM-DD'::text), 'YYYY-MM-DD'::text) AS date_survey
    FROM survey,
-    site
-  WHERE survey.id_site = site.id_site AND survey.id_measure_type_survey = 1
+    site,
+    measure_type
+  WHERE survey.id_site = site.id_site AND survey.id_measure_type_survey = measure_type.id_measure_type AND measure_type.type_measure::text = 'MNT'::text
   ORDER BY (to_date(to_char(survey.date_survey::timestamp with time zone, 'YYYY-MM-DD'::text), 'YYYY-MM-DD'::text)) DESC
 WITH DATA;
 

@@ -621,7 +621,7 @@ const prfUtils = (function () {
          */
         onParamChange: (e) => {
             maddog.setConfig({
-                [e.id]: e.type === "number" ? parseInt(e.value) : e.value
+                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
@@ -630,7 +630,7 @@ const prfUtils = (function () {
             prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
         defaultParams: {
-            interval: 2,
+            interval: 0.1,
             useSmallestDistance: true,
             minDist: 0,
             maxDist: 0

@@ -5,7 +5,7 @@ const url = "https://portail.indigeo.fr"
 const config = [{
     url: url + "/maddogapi/measure_type",
     idField: "id_measure_type",
-    field: "type_measure",
+    field: "description_measure",
     idSelect: "measureType"
 },
 {

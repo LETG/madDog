@@ -43,3 +43,20 @@ INSERT INTO site VALUES (11,'Plage des Trois Moutons','Lampaul-Ploudalmézeau','
 INSERT INTO site VALUES (12,'Plage de Tréompan','Lampaul-Ploudalmézeau','TREOMP');
 INSERT INTO site VALUES (13,'Plage de Corn ar Gazel','Lampaul-Ploudalmézeau','CGAZEL');
 INSERT INTO site VALUES (14,'Plage de Coulouarn','Lampaul-Ploudalmézeau','COULOU');
+
+-- Equipment
+INSERT INTO public.equipment VALUES (1, 'DGPS Topcon', 'DGPS Topcon Hiper V');
+INSERT INTO public.equipment VALUES (2, 'DGPS Trimble', 'DGPS Trimble 5700/5800');
+INSERT INTO public.equipment VALUES (3, 'Sparkfun Surveyor (centipede RTK)', 'Sparkfun Surveyor (centipede RTK) + antenne DA910');
+INSERT INTO public.equipment VALUES (4, 'Sparkfun Facet (centipede RTK)', 'Sparkfun Facet (centipede RTK)');
+
+-- Measure type
+INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');
+INSERT INTO public.measure_type VALUES (2, 'MNT', 'MNT : Modèle Numérique de Terrain');
+INSERT INTO public.measure_type VALUES (3, 'PRF', 'PRF : Profil de plage');
+INSERT INTO public.measure_type VALUES (4, 'REF', 'REF : Ligne(s) de référence (Cinématique Trait de côte ou Profil de plage)');
+
+-- Operator
+INSERT INTO public.operator VALUES (1, 'Scientifique', NULL);
+INSERT INTO public.operator VALUES (2, 'Gestionnaire', NULL);
+INSERT INTO public.operator VALUES (3, 'Citoyen', NULL);

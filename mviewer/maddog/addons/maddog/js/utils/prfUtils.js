@@ -620,8 +620,8 @@ const prfUtils = (function () {
          * @param {any} e event or this html item
          */
         onParamChange: (e) => {
-            maddog.setConfig({
-                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
+            maddog.setConfig({                
+                [e.id]: e.type === "number" ? e.id = "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
@@ -630,7 +630,7 @@ const prfUtils = (function () {
             prfUtils.manageError("Vous devez choisir un site, un profil et au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
         defaultParams: {
-            interval: 0.1,
+            interval: 1,
             useSmallestDistance: true,
             minDist: 0,
             maxDist: 0

@@ -189,7 +189,7 @@ const wps = (function () {
                 interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("interval", null, null, interval),
                 useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("useSmallestDistance", null, null, useSmallestDistance),
                 minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("minDist", null, null, minDist),
-                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, minDist)
+                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, maxDist)
             });
             // OUTPUTS
             var outputGenerator = new OutputGenerator();

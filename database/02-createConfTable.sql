@@ -43,12 +43,33 @@ INSERT INTO site VALUES (11,'Plage des Trois Moutons','Lampaul-Ploudalmézeau','
 INSERT INTO site VALUES (12,'Plage de Tréompan','Lampaul-Ploudalmézeau','TREOMP');
 INSERT INTO site VALUES (13,'Plage de Corn ar Gazel','Lampaul-Ploudalmézeau','CGAZEL');
 INSERT INTO site VALUES (14,'Plage de Coulouarn','Lampaul-Ploudalmézeau','COULOU');
+INSERT INTO site VALUES (15,'TEST Plage de Brochu','Quebec','BROCHU');
+INSERT INTO site VALUES (16,'Côte meuble de Kerhoazoc','Landunvez','KERHOA');
+INSERT INTO site VALUES (17,'Plage de Melon','Porspoder','PMELON');
+INSERT INTO site VALUES (18,'Falaise meuble de Keradraon','Lanildut','KERADR');
+INSERT INTO site VALUES (19,'Tombolo de Beg ar Vir','Lampaul-Plouarzel','BEGVIR');
+INSERT INTO site VALUES (20,'Plage d''Illien','Ploumoguer','ILLIEN');
+INSERT INTO site VALUES (21,'Plages de Park ao Aod','Carantec','PRKAOD');
+INSERT INTO site VALUES (22,'Falaise du lieu-dit Poul Morvan','Carantec','MORVAN');
+INSERT INTO site VALUES (23,'La chaise du curé','Carantec','CHACUR');
+INSERT INTO site VALUES (24,'Saint-Samson','Plougasnou','SAMSON');
+INSERT INTO site VALUES (25,'Le guerzit','Plougasnou','GUERZI');
+INSERT INTO site VALUES (26,'Grande plage de Primel','Plougasnou','PRIMEL');
+INSERT INTO site VALUES (27,'Moulin de la rive','Locquirec','MOURIV');
+INSERT INTO site VALUES (28,'Plage du Trez Hir','Plougonvelin','TREZHI');
+INSERT INTO site VALUES (29,'Plages de Park ao Iliz','Carantec','PRKILI');
+INSERT INTO site VALUES (30,'Plage de Morgat','Morgat','MORGAT');
+INSERT INTO site VALUES (31,'Plage de Trez Rouz','Camaret','TREROU');
+
+
+
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS Topcon', 'DGPS Topcon Hiper V');
 INSERT INTO public.equipment VALUES (2, 'DGPS Trimble', 'DGPS Trimble 5700/5800');
 INSERT INTO public.equipment VALUES (3, 'Sparkfun Surveyor (centipede RTK)', 'Sparkfun Surveyor (centipede RTK) + antenne DA910');
 INSERT INTO public.equipment VALUES (4, 'Sparkfun Facet (centipede RTK)', 'Sparkfun Facet (centipede RTK)');
+INSERT INTO public.equipment VALUES (5, 'Photogramétrie IGN', 'Photogramétrie IGN');
 
 -- Measure type
 INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');

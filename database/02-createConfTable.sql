@@ -65,13 +65,11 @@ INSERT INTO site VALUES (31,'Plage de Trez Rouz','Camaret','TREROU');
 
 
 -- Equipment
-INSERT INTO public.equipment VALUES (1, 'DGPS_Topcon', 'DGPS Topcon Hiper V');
-INSERT INTO public.equipment VALUES (2, 'DGPS_Trimble', 'DGPS Trimble 5700/5800');
-INSERT INTO public.equipment VALUES (3, 'Centipede_Surveyor', 'Sparkfun Surveyor (centipede RTK) + antenne DA910');
-INSERT INTO public.equipment VALUES (4, 'Centipede_Facet', 'Sparkfun Facet (centipede RTK)');
-INSERT INTO public.equipment VALUES (5, 'Telemetre_Leica', 'Télémètre laser Leica');
-INSERT INTO public.equipment VALUES (6, 'Numerisation_photographie', 'Numérisation à partir de photographie');
-INSERT INTO public.equipment VALUES (7, 'Extraction_MNT', 'Extraction à partir de MNT');
+INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');
+INSERT INTO public.equipment VALUES (2, 'Centipede_RTK', 'Centipede RTK');
+INSERT INTO public.equipment VALUES (3, 'Distancemetre', 'Distancemètre');
+INSERT INTO public.equipment VALUES (4, 'Extraction_MNT', 'Extraction à partir de MNT');
+INSERT INTO public.equipment VALUES (5, 'Numerisation_photographie', 'Numérisation à partir de photographie');
 
 -- Measure type
 INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');

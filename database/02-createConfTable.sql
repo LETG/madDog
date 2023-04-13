@@ -65,11 +65,13 @@ INSERT INTO site VALUES (31,'Plage de Trez Rouz','Camaret','TREROU');
 
 
 -- Equipment
-INSERT INTO public.equipment VALUES (1, 'DGPS Topcon', 'DGPS Topcon Hiper V');
-INSERT INTO public.equipment VALUES (2, 'DGPS Trimble', 'DGPS Trimble 5700/5800');
-INSERT INTO public.equipment VALUES (3, 'Sparkfun Surveyor (centipede RTK)', 'Sparkfun Surveyor (centipede RTK) + antenne DA910');
-INSERT INTO public.equipment VALUES (4, 'Sparkfun Facet (centipede RTK)', 'Sparkfun Facet (centipede RTK)');
-INSERT INTO public.equipment VALUES (5, 'Photogramétrie IGN', 'Photogramétrie IGN');
+INSERT INTO public.equipment VALUES (1, 'DGPS_Topcon', 'DGPS Topcon Hiper V');
+INSERT INTO public.equipment VALUES (2, 'DGPS_Trimble', 'DGPS Trimble 5700/5800');
+INSERT INTO public.equipment VALUES (3, 'Centipede_Surveyor', 'Sparkfun Surveyor (centipede RTK) + antenne DA910');
+INSERT INTO public.equipment VALUES (4, 'Centipede_Facet', 'Sparkfun Facet (centipede RTK)');
+INSERT INTO public.equipment VALUES (5, 'Telemetre_Leica', 'Télémètre laser Leica');
+INSERT INTO public.equipment VALUES (6, 'Numerisation_photographie', 'Numérisation à partir de photographie');
+INSERT INTO public.equipment VALUES (7, 'Extraction_MNT', 'Extraction à partir de MNT');
 
 -- Measure type
 INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');
@@ -78,6 +80,6 @@ INSERT INTO public.measure_type VALUES (3, 'PRF', 'PRF : Profil de plage');
 INSERT INTO public.measure_type VALUES (4, 'REF', 'REF : Ligne(s) de référence (Cinématique Trait de côte ou Profil de plage)');
 
 -- Operator
-INSERT INTO public.operator VALUES (1, 'Scientifique', NULL);
-INSERT INTO public.operator VALUES (2, 'Gestionnaire', NULL);
-INSERT INTO public.operator VALUES (3, 'Citoyen', NULL);
+INSERT INTO public.operator VALUES (1, 'Scientifique', 'Scientifique');
+INSERT INTO public.operator VALUES (2, 'Gestionnaire', 'Gestionnaire');
+INSERT INTO public.operator VALUES (3, 'Citoyen', 'Citoyen');

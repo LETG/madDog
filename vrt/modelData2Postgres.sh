@@ -43,7 +43,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     if [ -z "$numProfil" ]; then numProfil=1; fi
     dateSurvey=${metaFields[3]}
     epsg=${metaFields[4]}
-    nameEquiement=${metaFields[5]}
+    nameEquipment=${metaFields[5]}
     typeOperator=${metaFields[6]}
 
     # Check Measure Type exist else create it

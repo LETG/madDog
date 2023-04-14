@@ -97,7 +97,7 @@ selectMeasure.addEventListener('change', (event) => {
                 // Filter profiles by site id
                 var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
                 // Filter profiles by the type of measurement
-                var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '2'});
+                var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '3'});
                 // Display option if not profil
                 if (!$.isArray(PRF) ||  !PRF.length){                    
                     optionsGenerator('', "Aucun profil n'est disponible pour le site sélectionné", 'numProfil');

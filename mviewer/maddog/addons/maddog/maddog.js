@@ -120,7 +120,6 @@ const maddog = (function() {
             // wait all plugin as required dependancies
             let waitAll = [
                 waitLib(`tools-componentLoaded`, typeof tools !== 'undefined'),
-                waitLib(`axios-componentLoaded`, typeof axios !== 'undefined'),
                 waitLib(`wfs2Fuse-componentLoaded`, typeof wfs2Fuse !== 'undefined'),
                 waitLib(`maddog-wps-componentLoaded`, typeof wps !== 'undefined'),
                 waitLib(`bootstrap-multiselect-componentLoaded`, true)

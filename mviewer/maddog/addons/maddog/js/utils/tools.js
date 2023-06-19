@@ -162,7 +162,8 @@ const tools = (function() {
                 }
             );
             if (urlSite) {
-                axios.get(urlSite)
+                fetch(urlSite)
+                    .then(r => r.json())
                     .then((response) => response.data.features ? response.data.features[0] : [])
                     .then((feature) => {
                         callback(feature);
@@ -305,34 +306,33 @@ const tools = (function() {
             
             // get site info
             fetch(`${maddog.getCfg("config.options.postgrestapi")}/measuretypebysite?select=type_measure&code_site=eq.${maddog.idsite}`)
-            .then(function(response) {
-                
-                if(response.ok) {
-                    response.text().then(function(measureTypes){
-                        let measureTypesJson = JSON.parse(measureTypes);
+                .then(function(response) {
+                    if(response.ok) {
+                        response.text().then(function(measureTypes){
+                            let measureTypesJson = JSON.parse(measureTypes);
 
-                        measureTypesJson.forEach(measure => {
-                            if(measure.type_measure == "MNT"){
-                                document.getElementById("serviceCardMnt").style.pointerEvents  = "auto";
-                                document.getElementById("btn-wps-mnt").classList.remove("disabled");
-                                if (!MNT_WPS.hidden) mntUtils.siteChange();  
-                            }
-                            if(measure.type_measure == "TDC"){
-                                document.getElementById("serviceCardTdc").style.pointerEvents  = "auto";
-                                document.getElementById("btn-wps-tdc").classList.remove("disabled");
-                            }
-                            if(measure.type_measure == "PRF"){
-                                document.getElementById("serviceCardPrf").style.pointerEvents  = "auto";
-                                document.getElementById("btn-wps-pp").classList.remove("disabled");
-                            }
-                        });                          
-                    })
-                  } else {
-                    console.log('Mauvaise réponse du réseau');
-                  }
+                            measureTypesJson.forEach(measure => {
+                                if(measure.type_measure == "MNT"){
+                                    document.getElementById("serviceCardMnt").style.pointerEvents  = "auto";
+                                    document.getElementById("btn-wps-mnt").classList.remove("disabled");
+                                    if (!MNT_WPS.hidden) mntUtils.siteChange();  
+                                }
+                                if(measure.type_measure == "TDC"){
+                                    document.getElementById("serviceCardTdc").style.pointerEvents  = "auto";
+                                    document.getElementById("btn-wps-tdc").classList.remove("disabled");
+                                }
+                                if(measure.type_measure == "PRF"){
+                                    document.getElementById("serviceCardPrf").style.pointerEvents  = "auto";
+                                    document.getElementById("btn-wps-pp").classList.remove("disabled");
+                                }
+                            });                          
+                        })
+                    } else {
+                        console.log('Mauvaise réponse du réseau');
+                    }
                 })
                 .catch(function(error) {
-                  console.log('Il y a eu un problème avec la récupération des types de mesures par site: ' + error.message);
+                    console.log('Il y a eu un problème avec la récupération des types de mesures par site: ' + error.message);
                 });
 
         },

@@ -16,10 +16,11 @@ const prfUtils = (function () {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher sur la carte et dans la liste de sélection
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
-                .then(prfRefLine => {
-                    maddog.prfRefLine = prfRefLine.data;
-                    return prfRefLine.data.features;
+            fetch(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
+                .then(r => r.json())
+                .then(data => {
+                    maddog.prfRefLine = data;
+                    return data.features;
                 })
                 .then(prfSelect => {
                     prfSelect = maddog.prfRefLine.features;
@@ -82,10 +83,11 @@ const prfUtils = (function () {
         getPrfByProfilAndIdSite: (idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
             const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
-            axios.get(`${prfUrl}'${maddog.idsite}' AND idtype='${idType}'`)
+            fetch(`${prfUrl}'${maddog.idsite}' AND idtype='${idType}'`)
+                .then(r => r.json())
                 // récupération du PRF
                 .then(prf => {
-                    if (!prf.data.features.length) {
+                    if (!prf.features.length) {
                         throw new Error(`Données non disponibles pour le profil ${idType.toUpperCase()}`);
                     };
                     // get ref point (first by default)
@@ -592,7 +594,6 @@ const prfUtils = (function () {
             // reset config
             let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
             document.getElementById("interval").value = interval;
-            console.log(useSmallestDistance);
             document.getElementById("useSmallestDistance").value = useSmallestDistance;
             document.getElementById("minDist").value = minDist;
             document.getElementById("maxDist").value = maxDist;

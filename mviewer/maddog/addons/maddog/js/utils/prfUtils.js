@@ -91,7 +91,7 @@ const prfUtils = (function () {
                         throw new Error(`Données non disponibles pour le profil ${idType.toUpperCase()}`);
                     };
                     // get ref point (first by default)
-                    const newFeatures = prf.data.features.map(p => {
+                    const newFeatures = prf.features.map(p => {
                         let refPoint = null;
                         const points = p.geometry.coordinates.map((line, order) => {
                             if (!order) {
@@ -111,11 +111,11 @@ const prfUtils = (function () {
                         };
                     });
                     maddog.charts.beachProfile = {
-                        ...prf.data,
+                        ...prf,
                         features: newFeatures
                     };
                     // Création du multi select avec les dates des PRF
-                    prfUtils.setPrfFeatures(prf.data.features)
+                    prfUtils.setPrfFeatures(prf.features)
                     prfUtils.createPrfMultiSelect();
                     // affichage du multiselect et boutons
                     prfToolbar.hidden = false;

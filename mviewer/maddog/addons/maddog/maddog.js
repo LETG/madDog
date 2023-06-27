@@ -21,14 +21,21 @@ const maddog = (function() {
     }
 
     // wait communes layer ready
-    document.addEventListener("communes-ready", () => {
+    const setZoomToCommunes = () => {
         let { x, y, z } = API;
         if (!x || !y || !z) {
             return tools.zoomToOGCLayerExtent();   
         }
         const thisView = mviewer.getMap().getView();
         return thisView.setZoom(thisView.getZoom() - 1);
-    });
+    }
+    if (mviewer.getLayer("communewithsite").layer.getSource().getState() == "ready") {
+        setZoomToCommunes();
+    } else {
+        document.addEventListener("communes-ready", () => {
+            setZoomToCommunes();
+        });
+    }
 
     // wait many lib to avoid race condition errors
     const waitLib = (name, ready) => new Promise((resolve, reject) => {

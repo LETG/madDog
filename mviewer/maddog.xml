@@ -33,6 +33,7 @@
     <searchparameters bbox="false" localities="false" features="false" />   
 
     <extensions>
+        <extension type="javascript" id="papaparse" src="apps/maddog/addons/papaparse/papaparse.min.js"/>
         <extension type="component" id="panelDrag" path="apps/maddog/addons"/>
         <extension type="javascript" id="wps-js" src="apps/maddog/addons/wps-js/wps-js-all.min.js"/>
         <extension type="javascript" id="wfs2Fuse" src="apps/maddog/addons/wfs2Fuse/main.js"/>

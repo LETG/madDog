@@ -1,4 +1,5 @@
-const maddog = (function() {
+let maddog = null;
+maddog = (function () {
     let typingTimer; //timer identifier
     let zoomFeatureExtent = null;
     const doneTypingInterval = 500; //time in ms, 5 second for example
@@ -30,7 +31,12 @@ const maddog = (function() {
         return thisView.setZoom(thisView.getZoom() - 1);
     }
     if (mviewer.getLayer("communewithsite").layer.getSource().getState() == "ready") {
-        setZoomToCommunes();
+        if (maddog) {
+            setZoomToCommunes();
+        } else {
+            new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
+                .then(v => setZoomToCommunes);
+        }
     } else {
         document.addEventListener("communes-ready", () => {
             setZoomToCommunes();

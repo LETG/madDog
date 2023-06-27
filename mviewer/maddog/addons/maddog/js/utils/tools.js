@@ -164,7 +164,7 @@ const tools = (function() {
             if (urlSite) {
                 fetch(urlSite)
                     .then(r => r.json())
-                    .then((response) => response.data.features ? response.data.features[0] : [])
+                    .then(({features}) => features[0])
                     .then((feature) => {
                         callback(feature);
                     });

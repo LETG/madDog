@@ -7,10 +7,18 @@ const maddog = (function() {
     let wpsService = null;
 
     // wait map ready
-    document.addEventListener("map-ready", () => {
-        tools.onClickAction();
-        tools.highlightFeature();
-    });
+    if(!mviewer.getMap()) {
+        document.addEventListener("map-ready", () => {
+            tools.onClickAction();
+            tools.highlightFeature();
+        });
+    } else {
+        new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
+            .then(v => {
+                tools.onClickAction();
+                tools.highlightFeature();
+        });
+    }
 
     // wait communes layer ready
     document.addEventListener("communes-ready", () => {

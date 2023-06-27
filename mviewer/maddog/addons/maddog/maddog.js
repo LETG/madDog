@@ -7,10 +7,18 @@ const maddog = (function() {
     let wpsService = null;
 
     // wait map ready
-    document.addEventListener("map-ready", () => {
-        tools.onClickAction();
-        tools.highlightFeature();
-    });
+    if(!mviewer.getMap()) {
+        document.addEventListener("map-ready", () => {
+            tools.onClickAction();
+            tools.highlightFeature();
+        });
+    } else {
+        new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
+            .then(v => {
+                tools.onClickAction();
+                tools.highlightFeature();
+        });
+    }
 
     // wait communes layer ready
     document.addEventListener("communes-ready", () => {
@@ -120,7 +128,6 @@ const maddog = (function() {
             // wait all plugin as required dependancies
             let waitAll = [
                 waitLib(`tools-componentLoaded`, typeof tools !== 'undefined'),
-                waitLib(`axios-componentLoaded`, typeof axios !== 'undefined'),
                 waitLib(`wfs2Fuse-componentLoaded`, typeof wfs2Fuse !== 'undefined'),
                 waitLib(`maddog-wps-componentLoaded`, typeof wps !== 'undefined'),
                 waitLib(`bootstrap-multiselect-componentLoaded`, true)

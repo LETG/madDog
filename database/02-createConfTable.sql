@@ -60,7 +60,11 @@ INSERT INTO site VALUES (28,'Plage du Trez Hir','Plougonvelin','TREZHI');
 INSERT INTO site VALUES (29,'Plages de Park ao Iliz','Carantec','PRKILI');
 INSERT INTO site VALUES (30,'Plage de Morgat','Morgat','MORGAT');
 INSERT INTO site VALUES (31,'Plage de Trez Rouz','Camaret','TREROU');
-
+INSERT INTO site VALUES (32,'Plage du Grand Rocher','Plestin-Les-Grèves','GRDROC');
+INSERT INTO site VALUES (33,'Plage de Saint-Efflam Est','Plestin-Les-Grèves','STEFFE');
+INSERT INTO site VALUES (34,'Plage de Saint-Efflam Ouest','Plestin-Les-Grèves','STEFFO');
+INSERT INTO site VALUES (35,'Plage de Treduder','Treduder','TREDUD');
+INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-Grèvre','STMICH');
 
 
 

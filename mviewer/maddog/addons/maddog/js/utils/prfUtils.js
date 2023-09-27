@@ -104,7 +104,7 @@ const prfUtils = (function () {
                             ...p,
                             properties: {
                                 ...p.properties,
-                                color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+                                color: "#" + Math.random().toString(16).slice(2, 8).toUpperCase(),
                                 points: points,
                                 elevation: p.geometry.coordinates[2]
                             }

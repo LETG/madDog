@@ -35,7 +35,7 @@ maddog = (function () {
             setZoomToCommunes();
         } else {
             new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
-                .then(v => setZoomToCommunes);
+                .then(v => setZoomToCommunes());
         }
     } else {
         document.addEventListener("communes-ready", () => {

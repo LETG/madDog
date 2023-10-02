@@ -622,7 +622,7 @@ const prfUtils = (function () {
          */
         onParamChange: (e) => {
             maddog.setConfig({                
-                [e.id]: e.type === "number" ? e.id = "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
+                [e.id]: e.type === "number" ? e.id === "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {

@@ -246,7 +246,7 @@
                 target: 'mntMap',
                 layers: [],
                 view: mviewer.getMap().getView(),
-                controls: ol.control.defaults({
+                controls: ol.control.defaults.defaults({
                     attribution: false,
                     zoom: false,
                 }),

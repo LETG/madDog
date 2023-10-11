@@ -9,8 +9,8 @@ maddogDBSchema=public
 maddogDBUser=maddog
 maddogDBPassword=maddog
 
-# gdal_grid
-gdalGridIndivParm="power=6.0:smothing=7.0:radius1=30.0:radius2=30.0:angle=90.0:max_points=0:min_points=1:nodata=-100.0"
+# mnt
+mntConfTable="mntprocessconf"
 
 # geoserver dir for image mosaic
 # this folder have to already exist

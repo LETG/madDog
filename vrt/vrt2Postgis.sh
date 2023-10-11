@@ -56,8 +56,17 @@ then
     echo "mnt filename : $mntOutput"
     # First step with json to filter unwanted pc point
     ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "\"identifiant\" NOT LIKE 'pc%'"
+    
+    # read MNT gdal command params from DB
+    ## read columns to get gdal params values
+    paramsColumns="power, smothing, radius1, radius2, angle, max_points, min_points, nodata";
+    ## request table to get values by field
+    IFS="|" paramsValues=$(PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT $paramsColumns FROM $maddogDBSchema.$mntConfTable WHERE code_site='$codeSite'")
+    read power smothing radius1 radius2 angle max_points min_points nodata <<< $paramsValues
+    ## create gdal_grid command params
+    GdalParamsToString=`echo power=$power:smothing=$smothing:radius1=$radius1:radius2=$radius2:angle=$angle:max_points=$max_points:min_points=$max_points:nodata=$nodata`
     # Create tiff file
-    gdal_grid -zfield z -a invdist:$gdalGridIndivParm -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
+    gdal_grid -zfield z -a invdist:$GdalParamsToString -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
     echo "-- Update value for file $mntOutput"
     # issue on imagemosaic and gdal_grid ymin and ymax are inversed
     gdalwarp $mntOutputTmp  $mntOutput
@@ -86,6 +95,7 @@ then
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "REFRESH MATERIALIZED VIEW sitebuffer;"
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "REFRESH MATERIALIZED VIEW communewithsite;"
 elif [[ $type == "TDC" ]]
+IFS='|' params=(`psql -h localhost -p 5432 -d maddog -U gaetan -AXqtc "SELECT * FROM public.mntprocessconf WHERE code_site='VOUGOT';"`)
 then
     echo "-- Create line for point in Import TDC"
     ## Need to add date and TDC number

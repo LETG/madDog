@@ -22,7 +22,7 @@ CREATE TABLE mntprocessconf(
    code_site CHAR(6)  NOT NULL,
    algo CHAR(6) NOT NULL DEFAULT 'invdist',
    power REAL DEFAULT 6.0,
-   smothing REAL DEFAULT 7.0,
+   smoothing REAL DEFAULT 1.0,
    radius1 REAL DEFAULT 30.0,
    radius2 REAL DEFAULT 30.0,
    angle REAL DEFAULT 90,

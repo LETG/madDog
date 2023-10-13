@@ -74,7 +74,7 @@ https://github.com/jdev-org/madDog/blob/b1df1f875bce3b8c80842a9808a77730ca1282d3
 
 Ensuite, vous devrez modifier le fichier vrt2Postgis pour adapter la liste des paramètres à utiliser et la commande exécutée si nécessaire :
 
-https://github.com/jdev-org/madDog/blob/b1df1f875bce3b8c80842a9808a77730ca1282d3/vrt/vrt2Postgis.sh#L65-L67
+https://github.com/jdev-org/madDog/blob/ede54f74da92274eab5f41dc98dbd0bdd69c5474/vrt/vrt2Postgis.sh#L64-L67
 
 
 - Accéder aux TIF produits

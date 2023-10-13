@@ -20,6 +20,7 @@ CREATE TABLE wpstdcconf(
 CREATE TABLE mntprocessconf(
    id_site VARCHAR(6) NOT NULL UNIQUE,
    code_site CHAR(6)  NOT NULL,
+   algo CHAR(6) NOT NULL DEFAULT invdist,
    power REAL DEFAULT 6.0,
    smothing REAL DEFAULT 7.0,
    radius1 REAL DEFAULT 30.0,

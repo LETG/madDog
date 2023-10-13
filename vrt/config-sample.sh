@@ -9,9 +9,6 @@ maddogDBSchema=public
 maddogDBUser=maddog
 maddogDBPassword=maddog
 
-# mnt
-mntConfTable="mntprocessconf"
-
 # geoserver dir for image mosaic
 # this folder have to already exist
 mntDirectory=/data/MADDOG/imagemosaic

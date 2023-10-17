@@ -20,15 +20,15 @@ CREATE TABLE wpstdcconf(
 CREATE TABLE mntprocessconf(
    id_site VARCHAR(6) NOT NULL UNIQUE,
    code_site CHAR(6)  NOT NULL,
-   algo CHAR(6) NOT NULL DEFAULT invdist,
+   algo CHAR(6) NOT NULL DEFAULT 'invdist',
    power REAL DEFAULT 6.0,
    smothing REAL DEFAULT 7.0,
    radius1 REAL DEFAULT 30.0,
    radius2 REAL DEFAULT 30.0,
    angle REAL DEFAULT 90,
-   max_points INTEGER(4) DEFAULT 0,
-   min_points INTEGER(4) DEFAULT 1,
-   nodata READ DEFAULT -100,
+   max_points INTEGER DEFAULT 0,
+   min_points INTEGER DEFAULT 1,
+   nodata REAL DEFAULT -100,
    PRIMARY KEY(id_site)
 );
 

@@ -59,12 +59,12 @@ then
     
     # read MNT gdal command params from DB
     ## read columns to get gdal params values
-    paramsColumns="algo, power, smothing, radius1, radius2, angle, max_points, min_points, nodata";
+    paramsColumns="algo, power, smoothing, radius1, radius2, angle, max_points, min_points, nodata";
     ## request table to get values by field
     IFS="|" paramsValues=$(PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT $paramsColumns FROM $maddogDBSchema.mntprocessconf WHERE code_site='$codeSite'")
-    read algo power smothing radius1 radius2 angle max_points min_points nodata <<< $paramsValues
+    read algo power smoothing radius1 radius2 angle max_points min_points nodata <<< $paramsValues
     ## create gdal_grid command params
-    GdalParamsToString=`echo power=$power:smothing=$smothing:radius1=$radius1:radius2=$radius2:angle=$angle:max_points=$max_points:min_points=$max_points:nodata=$nodata`
+    GdalParamsToString=`echo power=$power:smoothing=$smothing:radius1=$radius1:radius2=$radius2:angle=$angle:max_points=$max_points:min_points=$max_points:nodata=$nodata`
     # Create tiff file
     gdal_grid -zfield z -a $algo:$GdalParamsToString -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
     echo "-- Update value for file $mntOutput"

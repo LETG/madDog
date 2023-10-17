@@ -18,9 +18,9 @@ CREATE TABLE wpstdcconf(
 -- mnt
 
 CREATE TABLE mntprocessconf(
-   id_site VARCHAR(6) NOT NULL UNIQUE,
+   id_site INTEGER NOT NULL UNIQUE,
    code_site CHAR(6)  NOT NULL,
-   algo CHAR(6) NOT NULL DEFAULT 'invdist',
+   algo CHAR(50) NOT NULL DEFAULT 'invdist',
    power REAL DEFAULT 6.0,
    smoothing REAL DEFAULT 1.0,
    radius1 REAL DEFAULT 30.0,

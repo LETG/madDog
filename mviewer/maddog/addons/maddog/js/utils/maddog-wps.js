@@ -237,8 +237,51 @@ const wps = (function () {
             // OUTPUTS
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
-                "rasterResult",
+                "rasterResultAsJSON",
                 "application/json",
+                null,
+                null,
+                null,
+                false,
+                null,
+                null);
+            var outputs = [complexOutput];
+            // EXECUTE WPS with 42North lib
+            wpsService.execute(callback, processIdentifier, "raw", executionMode, lineage, inputs, outputs);
+        },
+        /**
+         * MNT Raster Compare WPS.
+         * - Config object is define in maddog.js.
+         * Execute a callback pass from maddog.js file.
+         * @param {Object} compareMNT an object wich contain every WPS params
+         * @returns nothing
+         */
+        compareRasterResultAsTIFF: ({
+            callback = () => {},
+            wpsService = null,
+            processIdentifier = "mnt:compareMNToTiff",
+            executionMode = "async",
+            lineage = false,
+            codeSite = "",
+            initDate = "",
+            dateToCompare = "",
+            evaluationInterval = 10.0
+        }) => {
+            document.dispatchEvent(wps.startEvent);
+            if (!wpsService || !initDate || !dateToCompare) return {};
+            let inputGenerator = new InputGenerator();
+            // INPUTS
+            let inputs = Object.values({
+                codeSite: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("codeSite", null, null, codeSite || maddog.idsite),
+                initDate: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("initDate", null, null, initDate),
+                dateToCompare: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("dateToCompare", null, null, dateToCompare),
+                evaluationInterval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("evaluationInterval", null, null, evaluationInterval)
+            });
+            // OUTPUTS
+            var outputGenerator = new OutputGenerator();
+            var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
+                "rasterResultAsTIFF",
+                "image/tiff",
                 null,
                 null,
                 null,

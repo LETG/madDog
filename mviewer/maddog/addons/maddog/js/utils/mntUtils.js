@@ -84,14 +84,13 @@
         },
         {
             "color": "#7a0403",
-            condition: () => n <= 5,
-            "label": "5.0000"
+            condition: () => n > 4,
+            "label": "> 4.0000"
         }
     ].filter((e) => e.condition())[0];
 
     const pointStyle = (feature) => {
         let color = getDiffColor(feature.getProperties()?.elevationDiff);
-
         return new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 5,
@@ -102,6 +101,62 @@
             }),
         });
     };
+     /**
+      * Create compare tiff layer
+      * @returns ol.layer.vector
+      */
+     const createCompareLayerTiff = (tiff) => {
+        proj4.defs(
+            'EPSG:2154',
+            '+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+        );
+        ol.proj.proj4.register(proj4);
+         
+        const band = ['band', 1];
+
+        const source = new ol.source.GeoTIFF({
+            wrapX: true,
+            normalize: false,
+            sources: [{
+                url: "https://gis.jdev.fr/mviewer/apps/maddog/data/vectorize2.tiff"
+            }],
+        });
+        
+        const bandValue = ['band', 1];
+        return new ol.layer.WebGLTile({
+            source: source,
+            style: {
+                color: [
+                    'case',
+                    ['==', bandValue, -0],
+                    ['color', 0,0,0, 0],
+                    ['<=', bandValue, -5],
+                    ['color', 48, 18, 59, 1],
+                    ['<=', bandValue, -4],
+                    ['color', 69, 91, 205, 1],
+                    ['<=', bandValue, -3],
+                    ['color', 62, 156, 254, 1],
+                    ['<=', bandValue, -2],
+                    ['color', 24, 215, 203, 1],
+                    ['<=', bandValue, -1],
+                    ['color', 72, 248, 130, 1],
+                    ['<=', bandValue, 0],
+                    ['color', 164, 252, 60, 1],
+                    ['<=', bandValue, 1],
+                    ['color', 226, 220, 56, 1],
+                    ['<=', bandValue, 2],
+                    ['color', 254, 163, 49, 1],
+                    ['<=', bandValue, 3],
+                    ['color', 239, 89, 17, 1],
+                    ['<=', bandValue, 4],
+                    ['color', 194, 36, 3, 1],
+                    ['<=', bandValue, 5],
+                    ['color', 122, 4, 3, 1],
+                    ['color', 0, 0, 0, 1],
+                  ]
+            }
+        });
+     };
      /**
       * Create compare vector layer
       * @returns ol.layer.vector
@@ -305,6 +360,7 @@
                 [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "compareRasterMNTConfig");
             $("#mntCompareBtn").show();
+            $("#mntCompareBtnTiff").show();
         },
         /**
          * Create bootstrap-multiselect for beach profile UI
@@ -362,6 +418,8 @@
             const displayError = $('#mntMultiselect option:selected').length !== 2;
             // manage trigger wps button
             mntCompareBtn.disabled = displayError;
+            mntCompareBtnTiff.disabled = displayError;
+
             panelMNTParam.hidden = displayError;
             // error message
             alertMntParams.hidden = !displayError;
@@ -389,6 +447,20 @@
             mntUtils.changeDates();
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
+        addToCompareLayerTiff: (type) => {
+            if (!mntUtils.map) return;
+            // remove layer if exist
+            mntUtils.map.getLayers().getArray()
+                .filter(lyr => lyr.getProperties().id === vectorLayerId)
+                .forEach(el => mntUtils.map.removeLayer(el));
+            if (!mntUtils.features) return;
+            // create layer and add points
+            const layer = createCompareLayerTiff();
+
+            // add layer to map
+            mntUtils.map.addLayer(layer);
+        },
+
         addToCompareLayer: () => {
             if (!mntUtils.map) return;
             // remove layer if exist
@@ -409,16 +481,21 @@
             // add layer to map
             mntUtils.map.addLayer(layer);
         },
+
         /**
          * Callback on WPS response
          * @param {*} response object from WPS
          */
         onWpsSuccess: (response) => {
-            mntUtils.features = response?.responseDocument;
+            const isJson = response?.responseDocument?.type === "FeatureCollection";
             // create second map
             mntUtils.addMap();
             // add result to second map
-            mntUtils.addToCompareLayer();
+            if (isJson) {
+                mntUtils.features = response?.responseDocument;
+                return mntUtils.addToCompareLayer();   
+            }
+            return mntUtils.addToCompareLayerTiff();
         },
         /**
          * Will change the legend panel

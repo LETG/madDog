@@ -117,6 +117,15 @@
                 expanded="true"
                 attribution="Source: service WPS">
             </layer>
+            <!-- <layer id="tiff" name="Tiff" visible="true" queryable="false"
+                index="1"
+                toplayer="true"
+                type="customlayer" opacity="0.8"
+                url="apps/maddog/customlayers/tiff.js"
+                vectorlegend="true"
+                expanded="true"
+                attribution="Source: service WPS">
+            </layer> -->
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
             <layer id="tooltip-communes" name="Tooltip" visible="true" queryable="false"
                 tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"

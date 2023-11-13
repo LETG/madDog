@@ -160,7 +160,7 @@
                                                 <span data-toggle="tooltip" data-placement="top" title="Fixer l'équidistance entre les radiales de traitement le long de la ligne de référence">
                                                     <i class="fas fa-info-circle"></i></span>
                                             </label>
-                                            <input onchange="tdcUtils.onParamChange(this)" value="10" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
+                                            <input onchange="tdcUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="radialDistance" aria-describedby="basic-addon3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
@@ -422,9 +422,6 @@
                     <button  hidden id="mntResetBtn" type="button" class="navbar-right btn btn-default refreshWps" onClick="mntUtils.mntReset()">
                         <i class="fa-solid fa-rotate-right"></i>
                         Réinitialiser
-                    </button>
-                    <button id="mntCompareBtn" type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.compareRasterMNT(maddog.compareRasterMNTConfig)">
-                        Comparer en JSON
                     </button>
                     <button id="mntCompareBtnTiff" type="button" class="navbar-right btn btn-default triggerWps" onClick="wps.compareRasterResultAsTIFF(maddog.compareRasterMNTConfig)">
                         Comparer en TIFF

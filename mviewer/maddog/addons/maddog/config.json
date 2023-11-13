@@ -56,7 +56,7 @@
         },
         "searchLimit": 10,
         "wps": {
-            "url": "https://gis.jdev.fr/geoserver/ows",
+            "url": "https://portail.indigeo.fr/geoserver/ows",
             "version": "1.0.0"
         }
     }

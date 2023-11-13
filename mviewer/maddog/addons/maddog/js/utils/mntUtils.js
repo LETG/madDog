@@ -1,7 +1,7 @@
 /**
  * This file is usefull to manage MNT panels interaction and MNT WMS layer.
  */
- const mntUtils = (function() {
+const mntUtils = (function() {
 
     const MNTLayerName = "mnt";
 
@@ -31,7 +31,7 @@
 
     const vectorLayerId = "mntCompareLayer";
 
-     // COLOR CLASS FOR RESULT COMPARE MNT LAYER
+    // COLOR CLASS FOR RESULT COMPARE MNT LAYER
     const getDiffColor = (n) => [{
             "color": "#30123b",
             condition: () => n <= -5,
@@ -101,66 +101,113 @@
             }),
         });
     };
-     /**
-      * Create compare tiff layer
-      * @returns ol.layer.vector
-      */
-     const createCompareLayerTiff = (tiff) => {
+    /**
+     * Create compare tiff layer
+     * @returns ol.layer.vector
+     */
+    const createCompareLayerTiff = () => {
         proj4.defs(
             'EPSG:2154',
             '+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
         );
         ol.proj.proj4.register(proj4);
-         
-        const band = ['band', 1];
 
-        const source = new ol.source.GeoTIFF({
-            wrapX: true,
-            normalize: false,
-            sources: [{
-                url: "https://gis.jdev.fr/mviewer/apps/maddog/data/vectorize2.tiff"
-            }],
-        });
-        
-        const bandValue = ['band', 1];
-        return new ol.layer.WebGLTile({
-            source: source,
-            style: {
-                color: [
-                    'case',
-                    ['==', bandValue, -0],
-                    ['color', 0,0,0, 0],
-                    ['<=', bandValue, -5],
-                    ['color', 48, 18, 59, 1],
-                    ['<=', bandValue, -4],
-                    ['color', 69, 91, 205, 1],
-                    ['<=', bandValue, -3],
-                    ['color', 62, 156, 254, 1],
-                    ['<=', bandValue, -2],
-                    ['color', 24, 215, 203, 1],
-                    ['<=', bandValue, -1],
-                    ['color', 72, 248, 130, 1],
-                    ['<=', bandValue, 0],
-                    ['color', 164, 252, 60, 1],
-                    ['<=', bandValue, 1],
-                    ['color', 226, 220, 56, 1],
-                    ['<=', bandValue, 2],
-                    ['color', 254, 163, 49, 1],
-                    ['<=', bandValue, 3],
-                    ['color', 239, 89, 17, 1],
-                    ['<=', bandValue, 4],
-                    ['color', 194, 36, 3, 1],
-                    ['<=', bandValue, 5],
-                    ['color', 122, 4, 3, 1],
-                    ['color', 0, 0, 0, 1],
-                  ]
+        let config = maddog.compareRasterMNTConfig;
+        let xml = `
+            <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 			  http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+                <ows:Identifier>mnt:compareMNToTiff</ows:Identifier>
+                <wps:DataInputs>
+                    <wps:Input>
+                        <ows:Identifier>codeSite</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ maddog.idsite }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>initDate</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.initDate }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>dateToCompare</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.dateToCompare }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>evaluationInterval</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.evaluationInterval }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                </wps:DataInputs>
+                <wps:ResponseForm>
+                    <wps:RawDataOutput mimeType="image/tiff">
+                        <ows:Identifier>rasterResultAsTIFF</ows:Identifier>
+                    </wps:RawDataOutput>
+                </wps:ResponseForm>
+            </wps:Execute>
+        `;
+        fetch(maddog.getCfg("config.options.wps.url"), {
+            method: "POST",
+            body: xml,
+            headers: {
+                "Content-Type": "text/xml"
             }
+        }).then(x => x.arrayBuffer()).then(buffer => new Blob([buffer])).then(blob => {
+            return new ol.source.GeoTIFF({
+                wrapX: true,
+                normalize: false,
+                sources: [{
+                    blob: blob,
+                }],
+            });
+        }).then(src => {
+            const bandValue = ['band', 1];
+            const layer = new ol.layer.WebGLTile({
+                source: src,
+                style: {
+                    color: [
+                        'case',
+                        ['==', bandValue, -0],
+                        ['color', 0, 0, 0, 0],
+                        ['<=', bandValue, -5],
+                        ['color', 48, 18, 59, 1],
+                        ['<=', bandValue, -4],
+                        ['color', 69, 91, 205, 1],
+                        ['<=', bandValue, -3],
+                        ['color', 62, 156, 254, 1],
+                        ['<=', bandValue, -2],
+                        ['color', 24, 215, 203, 1],
+                        ['<=', bandValue, -1],
+                        ['color', 72, 248, 130, 1],
+                        ['<=', bandValue, 0],
+                        ['color', 164, 252, 60, 1],
+                        ['<=', bandValue, 1],
+                        ['color', 226, 220, 56, 1],
+                        ['<=', bandValue, 2],
+                        ['color', 254, 163, 49, 1],
+                        ['<=', bandValue, 3],
+                        ['color', 239, 89, 17, 1],
+                        ['<=', bandValue, 4],
+                        ['color', 194, 36, 3, 1],
+                        ['<=', bandValue, 5],
+                        ['color', 122, 4, 3, 1],
+                        ['color', 0, 0, 0, 1],
+                    ]
+                }
+            });
+            // add layer to map
+            mntUtils.map.addLayer(layer);
         });
-     };
-     /**
-      * Create compare vector layer
-      * @returns ol.layer.vector
-      */
+
+
+    };
+    /**
+     * Create compare vector layer
+     * @returns ol.layer.vector
+     */
     const createCompareLayer = () => new ol.layer.Vector({
         source: new ol.source.Vector({
             format: new ol.format.GeoJSON()
@@ -203,7 +250,7 @@
             maddog.setConfig({
                 ...mntUtils.defaultParams
             }, "beachProfileTrackingConfig"); // <-- see with Gaetan why beachProfilTracking
-            
+
         },
         /**
          * On close MNT panel
@@ -259,14 +306,14 @@
         /**
          * Update WMS MNT params according selected site and selected date (first by default)
          */
-        updateLayer: () => {           
-            if (mntUtils.date) {  
-                mviewer.getLayer(MNTLayerName).layer.setVisible(true);            
+        updateLayer: () => {
+            if (mntUtils.date) {
+                mviewer.getLayer(MNTLayerName).layer.setVisible(true);
                 changeSourceParams({
                     CQL_FILTER: `location like '%${maddog.idsite}%'`,
                     time: mntUtils.date
                 });
-            }else{
+            } else {
                 // no date selected remove layer visibility
                 mviewer.getLayer(MNTLayerName).layer.setVisible(false);
             }
@@ -447,18 +494,15 @@
             mntUtils.changeDates();
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
-        addToCompareLayerTiff: (type) => {
+
+        addToCompareLayerTiff: () => {
             if (!mntUtils.map) return;
             // remove layer if exist
             mntUtils.map.getLayers().getArray()
                 .filter(lyr => lyr.getProperties().id === vectorLayerId)
                 .forEach(el => mntUtils.map.removeLayer(el));
-            if (!mntUtils.features) return;
             // create layer and add points
-            const layer = createCompareLayerTiff();
-
-            // add layer to map
-            mntUtils.map.addLayer(layer);
+            createCompareLayerTiff();
         },
 
         addToCompareLayer: () => {
@@ -487,14 +531,9 @@
          * @param {*} response object from WPS
          */
         onWpsSuccess: (response) => {
-            const isJson = response?.responseDocument?.type === "FeatureCollection";
             // create second map
             mntUtils.addMap();
             // add result to second map
-            if (isJson) {
-                mntUtils.features = response?.responseDocument;
-                return mntUtils.addToCompareLayer();   
-            }
             return mntUtils.addToCompareLayerTiff();
         },
         /**
@@ -523,7 +562,7 @@
             }
         },
         defaultParams: {
-            evaluationInterval: 10.0,
+            evaluationInterval: 0,
             initDate: null,
             dateToCompare: null
         }

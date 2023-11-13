@@ -222,7 +222,7 @@ const wps = (function () {
             codeSite = "",
             initDate = "",
             dateToCompare = "",
-            evaluationInterval = 10.0
+            evaluationInterval = 0
         }) => {
             document.dispatchEvent(wps.startEvent);
             if (!wpsService || !initDate || !dateToCompare) return {};
@@ -265,7 +265,7 @@ const wps = (function () {
             codeSite = "",
             initDate = "",
             dateToCompare = "",
-            evaluationInterval = 10.0
+            evaluationInterval = 0
         }) => {
             document.dispatchEvent(wps.startEvent);
             if (!wpsService || !initDate || !dateToCompare) return {};

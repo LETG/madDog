@@ -230,14 +230,6 @@ maddog = (function () {
                     processIdentifier: "mnt:compareMNToTiff",
                     ...mntUtils.defaultParams
                 }, "compareRasterMNTConfig");
-
-                maddog.setConfig({
-                    wpsService: wpsService,
-                    callback: mntUtils.onWpsSuccess,
-                    codeSite: maddog.idSite,
-                    processIdentifier: "mnt:compareRasterMNT",
-                    ...mntUtils.defaultParams
-                }, "compareRasterMNTConfig");
             });
         },
         /**

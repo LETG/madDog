@@ -406,7 +406,6 @@ const mntUtils = (function() {
             maddog.setConfig({
                 [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "compareRasterMNTConfig");
-            $("#mntCompareBtn").show();
             $("#mntCompareBtnTiff").show();
         },
         /**
@@ -464,7 +463,6 @@ const mntUtils = (function() {
         manageError: () => {
             const displayError = $('#mntMultiselect option:selected').length !== 2;
             // manage trigger wps button
-            mntCompareBtn.disabled = displayError;
             mntCompareBtnTiff.disabled = displayError;
 
             panelMNTParam.hidden = displayError;

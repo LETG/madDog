@@ -37,6 +37,10 @@ const tdcUtils = (function () {
                                 radialDistance.value = p?.radial_distance;
                                 tdcUtils.onParamChange(radialDistance);
                             }
+                            if (p.hasOwnProperty("direction")) {
+                                radialDirection.value = p.direction;
+                                tdcUtils.onParamChange(radialDirection);
+                            }
                         })
                 );
         },

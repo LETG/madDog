@@ -357,7 +357,7 @@ const tdcUtils = (function () {
                 yaxis: {
                     gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul (m/an)',
+                        text: "Taux d'évolution (m/an)",
                         ...axesFont
                     },
                     autorange: true,

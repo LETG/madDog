@@ -280,9 +280,11 @@ const mntUtils = (function() {
             mntUtils.onBaseLayerChange();
             // init legend and sync on view change
             mntUtils.syncLegend();
-            mviewer.getMap().getView().on('change:resolution', (event) => {
-                mntUtils.syncLegend(event);
-            });
+            if (maddog.getCfg(`config.options.syncLegend`)) {
+                mviewer.getMap().getView().on('change:resolution', (event) => {
+                    mntUtils.syncLegend(event);
+                });   
+            }
         },
         /**
          * To reset MNT
@@ -613,7 +615,7 @@ const mntUtils = (function() {
         syncLegend: (event) => {
             if (MNT_WPS.hidden) {
                 panelDrag.hidden();
-            } else if(maddog.getCfg(`config.options.syncLegend`)) {
+            } else {
                 const resolution = event ? event.target.getResolution() : null;
                 const src = mviewer.getLayer(MNTLayerName).layer.getSource();
                 const graphicUrl = src.getLegendUrl(resolution);

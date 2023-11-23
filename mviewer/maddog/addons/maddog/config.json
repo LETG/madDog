@@ -55,7 +55,7 @@
             "field": "code_site"
         },
         "searchLimit": 10,
-        "syncLegend": false,
+        "syncLegend": true,
         "wps": {
             "url": "https://portail.indigeo.fr/geoserver/ows",
             "version": "1.0.0"

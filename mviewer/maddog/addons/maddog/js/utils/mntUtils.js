@@ -561,7 +561,7 @@ const mntUtils = (function() {
         syncLegend: (event) => {
             if (MNT_WPS.hidden) {
                 panelDrag.hidden();
-            } else {
+            } else if(maddog.getCfg(`config.options.syncLegend`)) {
                 const resolution = event ? event.target.getResolution() : null;
                 const src = mviewer.getLayer(MNTLayerName).layer.getSource();
                 const graphicUrl = src.getLegendUrl(resolution);

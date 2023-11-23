@@ -535,6 +535,15 @@ const mntUtils = (function() {
             return mntUtils.addToCompareLayerTiff();
         },
         /**
+         * Fire manual WPS request without WPS north 52 lib
+         */
+        onWpsTrigger: () => {
+            // create second map
+            mntUtils.addMap();
+            // add result to second map
+            return mntUtils.addToCompareLayerTiff();
+        },
+        /**
          * Will change the legend panel
          * @param {string} content 
          */

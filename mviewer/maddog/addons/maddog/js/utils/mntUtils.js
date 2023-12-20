@@ -1,7 +1,7 @@
 /**
  * This file is usefull to manage MNT panels interaction and MNT WMS layer.
  */
- const mntUtils = (function() {
+const mntUtils = (function() {
 
     const MNTLayerName = "mnt";
 
@@ -31,7 +31,7 @@
 
     const vectorLayerId = "mntCompareLayer";
 
-     // COLOR CLASS FOR RESULT COMPARE MNT LAYER
+    // COLOR CLASS FOR RESULT COMPARE MNT LAYER
     const getDiffColor = (n) => [{
             "color": "#30123b",
             condition: () => n <= -5,
@@ -84,35 +84,187 @@
         },
         {
             "color": "#7a0403",
-            condition: () => n <= 5,
-            "label": "5.0000"
+            condition: () => n > 4,
+            "label": "> 4.0000"
         }
     ].filter((e) => e.condition())[0];
 
-    const pointStyle = (feature) => {
-        let color = getDiffColor(feature.getProperties()?.elevationDiff);
+    /**
+     * remove all layers with same id
+     * @param {string} id 
+     */
+    const removeAllLayers = (id) => {
+        // remove if alreadyExists
+        const mntMapLayers = mntUtils.map.getLayers().getArray();
+        const layerCreated = mntMapLayers.filter(x => x.get("id") == id);
+        if (layerCreated.length) {
+            layerCreated.forEach(l => mntUtils.map.removeLayer(l));
+        }
+    }
+    /**
+     * Create compare tiff layer
+     * @returns ol.layer.vector
+     */
+    const createCompareLayerTiff = (src) => {
+        // create new one
+        const bandValue = ['band', 1];
+        const layer = new ol.layer.WebGLTile({
+            source: null,
+            id: vectorLayerId,
+            style: {
+                color: [
+                    'case',
+                    ['==', bandValue, -0],
+                    ['color', 0, 0, 0, 0],
+                    ['<=', bandValue, -4],
+                    ['color', 62,55,144, 1],
+                    ['<=', bandValue, -3.75],
+                    ['color', 64, 64, 162, 1],
+                    ['<=', bandValue, -3.5],
+                    ['color', 66, 73, 178, 1],
+                    ['<=', bandValue, -3.25],
+                    ['color', 68, 82, 193, 1],
+                    ['<=', bandValue, -3],
+                    ['color', 69, 91, 205, 1],
+                    ['<=', bandValue, -2.75],
+                    ['color', 70, 99, 217, 1],
+                    ['<=', bandValue, -2.5],
+                    ['color', 70, 107, 227, 1],
+                    ['<=', bandValue, -2.25],
+                    ['color', 71, 116, 236, 1],
+                    ['<=', bandValue, -2],
+                    ['color', 71, 124, 243, 1],
+                    ['<=', bandValue, -1.75],
+                    ['color', 70, 132, 249, 1],
+                    ['<=', bandValue, -1.5],
+                    ['color', 69, 140, 253, 1],
+                    ['<=', bandValue, -1.25],
+                    ['color', 62, 156, 254, 1],
+                    ['<=', bandValue, -1],
+                    ['color', 62, 156, 254, 1],
+                    ['<=', bandValue, -0.75],
+                    ['color', 57, 164, 252, 1],
+                    ['<=', bandValue, -0.5],
+                    ['color', 52, 172, 247, 1],
+                    ['<=', bandValue, -0.25],
+                    ['color', 46, 180, 242, 1],
+                    ['<=', bandValue, 0],
+                    ['color', 40, 188, 235, 1],
+                    ['<=', bandValue, 0.25],
+                    ['color', 35, 195, 228, 1],
+                    ['<=', bandValue, 0.5],
+                    ['color', 35, 195, 228, 1],
+                    ['<=', bandValue, 0.75],
+                    ['color', 26, 209, 211, 1],
+                    ['<=', bandValue, 1],
+                    ['color', 24, 215, 203, 1],
+                    ['<=', bandValue, 1.25],
+                    ['color', 24, 221, 194, 1],
+                    ['<=', bandValue, 1.5],
+                    ['color', 25, 226, 187, 1],
+                    ['<=', bandValue, 1.75],
+                    ['color', 28, 230, 179, 1],
+                    ['<=', bandValue, 2],
+                    ['color', 33, 235, 171, 1],
+                    ['<=', bandValue, 2.25],
+                    ['color', 41, 239, 162, 1],
+                    ['<=', bandValue, 2.5],
+                    ['color', 50, 242, 152, 1],
+                    ['<=', bandValue, 2.75],
+                    ['color', 61, 245, 141, 1],
+                    ['<=', bandValue, 3],
+                    ['color', 72, 248, 130, 1],
+                    ['<=', bandValue, 3.25],
+                    ['color', 84, 250, 120, 1],
+                    ['<=', bandValue, 3.5],
+                    ['color', 96, 252, 109, 1],
+                    ['<=', bandValue, 3.75],
+                    ['color', 109, 254, 98, 1],
+                    ['<=', bandValue, 4],
+                    ['color', 122, 254, 88, 1],
+                    ['<=', bandValue, 4.25],
+                    ['color', 134, 255, 80, 1],
+                    ['<=', bandValue, 4.5],
+                    ['color', 145, 255, 72, 1],
+                    ['<=', bandValue, 4.75],
+                    ['color', 155, 254, 64, 1],
+                    ['<=', bandValue, 5],
+                    ['color', 164, 252, 60, 1],
+                    ['<=', bandValue, 5],
+                    ['color', 0, 0, 0, 1],
+                    ['color', 0, 0, 0, 0]
+                ]
+            }
+        });
+        if (src) {
+            removeAllLayers(vectorLayerId);
+            layer.setSource(src);
+            return layer;
+        }
+        proj4.defs(
+            'EPSG:2154',
+            '+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+        );
+        ol.proj.proj4.register(proj4);
 
-        return new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 5,
-                fill: new ol.style.Fill({
-                    color: color.color,
-                    width: 2
-                }),
-            }),
+        let config = maddog.compareRasterMNTConfig;
+        let xml = `
+            <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 			  http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+                <ows:Identifier>mnt:compareMNToTiff</ows:Identifier>
+                <wps:DataInputs>
+                    <wps:Input>
+                        <ows:Identifier>codeSite</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ maddog.idsite }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>initDate</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.initDate }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>dateToCompare</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.dateToCompare }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                    <wps:Input>
+                        <ows:Identifier>evaluationInterval</ows:Identifier>
+                        <wps:Data>
+                            <wps:LiteralData>${ config.evaluationInterval }</wps:LiteralData>
+                        </wps:Data>
+                    </wps:Input>
+                </wps:DataInputs>
+                <wps:ResponseForm>
+                    <wps:RawDataOutput mimeType="image/tiff">
+                        <ows:Identifier>rasterResultAsTIFF</ows:Identifier>
+                    </wps:RawDataOutput>
+                </wps:ResponseForm>
+            </wps:Execute>
+        `;
+        fetch(maddog.getCfg("config.options.wps.url"), {
+            method: "POST",
+            body: xml,
+            headers: {
+                "Content-Type": "text/xml"
+            }
+        }).then(x => x.arrayBuffer()).then(buffer => new Blob([buffer])).then(blob => {
+            return new ol.source.GeoTIFF({
+                wrapX: true,
+                normalize: false,
+                sources: [{
+                    blob: blob,
+                }],
+            });
+        }).then(src => {
+            layer.setSource(src);
+            // add layer to map
+            removeAllLayers(vectorLayerId);
+            mntUtils.map.addLayer(layer);
         });
     };
-     /**
-      * Create compare vector layer
-      * @returns ol.layer.vector
-      */
-    const createCompareLayer = () => new ol.layer.Vector({
-        source: new ol.source.Vector({
-            format: new ol.format.GeoJSON()
-        }),
-        id: vectorLayerId,
-        style: pointStyle
-    });
     // PUBLIC
     return {
         // dates from postgREST table
@@ -126,9 +278,11 @@
             mntUtils.onBaseLayerChange();
             // init legend and sync on view change
             mntUtils.syncLegend();
-            mviewer.getMap().getView().on('change:resolution', (event) => {
-                mntUtils.syncLegend(event);
-            });
+            if (maddog.getCfg(`config.options.syncLegend`)) {
+                mviewer.getMap().getView().on('change:resolution', (event) => {
+                    mntUtils.syncLegend(event);
+                });   
+            }
         },
         /**
          * To reset MNT
@@ -142,13 +296,12 @@
             mntUtils.getDates();
             mntToolbar.hidden = true;
             mntUtils.features = null;
-            mntUtils.addToCompareLayer();
 
             document.getElementById("evaluationInterval").value = mntUtils.defaultParams.evaluationInterval;
             maddog.setConfig({
                 ...mntUtils.defaultParams
             }, "beachProfileTrackingConfig"); // <-- see with Gaetan why beachProfilTracking
-            
+
         },
         /**
          * On close MNT panel
@@ -204,14 +357,14 @@
         /**
          * Update WMS MNT params according selected site and selected date (first by default)
          */
-        updateLayer: () => {           
-            if (mntUtils.date) {  
-                mviewer.getLayer(MNTLayerName).layer.setVisible(true);            
+        updateLayer: () => {
+            if (mntUtils.date) {
+                mviewer.getLayer(MNTLayerName).layer.setVisible(true);
                 changeSourceParams({
                     CQL_FILTER: `location like '%${maddog.idsite}%'`,
                     time: mntUtils.date
                 });
-            }else{
+            } else {
                 // no date selected remove layer visibility
                 mviewer.getLayer(MNTLayerName).layer.setVisible(false);
             }
@@ -222,7 +375,6 @@
          */
         siteChange: () => {
             mntUtils.features = null;
-            mntUtils.addToCompareLayer();
             mntUtils.getDates();
             // change custom layer params to add CQL
             if (!maddog.idsite) return;
@@ -283,16 +435,27 @@
             if (!mntUtils.map) {
                 return;
             }
-            // get all baseLayers from initial mv map
-            mntUtils.map.getLayers().getArray().forEach(e => mntUtils.map.removeLayer(e))
+            const mntMapBaseLayer = mntUtils.map.getLayers().getArray().filter(x => x.get("id") == "compareBaseMap");
+            if (mntMapBaseLayer.length && mntMapBaseLayer[0].get("blid") == mviewer.getActiveBaseLayer()) {
+                // avoid action if selected is same as current
+                return;
+            }
             const BL = mviewer.getMap().getLayers().getArray().filter(i => i.getProperties().blid === mviewer.getActiveBaseLayer())[0].getSource();
+            if (mntMapBaseLayer.length) {
+                // update source
+                mntMapBaseLayer[0].setSource(BL);
+                mntMapBaseLayer[0].set("blid",mviewer.getActiveBaseLayer());
+                return;
+            }
+            // create BL
+            removeAllLayers("compareBaseMap");
             const activeBL = new ol.layer.Tile({
+                id: "compareBaseMap",
                 visible: true,
                 source: BL,
                 blid: mviewer.getActiveBaseLayer()
             });
-            mntUtils.map.addLayer(activeBL)
-            mntUtils.map.addLayer(createCompareLayer());
+            mntUtils.map.addLayer(activeBL);
         },
         // second MNT map
         map: null,
@@ -304,7 +467,7 @@
             maddog.setConfig({
                 [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "compareRasterMNTConfig");
-            $("#mntCompareBtn").show();
+            $("#mntCompareBtnTiff").show();
         },
         /**
          * Create bootstrap-multiselect for beach profile UI
@@ -361,7 +524,8 @@
         manageError: () => {
             const displayError = $('#mntMultiselect option:selected').length !== 2;
             // manage trigger wps button
-            mntCompareBtn.disabled = displayError;
+            mntCompareBtnTiff.disabled = displayError;
+
             panelMNTParam.hidden = displayError;
             // error message
             alertMntParams.hidden = !displayError;
@@ -389,36 +553,35 @@
             mntUtils.changeDates();
             mntUtils.manageError("Vous devez choisir au moins 2 dates !", '<i class="fas fa-exclamation-circle"></i>');
         },
-        addToCompareLayer: () => {
+
+        addToCompareLayerTiff: () => {
             if (!mntUtils.map) return;
             // remove layer if exist
             mntUtils.map.getLayers().getArray()
                 .filter(lyr => lyr.getProperties().id === vectorLayerId)
                 .forEach(el => mntUtils.map.removeLayer(el));
-            if (!mntUtils.features) return;
             // create layer and add points
-            const layer = createCompareLayer();
-            let features = new ol.format.GeoJSON({
-                defaultDataProjection: 'EPSG:2154'
-            }).readFeatures(mntUtils.features, {
-                dataProjection: 'EPSG:2154',
-                featureProjection: 'EPSG:3857'
-            });
-            features.forEach(f => f.setStyle(pointStyle(f)));
-            layer.getSource().addFeatures(features);
-            // add layer to map
-            mntUtils.map.addLayer(layer);
+            createCompareLayerTiff();
         },
+
         /**
          * Callback on WPS response
          * @param {*} response object from WPS
          */
         onWpsSuccess: (response) => {
-            mntUtils.features = response?.responseDocument;
             // create second map
             mntUtils.addMap();
             // add result to second map
-            mntUtils.addToCompareLayer();
+            return mntUtils.addToCompareLayerTiff();
+        },
+        /**
+         * Fire manual WPS request without WPS north 52 lib
+         */
+        onWpsTrigger: () => {
+            // create second map
+            mntUtils.addMap();
+            // add result to second map
+            return mntUtils.addToCompareLayerTiff();
         },
         /**
          * Will change the legend panel
@@ -446,7 +609,7 @@
             }
         },
         defaultParams: {
-            evaluationInterval: 10.0,
+            evaluationInterval: 0,
             initDate: null,
             dateToCompare: null
         }

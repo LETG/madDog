@@ -76,6 +76,7 @@ INSERT INTO site VALUES (35,'Plage de Treduder','Treduder','TREDUD');
 INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-Grèvre','STMICH');
 INSERT INTO site VALUES (37,'Île de Banneg','Le Conquet','BANNEG');
 INSERT INTO site VALUES (38,'Île de Béniguet','Molène','BENIGU');
+INSERT INTO site VALUES (39,'Cordon de Karvedog','Île de Sein','KARVED');
 
 
 
@@ -96,3 +97,4 @@ INSERT INTO public.measure_type VALUES (4, 'REF', 'REF : Ligne(s) de référence
 INSERT INTO public.operator VALUES (1, 'Scientifique', 'Scientifique');
 INSERT INTO public.operator VALUES (2, 'Gestionnaire', 'Gestionnaire');
 INSERT INTO public.operator VALUES (3, 'Citoyen', 'Citoyen');
+INSERT INTO public.operator VALUES (4, 'Etudiant', 'Etudiant');

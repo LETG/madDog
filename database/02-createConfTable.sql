@@ -17,8 +17,17 @@ CREATE TABLE wpstdcconf(
 
 
 -- Trait de cote 
-INSERT INTO wpstdcconf VALUES ('VOUGOT', 'TDC1', true, 100, 50);
-INSERT INTO wpstdcconf VALUES ('BOUTRO', 'TDC1', false, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('BOUTRO', 'TDC1', true, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('BETAHO', 'TDC1', false, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('TREFIA', 'TDC1', false, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('PENMAR', 'TDC1', false, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('PLABER', 'TDC1', false, 150, 50);
+INSERT INTO public.wpstdcconf VALUES ('VOUGOT', 'TDC1', false, 100, 50);
+INSERT INTO public.wpstdcconf VALUES ('GOULVE', 'TDC1', false, 250, 75);
+INSERT INTO public.wpstdcconf VALUES ('STEFFO', 'TDC1', true, 80, 25);
+INSERT INTO public.wpstdcconf VALUES ('STEFFE', 'TDC1', true, 80, 25);
+INSERT INTO public.wpstdcconf VALUES ('STMICH', 'TDC1', true, 100, 25);
+
 
 -- Profil
 INSERT INTO wpsprofconf VALUES ('VOUGOT', 'PRF1', 175);
@@ -65,6 +74,8 @@ INSERT INTO site VALUES (33,'Plage de Saint-Efflam Est','Plestin-Les-Grèves','S
 INSERT INTO site VALUES (34,'Plage de Saint-Efflam Ouest','Plestin-Les-Grèves','STEFFO');
 INSERT INTO site VALUES (35,'Plage de Treduder','Treduder','TREDUD');
 INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-Grèvre','STMICH');
+INSERT INTO site VALUES (37,'Île de Banneg','Le Conquet','BANNEG');
+INSERT INTO site VALUES (38,'Île de Béniguet','Molène','BENIGU');
 
 
 

@@ -217,7 +217,7 @@ const tdcUtils = (function () {
             labels = _.sortBy(labels);
             // create one line by date
             const lines = selected.map((s, i) => {
-                return tdcUtils.createPlotlyLine(s, labels, "fromStartDist", s.color)
+                return tdcUtils.createPlotlyLine(s, labels, "fromDateRefDist", s.color)
             });
             // create chart
             const axesFont = {

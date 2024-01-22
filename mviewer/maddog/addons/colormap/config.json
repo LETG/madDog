@@ -1,0 +1,7 @@
+{
+    "type": "module",
+    "js": ["js/colormap.js"],
+    "css": "colormap.css",
+    "html": "colormap.html",
+    "target": "page-content-wrapper"
+}

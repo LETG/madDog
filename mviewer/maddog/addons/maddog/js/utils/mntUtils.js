@@ -106,6 +106,26 @@ const mntUtils = (function() {
      * @returns ol.layer.vector
      */
     const createCompareLayerTiff = () => {
+        const transparencyMax = +0.02;
+        const transparencyMin = -0.02;
+        
+        const valueMin = -4;
+        const valueMax = +6;
+        const steps = 0.25;
+        const noData= 0;
+        
+        let colormap;
+        
+        const colorsRange = [
+          { name: "winter", min: valueMin, max: transparencyMin, reverse: false },
+          { name: "oxygen", min: transparencyMax, max: valueMax, reverse: true },
+        ];
+            
+        const isTransparent = (value) => {
+            if (value <= transparencyMax && value >= transparencyMin) {
+                return true;
+            }
+        }; 
         proj4.defs(
             'EPSG:2154',
             '+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
@@ -159,95 +179,21 @@ const mntUtils = (function() {
             return new ol.source.GeoTIFF({
                 wrapX: true,
                 normalize: false,
+                noData: noData,
                 sources: [{
                     blob: blob,
                 }],
             });
         }).then(src => {
+            if (!colormap) {
+                colormap = mviewer.customComponents.colormap;   
+            }
             const bandValue = ['band', 1];
+            const colors = colormap.colorRanges(colorsRange, isTransparent, steps);
             const layer = new ol.layer.WebGLTile({
                 source: src,
                 style: {
-                    color: [
-                        'case',
-                        ['==', bandValue, -0],
-                        ['color', 0, 0, 0, 0],
-                        ['<=', bandValue, -4],
-                        ['color', 62,55,144, 1],
-                        ['<=', bandValue, -3.75],
-                        ['color', 64, 64, 162, 1],
-                        ['<=', bandValue, -3.5],
-                        ['color', 66, 73, 178, 1],
-                        ['<=', bandValue, -3.25],
-                        ['color', 68, 82, 193, 1],
-                        ['<=', bandValue, -3],
-                        ['color', 69, 91, 205, 1],
-                        ['<=', bandValue, -2.75],
-                        ['color', 70, 99, 217, 1],
-                        ['<=', bandValue, -2.5],
-                        ['color', 70, 107, 227, 1],
-                        ['<=', bandValue, -2.25],
-                        ['color', 71, 116, 236, 1],
-                        ['<=', bandValue, -2],
-                        ['color', 71, 124, 243, 1],
-                        ['<=', bandValue, -1.75],
-                        ['color', 70, 132, 249, 1],
-                        ['<=', bandValue, -1.5],
-                        ['color', 69, 140, 253, 1],
-                        ['<=', bandValue, -1.25],
-                        ['color', 62, 156, 254, 1],
-                        ['<=', bandValue, -1],
-                        ['color', 62, 156, 254, 1],
-                        ['<=', bandValue, -0.75],
-                        ['color', 57, 164, 252, 1],
-                        ['<=', bandValue, -0.5],
-                        ['color', 52, 172, 247, 1],
-                        ['<=', bandValue, -0.25],
-                        ['color', 46, 180, 242, 1],
-                        ['<=', bandValue, 0],
-                        ['color', 40, 188, 235, 1],
-                        ['<=', bandValue, 0.25],
-                        ['color', 35, 195, 228, 1],
-                        ['<=', bandValue, 0.5],
-                        ['color', 35, 195, 228, 1],
-                        ['<=', bandValue, 0.75],
-                        ['color', 26, 209, 211, 1],
-                        ['<=', bandValue, 1],
-                        ['color', 24, 215, 203, 1],
-                        ['<=', bandValue, 1.25],
-                        ['color', 24, 221, 194, 1],
-                        ['<=', bandValue, 1.5],
-                        ['color', 25, 226, 187, 1],
-                        ['<=', bandValue, 1.75],
-                        ['color', 28, 230, 179, 1],
-                        ['<=', bandValue, 2],
-                        ['color', 33, 235, 171, 1],
-                        ['<=', bandValue, 2.25],
-                        ['color', 41, 239, 162, 1],
-                        ['<=', bandValue, 2.5],
-                        ['color', 50, 242, 152, 1],
-                        ['<=', bandValue, 2.75],
-                        ['color', 61, 245, 141, 1],
-                        ['<=', bandValue, 3],
-                        ['color', 72, 248, 130, 1],
-                        ['<=', bandValue, 3.25],
-                        ['color', 84, 250, 120, 1],
-                        ['<=', bandValue, 3.5],
-                        ['color', 96, 252, 109, 1],
-                        ['<=', bandValue, 3.75],
-                        ['color', 109, 254, 98, 1],
-                        ['<=', bandValue, 4],
-                        ['color', 122, 254, 88, 1],
-                        ['<=', bandValue, 4.25],
-                        ['color', 134, 255, 80, 1],
-                        ['<=', bandValue, 4.5],
-                        ['color', 145, 255, 72, 1],
-                        ['<=', bandValue, 4.75],
-                        ['color', 155, 254, 64, 1],
-                        ['<=', bandValue, 5],
-                        ['color', 164, 252, 60, 1],
-                        ['color', 0, 0, 0, 1]
-                    ]
+                    color: ['interpolate', ['linear'], bandValue, ...colors]
                 }
             });
             // add layer to map

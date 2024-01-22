@@ -33,13 +33,14 @@
     <searchparameters bbox="false" localities="false" features="false" />   
 
     <extensions>
+        <extension type="component" id="colormap" path="apps/maddog/addons"/>  
         <extension type="javascript" id="papaparse" src="apps/maddog/addons/papaparse/papaparse.min.js"/>
         <extension type="component" id="panelDrag" path="apps/maddog/addons"/>
         <extension type="javascript" id="wps-js" src="apps/maddog/addons/wps-js/wps-js-all.min.js"/>
         <extension type="javascript" id="wfs2Fuse" src="apps/maddog/addons/wfs2Fuse/main.js"/>
         <extension type="javascript" id="plotly" src="apps/maddog/addons/maddog/js/lib/plotly-2.12.1.min.js"/>
-        <extension type="component" id="bootstrap-multiselect" path="apps/maddog/addons"/>        
-        <extension type="component" id="maddog" path="apps/maddog/addons"/>        
+        <extension type="component" id="bootstrap-multiselect" path="apps/maddog/addons"/>    
+        <extension type="component" id="maddog" path="apps/maddog/addons"/>
     </extensions>
 
     <themes legendmini="true">         
@@ -117,7 +118,7 @@
                 expanded="true"
                 attribution="Source: service WPS">
             </layer>
-            <!-- <layer id="tiff" name="Tiff" visible="true" queryable="false"
+            <layer id="tiff" name="Tiff" visible="false" queryable="false"
                 index="1"
                 toplayer="true"
                 type="customlayer" opacity="0.8"
@@ -125,7 +126,7 @@
                 vectorlegend="true"
                 expanded="true"
                 attribution="Source: service WPS">
-            </layer> -->
+            </layer>
             <!-- Cette couche utilitaire permet d'avoir une tooltip pour les communes avec un style transparent -->
             <layer id="tooltip-communes" name="Tooltip" visible="true" queryable="false"
                 tooltip="true" tooltipenabled="true" tooltipcontent="{{nom}}"

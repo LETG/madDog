@@ -1,6 +1,0 @@
-{
-    "js": ["axios.min.js"],
-    "css": "",
-    "html": "axios.html",
-    "target": "main"
-}

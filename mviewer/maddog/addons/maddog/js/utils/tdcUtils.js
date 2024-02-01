@@ -11,10 +11,11 @@ const tdcUtils = (function () {
         getReferenceLine: (idsite) => {
             // search reference line as first step and required WPS infos
             const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
-            axios.get(`${lineRefUrl}'${idsite}' AND idtype LIKE 'TDC1'`)
+            fetch(`${ lineRefUrl }'${ idsite }' AND idtype LIKE 'TDC1'`)
+                .then(r => r.json())
                 .then(lineRef => {
-                    maddog.refLine = lineRef.data;
-                    return lineRef.data.features ? lineRef.data.features[0] : []
+                    maddog.refLine = lineRef;
+                    return lineRef.features ? lineRef.features[0] : []
                 })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // from reference line, we get radiale
@@ -25,29 +26,34 @@ const tdcUtils = (function () {
                 .then(() =>
                     // get WPS params for this reference line
                     fetch(`${maddog.getCfg("config.options.postgrestapi")}/wpstdcconf?id_site=eq.${idsite}`)
-                    .then(response => response.text())
-                    .then(wpsParams => {
-                        const p = JSON.parse(wpsParams)[0];
-                        if (p?.radial_length) {
-                            radialLength.value = p?.radial_length;
-                            tdcUtils.onParamChange(radialLength);
-                        }
-                        if (p?.radial_distance) {
-                            radialDistance.value = p?.radial_distance;
-                            tdcUtils.onParamChange(radialDistance);
-                        }
-                    })
+                        .then(response => response.text())
+                        .then(wpsParams => {
+                            const p = JSON.parse(wpsParams)[0];
+                            if (p?.radial_length) {
+                                radialLength.value = p?.radial_length;
+                                tdcUtils.onParamChange(radialLength);
+                            }
+                            if (p?.radial_distance) {
+                                radialDistance.value = p?.radial_distance;
+                                tdcUtils.onParamChange(radialDistance);
+                            }
+                            if (p.hasOwnProperty("direction")) {
+                                radialDirection.value = p.direction;
+                                tdcUtils.onParamChange(radialDirection);
+                            }
+                        })
                 );
         },
         getTDCByIdSite: (idsite) => {
             // next, we get TDC usefull to call coastline tracking WPS
             const tdcUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
-            axios.get(`${tdcUrl}'${idsite}'`)
+            fetch(`${ tdcUrl }'${ idsite }'`)
+                .then(r => r.json())
                 // get TDC and calculate legend and char color
                 .then(tdc => {
                     maddog.charts.tdc = {
-                        ...tdc.data,
-                        features: tdc.data.features.map(f =>
+                        ...tdc,
+                        features: tdc.features.map(f =>
                             ({
                                 ...f,
                                 properties: {
@@ -58,7 +64,7 @@ const tdcUtils = (function () {
                         )
                     };
                     // display multiselect from TDC dates
-                    tdcUtils.setTdcFeatures(tdc.data.features)
+                    tdcUtils.setTdcFeatures(tdc.features)
                     tdcUtils.createTDCMultiSelect();
                     // display TDC to map
                     tdcUtils.changeTdc()
@@ -211,7 +217,7 @@ const tdcUtils = (function () {
             labels = _.sortBy(labels);
             // create one line by date
             const lines = selected.map((s, i) => {
-                return tdcUtils.createPlotlyLine(s, labels, "cumulateDist", s.color)
+                return tdcUtils.createPlotlyLine(s, labels, "fromDateRefDist", s.color)
             });
             // create chart
             const axesFont = {
@@ -351,7 +357,7 @@ const tdcUtils = (function () {
                 yaxis: {
                     gridcolor: "#555",
                     title: {
-                        text: 'Taux de recul (m/an)',
+                        text: "Taux d'évolution (m/an)",
                         ...axesFont
                     },
                     autorange: true,

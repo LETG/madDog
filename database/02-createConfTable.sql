@@ -78,8 +78,6 @@ INSERT INTO site VALUES (37,'Île de Banneg','Le Conquet','BANNEG');
 INSERT INTO site VALUES (38,'Île de Béniguet','Molène','BENIGU');
 INSERT INTO site VALUES (39,'Cordon de Karvedog','Île de Sein','KARVED');
 
-
-
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');
 INSERT INTO public.equipment VALUES (2, 'Centipede_RTK', 'Centipede RTK');

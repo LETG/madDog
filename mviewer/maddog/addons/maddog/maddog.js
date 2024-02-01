@@ -1,4 +1,5 @@
-const maddog = (function() {
+let maddog = null;
+maddog = (function () {
     let typingTimer; //timer identifier
     let zoomFeatureExtent = null;
     const doneTypingInterval = 500; //time in ms, 5 second for example
@@ -7,20 +8,40 @@ const maddog = (function() {
     let wpsService = null;
 
     // wait map ready
-    document.addEventListener("map-ready", () => {
-        tools.onClickAction();
-        tools.highlightFeature();
-    });
+    if(!mviewer.getMap()) {
+        document.addEventListener("map-ready", () => {
+            tools.onClickAction();
+            tools.highlightFeature();
+        });
+    } else {
+        new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
+            .then(v => {
+                tools.onClickAction();
+                tools.highlightFeature();
+        });
+    }
 
     // wait communes layer ready
-    document.addEventListener("communes-ready", () => {
+    const setZoomToCommunes = () => {
         let { x, y, z } = API;
         if (!x || !y || !z) {
             return tools.zoomToOGCLayerExtent();   
         }
         const thisView = mviewer.getMap().getView();
         return thisView.setZoom(thisView.getZoom() - 1);
-    });
+    }
+    if (mviewer.getLayer("communewithsite").layer.getSource().getState() == "ready") {
+        if (maddog) {
+            setZoomToCommunes();
+        } else {
+            new Promise((resolve) => document.addEventListener(`maddog-componentLoaded`, resolve()))
+                .then(v => setZoomToCommunes());
+        }
+    } else {
+        document.addEventListener("communes-ready", () => {
+            setZoomToCommunes();
+        });
+    }
 
     // wait many lib to avoid race condition errors
     const waitLib = (name, ready) => new Promise((resolve, reject) => {
@@ -120,7 +141,6 @@ const maddog = (function() {
             // wait all plugin as required dependancies
             let waitAll = [
                 waitLib(`tools-componentLoaded`, typeof tools !== 'undefined'),
-                waitLib(`axios-componentLoaded`, typeof axios !== 'undefined'),
                 waitLib(`wfs2Fuse-componentLoaded`, typeof wfs2Fuse !== 'undefined'),
                 waitLib(`maddog-wps-componentLoaded`, typeof wps !== 'undefined'),
                 waitLib(`bootstrap-multiselect-componentLoaded`, true)

@@ -56,15 +56,24 @@ then
     echo "mnt filename : $mntOutput"
     # First step with json to filter unwanted pc point
     ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "\"identifiant\" NOT LIKE 'pc%'"
+    
+    # read MNT gdal command params from DB
+    ## read columns to get gdal params values
+    paramsColumns="algo, power, smoothing, radius1, radius2, angle, max_points, min_points, nodata";
+    ## request table to get values by field
+    IFS="|" paramsValues=$(PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT $paramsColumns FROM $maddogDBSchema.mntprocessconf WHERE code_site='$codeSite'")
+    read algo power smoothing radius1 radius2 angle max_points min_points nodata <<< $paramsValues
+    ## create gdal_grid command params
+    GdalParamsToString=`echo power=$power:smoothing=$smothing:radius1=$radius1:radius2=$radius2:angle=$angle:max_points=$max_points:min_points=$max_points:nodata=$nodata`
     # Create tiff file
-    gdal_grid -zfield z -a invdist:$gdalGridIndivParm -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
+    gdal_grid -zfield z -a $algo:$GdalParamsToString -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
     echo "-- Update value for file $mntOutput"
     # issue on imagemosaic and gdal_grid ymin and ymax are inversed
     gdalwarp $mntOutputTmp  $mntOutput
 
     # File has to be readeable by geoserver to index it
     chown -R tomcat:tomcat $mntOutput
-   
+
     #update mosaic index
     curl -v -u $geoserverLogin:$geoserverMdp -XPOST $geoserverUrl -H "\"Content-type: text/plain\"" -d "\"file://$mntDirectory\"" 
 

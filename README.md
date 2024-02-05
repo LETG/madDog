@@ -50,6 +50,35 @@ https://github.com/jdev-org/madDog/blob/main/vrt/config-sample.sh
 
 https://github.com/jdev-org/madDog/blob/main/vrt/vrt2Postgis.sh#L60
 
+- Paramètres d'interpolation GDAL
+
+Les paramètres sont renseignés dans la table `mntprocessconf`. 
+
+Cette table `mntprocessconf` est automatiquement créée par le script [02-createConfTable.sql](https://github.com/jdev-org/madDog/blob/issue-98/database/02-createConfTable.sql#L20-L32).
+
+Elle contient autant de champs que de paramètres à renseigner pour l'algorithme à utiliser. Ces paramètres sont ceux attendus par l'algorithme d'interpolation renseigné dans le champ `algo` de la table `mntprocessconf` selon [la documentation](https://gdal.org/programs/gdal_grid.html#invdist) de l'outil **gdal_grid**.
+
+Les sites (e.g VOUGOT) sont par défaut automatiquement renseignés à la création de la table avec des paramètres par défaut pour l'algorithme `invdist` :
+
+https://github.com/jdev-org/madDog/blob/b1df1f875bce3b8c80842a9808a77730ca1282d3/database/02-createConfTable.sql#L104C5-L106
+
+Il faudra alors ajouter manuellement les nouveaux sites dans cette table si nécessaire.
+
+- Modifier l'algorithme d'interpolation utilisé ou les paramètres
+
+Si vous souhaitez modifier le type d'algorithme, vous devez changer la valeur du champ `algo` de la table `mntprocessconf`.
+
+Selon l'algorithme, la liste et le nom des paramètres peuvent varier. Vous devrez donc modifier la structure de la table pour ajouter les paramètres (1 champ par nom de paramètre unique). N'oubliez pas de modifier le script de création de la table si vous ajouter / supprimez un champ (à pousser sur Git) si nécessaire :
+
+https://github.com/jdev-org/madDog/blob/b1df1f875bce3b8c80842a9808a77730ca1282d3/database/02-createConfTable.sql#L20-L32
+
+Ensuite, vous devrez modifier le fichier vrt2Postgis pour adapter la liste des paramètres à utiliser et la commande exécutée si nécessaire :
+
+https://github.com/jdev-org/madDog/blob/ede54f74da92274eab5f41dc98dbd0bdd69c5474/vrt/vrt2Postgis.sh#L64-L67
+
+
+- Accéder aux TIF produits
+
 En fin de process, les TIF sont disponibles dans le répertoire `/data/MADDOG/imagemosaic/mnt`.
 
 ### Imagemosaic

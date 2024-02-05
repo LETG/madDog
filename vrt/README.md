@@ -1,6 +1,6 @@
-## VRT
+# VRT
 
-### Install
+## Install
 To use VRT you need to install GDAL
 For this project we use Postgresql 13.7 with Postgis 3.2.1, we need at least version 3.0.4 of gdal.
 
@@ -11,7 +11,7 @@ apt  install gdal-bin
 ogrinfo --version 
 ```
 
-### VRT -> GEOJson
+## VRT -> GEOJson
 
 Example de commande de lancement d'un VRT permettant transformer un csv en geojson
 
@@ -19,9 +19,9 @@ Example de commande de lancement d'un VRT permettant transformer un csv en geojs
 cd vrt && ogr2ogr -f "GEOJson" ref1.geojson csvToLine.vrt
 ```
 
-### CSV -> VRT -> GEOJson -> PostGIS
+## CSV -> VRT -> GEOJson -> PostGIS
 
-1. **Description**
+### Description
 
 Le script `./script/vrt2Postgis.sh` permet d'importer un CSV vers PostGIS selon le modèle défini dans le VRT et selon la documentation gdal suivante : 
 
@@ -38,7 +38,9 @@ Ce script prend 5 paramètres dans cet ordre :
 
 > Attention : le nom de la table est obligatoire  pour ajouter un objet dans la base
 
-2. **Configuration**
+### Configuration
+
+- **Base de données**
 
 Ouvrir le script et modifier les informations de connexion à la base de données PostGreSQL :
 
@@ -52,7 +54,7 @@ password=""
 db=""
 ```
 
-3. **Exécution**
+### Execution
 
 ```
 cd ./script/

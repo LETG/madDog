@@ -15,6 +15,22 @@ CREATE TABLE wpstdcconf(
    PRIMARY KEY(id_site, id_tdc)
 );
 
+-- mnt
+
+CREATE TABLE mntprocessconf(
+   id_site INTEGER NOT NULL UNIQUE,
+   code_site VARCHAR(6)  NOT NULL,
+   algo VARCHAR(50) NOT NULL DEFAULT 'invdist',
+   power REAL DEFAULT 6.0,
+   smoothing REAL DEFAULT 1.0,
+   radius1 REAL DEFAULT 30.0,
+   radius2 REAL DEFAULT 30.0,
+   angle REAL DEFAULT 90,
+   max_points INTEGER DEFAULT 0,
+   min_points INTEGER DEFAULT 1,
+   nodata REAL DEFAULT -100,
+   PRIMARY KEY(id_site)
+);
 
 -- Trait de cote 
 INSERT INTO wpstdcconf VALUES ('VOUGOT', 'TDC1', true, 100, 50);
@@ -85,3 +101,7 @@ INSERT INTO public.measure_type VALUES (4, 'REF', 'REF : Ligne(s) de référence
 INSERT INTO public.operator VALUES (1, 'Scientifique', 'Scientifique');
 INSERT INTO public.operator VALUES (2, 'Gestionnaire', 'Gestionnaire');
 INSERT INTO public.operator VALUES (3, 'Citoyen', 'Citoyen');
+
+-- Populate MNT table
+INSERT INTO public.mntprocessconf (id_site, code_site)
+SELECT DISTINCT(id_site), code_site FROM public.site b ORDER BY b.id_site;

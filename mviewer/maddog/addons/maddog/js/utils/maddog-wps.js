@@ -237,7 +237,7 @@ const wps = (function () {
             // OUTPUTS
             var outputGenerator = new OutputGenerator();
             var complexOutput = outputGenerator.createComplexOutput_WPS_1_0(
-                "rasterResult",
+                "rasterResultAsJSON",
                 "application/json",
                 null,
                 null,

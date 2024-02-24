@@ -77,7 +77,7 @@ selectMeasure.addEventListener('change', (event) => {
     if (value == 'PRF') {        
         // Integrate the profile numbers according to the selected site
         const selectSite = document.querySelector('#codeSite');
-        selectSite.addEventListener('change', (event) => { 
+        selectSite.addEventListener('change', f = (event) => { 
             // Display PRF select
             document.getElementById('selectProfilId').style.display = "block";
             // Remove options from select
@@ -98,11 +98,13 @@ selectMeasure.addEventListener('change', (event) => {
                 var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
                 // Filter profiles by the type of measurement
                 var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '3'});
+                // Sort profiles on num_profil
+                PRF.sort((a, b) => a.num_profil - b.num_profil);
                 // Display option if not profil
                 if (!$.isArray(PRF) ||  !PRF.length){                    
                     optionsGenerator('', "Aucun profil n'est disponible pour le site sélectionné", 'numProfil');
                 } else {
-                    PRF.forEach(el => optionsGenerator(el.num_profil, el.num_profil, 'numProfil'));
+                    PRF.forEach(el => optionsGenerator(el.num_profil, "Profil " + el.num_profil, 'numProfil'));
                 }                
             }             
             fetchUrl();
@@ -117,6 +119,10 @@ selectMeasure.addEventListener('change', (event) => {
 function resetForm() {
     document.getElementById("formSuivi").reset();
     document.getElementById("formSuivi").classList.remove('was-validated');
+    document.getElementById('numProfil').innerHTML = "";
+    document.getElementById('numProfil').required = false;
+    document.getElementById('selectProfilId').style.display = "none";
+    document.querySelector('#codeSite').removeEventListener('change', f);
 }
 
 // Set csvContent parm if input is valid

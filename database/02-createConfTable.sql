@@ -74,9 +74,8 @@ INSERT INTO site VALUES (33,'Plage de Saint-Efflam Est','Plestin-Les-Grèves','S
 INSERT INTO site VALUES (34,'Plage de Saint-Efflam Ouest','Plestin-Les-Grèves','STEFFO');
 INSERT INTO site VALUES (35,'Plage de Treduder','Treduder','TREDUD');
 INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-Grèvre','STMICH');
-INSERT INTO site VALUES (37,'Île de Banneg','Le Conquet','BANNEG');
-INSERT INTO site VALUES (38,'Île de Béniguet','Molène','BENIGU');
-INSERT INTO site VALUES (39,'Cordon de Karvedog','Île de Sein','KARVED');
+INSERT INTO site VALUES (37,'Île de Béniguet','Molène','BENIGU');
+INSERT INTO site VALUES (38,'Cordon de Karvedog','Île de Sein','KARVED');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

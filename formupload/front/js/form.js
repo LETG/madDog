@@ -97,7 +97,7 @@ selectMeasure.addEventListener('change', (event) => {
                 // Filter profiles by site id
                 var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
                 // Filter profiles by the type of measurement
-                var PRF = find_in_object(filtered_jsonPRF, {id_measure_type: '3'});
+                var PRF = find_in_object(filtered_jsonPRF, {measuretype: 'PRF'});
                 // Sort profiles on num_profil
                 PRF.sort((a, b) => a.num_profil - b.num_profil);
                 // Display option if not profil

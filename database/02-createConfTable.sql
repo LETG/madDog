@@ -76,6 +76,7 @@ INSERT INTO site VALUES (35,'Plage de Treduder','Treduder','TREDUD');
 INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-Grèvre','STMICH');
 INSERT INTO site VALUES (37,'Île de Béniguet','Molène','BENIGU');
 INSERT INTO site VALUES (38,'Cordon de Karvedog','Île de Sein','KARVED');
+INSERT INTO site VALUES (39,'Plage de Nantouar','Louannec ','NANTOU');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

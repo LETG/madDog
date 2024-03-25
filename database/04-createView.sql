@@ -55,12 +55,12 @@ WITH DATA;
 -- Create sitemeasureprofil
 -- Used to get num profil depending on site and measuretype
 CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
- SELECT RIGHT(lr.idtype, 1)::integer AS num_profil,
+ SELECT RIGHT(lineref.idtype, 1)::integer AS num_profil,
     site.id_site,
     LEFT(lineref.idtype, 3) AS measuretype
    FROM lineref,
     site
-  WHERE lineref.idsite::bpchar = site.code_site;
+  WHERE lineref.idsite::bpchar = site.code_site
 WITH DATA;
 
 

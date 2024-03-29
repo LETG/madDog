@@ -77,6 +77,11 @@ INSERT INTO site VALUES (36,'Plage de Saint-Michel-en-Grèvre','Saint-Michel-en-
 INSERT INTO site VALUES (37,'Île de Béniguet','Molène','BENIGU');
 INSERT INTO site VALUES (38,'Cordon de Karvedog','Île de Sein','KARVED');
 INSERT INTO site VALUES (39,'Plage de Nantouar','Louannec ','NANTOU');
+INSERT INTO site VALUES (40,'Plage de Goas Lagorn','Lannion ','LAGORN');
+INSERT INTO site VALUES (41,'Plage de Goas Treiz','Trebeurden ','GTREIZ');
+INSERT INTO site VALUES (42,'Plage de la Grève Rose','Tregastel ','GRROSE');
+INSERT INTO site VALUES (43,'Marais du Launay','Penvénan','LAUNAY');
+INSERT INTO site VALUES (44,'Marais de Brestan','Pleubian ','BRESTA');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

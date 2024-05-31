@@ -76,10 +76,10 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 && epsg.matches("^[0-9]{4}")){
                  
                 StringBuffer finalDataType = new StringBuffer(measureType);
-                /*if(numProfil == null || numProfil<1 || numProfil >9){
+                if(numProfil == null || numProfil<1 || numProfil >99){
                     numProfil=1;
                     LOGGER.debug("numProfil update to: " +  numProfil);
-                }*/
+                }
                 finalDataType.append(numProfil);
             
                 Path folderPath = createMaddogFolder(codeSite, finalDataType.toString());

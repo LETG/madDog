@@ -30,12 +30,12 @@ const config = [{
 ]
 
 // Function to filter Json by value
-function find_in_object(object, my_criteria){
-    return object.filter(function(obj) {
-      return Object.keys(my_criteria).every(function(c) {
-        return obj[c] == my_criteria[c];
-      });
-    });  
+function find_in_object(object, my_criteria) {
+    return object.filter(function (obj) {
+        return Object.keys(my_criteria).every(function (c) {
+            return obj[c] == my_criteria[c];
+        });
+    });
 };
 
 
@@ -50,19 +50,19 @@ function optionsGenerator(value, text, select) {
 
 // Function to add all options in select by API
 function addOptionsSelect(url, field, textfield, idField, idSelect) {
-fetch(url)
-    .then(function(response) {
-        return response.json()
-    })
-    .then(function(json) {
-        json.forEach(function(feature, index) {
-            // If field as null display id field            
-            let fieldSelect = feature[field] ? feature[field] : feature[idField];
-            let fieldText = feature[textfield] ? feature[textfield] : fieldSelect;
-            // Create select's option for all feature
-            optionsGenerator(fieldSelect, fieldText, idSelect)
+    fetch(url)
+        .then(function (response) {
+            return response.json()
+        })
+        .then(function (json) {
+            json.forEach(function (feature, index) {
+                // If field as null display id field            
+                let fieldSelect = feature[field] ? feature[field] : feature[idField];
+                let fieldText = feature[textfield] ? feature[textfield] : fieldSelect;
+                // Create select's option for all feature
+                optionsGenerator(fieldSelect, fieldText, idSelect)
+            });
         });
-    });
 };
 
 // Add all options for config object
@@ -74,10 +74,10 @@ const selectMeasure = document.querySelector('#measureType');
 selectMeasure.addEventListener('change', (event) => {
     var value = event.target.value;
     // IF PRF display numProfil information
-    if (value == 'PRF') {        
+    if (value == 'PRF') {
         // Integrate the profile numbers according to the selected site
         const selectSite = document.querySelector('#codeSite');
-        selectSite.addEventListener('change', f = (event) => { 
+        selectSite.addEventListener('change', f = (event) => {
             // Display PRF select
             document.getElementById('selectProfilId').style.display = "block";
             // Remove options from select
@@ -89,24 +89,24 @@ selectMeasure.addEventListener('change', (event) => {
                 let responseSite = await fetch(url + "/maddogapi/site");
                 let jsonSite = await responseSite.json();
                 // Filter site by code site
-                var filtered_jsonSite = find_in_object(JSON.parse(JSON.stringify(jsonSite)), {code_site: codeSite});
+                var filtered_jsonSite = find_in_object(JSON.parse(JSON.stringify(jsonSite)), { code_site: codeSite });
                 var idSite = filtered_jsonSite[0].id_site;
                 // Get Profils for selected site
                 let responsePRF = await fetch(url + "/maddogapi/sitemeasureprofil");
                 let jsonPRF = await responsePRF.json();
                 // Filter profiles by site id
-                var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), {id_site: idSite});
+                var filtered_jsonPRF = find_in_object(JSON.parse(JSON.stringify(jsonPRF)), { id_site: idSite });
                 // Filter profiles by the type of measurement
-                var PRF = find_in_object(filtered_jsonPRF, {measuretype: 'PRF'});
+                var PRF = find_in_object(filtered_jsonPRF, { measuretype: 'PRF' });
                 // Sort profiles on num_profil
                 PRF.sort((a, b) => a.num_profil - b.num_profil);
                 // Display option if not profil
-                if (!$.isArray(PRF) ||  !PRF.length){                    
+                if (!$.isArray(PRF) || !PRF.length) {
                     optionsGenerator('', "Aucun profil n'est disponible pour le site sélectionné", 'numProfil');
                 } else {
                     PRF.forEach(el => optionsGenerator(el.num_profil, "Profil " + el.num_profil, 'numProfil'));
-                }                
-            }             
+                }
+            }
             fetchUrl();
         });
     } else {
@@ -136,21 +136,29 @@ function validationFormat() {
         csvFile.setCustomValidity("Format de fichier non valide, veuillez sélectionner un fichier .csv");
         csvFile.reportValidity();
         csvFile.value = '';
-        return ;
-    } else {   
+    } else {
         // Read csv file to string
         var files = csvFile.files;
         if (files.length === 0) {
             csvFile.setCustomValidity("Le fichier ne doit pas être vide");
             csvFile.reportValidity();
-            return ;
+        } else {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                const csvContent = event.target.result;
+                const result = validateCSV(csvContent, selectMeasure.value);
+                if (!result.valid) {
+                    csvFile.setCustomValidity(result.error);
+                    csvFile.reportValidity();
+                    console.error('Erreur:', result.error);
+                } else {
+                    document.getElementById('maddogImpBut').disabled = false;
+                    csvFile.setCustomValidity("");
+                    console.error('Valide:');
+                }
+            };
+            reader.readAsText(files[0]);
         }
-        csvFile.setCustomValidity("");
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            csvContent = event.target.result;
-        };
-        reader.readAsText(files[0]);
     }
 }
 
@@ -160,12 +168,12 @@ function validationFormat() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const formSuivi = document.getElementById("formSuivi");
 
-    formSuivi.addEventListener('submit', event => { 
+    formSuivi.addEventListener('submit', event => {
 
         event.preventDefault();
-        if (!formSuivi.checkValidity()) {           
+        if (!formSuivi.checkValidity()) {
             event.stopPropagation();
-        }else{
+        } else {
             importDataWPS()
         }
         formSuivi.classList.add('was-validated')

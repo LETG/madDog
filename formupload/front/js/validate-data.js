@@ -1,4 +1,29 @@
+var maddogbbox = { xmin: 401659, xmax: 401659, ymin: 6886993, ymax: 6886993 };
+
+function loadbbox() {
+
+    console.log('loadbbox');
+    // TODO change for final url
+    const bboxUrl = '/maddog/formupload/data/limites.geojson';
+
+    fetch(bboxUrl)
+        .then((response) => response.json())
+        .then((json) => {
+            json.features.forEach(feature => {
+                feature.geometry.coordinates[0].forEach(coord => {
+                    const [x, y] = coord;
+                    if (x < maddogbbox.xmin) maddogbbox.xmin = x;
+                    if (x > maddogbbox.xmax) maddogbbox.xmax = x;
+                    if (y < maddogbbox.ymin) maddogbbox.ymin = y;
+                    if (y > maddogbbox.ymax) maddogbbox.ymax = y;
+                });
+            });
+        })
+        .catch((error) => console.error(error));
+}
+
 function validateCSV(content, measureType) {
+
     const lines = content.trim().split('\n');
     const headers = lines[0].replace(/\r/g, '').split(';');
 
@@ -32,11 +57,16 @@ function validateCSV(content, measureType) {
         }
         previousId = id;
 
+        console.log(maddogbbox);
         const x = parseFloat(columns[1]);
         const y = parseFloat(columns[2]);
         const z = columns[3].trim();
         if (isNaN(x) || isNaN(y) || (z !== '' && !isValidDecimal(z))) {
             return { valid: false, error: `Coordonnées invalides à la ligne ${i + 1}.` };
+        }
+
+        if (x > maddogbbox.xmax || x < maddogbbox.xmin || y > maddogbbox.ymax || y < maddogbbox.ymin) {
+            return { valid: false, error: `Coordonnées en dehors de l'étendu possible ou mauvaise projection à la ligne ${i + 1}.` };
         }
 
         const identifiant = columns[4];
@@ -93,4 +123,6 @@ function isValidDecimal(value) {
     const decimalRegex = /^-?\d+(\.\d+)?$/;
     return decimalRegex.test(value);
 }
+
+
 

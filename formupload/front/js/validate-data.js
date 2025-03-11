@@ -41,8 +41,7 @@ function validateCSV(content, measureType) {
     // Vérification du format de date (aaaa-mm-jj)
     const identifiants = [];
     let previousId = -1;
-    //let previousIdentifiant = null;
-    //let previousDate = null;
+    let previousDate = null;
 
     for (let i = 1; i < lines.length; i++) {
         const columns = lines[i].replace(/\r/g, '').split(';');
@@ -74,22 +73,17 @@ function validateCSV(content, measureType) {
             return { valid: false, error: `Identifiant invalide à la ligne ${i + 1}.` };
         }
         identifiants.push(identifiant);
-        // Peut être pas nécessaire
-        // if (previousIdentifiant && identifiant !== previousIdentifiant) {
-        //     return { valid: false, error: `Identifiant différent à la ligne ${i + 1}.` };
-        // }
-        // previousIdentifiant = identifiant;
 
         const date = columns[5];
         // on vérifie les dates uniquement si ce n'est pas une mesure de type ref
         if (!isValidDate(date) && measureType != "REF") {
             return { valid: false, error: `Format de date invalide à la ligne ${i + 1}.` };
         }
-        // // Problèment pas nécessaire
-        // if (previousDate && date !== previousDate) {
-        //     return { valid: false, error: `Date différente à la ligne ${i + 1}.` };
-        // }
-        //previousDate = date;
+        // Problèment pas nécessaire
+        if (previousDate && date !== previousDate) {
+            return { valid: false, error: `Date différente à la ligne ${i + 1}.` };
+        }
+        previousDate = date;
     }
     if (!identifiants.includes(measureType + "1")) {
         return { valid: false, error: `Le csv doit contenir au moins un identifiant de la forme ${measureType}1` };

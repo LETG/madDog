@@ -15,15 +15,15 @@
     <mapoptions maxzoom="19" projection="EPSG:3857" center="-469122.1814135454, 6194499.885208064" zoom="10" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="gallery">
-        <baselayer  type="WMS" id="scan25" label="SCAN25" title="SCAN25" thumbgallery="img/basemap/scan.jpg"
-			url="https://tile.geobretagne.fr:443/gwc02/service/wms" layers="carte" format="image/jpeg" visible="false"
-			attribution="&lt;a href='https://geobretagne.fr/geonetwork/srv/fre/catalog.search#/metadata/81e86907-e601-4518-bc94-743aeaa2211a' target='_blank' >GéoBretagne&lt;/a>"/>        
+        <baselayer  type="WMS" id="scan25" label="Plan IGN" title="Plan IGN" thumbgallery="img/basemap/scan.jpg"
+			url="https://data.geopf.fr/wms-r" layers="GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2" format="image/jpeg" visible="false"
+			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Plan&lt;/a>"/>      
         <baselayer  type="WMS" id="photo1" label="Orthophotographie historique" title="Orthophotographie historique" thumbgallery="img/basemap/ortho-ancien.jpg"
-			url="https://wxs.ign.fr/orthohisto/geoportail/r/wms" layers="ORTHOIMAGERY.ORTHOPHOTOS.1950-1965" format="image/jpeg" visible="false"
-			attribution="&lt;a href='https://geoservices.ign.fr/services-web-experts-orthohisto' target='_blank' >IGN - Geoportail Orthohisto&lt;/a>"/>
+			url="https://data.geopf.fr/wms-r" layers="ORTHOIMAGERY.ORTHOPHOTOS.1950-1965" format="image/jpeg" visible="false"
+			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Orthohisto&lt;/a>"/>
         <baselayer  type="WMS" id="photo2" label="Orthophotographie" title="Orthophotographie" thumbgallery="img/basemap/ortho.jpg"
-			url="https://wxs.ign.fr/ortho/geoportail/r/wms" layers="ORTHOIMAGERY.ORTHOPHOTOS" format="image/jpeg" visible="false"
-			attribution="&lt;a href='https://geoservices.ign.fr/services-web-experts-ortho' target='_blank' >IGN - Géoportail Ortho&lt;/a>"/> 
+			url="https://data.geopf.fr/wms-r" layers="ORTHOIMAGERY.ORTHOPHOTOS" format="image/jpeg" visible="false"
+			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Ortho&lt;/a>"/> 
         <baselayer  type="OSM" id="positron" label="Positron" title="Carto" thumbgallery="img/basemap/positron.png" 
             url="http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" maxzoom="20" 
             visible="true" attribution="Map tiles by  &lt;a href='https://carto.com/attributions' target='_blank'>Carto &lt;/a>, under  &lt;a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0 &lt;/a>" />              

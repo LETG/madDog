@@ -50,7 +50,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 	public static String importData(
 		@DescribeParameter(name = "codeSite", description = "codeSite") final String codeSite,
 		@DescribeParameter(name = "measureType", description = "Type of data, TDC, PRF, MNT") final String measureType,
-        @DescribeParameter(name = "numProfil", description = "Profil number (between 1 and 9", min = 0) Integer numProfil,
+        @DescribeParameter(name = "numProfil", description = "Profil number", min = 0) Integer numProfil,
         @DescribeParameter(name = "surveyDate", description = "Survey Date ") String surveyDate,
         @DescribeParameter(name = "epsg", description = "Projection 2154 without EPSG: ") final String epsg,
         @DescribeParameter(name = "idEquipement", description = "Equipement Code") final String idEquipement,
@@ -76,7 +76,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 && epsg.matches("^[0-9]{4}")){
                  
                 StringBuffer finalDataType = new StringBuffer(measureType);
-                if(numProfil == null || numProfil<1 || numProfil >9){
+                if(numProfil == null || numProfil<1 || numProfil >99){
                     numProfil=1;
                     LOGGER.debug("numProfil update to: " +  numProfil);
                 }

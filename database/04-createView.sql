@@ -55,14 +55,17 @@ WITH DATA;
 -- Create sitemeasureprofil
 -- Used to get num profil depending on site and measuretype
 CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
- SELECT DISTINCT 
- 	num_profil,
-    survey.id_site,
-    id_measure_type
-   FROM survey, profil
-  WHERE survey.id_survey = profil.id_survey AND survey.id_measure_type_survey = profil.id_measure_type
+ SELECT 
+ 	CASE 
+		WHEN LENGTH(lineref.idtype) = 5 THEN RIGHT(lineref.idtype, 2)::integer 
+		WHEN LENGTH(lineref.idtype) = 4 THEN RIGHT(lineref.idtype, 1)::integer 
+	END AS num_profil,
+    site.id_site,
+    LEFT(lineref.idtype, 3) AS measuretype
+   FROM lineref,
+    site
+  WHERE lineref.idsite::bpchar = site.code_site
 WITH DATA;
-
 
 CREATE OR REPLACE VIEW measuretypebysite
  AS

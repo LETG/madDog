@@ -467,7 +467,7 @@ const mntUtils = (function() {
             maddog.setConfig({
                 [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "compareRasterMNTConfig");
-            $("#mntCompareBtnTiff").show();
+            $("#mntCompareBtn").show();
         },
         /**
          * Create bootstrap-multiselect for beach profile UI
@@ -524,7 +524,7 @@ const mntUtils = (function() {
         manageError: () => {
             const displayError = $('#mntMultiselect option:selected').length !== 2;
             // manage trigger wps button
-            mntCompareBtnTiff.disabled = displayError;
+            mntCompareBtn.disabled = displayError;
 
             panelMNTParam.hidden = displayError;
             // error message

@@ -1,0 +1,4 @@
+--2022-09-06 09:59:15--  ftp://localhost/3000?url=https://portail.indigeo.fr/geocms/maps/portail-urcsuraz/share?plugins
+           => ‘wget-log’
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:21... failed: Connection refused.

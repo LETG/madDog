@@ -84,6 +84,9 @@ INSERT INTO site VALUES (43,'Marais du Launay','Penvénan','LAUNAY');
 INSERT INTO site VALUES (44,'Marais de Brestan','Pleubian ','BRESTA');
 INSERT INTO site VALUES (45,'Plage du Hogolo','Plestin-les-Grèves','HOGOLO');
 INSERT INTO site VALUES (46,'Plage de la Banche','Binic','BANCHE');
+INSERT INTO site VALUES (47,'Martin Plage','Plérin','MARTIN');
+INSERT INTO site VALUES (48,'Plage de Saint Marc','Tréveneuc','STMARC');
+INSERT INTO site VALUES (49,'Plage de l''Hôtellerie','Hillion','HOTELL');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

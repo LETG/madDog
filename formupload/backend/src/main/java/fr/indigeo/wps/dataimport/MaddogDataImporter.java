@@ -13,8 +13,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geoserver.wps.gs.GeoServerProcess;
 import org.geotools.process.factory.DescribeParameter;
 import org.geotools.process.factory.DescribeProcess;
@@ -27,13 +27,13 @@ import com.opencsv.CSVWriter;
 import net.sf.json.JSONObject;
 
 /**
- * @author Pierre Jego https://jdev.fr
+ * @author Pierre JEGO - pierre.jeg@jdev.fr pour IEUM LETG
  *
  */
 @DescribeProcess(title = "Add data to maddog datadir", description = "Import data to maddog folder")
 public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataImporter> implements GeoServerProcess {
 
-	private static final Logger LOGGER = Logger.getLogger(MaddogDataImporter.class);
+	private static final Logger LOGGER = LogManager.getLogger(MaddogDataImporter.class);
 
     private static final String DATA_FOLDER = "/data/MADDOG/";
     private static final String DATE_PATTERN="yyyyMMddHHmmssSSSSSSS"; 
@@ -60,14 +60,14 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
             boolean isSuccess = false;
 
             if (LOGGER.isDebugEnabled()){
-                LOGGER.debug("codeSite : " + codeSite);
-                LOGGER.debug("measureType : " + measureType);
-                LOGGER.debug("numProfil : " +  numProfil);
-                LOGGER.debug("surveyDate : " +  surveyDate);
-                LOGGER.debug("epsg : " + epsg);
-                LOGGER.debug("idEquipement : " + idEquipement);
-                LOGGER.debug("idOperator : " + idOperator);
-                LOGGER.debug("csvContent : " + csvContent); 
+                LOGGER.debug("codeSite : {}", codeSite);
+                LOGGER.debug("measureType : {}", measureType);
+                LOGGER.debug("numProfil : {}", numProfil);
+                LOGGER.debug("surveyDate : {}", surveyDate);
+                LOGGER.debug("epsg : {}", epsg);
+                LOGGER.debug("idEquipement : {}",  idEquipement);
+                LOGGER.debug("idOperator : {}",  idOperator);
+                LOGGER.debug("csvContent : {}",  csvContent); 
             }
             
             if(codeSite.matches("^[A-Z]{6}") 
@@ -78,7 +78,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 StringBuffer finalDataType = new StringBuffer(measureType);
                 if(numProfil == null || numProfil<1 || numProfil >99){
                     numProfil=1;
-                    LOGGER.debug("numProfil update to: " +  numProfil);
+                    LOGGER.debug("numProfil update to {}",  numProfil);
                 }
                 finalDataType.append(numProfil);
             
@@ -112,7 +112,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
     private static void uploadCSVContent(String fileName, String csvContent) throws IOException {      
 
-        LOGGER.info("Data filename : " + fileName.toString()); 
+        LOGGER.info("Data filename : {}",  fileName.toString()); 
         
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
         writer.write(csvContent);
@@ -137,7 +137,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         StringBuffer metaFileName = createFileBaseName(folderPath.toString(), measureType, numProfil, codeSite, surveyDate);
         metaFileName.append(".meta");
 
-        LOGGER.info("Meta filename : " + metaFileName.toString()); 
+        LOGGER.info("Meta filename : {}",  metaFileName.toString()); 
 
         File csvOutputFile = new File(metaFileName.toString());
         FileWriter outputfile = new FileWriter(csvOutputFile);
@@ -151,7 +151,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
         // add data to csv
         String[] meta = { codeSite, measureType, Integer.toString(numProfil), surveyDate, epsg, idEquipement, idOperator};
         if (LOGGER.isDebugEnabled()){
-            LOGGER.debug("data to add : " + Arrays.toString(meta)); 
+            LOGGER.debug("data to add : {}",  Arrays.toString(meta)); 
         }
         metaDataCSV.writeNext(meta);
         metaDataCSV.close();
@@ -160,7 +160,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
     }
 
 
-    private static StringBuffer createFileBaseName(String folderStringPath, String measureType, Integer numProfil, String codeSite, String surveyDate) {
+    static StringBuffer createFileBaseName(String folderStringPath, String measureType, Integer numProfil, String codeSite, String surveyDate) {
                 
         StringBuffer FileBaseName = new StringBuffer(folderStringPath);
         FileBaseName.append(File.separator);
@@ -189,23 +189,23 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
             
             Path pathSite = Paths.get(DATA_FOLDER, codeSite);
                 
-            LOGGER.debug("Check folder and create : " + pathSite.toString());
+            LOGGER.debug("Check folder and create : {}", pathSite.toString());
             Files.createDirectories(pathSite);  
 
             Path pathDataType = Paths.get(pathSite.toString(), dataType);
-            LOGGER.debug("Check folder and create : " + pathDataType.toString());
+            LOGGER.debug("Check folder and create : {}",  pathDataType.toString());
             Files.createDirectories(pathDataType);  
 
             Path pathDate = Paths.get(pathDataType.toString(), LocalDateTime.now().format(formatter));
-            LOGGER.info("Check folder and create : " + pathDate.toString());
+            LOGGER.info("Check folder and create : {}",  pathDate.toString());
             folderPath = Files.createDirectories(pathDate);  
 
         } catch (FileAlreadyExistsException e) {
-            LOGGER.info("No need to create folder exist" + e.getMessage());
+            LOGGER.info("No need to create folder exist", e.getMessage());
         } catch (NoSuchFileException e) {
-            LOGGER.error("Parent directory does not exist!" + e.getMessage());
+            LOGGER.error("Parent directory does not exist!", e.getMessage());
         } catch (IOException e) {
-            LOGGER.error("Parent directory does not exist!" + e.getMessage());
+            LOGGER.error("Parent directory does not exist!", e.getMessage());
         }
         return folderPath;
     }

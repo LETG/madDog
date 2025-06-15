@@ -402,7 +402,7 @@ const tdcUtils = (function () {
             tdcUtils.tdcTauxChart(dates);
         },
         setTdcFeatures: (features) => {
-            const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
+            const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":${JSON.stringify(features)}}]]>`;
             maddog.setConfig({
                 tdc: tdcGeojson
             }, "coastLinesTrackingConfig");

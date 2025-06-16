@@ -105,7 +105,7 @@ const prfUtils = (function () {
                             properties: {
                                 ...p.properties,
                                 color: "#" + Math.random().toString(16).slice(2, 8).toUpperCase(),
-                                points: points,
+                                //points: points,
                                 elevation: p.geometry.coordinates[2]
                             }
                         };
@@ -212,12 +212,12 @@ const prfUtils = (function () {
          */
         orderDatesOld: (selected) => {
             return selected.sort((a, b) => {
-                return moment(a.isodate).diff(b.isodate);
+                return moment(a.date).diff(b.date);
             });
         },
         orderDates: (selected) => {
             return _.orderBy(selected, (o) => {
-                return moment(o.isodate);
+                return moment(o.date);
             }, ['asc'])
         },
         /**
@@ -231,13 +231,11 @@ const prfUtils = (function () {
             div.id = "prfBilanSedChart";
             document.getElementById("ppTabGraph").appendChild(div);
             // standardize date format
-            let selected = maddog.charts.sediments.result.map(item => ({
-                ...item,
-                isodate: new Date(item.date)
-            }));
-            selected = prfUtils.orderDates(selected, "isodate");
+            let selected = maddog.charts.sediments.result;
+            //TODO no isodate in prfUtils
+            //selected = prfUtils.orderDates(selected, "date");
             // get uniq labels already orderd by date
-            const datesX = _.uniq(selected.map(s => new Date(moment(s.date, "YYYY-MM-DDZ"))));
+            const datesX = selected.map(s => s.date);
             var data = [{
                     x: datesX,
                     y: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
@@ -442,7 +440,7 @@ const prfUtils = (function () {
                     }
                 }
             `;
-            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":[${JSON.stringify(features)}]}]]>`;
+            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":${JSON.stringify(features)}}]]>`;
             maddog.setConfig({
                 fc: prfGeojson
             }, "beachProfileTrackingConfig");

@@ -105,7 +105,8 @@ const prfUtils = (function () {
                             properties: {
                                 ...p.properties,
                                 color: "#" + Math.random().toString(16).slice(2, 8).toUpperCase(),
-                                //points: points,
+                                y: points.map(x => x[3]),
+                                y: points.map(x => x[2]),
                                 elevation: p.geometry.coordinates[2]
                             }
                         };
@@ -353,8 +354,8 @@ const prfUtils = (function () {
             const preparedLinesData = selected.map(s => {
                 return {
                     ...s.properties,
-                    x: s.properties.points.map(x => x[3]),
-                    y: s.properties.points.map(x => x[2]),
+                    x: s.properties.x,
+                    y: s.properties.y,
                     name: `${s.id}-${s.properties.idtype}`
                 }
             });
@@ -432,6 +433,8 @@ const prfUtils = (function () {
          * @param {Array} features <Aray>
          */
         setPrfFeatures: (features) => {
+            // CRS is not handled by WPS geoserver won't read it
+            // TODO probably remove it from WPS request
             const crsInfo = `
                 "crs": {
                     "type": "name",
@@ -518,6 +521,8 @@ const prfUtils = (function () {
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,
+                    // TODO since wps returnds date no need to moment anymore
+                    // isodate already item.creationdate
                     isodate: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
                 }));
             let dates = prfUtils.orderDates(data);

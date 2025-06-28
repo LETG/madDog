@@ -105,7 +105,7 @@ const prfUtils = (function () {
                             properties: {
                                 ...p.properties,
                                 color: "#" + Math.random().toString(16).slice(2, 8).toUpperCase(),
-                                y: points.map(x => x[3]),
+                                x: points.map(x => x[3]),
                                 y: points.map(x => x[2]),
                                 elevation: p.geometry.coordinates[2]
                             }
@@ -233,10 +233,8 @@ const prfUtils = (function () {
             document.getElementById("ppTabGraph").appendChild(div);
             // standardize date format
             let selected = maddog.charts.sediments.result;
-            //TODO no isodate in prfUtils
-            //selected = prfUtils.orderDates(selected, "date");
-            // get uniq labels already orderd by date
-            const datesX = selected.map(s => s.date);
+           // transform date to string yyyy-mm-dd
+            const datesX = selected.map(s => moment(new Date(s.date.replace(/CEST|CET/, ''))).format('YYYY-MM-DD'));
             var data = [{
                     x: datesX,
                     y: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
@@ -515,15 +513,12 @@ const prfUtils = (function () {
          */
         createPrfMultiSelect: () => {
             prfToolbar.hidden = false;
-            //const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
-            // get dates from WPS result
-            let data = maddog.charts.beachProfile.features
+                  let data = maddog.charts.beachProfile.features
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,
-                    // TODO since wps returnds date no need to moment anymore
-                    // isodate already item.creationdate
-                    isodate: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
+
+                    date: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
                 }));
             let dates = prfUtils.orderDates(data);
             // clean multi select if exists

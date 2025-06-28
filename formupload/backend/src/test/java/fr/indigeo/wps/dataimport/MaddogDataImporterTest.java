@@ -3,6 +3,7 @@ package fr.indigeo.wps.dataimport;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -48,21 +49,21 @@ public class MaddogDataImporterTest {
         assertTrue((Boolean) json.get("succes"));
 
         // Check that files are created
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(tempDir.resolve(codeSite))) {
-            boolean foundCsv = false, foundMeta = false;
-            for (Path folder : stream) {
-                try (DirectoryStream<Path> files = Files.newDirectoryStream(folder)) {
-                    for (Path file : files) {
-                        if (file.toString().endsWith(".csv")) foundCsv = true;
-                        if (file.toString().endsWith(".meta")) foundMeta = true;
-                    }
+        boolean foundCsv = false, foundMeta = false;
+        try {
+            Path root = tempDir.resolve(codeSite);
+            // Parcours récursif de tous les fichiers sous le dossier du codeSite
+            try (var paths = Files.walk(root)) {
+                for (Path file : (Iterable<Path>) paths::iterator) {
+                    if (file.toString().endsWith(".csv")) foundCsv = true;
+                    if (file.toString().endsWith(".meta")) foundMeta = true;
                 }
             }
-            assertTrue(foundCsv, "CSV file should be created");
-            assertTrue(foundMeta, "Meta file should be created");
         } catch (IOException e) {
             fail("Exception while checking files: " + e.getMessage());
         }
+        assertTrue(foundCsv, "CSV file should be created");
+        assertTrue(foundMeta, "Meta file should be created");
     }
 
     @Test
@@ -71,7 +72,7 @@ public class MaddogDataImporterTest {
         String result = MaddogDataImporter.importData(
                 "BAD", "TDC", 1, "2024-06-15", "2154", "EQ01", "OP01", "x;y;z\n1;2;3");
         JSONObject json = (JSONObject) org.json.simple.JSONValue.parse(result);
-        assertTrue((Boolean) json.get("succes"));
+        assertFalse((Boolean) json.get("succes"));
     }
 
     @Test

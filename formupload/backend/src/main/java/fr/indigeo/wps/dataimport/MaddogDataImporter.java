@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
 
 	private static final Logger LOGGER = LogManager.getLogger(MaddogDataImporter.class);
 
-    private static final String DATA_FOLDER = "/data/MADDOG/";
+    private static String DATA_FOLDER = "/data/MADDOG/";
     private static final String DATE_PATTERN="yyyyMMddHHmmssSSSSSSS"; 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
 

@@ -1,8 +1,8 @@
-name: Build formupload wps backend
+name: Build data importer wps jar
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '*' ]
   pull_request:
     branches: [ main ]
 
@@ -20,10 +20,10 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: Build with Maven
-      run: mvn -B install --file formupload/backend/pom.xml
+      run: mvn -B package --file formupload/backend/pom.xml
     - name: store jar
       run: mkdir staging && cp formupload/backend/target/*.jar staging
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: Package
         path: staging

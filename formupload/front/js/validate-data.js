@@ -1,10 +1,10 @@
-var maddogbbox = { xmin: 401659, xmax: 401659, ymin: 6886993, ymax: 6886993 };
+var maddogbbox = { xmin: 98046, xmax: 401659, ymin: 6703164, ymax: 6886993 };
 
 function loadbbox() {
 
     console.log('loadbbox');
     // TODO change for final url
-    const bboxUrl = '/maddog/formupload/data/limites.geojson';
+    const bboxUrl = '/maddogimport/data/limites.geojson';
 
     fetch(bboxUrl)
         .then((response) => response.json())
@@ -75,6 +75,8 @@ function validateCSV(content, measureType) {
         identifiants.push(identifiant);
 
         const date = columns[5];
+        console.log(date);
+        console.log(document.getElementById('surveyDate').value);
         // on vérifie les dates uniquement si ce n'est pas une mesure de type ref
         if (!isValidDate(date) && measureType != "REF") {
             return { valid: false, error: `Format de date invalide à la ligne ${i + 1}.` };
@@ -105,7 +107,9 @@ function isValidIdentifiant(identifiant) {
     const tdcMatch = identifiant.match(/^TDC\d+$/);
     const startWithL = identifiant.match(/^l\d+$/);
     const startWithpc = identifiant.match(/^pc\d+$/);
-    return prfMatch || tdcMatch || startWithL || startWithpc;
+    const startWithpt = identifiant.match(/^pt\d+$/);
+    const startWithsemi = identifiant.match(/^semi\d+$/);
+    return prfMatch || tdcMatch || startWithL || startWithpc|| startWithpt || startWithsemi;
 }
 
 function isValidDate(date) {

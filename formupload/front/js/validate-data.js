@@ -72,8 +72,9 @@ function validateCSV(content, measureType) {
             return { valid: false, error: `Identifiant invalide à la ligne ${i + 1}.` };
         }
        
-        if (wantedIdentifiant!=identifiant) {
-        return { valid: false, error: `Ligne ${i + 1}, le csv doit contenir le même identifiant ${wantedIdentifiant} dans l'ensemble du fichier` };
+        // test si l'identifiant est de la forem ${wantedIdentifiant}+un nombre
+        if (wantedIdentifiant!="REF" &&  !identifiant.match(new RegExp(`^${wantedIdentifiant}\\d+$`))) {
+            return { valid: false, error: `Ligne ${i + 1}, l'identifiant doit être de la forme ${wantedIdentifiant}X où X est un nombre.` };
         }
 
         const date = columns[5];

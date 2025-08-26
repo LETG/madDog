@@ -31,17 +31,16 @@ function validateCSV(content, measureType) {
     // Vérification des noms des entêtes
     const expectedHeaders = ['id', 'x', 'y', 'z', 'identifiant', 'date'];
     if (!arraysEqual(headers, expectedHeaders)) {
-        return { valid: false, error: 'En-têtes incorrects ou dans le mauvais ordre.' };
+        return { valid: false, error: 'En-têtes incorrects, dans le mauvais ordre ou séparateur incorrect.' };
     }
 
     // Vérification de l'ordre des id (ordre croissant)
     // Vérification du type de séparateur décimal pour les coordonnées (.)
     // Vérification du type de séparateur de champs (;)
-    // Vérification des identifiants
+    // Vérification des identifiants ( toujours le même id dans le csv, de la forme PRF1, TDC1, l1, pc1, pt1 ou semi1)
     // Vérification du format de date (aaaa-mm-jj)
-    const identifiants = [];
+    let wantedIdentifiant = document.getElementById('measureType').value;
     let previousId = -1;
-    let previousDate = null;
 
     for (let i = 1; i < lines.length; i++) {
         const columns = lines[i].replace(/\r/g, '').split(';');
@@ -65,14 +64,17 @@ function validateCSV(content, measureType) {
         }
 
         if (x > maddogbbox.xmax || x < maddogbbox.xmin || y > maddogbbox.ymax || y < maddogbbox.ymin) {
-            return { valid: false, error: `Coordonnées en dehors de l'étendu possible ou mauvaise projection à la ligne ${i + 1}.` };
+            return { valid: false, error: `Coordonnées en dehors de l'étendue possible ou mauvaise projection à la ligne ${i + 1}.` };
         }
 
         const identifiant = columns[4];
         if (!isValidIdentifiant(identifiant)) {
             return { valid: false, error: `Identifiant invalide à la ligne ${i + 1}.` };
         }
-        identifiants.push(identifiant);
+       
+        if (wantedIdentifiant!=identifiant) {
+        return { valid: false, error: `Ligne ${i + 1}, le csv doit contenir le même identifiant ${wantedIdentifiant} dans l'ensemble du fichier` };
+        }
 
         const date = columns[5];
         console.log(date);
@@ -81,15 +83,8 @@ function validateCSV(content, measureType) {
         if (!isValidDate(date) && measureType != "REF") {
             return { valid: false, error: `Format de date invalide à la ligne ${i + 1}.` };
         }
-        // Problèment pas nécessaire
-        if (previousDate && date !== previousDate) {
-            return { valid: false, error: `Date différente à la ligne ${i + 1}.` };
-        }
-        previousDate = date;
     }
-    if (!identifiants.includes(measureType + "1")) {
-        return { valid: false, error: `Le csv doit contenir au moins un identifiant de la forme ${measureType}1` };
-    }
+    
 
     return { valid: true, error: null };
 }
@@ -103,13 +98,14 @@ function arraysEqual(arr1, arr2) {
 }
 
 function isValidIdentifiant(identifiant) {
+    const refMatch = identifiant.match(/^REF+$/);
     const prfMatch = identifiant.match(/^PRF\d+$/);
     const tdcMatch = identifiant.match(/^TDC\d+$/);
     const startWithL = identifiant.match(/^l\d+$/);
     const startWithpc = identifiant.match(/^pc\d+$/);
     const startWithpt = identifiant.match(/^pt\d+$/);
     const startWithsemi = identifiant.match(/^semi\d+$/);
-    return prfMatch || tdcMatch || startWithL || startWithpc|| startWithpt || startWithsemi;
+    return refMatch || prfMatch || tdcMatch || startWithL || startWithpc|| startWithpt || startWithsemi;
 }
 
 function isValidDate(date) {

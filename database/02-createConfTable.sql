@@ -84,6 +84,17 @@ INSERT INTO site VALUES (43,'Marais du Launay','Penvénan','LAUNAY');
 INSERT INTO site VALUES (44,'Marais de Brestan','Pleubian ','BRESTA');
 INSERT INTO site VALUES (45,'Plage du Hogolo','Plestin-les-Grèves','HOGOLO');
 INSERT INTO site VALUES (46,'Plage de la Banche','Binic','BANCHE');
+INSERT INTO site VALUES (50,'Plage de la Pissote','Saint-Jacut-de-la-Mer','DAPISS');
+INSERT INTO site VALUES (51,'Plage de la Manchette','Saint-Jacut-de-la-Mer','DAMANC');
+INSERT INTO site VALUES (52,'Plage de la Mare','Saint-Cast-le-Guildo','DAMARE');
+INSERT INTO site VALUES (53,'Grèves d''en Bas','Plévenon','DAGRE1');
+INSERT INTO site VALUES (54,'Plage de Larmor','Plougastel-Daoulas','PDLARM');
+INSERT INTO site VALUES (55,'Le Caro','Plougastel-Daoulas','PDCARO');
+INSERT INTO site VALUES (56,'Porz ar Loc''h','Plougastel-Daoulas','PDPALO');
+INSERT INTO site VALUES (57,'Plage du Petit Dellec','Plouzané','PZPDEL');
+INSERT INTO site VALUES (58,'Plage du Grand Dellec','Plouzané','PZGDEL');
+INSERT INTO site VALUES (59,'Plage des Sables Rouges','Le Relecq-Kerhuon','RKSARO');
+INSERT INTO site VALUES (60,'Moulin Blanc','Guipavas','GPMOBL');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

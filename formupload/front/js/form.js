@@ -1,5 +1,5 @@
 // Declare url for api and wps Maddog 
-const url = "https://portail.indigeo.fr"
+const url = "http://localhost"
 
 // Create config
 const config = [{
@@ -122,7 +122,7 @@ function resetForm() {
     document.getElementById('numProfil').innerHTML = "";
     document.getElementById('numProfil').required = false;
     document.getElementById('selectProfilId').style.display = "none";
-    document.querySelector('#codeSite').removeEventListener('change', f);
+    document.querySelector('#codeSite').removeEventListener('change');
 }
 
 // Set csvContent parm if input is valid
@@ -145,7 +145,8 @@ function validationFormat() {
         } else {
             var reader = new FileReader();
             reader.onload = function (event) {
-                const csvContent = event.target.result;
+                // global variable
+                csvContent = event.target.result;
                 const result = validateCSV(csvContent, selectMeasure.value);
                 if (!result.valid) {
                     csvFile.setCustomValidity(result.error);

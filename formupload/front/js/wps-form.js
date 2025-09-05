@@ -1,6 +1,3 @@
-// Create variable to content csv
-var csvContent = null;
-
 // Function to get select's value
 function getValSelect(selectId){
     var value = document.getElementById(selectId).value;

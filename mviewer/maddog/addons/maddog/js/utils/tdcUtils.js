@@ -10,7 +10,7 @@ const tdcUtils = (function () {
     return {
         getReferenceLine: (idsite) => {
             // search reference line as first step and required WPS infos
-            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=`;
             fetch(`${ lineRefUrl }'${ idsite }' AND idtype LIKE 'TDC1'`)
                 .then(r => r.json())
                 .then(lineRef => {
@@ -46,7 +46,7 @@ const tdcUtils = (function () {
         },
         getTDCByIdSite: (idsite) => {
             // next, we get TDC usefull to call coastline tracking WPS
-            const tdcUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
+            const tdcUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=`;
             fetch(`${ tdcUrl }'${ idsite }'`)
                 .then(r => r.json())
                 // get TDC and calculate legend and char color

@@ -23,7 +23,6 @@
         "select": {
             "prf": "red"
         },
-        "server": "https://portail.indigeo.fr/geoserver/MADDOG",
         "defaultLayerZoom": {
             "namespace": "maddog",
             "layer": "communewithsite",
@@ -32,7 +31,7 @@
             "url": ""
         },
         "communes": {
-            "url": "https://portail.indigeo.fr/geoserver/MADDOG/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=MADDOG%3Acommunewithsite&outputFormat=application%2Fjson",
+            "url": "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=MADDOG%3Acommunewithsite&outputFormat=application%2Fjson",
             "fuseOptions": {
                 "keys": ["nom"],
                 "threshold": 0.3
@@ -41,7 +40,7 @@
             "label": "nom"
         },
         "sites": {
-            "url": "https://portail.indigeo.fr/geoserver/MADDOG/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=MADDOG%3Asitebuffer&outputFormat=application%2Fjson",
+            "url": "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=MADDOG%3Asitebuffer&outputFormat=application%2Fjson",
             "fuseOptions": {
                 "keys": ["namesite"],
                 "threshold": 0.3
@@ -49,14 +48,14 @@
             "idField": "idsite",
             "label": "namesite"
         },
-        "postgrestapi": "https://portail.indigeo.fr/maddogapi",
+        "postgrestapi": "/maddogapi",
         "mntApi": {
             "table": "sitemntdate",
             "field": "code_site"
         },
         "searchLimit": 10,
         "wps": {
-            "url": "https://portail.indigeo.fr/geoserver/ows",
+            "url": "/ows",
             "version": "1.0.0"
         }
     }

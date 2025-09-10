@@ -4,7 +4,7 @@ const format = 'image/png';
 var untiled = new ol.layer.Image({
     source: new ol.source.ImageWMS({
         ratio: 1,
-        url: 'https://portail.indigeo.fr/geoserver/MADDOG/wms',
+        url: `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/wms`,
         params: {
             'FORMAT': format,
             'VERSION': '1.1.1',  

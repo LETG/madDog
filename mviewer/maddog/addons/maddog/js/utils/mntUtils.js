@@ -244,7 +244,7 @@ const mntUtils = (function () {
                 </wps:ResponseForm>
             </wps:Execute>
         `;
-        fetch(maddog.getCfg("config.options.wps.url"), {
+        fetch(`${mviewer.env?.url_geoserver}/`+maddog.getCfg("config.options.wps.url"), {
             method: "POST",
             body: xml,
             headers: {

@@ -352,8 +352,8 @@ const prfUtils = (function () {
             const preparedLinesData = selected.map(s => {
                 return {
                     ...s.properties,
-                    x: s.properties.points.map(x => x[3]),
-                    y: s.properties.points.map(x => x[2]),
+                    x: s.properties.x,
+                    y: s.properties.y,
                     name: `${s.id}-${s.properties.idtype}`
                 }
             });

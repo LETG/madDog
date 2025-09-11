@@ -70,7 +70,7 @@
 	        </layer>                         
         </theme>
         <theme name="Relevés"  collapsed="false" id="tdc" icon="fas fa-arrow-right">                 
-		    <layer id="java " name="Modèle numérique de terrain"  visible="false"
+		    <layer id="mnt " name="Modèle numérique de terrain"  visible="false"
                 index="4"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"

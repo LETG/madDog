@@ -1,5 +1,5 @@
 {
-    "url_app": "https://portail.indigeo.fr/geoserver",
-    "url_geoserver": "https://portail.indigeo.fr/geoserver",
+    "url_app": "http://localhost",
+    "url_geoserver": "http://localhost/geoserver",
     "geoserver_workspace": "MADDOG"
 }

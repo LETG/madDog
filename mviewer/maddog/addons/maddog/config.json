@@ -55,7 +55,7 @@
         },
         "searchLimit": 10,
         "wps": {
-            "url": "/ows",
+            "url": "/geoserver/ows",
             "version": "1.0.0"
         }
     }

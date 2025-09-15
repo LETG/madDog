@@ -15,7 +15,7 @@ const prfUtils = (function () {
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher sur la carte et dans la liste de sélection
-            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=`;
             fetch(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(r => r.json())
                 .then(data => {
@@ -82,7 +82,7 @@ const prfUtils = (function () {
          */
         getPrfByProfilAndIdSite: (idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
-            const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
+            const prfUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=`;
             fetch(`${prfUrl}'${maddog.idsite}' AND idtype='${idType}'`)
                 .then(r => r.json())
                 // récupération du PRF
@@ -513,7 +513,9 @@ const prfUtils = (function () {
          */
         createPrfMultiSelect: () => {
             prfToolbar.hidden = false;
-                  let data = maddog.charts.beachProfile.features
+            //const dates = maddog.charts.beachProfile.features.map(d => d.properties.creationdate);
+            // get dates from WPS result
+            let data = maddog.charts.beachProfile.features
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,

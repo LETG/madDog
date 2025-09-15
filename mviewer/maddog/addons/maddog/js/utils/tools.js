@@ -139,7 +139,7 @@ const tools = (function() {
          * @returns nothing
          */
         initFuseSearch: (id) => wfs2Fuse.initSearch(
-            getCfg(`config.options.${id}.url`),
+            `${mviewer.env?.url_geoserver}`+getCfg(`config.options.${id}.url`),
             getCfg(`config.options.${id}.fuseOptions`),
             id,
             (d) => {

@@ -95,6 +95,20 @@ INSERT INTO site VALUES (57,'Plage du Petit Dellec','Plouzané','PZPDEL');
 INSERT INTO site VALUES (58,'Plage du Grand Dellec','Plouzané','PZGDEL');
 INSERT INTO site VALUES (59,'Plage des Sables Rouges','Le Relecq-Kerhuon','RKSARO');
 INSERT INTO site VALUES (60,'Moulin Blanc','Guipavas','GPMOBL');
+INSERT INTO site VALUES (61,'Plage de Mouton (Est)','Trébeurden','MOUTOE');
+INSERT INTO site VALUES (62,'Plage de Mouton (Ouest)','Trébeurden','MOUTOO');
+INSERT INTO site VALUES (63,'Plage de Toul Gwen','Pleumeur-Bodou','TOULGW');
+INSERT INTO site VALUES (64,'Plage du Moulin','Binic-Etables-sur-Mer','MOULIN');
+INSERT INTO site VALUES (65,'Plage de la Belle Etoile','Concarneau','BETOIL');
+INSERT INTO site VALUES (66,'Plage des Sables Blancs (Concarneau)','Concarneau','SBCONC');
+INSERT INTO site VALUES (67,'Grande Plage','Ile-Tudy','GRDPLA');
+INSERT INTO site VALUES (68,'Plage de Poulluen','Loctudy','POULLU');
+INSERT INTO site VALUES (69,'Plage des Sables Blancs (Loctudy)','Loctudy','SBLOCT');
+INSERT INTO site VALUES (70,'Pors Treillen','Treffiagat','PORSTR');
+INSERT INTO site VALUES (71,'Cleut Rouz/Kermil','Fouesnant','CLEUTR');
+INSERT INTO site VALUES (72,'Mer Blanche/Kerler/Trégonour','Fouesnant','MERBLA');
+INSERT INTO site VALUES (73,'Plage de Kermor/Treustel','Combrit','TREUST');
+
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

@@ -235,16 +235,22 @@ const prfUtils = (function () {
             let selected = maddog.charts.sediments.result;
            // transform date to string yyyy-mm-dd
             const datesX = selected.map(s => moment(new Date(s.date.replace(/CEST|CET/, ''))).format('YYYY-MM-DD'));
+            // Récupère les valeurs d'évolution de date à date
+            const evolutions = selected.map(s => s.data.filter(i => i.diffWithPrevious)[0]?.diffWithPrevious);
+            // Génère un tableau de couleurs : rouge si positif, bleu sinon
+            const barColors = evolutions.map(v => v > 0 ? '#b43939ff' : '#5881ceff');
+            
             var data = [{
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
+                    y: selected.map(s => s.data.filter(i => i.totalEvolution)[0]?.totalEvolution),
                     name: "Evolution cumulée"
                 },
                 {
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.previousEvolutionPercent)[0]?.previousEvolutionPercent),
+                    y: evolutions,
                     type: "bar",
-                    name: "Evolution de date à date"
+                    name: "Evolution de date à date",
+                    marker: { color: barColors }
                 }
             ];
             const axesFont = {
@@ -286,7 +292,7 @@ const prfUtils = (function () {
                     showgrid: false
                 },
                 yaxis: {
-                    ticktext: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
+                    ticktext: selected.map(s => s.data.filter(i => i.totalEvolution)[0]?.totalEvolution),
                     autorange: true,
                     showgrid: false,
                     zeroline: false,
@@ -352,8 +358,6 @@ const prfUtils = (function () {
             const preparedLinesData = selected.map(s => {
                 return {
                     ...s.properties,
-                    x: s.properties.x,
-                    y: s.properties.y,
                     name: `${s.id}-${s.properties.idtype}`
                 }
             });

@@ -250,7 +250,38 @@ const prfUtils = (function () {
                     y: evolutions,
                     type: "bar",
                     name: "Evolution de date à date",
-                    marker: { color: barColors }
+                    marker: { color: barColors },
+                    showlegend: false 
+                },
+                 // Trace fictive pour la légende globale
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Evolution de date à date",
+                    marker: { color: '#ffffffff' },
+                    showlegend: true,
+                    visible: 'legendonly'
+                },
+                 // Trace fictive pour la légende "positive"
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Positive",
+                    marker: { color: '#b43939ff' },
+                    showlegend: true,
+                    visible: 'legendonly'
+                },
+                // Trace fictive pour la légende "négative"
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Négative",
+                    marker: { color: '#5881ceff' },
+                    showlegend: true,
+                    visible: 'legendonly'
                 }
             ];
             const axesFont = {

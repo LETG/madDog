@@ -69,7 +69,7 @@ public class MaddogDataImporter extends StaticMethodsProcessFactory<MaddogDataIm
                 LOGGER.debug("csvContent : {}",  csvContent); 
             }
             
-            if(codeSite.matches("^[A-Z]{6}") 
+            if(codeSite.matches("^[A-Z0-9]{6}") 
                 && measureType.matches("^[A-Z]{3}") 
                 && surveyDate.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}") 
                 && epsg.matches("^[0-9]{4}")){

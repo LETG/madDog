@@ -87,7 +87,7 @@ INSERT INTO site VALUES (46,'Plage de la Banche','Binic','BANCHE');
 INSERT INTO site VALUES (47,'Martin Plage','Plérin','MARTIN');
 INSERT INTO site VALUES (48,'Plage de l''Hôtellerie','Hillion','HOTELL');
 INSERT INTO site VALUES (49,'Plage de Saint-Marc','Tréveneuc','STMARC');
-INSERT INTO site VALUES (50,'Plage de la Pissote','Saint-Jacut-de-la-Mer','DAPISS');
+INSERT INTO site VALUES (50,'Plage de la Pissotte','Saint-Jacut-de-la-Mer','DAPISS');
 INSERT INTO site VALUES (51,'Plage de la Manchette','Saint-Jacut-de-la-Mer','DAMANC');
 INSERT INTO site VALUES (52,'Plage de la Mare','Saint-Cast-le-Guildo','DAMARE');
 INSERT INTO site VALUES (53,'Grèves d''en Bas','Plévenon','DAGRE1');

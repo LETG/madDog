@@ -49,14 +49,14 @@ do
     "MNT")
         echo "No spatial tables for $type_measure " ;;
     "REF")
-        psql_exec "DELETE FROM $maddogDBSchema.lineref WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
-        echo "Delete $type_measure values for this survey $id_survey" ;;
+        psql_exec "DELETE FROM $maddogDBSchema.lineref WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     "TDC")
-        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
-        echo "Delete $type_measure values for this survey $id_survey" ;;
+        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     "PRF")
-        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
-        echo "Delete $type_measure values for this survey $id_survey" ;;
+        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     *)
         echo "Unknown type"
         exit 1 ;;

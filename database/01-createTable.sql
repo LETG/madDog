@@ -56,10 +56,10 @@ CREATE TABLE measure(
 );
 
 CREATE TABLE profil(
+   id_profil SERIAL,
    id_survey INTEGER,
    id_measure_type INTEGER,
    num_profil INTEGER,
-   PRIMARY KEY(id_survey, id_measure_type),
    FOREIGN KEY(id_survey) REFERENCES survey(id_survey) ON DELETE CASCADE,
    FOREIGN KEY(id_measure_type) REFERENCES measure_type(id_measure_type)
 );

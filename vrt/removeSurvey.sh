@@ -27,7 +27,8 @@ psql_exec(){
 echo "-- Get information from history table to remove survey data"
 # Read history table to get data to remove ( only when to_delete = true )
 # get id_survey, date_survey, id_type, code_site
-historyData=$(psql_exec "SELECT hs.id_history, hs.id_survey, hs.date_survey, hs.id_measure_type, hs.id_site FROM $maddogDBSchema.history hs WHERE hs.to_delete = true;")
+historyData=$(psql_exec "SELECT hs.id_history, hs.id_survey, hs.date_survey, hs.id_measure_type, hs.id_site, p.num_profil FROM $maddogDBSchema.history hs, $maddogDBSchema.profil p WHERE hs.to_delete = true AND hs.id_survey = p.id_survey;")
+echo $historyData
 
 # for each entry in historyData
 for entry in $historyData
@@ -37,6 +38,7 @@ do
     date_survey=$(echo $entry | cut -d'|' -f3)
     id_measure_type=$(echo $entry | cut -d'|' -f4)
     id_site=$(echo $entry | cut -d'|' -f5)    
+    num_profil=$(echo $entry | cut -d'|' -f6)    
     echo "-- Processing history id: $id_history, survey id: $id_survey, date: $date_survey, measure type id: $id_measure_type, site id: $id_site"
     type_measure=$(psql_exec "SELECT type_measure FROM $maddogDBSchema.measure_type WHERE id_measure_type = $id_measure_type;")
     code_site=$(psql_exec "SELECT code_site FROM $maddogDBSchema.site WHERE id_site = $id_site;" )
@@ -44,15 +46,16 @@ do
 
     # Structure case
     case $type_measure in
-    "MNT"|"REF")
-        # we don't delete mnt or ref data so update history to set to_delete = false for these types
-        psql_exec "UPDATE $maddogDBSchema.history SET to_delete = false WHERE id_history = $id_history;"
-        echo "Update history no deletion for $type_measure" ;;
+    "MNT")
+        echo "No spatial tables for $type_measure " ;;
+    "REF")
+        psql_exec "DELETE FROM $maddogDBSchema.lineref WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        echo "Delete $type_measure values for this survey $id_survey" ;;
     "TDC")
-        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE idsite = $id_site AND idtype = $id_measure_type AND creationdate = $date_survey;"
+        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
         echo "Delete $type_measure values for this survey $id_survey" ;;
     "PRF")
-        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE idsite = $id_site AND idtype = $id_measure_type AND creationdate = $date_survey;"
+        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE idsite = '$id_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
         echo "Delete $type_measure values for this survey $id_survey" ;;
     *)
         echo "Unknown type"
@@ -62,20 +65,22 @@ do
     # Delete entry in survey table( cascade delete will remove data in dependent tables )
     psql_exec DELETE FROM $maddogDBSchema.survey WHERE id_survey = $id_survey;
 
+
     echo "-- Removing survey data from file system"
     ## Find folders to delete in file system using code_site, id_type, date_survey from history table
     # then read all .meta files to find files to delete ( compare date in meta with date_survey in history table )
     # then delete files and folders if empty    
+
+    # Update state and date in history table
+    echo "-- Updating history table"
+    psql_exec "UPDATE  $maddogDBSchema.history set date_deleted=CURRENT_DATE, to_delete=FALSE WHERE id_survey=$id_survey"      
 done
 
 
 # Update materialized view
 echo "-- Updating materialized views"
-psql_exec "REFRESH MATERIALIZED VIEW sitemntdate;"
-psql_exec "REFRESH MATERIALIZED VIEW sitemeasureprofil;"
-
-
-
+psql_exec "REFRESH MATERIALIZED VIEW $maddogDBSchema.sitemntdate;"
+psql_exec "REFRESH MATERIALIZED VIEW $maddogDBSchema.sitemeasureprofil;"
 
 
 echo "-- END PROCESS"

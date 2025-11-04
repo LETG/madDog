@@ -6,6 +6,7 @@ const USER_SITES= URL_BACKEND_ADMIN + "/maddogimport/admin/data/site_user_list.j
 const SURVEYS_API= URL_BACKEND_API+"/survey";
 const SITES_API= URL_BACKEND_API+"/site";
 const MTYPE_API= URL_BACKEND_API+"/measure_type";
+const PROFIL_API= URL_BACKEND_API+"/profil";
 const HISTORY_API= URL_BACKEND_API+"/history";
 
 ///------------ TOOLS FUNCTIONS ------------///
@@ -61,7 +62,12 @@ async function populateSiteListForUser(username) {
     // Add a event on change to load surveys for selected site 
     selectElement.addEventListener('change', async (event) => {
         const selectedSiteId = event.target.value;
-        const surveys = await fetchJson(SURVEYS_API+"?id_site=eq."+selectedSiteId);
+        const surveys = await fetchJson(SURVEYS_API+"?id_site=eq."+selectedSiteId+"&select=id_site,id_survey,date_survey,id_measure_type_survey,measure_type(type_measure),profil(num_profil)&order=date_survey.asc,id_measure_type_survey.desc");
+        // Aggregate measure_type and profil data into profil data 
+        surveys.forEach(survey => {
+          survey.profil = survey.measure_type[0].type_measure + survey.profil[0].num_profil;
+          delete survey.measure_type;
+        }); 
         renderSurveysTable(surveys);
     });
 
@@ -78,6 +84,7 @@ async function populateSiteListForUser(username) {
  * @param {Array} surveys - array of survey objects
  * @param {string} containerId - id of the container to render the table into
  */
+// ...existing code...
 function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -87,6 +94,9 @@ function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
     container.innerHTML = '<p>Aucun survey disponible pour cet utilisateur.</p>';
     return;
   }
+
+  // columns to hide
+  const hiddenCols = new Set(['id_measure_type_survey','id_site']);
 
   // Toolbar with action button
   const toolbar = document.createElement('div');
@@ -104,10 +114,11 @@ function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
 
   container.appendChild(toolbar);
 
+  // collect keys and filter hidden columns
   const keys = Array.from(surveys.reduce((set, s) => {
     Object.keys(s).forEach(k => set.add(k));
     return set;
-  }, new Set()));
+  }, new Set())).filter(k => !hiddenCols.has(k));
 
   const table = document.createElement('table');
   table.className = 'table table-sm table-striped';
@@ -144,7 +155,7 @@ function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
     tdChk.appendChild(chk);
     row.appendChild(tdChk);
 
-    // data cells
+    // data cells (skip hidden columns)
     keys.forEach(k => {
       const td = document.createElement('td');
       const v = s[k];
@@ -209,7 +220,7 @@ function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
       return surveys[idx];
     });
     // set site for deletion
-    logSiteSelection(selected[0]).catch(err => {
+    logSiteSelection(selected).catch(err => {
       console.error('Error logging site selection:', err);
     });
   });
@@ -220,7 +231,7 @@ function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
 }
 
 // call postgrest API to store id_site in history table
-async function logSiteSelection(survey) {
+async function logSiteSelection(surveysToDelete) {
   const MADDOG_USER = new URLSearchParams(window.location.search).get('user');
   const container = document.getElementById('surveyTableContainer');
 
@@ -265,17 +276,20 @@ async function logSiteSelection(survey) {
   containerParent.appendChild(overlay);
 
   try {
+     // build payload: array of history records
+    const payload = surveysToDelete.map(survey => ({
+      id_survey: survey.id_survey,
+      date_survey: survey.date_survey ? new Date(survey.date_survey).toISOString() : null,
+      id_site: survey.id_site,
+      id_measure_type: survey.id_measure_type_survey,
+      username: MADDOG_USER,
+      date_requested: new Date().toISOString()
+    }));
+
     const response = await fetch(HISTORY_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id_survey: survey.id_survey,
-        date_survey: new Date(survey.date_survey).toISOString(),
-        id_site: survey.id_site,
-        id_measure_type: survey.id_measure_type_survey,
-        username: MADDOG_USER,
-        date_requested: new Date().toISOString(),
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

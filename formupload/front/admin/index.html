@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr" class="h-100">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="pierre.jego@jdev.fr">
+  <title>MADDOG - Interface d'administration des données</title>
+  <link rel="stylesheet" href="../css/bootstrap-icons.css">
+  <!-- Bootstrap v5.2.0 core CSS -->
+  <link href="../lib/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="../css/form.css" rel="stylesheet">
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="d-flex flex-column h-100">
+  <!-- Contain -->
+  <main class="flex-shrink-0">
+    <div class="container" id="containerForm">
+      <div class="row justify-content-between">
+        <div class="col-8">
+          <h1 class="mt-1 mb-4">Supprimer des données de suivi</h1>
+        </div>
+        <div class="col-2" style="text-align:end;">
+          <h1><i class="bi bi-trash"></i></h1>
+        </div>
+      </div>
+      <form id="formSuivi" class="form needs-validation" novalidate>
+        <h3>Sélectionner un site d'étude :</h3>
+        <div class="row mb-4">
+          <div class="mb-3 col-md-6">
+            <select id="adminCodeSite" class="form-select">
+              <option selected value="">Sélectionner ...</option>
+            </select>
+            <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
+          </div>
+          <h3>Liste des relevés</h3>
+          <div id="surveyTableContainer"></div>
+        </div>
+      </form>
+    </div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <img class="fit-picture" src="../img/logo_Maddog.png" alt="Logo Maddog" style="width: 140px;">
+        </div>
+        <div class="col-md-9" style="text-align:end;">
+          <span class="text-muted"> Un problème ? Contactez-nous par mail à <a
+              href="mailto:maddog@indigeo.fr">maddog@indigeo.fr</a>
+            <i class="bi bi-pause"></i> Accéder au <a href="https://portail.indigeo.fr/mviewer/?config=apps/maddog.xml#"
+              target="_blank">visualiseur Maddog</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="../lib/jquery-3.6.0.min.js"></script>
+  <script src="../lib/bootstrap.bundle.min.js"></script>
+  <script src="../lib/wps-js-all.min.js"></script>
+  <script src="../js/wps-form.js"></script>
+  <script src="../js/validate-data.js"></script>
+  <script src="js/admin.js"></script>
+  <script type="application/javascript">
+  
+
+    // update site input
+    $(document).ready(function () {
+      const MADDOG_USER = new URLSearchParams(window.location.search).get('user');
+      populateSiteListForUser(MADDOG_USER);
+    });
+  </script>
+</body>
+
+</html>

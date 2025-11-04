@@ -52,16 +52,29 @@ CREATE TABLE measure(
    PRIMARY KEY(id_measure),
    FOREIGN KEY(id_equipment) REFERENCES equipment(id_equipment),
    FOREIGN KEY(id_operator) REFERENCES operator(id_operator),
-   FOREIGN KEY(id_survey) REFERENCES survey(id_survey)
+   FOREIGN KEY(id_survey) REFERENCES survey(id_survey) ON DELETE CASCADE
 );
 
 CREATE TABLE profil(
+   id_profil SERIAL,
    id_survey INTEGER,
    id_measure_type INTEGER,
    num_profil INTEGER,
-   PRIMARY KEY(id_survey, id_measure_type),
-   FOREIGN KEY(id_survey) REFERENCES survey(id_survey),
+   FOREIGN KEY(id_survey) REFERENCES survey(id_survey) ON DELETE CASCADE,
    FOREIGN KEY(id_measure_type) REFERENCES measure_type(id_measure_type)
 );
 
+--- Table to log site selections for deletion
+CREATE TABLE history(
+   id_history SERIAL,
+   id_survey INTEGER,
+   date_survey DATE NOT NULL,
+   id_site INTEGER,
+   id_measure_type INTEGER,
+   username VARCHAR(100) ,
+   date_requested DATE NOT NULL,
+   to_delete BOOLEAN  DEFAULT TRUE,
+   date_deleted DATE ,
+   PRIMARY KEY(id_history)
+);
 

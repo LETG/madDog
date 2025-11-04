@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS operator;
 DROP TABLE IF EXISTS equipment;
 DROP TABLE IF EXISTS survey;
 DROP TABLE IF EXISTS site; 
+DROP TABLE IF EXISTS history; 
 
 -- Configuration tables
 

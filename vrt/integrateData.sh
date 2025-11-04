@@ -68,7 +68,7 @@ function importData {
 for idSite in $rootPath/*     
 do
     # first step is idSite
-    if [ -d "$idSite" ] && [[ ${idSite##*/}=~^[A-Z]{6} ]]; then
+    if [ -d "$idSite" ] && [[ ${idSite##*/}=~^[A-Z0-9]{6} ]]; then
         idSite=${idSite%*/}     
         echo "--------------------- ${idSite##*/} ---------------------------" 
         echo "- Traitement du site ${idSite##*/}"    

@@ -45,10 +45,8 @@
         <h3>Sélectionner un site d'étude :</h3>
         <div class="row mb-4">
           <div class="mb-3 col-md-6">
-            <select id="adminCodeSite" class="form-select">
-              <option selected value="">Sélectionner ...</option>
-            </select>
-            <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
+            <input id="adminCodeSite" list="adminCodeSiteList" class="form-control" placeholder="Commencez à taper pour autocompléter...">
+            <datalist id="adminCodeSiteList"></datalist>
           </div>
           <h3>Liste des relevés</h3>
           <div id="surveyTableContainer"></div>

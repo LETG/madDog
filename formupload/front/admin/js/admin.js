@@ -44,39 +44,52 @@ async function populateSiteListForUser(username) {
     console.log("Populating site list for user:", username);
     const userSites = await getSitesForUser(username);
     const allSites = await fetchJson(SITES_API);
-    const selectElement = document.getElementById('adminCodeSite');
+    const allMeasuresType = await fetchJson(MTYPE_API);
 
-    // Clear existing options
-    selectElement.innerHTML = '';
+    // input + datalist elements (adminCodeSite = input, adminCodeSiteList = datalist)
+    const inputEl = document.getElementById('adminCodeSite');
+    const datalist = document.getElementById('adminCodeSiteList');
+    if (!inputEl || !datalist) {
+        console.warn('adminCodeSite input or adminCodeSiteList datalist not found in DOM');
+        return;
+    }
 
-    // Add only sites that belong to the user
+    // clear previous options / lookup
+    datalist.innerHTML = '';
+    inputEl.value = '';
+    const siteLookup = new Map(); // display -> id_site
+
+    // populate datalist with sites available to the user
     allSites
         .filter(site => userSites.includes(site.code_site))
         .forEach(site => {
-            const option = document.createElement('option');
-            option.value = site.id_site;
-            option.text = site.name_site || site.code_site;
-            selectElement.appendChild(option);
+            const display = `${site.name_site || site.code_site} (${site.code_site})`;
+            const opt = document.createElement('option');
+            opt.value = display;
+            datalist.appendChild(opt);
+            siteLookup.set(display, site.id_site);
         });
 
-    // Add a event on change to load surveys for selected site 
-    selectElement.addEventListener('change', async (event) => {
-        const selectedSiteId = event.target.value;
-        const surveys = await fetchJson(SURVEYS_API+"?id_site=eq."+selectedSiteId+"&select=id_site,id_survey,date_survey,id_measure_type_survey,measure_type(type_measure),profil(num_profil)&order=date_survey.asc,id_measure_type_survey.desc");
-        // Aggregate measure_type and profil data into profil data 
+    // when user selects / changes value, load surveys for the corresponding id_site
+    inputEl.addEventListener('change', async (event) => {
+        const selectedDisplay = event.target.value;
+        const selectedSiteId = siteLookup.get(selectedDisplay);
+        if (!selectedSiteId) {
+            console.warn('selected site not found for:', selectedDisplay);
+            renderSurveysTable([]); // clear table
+            return;
+        }
+
+        const surveys = await fetchJson(SURVEYS_API+"?id_site=eq."+selectedSiteId+"&select=id_site,id_survey,date_survey,id_measure_type_survey,profil(num_profil)&order=date_survey.asc,id_measure_type_survey.desc");
         surveys.forEach(survey => {
-          survey.profil = survey.measure_type[0].type_measure + survey.profil[0].num_profil;
+          // use allMeasuresType to map measure type details
+          const measureType = allMeasuresType.find(mt => mt.id_measure_type === survey.id_measure_type_survey);
+          // flatten profil and measure_type into single profil string
+          survey.profil = measureType.type_measure + survey.profil[0].num_profil;
           delete survey.measure_type;
-        }); 
+        });
         renderSurveysTable(surveys);
     });
-
-    // select first option by default
-    if (selectElement.options.length > 0) {
-        selectElement.selectedIndex = 0;
-        const event = new Event('change');
-        selectElement.dispatchEvent(event);
-    }
 }
 
 /**

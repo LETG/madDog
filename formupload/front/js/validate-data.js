@@ -73,7 +73,7 @@ function validateCSV(content, measureType) {
         }
        
         // test si l'identifiant est de la forem ${wantedIdentifiant}+un nombre
-        if (wantedIdentifiant!="REF" &&  !identifiant.match(new RegExp(`^${wantedIdentifiant}\\d+$`))) {
+        if (wantedIdentifiant!="REF" && !identifiant.match(/^autre$/) && !identifiant.match(new RegExp(`^${wantedIdentifiant}\\d+$`))) {
             return { valid: false, error: `Ligne ${i + 1}, l'identifiant doit être de la forme ${wantedIdentifiant}X où X est un nombre.` };
         }
 
@@ -102,7 +102,7 @@ function isValidIdentifiant(identifiant) {
     const refMatch = identifiant.match(/^REF+$/);
     const prfMatch = identifiant.match(/^PRF\d+$/);
     const tdcMatch = identifiant.match(/^TDC\d+$/);
-    const autreMatch = identifiant.match(/^autre\d+$/);
+    const autreMatch = identifiant.match(/^autre$/);
     const startWithL = identifiant.match(/^l\d+$/);
     const startWithpc = identifiant.match(/^pc\d+$/);
     const startWithpt = identifiant.match(/^pt\d+$/);

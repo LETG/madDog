@@ -45,6 +45,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     epsg=${metaFields[4]}
     nameEquipment=${metaFields[5]}
     typeOperator=${metaFields[6]}
+    commentaireMeasure=${metaFields[7]}
 
     # Check Measure Type exist else create it
     idMeasureType=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_measure_type FROM measure_type where type_measure='$typeMeasure';"`
@@ -105,7 +106,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     sed "s/.$/;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
    
     echo "replace header"
-    header="id;x;y;z;identifiant;date;epsg;id_equipment;id_operator;id_survey"   
+    header="id;x;y;z;identifiant;date;commentaire;epsg;id_equipment;id_operator;id_survey"   
     #replace header
     sed -i "1s/.*/$header/" $tmpData
 

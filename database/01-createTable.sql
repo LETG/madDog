@@ -49,6 +49,7 @@ CREATE TABLE measure(
    id_equipment INTEGER NOT NULL,
    id_operator INTEGER NOT NULL,
    id_survey INTEGER NOT NULL,
+   commentaire_measure VARCHAR(50),
    PRIMARY KEY(id_measure),
    FOREIGN KEY(id_equipment) REFERENCES equipment(id_equipment),
    FOREIGN KEY(id_operator) REFERENCES operator(id_operator),

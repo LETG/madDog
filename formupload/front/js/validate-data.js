@@ -29,7 +29,7 @@ function validateCSV(content, measureType) {
 
     console.log(headers);
     // Vérification des noms des entêtes
-    const expectedHeaders = ['id', 'x', 'y', 'z', 'identifiant', 'date'];
+    const expectedHeaders = ['id', 'x', 'y', 'z', 'identifiant', 'date', 'commentaire'];
     if (!arraysEqual(headers, expectedHeaders)) {
         return { valid: false, error: 'En-têtes incorrects, dans le mauvais ordre ou séparateur incorrect.' };
     }
@@ -102,11 +102,12 @@ function isValidIdentifiant(identifiant) {
     const refMatch = identifiant.match(/^REF+$/);
     const prfMatch = identifiant.match(/^PRF\d+$/);
     const tdcMatch = identifiant.match(/^TDC\d+$/);
+    const autreMatch = identifiant.match(/^autre\d+$/);
     const startWithL = identifiant.match(/^l\d+$/);
     const startWithpc = identifiant.match(/^pc\d+$/);
     const startWithpt = identifiant.match(/^pt\d+$/);
     const startWithsemi = identifiant.match(/^semi\d+$/);
-    return refMatch || prfMatch || tdcMatch || startWithL || startWithpc|| startWithpt || startWithsemi;
+    return refMatch || prfMatch || tdcMatch || startWithL || startWithpc|| startWithpt || startWithsemi || autreMatch;
 }
 
 function isValidDate(date) {

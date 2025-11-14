@@ -258,6 +258,12 @@
         "id_site": "BANCHE",
         "admin": ["qruaud", "ldeho","makan.gandit@univ-brest.fr", "maddog"],
         "user" : [""]
+    },
+
+    {
+        "id_site": "MARTIN",
+        "admin": ["qruaud", "ldeho","makan.gandit@univ-brest.fr", "maddog"],
+        "user" : ["ssuanez"]
     }
     
     

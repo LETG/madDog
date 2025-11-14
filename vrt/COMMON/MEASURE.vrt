@@ -8,9 +8,9 @@
         <Field name="pro_epsg" src="epsg" type="String"/>
         <Field name="date_measure" src="date" type="Date"/>
         <Field name="description_measure" src="identifiant" type="String"/>
+        <Field name="commentaire_measure" src="commentaire" type="String"/>     
         <Field name="id_equipment" type="String"/>
         <Field name="id_operator" type="String"/>
         <Field name="id_survey" type="String"/>
-        <Field name="commentaire" src="commentaire" type="String"/>        
     </OGRVRTLayer>
 </OGRVRTDataSource>

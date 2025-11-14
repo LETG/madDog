@@ -45,7 +45,6 @@ if test -f "${fileNameWithoutExt}.meta"; then
     epsg=${metaFields[4]}
     nameEquipment=${metaFields[5]}
     typeOperator=${metaFields[6]}
-    commentaireMeasure=${metaFields[7]}
 
     # Check Measure Type exist else create it
     idMeasureType=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_measure_type FROM measure_type where type_measure='$typeMeasure';"`
@@ -91,19 +90,16 @@ if test -f "${fileNameWithoutExt}.meta"; then
     `PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO profil (id_survey, id_measure_type, num_profil) VALUES ('$idSurvey', '$idMeasureType', '$numProfil');"`
     echo "--numProfil : $num_profil"
     
-    # Measure import Solution 1 was too slow
-    #echo ">Import file to postgresql in table : $tableMeasure"
-    #VRT not working here beacause of additional field need idOperator, idSurvey, idEquipement
-    #exec <  $fileName || exit 1
-    #read header # read (and ignore) the first line
-    #while IFS=\; read id x y z desc dateM; do
-    #    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO measure (num_measure, coord_x, coord_y, coord_z, proj_epsg, date_measure, description_measure, id_equipment, id_operator, id_survey) VALUES ('$id', '$x', '$y', '$z', '$epsg', '$dateM', '$desc', '$idEquipment', '$idOperator', '$idSurvey');"
-    # done
-    # Measure Solution 2 with vrt by updating csv input
     tmpData=tempDataModel.csv
     echo "add additional information in csv file"
-    # '$epsg', '$dateM', '$desc', '$idEquipment', '$idOperator', '$idSurvey
-    sed "s/.$/;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    #check how many columns in csv ( latest column 'commentaire' is optional)
+    numCols=$(head -1 $fileName | awk -F';' '{print NF}')
+    if [ $numCols -eq 7 ]
+    then
+        sed "s/.$/;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    else
+        sed "s/.$/;;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    fi
    
     echo "replace header"
     header="id;x;y;z;identifiant;date;commentaire;epsg;id_equipment;id_operator;id_survey"   
@@ -116,7 +112,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     sed -i "s/<SrcDataSource>/<SrcDataSource>${tmpData}/g" $configuredVrt
 
     echo "-Import file to postgresql in table : measure"
-    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt
+    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt -where "description_measure <> 'autre'"
 
     rm $configuredVrt
     rm $tmpData

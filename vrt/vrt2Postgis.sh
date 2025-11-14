@@ -56,7 +56,7 @@ then
     echo "mnt filename : $mntOutput"
     # First step with json to filter unwanted pc point
     #ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "\"identifiant\" NOT LIKE 'pc%'"
-    ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "identifiant NOT LIKE 'pc%' AND identifiant NOT LIKE 'PC%' AND identifiant NOT LIKE '%ign%' AND identifiant NOT LIKE '%IGN%' AND identifiant NOT LIKE 'ptstat%' AND identifiant NOT LIKE 'PTSTAT%'"
+    ogr2ogr -f GeoJSON "$mntGeoJson" "$configuredVrt" -where "identifiant <> 'autre'"
     # Create tiff file
     gdal_grid -zfield z -a invdist:$gdalGridIndivParm -ot Float64 -of GTiff "$mntGeoJson" "$mntOutputTmp"
     echo "-- Update value for file $mntOutput"

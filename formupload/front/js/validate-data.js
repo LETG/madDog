@@ -1,9 +1,6 @@
 var maddogbbox = { xmin: 98046, xmax: 401659, ymin: 6703164, ymax: 6886993 };
 
 function loadbbox() {
-
-    console.log('loadbbox');
-    // TODO change for final url
     const bboxUrl = '/maddogimport/data/limites.geojson';
 
     fetch(bboxUrl)
@@ -27,10 +24,13 @@ function validateCSV(content, measureType) {
     const lines = content.trim().split('\n');
     const headers = lines[0].replace(/\r/g, '').split(';');
 
-    console.log(headers);
-    // Vérification des noms des entêtes
-    const expectedHeaders = ['id', 'x', 'y', 'z', 'identifiant', 'date', 'commentaire'];
-    if (!arraysEqual(headers, expectedHeaders)) {
+    const expectedHeaders = ['id', 'x', 'y', 'z', 'identifiant', 'date'];
+    const optionalHeader = 'commentaire';
+
+    // Vérifie que les en-têtes obligatoires sont présents et dans le bon ordre
+    if (!(headers.length >= expectedHeaders.length &&
+                 headers.slice(0, expectedHeaders.length).every((header, index) => header === expectedHeaders[index]) &&
+                 (headers.length === expectedHeaders.length || headers[headers.length - 1] === optionalHeader))) {
         return { valid: false, error: 'En-têtes incorrects, dans le mauvais ordre ou séparateur incorrect.' };
     }
 
@@ -45,7 +45,8 @@ function validateCSV(content, measureType) {
     for (let i = 1; i < lines.length; i++) {
         const columns = lines[i].replace(/\r/g, '').split(';');
 
-        if (columns.length !== expectedHeaders.length) {
+        //TODO
+        if (columns.length !== headers.length) {
             return { valid: false, error: `Nombre incorrect de colonnes à la ligne ${i + 1}.` };
         }
 
@@ -55,7 +56,6 @@ function validateCSV(content, measureType) {
         }
         previousId = id;
 
-        console.log(maddogbbox);
         const x = parseFloat(columns[1]);
         const y = parseFloat(columns[2]);
         const z = columns[3].trim();
@@ -72,14 +72,12 @@ function validateCSV(content, measureType) {
             return { valid: false, error: `Identifiant invalide à la ligne ${i + 1}.` };
         }
        
-        // test si l'identifiant est de la forem ${wantedIdentifiant}+un nombre
+        // test si l'identifiant est de la forme ${wantedIdentifiant}+un nombre (si pas REF et pas autre)
         if (wantedIdentifiant!="REF" && !identifiant.match(/^autre$/) && !identifiant.match(new RegExp(`^${wantedIdentifiant}\\d+$`))) {
             return { valid: false, error: `Ligne ${i + 1}, l'identifiant doit être de la forme ${wantedIdentifiant}X où X est un nombre.` };
         }
 
         const date = columns[5];
-        console.log(date);
-        console.log(document.getElementById('surveyDate').value);
         // on vérifie les dates uniquement si ce n'est pas une mesure de type ref
         if (!isValidDate(date) && measureType != "REF") {
             return { valid: false, error: `Format de date invalide à la ligne ${i + 1}.` };

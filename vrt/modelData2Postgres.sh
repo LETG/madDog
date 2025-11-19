@@ -112,7 +112,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     sed -i "s/<SrcDataSource>/<SrcDataSource>${tmpData}/g" $configuredVrt
 
     echo "-Import file to postgresql in table : measure"
-    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt -where "description_measure <> 'autre'"
+    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt
 
     rm $configuredVrt
     rm $tmpData

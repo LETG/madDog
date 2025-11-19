@@ -73,7 +73,7 @@ then
     rm $mntOutputTmp
 else 
     echo "-- Import file to postgresql in table : $table"
-    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$table" $configuredVrt
+    ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$table" $configuredVrt -where "identifiant <> 'autre'"
 fi
 
 if [[ $type == "REF" ]]

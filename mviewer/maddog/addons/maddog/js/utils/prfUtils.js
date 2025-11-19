@@ -261,7 +261,6 @@ const prfUtils = (function () {
                     name: "Evolution de date à date",
                     marker: { color: '#ffffffff' },
                     showlegend: true,
-                    visible: 'legendonly'
                 },
                  // Trace fictive pour la légende "positive"
                 {
@@ -270,8 +269,7 @@ const prfUtils = (function () {
                     type: "bar",
                     name: "Positive",
                     marker: { color: '#b43939ff' },
-                    showlegend: true,
-                    visible: 'legendonly'
+                    showlegend: true
                 },
                 // Trace fictive pour la légende "négative"
                 {
@@ -280,8 +278,7 @@ const prfUtils = (function () {
                     type: "bar",
                     name: "Négative",
                     marker: { color: '#5881ceff' },
-                    showlegend: true,
-                    visible: 'legendonly'
+                    showlegend: true
                 }
             ];
             const axesFont = {

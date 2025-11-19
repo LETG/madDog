@@ -28,7 +28,6 @@ echo "-- Get information from history table to remove survey data"
 # Read history table to get data to remove ( only when to_delete = true )
 # get id_survey, date_survey, id_type, code_site
 historyData=$(psql_exec "SELECT hs.id_history, hs.id_survey, hs.date_survey, hs.id_measure_type, hs.id_site, p.num_profil FROM $maddogDBSchema.history hs, $maddogDBSchema.profil p WHERE hs.to_delete = true AND hs.id_survey = p.id_survey;")
-echo $historyData
 
 # for each entry in historyData
 for entry in $historyData
@@ -39,11 +38,11 @@ do
     id_measure_type=$(echo $entry | cut -d'|' -f4)
     id_site=$(echo $entry | cut -d'|' -f5)    
     num_profil=$(echo $entry | cut -d'|' -f6)    
-    echo "-- Processing history id: $id_history, survey id: $id_survey, date: $date_survey, measure type id: $id_measure_type, site id: $id_site"
     type_measure=$(psql_exec "SELECT type_measure FROM $maddogDBSchema.measure_type WHERE id_measure_type = $id_measure_type;")
     code_site=$(psql_exec "SELECT code_site FROM $maddogDBSchema.site WHERE id_site = $id_site;" )
-    echo "-- Measure type: $type_measure, code site: $code_site"        
-
+    
+    echo "-- Processing history id: $id_history, survey id: $id_survey, measure type id: $id_measure_type, site id: $id_site"
+    echo "-- Code site: $code_site, Measure type: $type_measure , num profil: $num_profil, date: $date_survey"
     # Structure case
     case $type_measure in
     "MNT")
@@ -69,7 +68,43 @@ do
     echo "-- Removing survey data from file system"
     ## Find folders to delete in file system using code_site, id_type, date_survey from history table
     # then read all .meta files to find files to delete ( compare date in meta with date_survey in history table )
-    # then delete files and folders if empty    
+    # then delete files and folders if empty   
+    # List all subfolder from rootPath/$id_site/$type_measure$num_profil
+    dataRootPath="$rootPath/$code_site/$type_measure$num_profil"
+    subFolders=$(find $dataRootPath -type d)
+    for folder in $subFolders 
+    #read all files with extesion meta in subfolders  
+    do
+        metaFiles=$(find $folder -maxdepth 1 -type f -name "*.meta")
+        for metaFile in $metaFiles
+        do
+            # for each file, read the second line and compare current data to meta file
+            secondline=`sed -n '2p' $metaFile`;
+            IFS=';' read -r -a metaFields <<< $secondline
+
+            # Set variables for next database import
+            metaCodeSite=${metaFields[0]}
+            metaTypeMeasure=${metaFields[1]}
+            metaNumProfil=${metaFields[2]}
+            # if not set set to 1
+            if [ -z "$metaNumProfil" ]; then metaNumProfil=1; fi
+            metaDateSurvey=${metaFields[3]}
+  
+            if [ "$metaTypeMeasure" = "$type_measure" ] && [ "$metaDateSurvey" = "$date_survey" ] && [ "$metaNumProfil" = "$num_profil" ]; then
+                # delete meta and csv
+                baseName=$(basename "$metaFile" .meta)
+                dataFile="$folder/$baseName.csv"
+                echo "-- Deleting data file: $dataFile and meta file: $metaFile"
+                rm -f "$dataFile" "$metaFile"
+                fileDeleted=true 
+            fi
+        done
+    done
+
+    # If fileDeleted != true add a warning
+    if [ "$fileDeleted" != true ]; then
+        echo "-- WARNING: No file found to delete for survey id: $id_survey, measure type: $type_measure, site code: $code_site, date: $date_survey"
+    fi
 
     # Update state and date in history table
     echo "-- Updating history table"

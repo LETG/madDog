@@ -90,22 +90,19 @@ if test -f "${fileNameWithoutExt}.meta"; then
     `PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO profil (id_survey, id_measure_type, num_profil) VALUES ('$idSurvey', '$idMeasureType', '$numProfil');"`
     echo "--numProfil : $num_profil"
     
-    # Measure import Solution 1 was too slow
-    #echo ">Import file to postgresql in table : $tableMeasure"
-    #VRT not working here beacause of additional field need idOperator, idSurvey, idEquipement
-    #exec <  $fileName || exit 1
-    #read header # read (and ignore) the first line
-    #while IFS=\; read id x y z desc dateM; do
-    #    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO measure (num_measure, coord_x, coord_y, coord_z, proj_epsg, date_measure, description_measure, id_equipment, id_operator, id_survey) VALUES ('$id', '$x', '$y', '$z', '$epsg', '$dateM', '$desc', '$idEquipment', '$idOperator', '$idSurvey');"
-    # done
-    # Measure Solution 2 with vrt by updating csv input
     tmpData=tempDataModel.csv
     echo "add additional information in csv file"
-    # '$epsg', '$dateM', '$desc', '$idEquipment', '$idOperator', '$idSurvey
-    sed "s/.$/;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    #check how many columns in csv ( latest column 'commentaire' is optional)
+    numCols=$(head -1 $fileName | awk -F';' '{print NF}')
+    if [ $numCols -eq 7 ]
+    then
+        sed "s/.$/;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    else
+        sed "s/.$/;;$epsg;$idEquipment;$idOperator;$idSurvey/" $fileName > $tmpData
+    fi
    
     echo "replace header"
-    header="id;x;y;z;identifiant;date;epsg;id_equipment;id_operator;id_survey"   
+    header="id;x;y;z;identifiant;date;commentaire;epsg;id_equipment;id_operator;id_survey"   
     #replace header
     sed -i "1s/.*/$header/" $tmpData
 

@@ -5,6 +5,7 @@
         <LayerSRS>EPSG:2154</LayerSRS>
         <Field name="linePosition" type="Integer" src="id"/>
         <Field name="creationDate" type="Date" src="date"/>
+        <Field name="identifiant" type="String" src="identifiant"/>
         <GeometryField encoding="PointFromColumns" x="x" y="y" z="z"/>
     </OGRVRTLayer>
 </OGRVRTDataSource>

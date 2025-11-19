@@ -125,6 +125,7 @@ INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');
 INSERT INTO public.measure_type VALUES (2, 'MNT', 'MNT : Modèle Numérique de Terrain');
 INSERT INTO public.measure_type VALUES (3, 'PRF', 'PRF : Profil de plage');
 INSERT INTO public.measure_type VALUES (4, 'REF', 'REF : Ligne(s) de référence (Cinématique Trait de côte ou Profil de plage)');
+INSERT INTO public.measure_type VALUES (5, 'autre', 'autre : autres types de mesure exemple point de calage, point topographique');
 
 -- Operator
 INSERT INTO public.operator VALUES (1, 'Scientifique', 'Scientifique');

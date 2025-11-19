@@ -1,5 +1,5 @@
 // Declare url for api and wps Maddog 
-const url = "https://portail.indigeo.fr"
+const url = "http://localhost"
 
 // Create config
 const config = [{

@@ -14,6 +14,7 @@ gdalGridIndivParm="power=6.0:smothing=7.0:radius1=30.0:radius2=30.0:angle=90.0:m
 
 # geoserver dir for image mosaic
 # this folder have to already exist
+rootPath="/data/MADDOG"
 mntDirectory=/data/MADDOG/imagemosaic
 
 # geoserver dir for image mosaic

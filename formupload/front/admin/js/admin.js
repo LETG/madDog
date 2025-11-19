@@ -1,5 +1,5 @@
 // Configuration
-const URL_BACKEND_ADMIN = "http://localhost";
+const URL_BACKEND_ADMIN = "https://portail.indigeo.fr/";
 const URL_BACKEND_API = URL_BACKEND_ADMIN+"/maddogapi";
 
 const USER_SITES= URL_BACKEND_ADMIN + "/maddogimport/admin/data/site_user_list.json";
@@ -69,6 +69,9 @@ async function populateSiteListForUser(username) {
             datalist.appendChild(opt);
             siteLookup.set(display, site.id_site);
         });
+      
+     // Load and display pending deletions
+    loadPendingDeletions();
 
     // when user selects / changes value, load surveys for the corresponding id_site
     inputEl.addEventListener('change', async (event) => {
@@ -88,7 +91,11 @@ async function populateSiteListForUser(username) {
           survey.profil = measureType.type_measure + survey.profil[0].num_profil;
           delete survey.measure_type;
         });
-        renderSurveysTable(surveys);
+        // remove survey if already in history with to deled at true
+        const history = await fetchJson(HISTORY_API+"?to_delete=eq.true&select=id_survey");
+        const historySurveyIds = new Set(history.map(h => h.id_survey));
+        const filteredSurveys = surveys.filter(s => !historySurveyIds.has(s.id_survey));    
+        renderSurveysTable(filteredSurveys);
     });
 }
 
@@ -97,7 +104,6 @@ async function populateSiteListForUser(username) {
  * @param {Array} surveys - array of survey objects
  * @param {string} containerId - id of the container to render the table into
  */
-// ...existing code...
 function renderSurveysTable(surveys, containerId = 'surveyTableContainer') {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -314,6 +320,12 @@ async function logSiteSelection(surveysToDelete) {
       if (container) {
         container.innerHTML = '<p>Tableau vidé après enregistrement.</p>';
       }
+      // reset input
+      const inputEl = document.getElementById('adminCodeSite');
+      if (inputEl) inputEl.value = '';
+
+      // clear pending deletions and reload
+      loadPendingDeletions();
     }
   } catch (err) {
     console.error('Failed to log site selection:', err);
@@ -325,3 +337,96 @@ async function logSiteSelection(surveysToDelete) {
     else if (containerParent) containerParent.style.position = prevPos;
   }
 }
+
+// Load and display surveys pending deletion
+async function loadPendingDeletions() {
+    try {
+        const history = await fetchJson(HISTORY_API + "?to_delete=eq.true&select=id_history,id_survey,date_survey,id_measure_type,id_site,username,date_requested");
+        const allMeasuresType = await fetchJson(MTYPE_API);
+        const allSites = await fetchJson(SITES_API);
+
+        // Enrich history data with site and measure type info
+        const enrichedHistory = history.map(h => {
+            const site = allSites.find(s => s.id_site === h.id_site);
+            const measureType = allMeasuresType.find(mt => mt.id_measure_type === h.id_measure_type);
+            return {
+                ...h,
+                code_site: site ? site.code_site : 'N/A',
+                type_measure: measureType ? measureType.type_measure : 'N/A'
+            };
+        });
+
+        renderPendingDeletionsTable(enrichedHistory);
+    } catch (err) {
+        console.error('Error loading pending deletions:', err);
+    }
+}
+
+/**
+ * Create and render a table of surveys pending deletion
+ * @param {Array} history - array of history objects with to_delete = true
+ */
+function renderPendingDeletionsTable(history) {
+    const container = document.getElementById('containerForm');
+    if (!container) return;
+
+    // Check if pending table already exists, remove it
+    const existingTable = document.getElementById('pendingDeletionsContainer');
+    if (existingTable) existingTable.remove();
+
+    // Create container for pending deletions table
+    const pendingContainer = document.createElement('div');
+    pendingContainer.id = 'pendingDeletionsContainer';
+    pendingContainer.className = 'mt-5 mb-5';
+
+    const title = document.createElement('h3');
+    title.textContent = 'Relevés en attente de suppression';
+    pendingContainer.appendChild(title);
+
+    if (!history || history.length === 0) {
+        const emptyMsg = document.createElement('p');
+        emptyMsg.className = 'text-muted';
+        emptyMsg.textContent = 'Aucun relevé en attente de suppression.';
+        pendingContainer.appendChild(emptyMsg);
+        container.appendChild(pendingContainer);
+        return;
+    }
+
+    // Create table
+    const table = document.createElement('table');
+    table.className = 'table table-sm table-striped';
+
+    const thead = document.createElement('thead');
+    const hrow = document.createElement('tr');
+    const headers = ['ID', 'Site', 'Type', 'Date relevé', 'Utilisateur', 'Date demande'];
+    headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        hrow.appendChild(th);
+    });
+    thead.appendChild(hrow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    history.forEach(h => {
+        const row = document.createElement('tr');
+        const cells = [
+            h.id_history,
+            h.code_site,
+            h.type_measure,
+            h.date_survey ? new Date(h.date_survey).toLocaleDateString('fr-FR') : 'N/A',
+            h.username || 'N/A',
+            h.date_requested ? new Date(h.date_requested).toLocaleDateString('fr-FR') : 'N/A'
+        ];
+        cells.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell;
+            row.appendChild(td);
+        });
+        tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    pendingContainer.appendChild(table);
+    container.appendChild(pendingContainer);
+}
+

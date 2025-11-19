@@ -6,6 +6,7 @@
         <Field name="idType" type="String" src="identifiant"/>
         <Field name="linePosition" type="Integer" src="id"/>
         <Field name="creationDate" type="Date" src="date"/>
+        <Field name="identifiant" type="String" src="identifiant"/>
         <GeometryField encoding="PointFromColumns" x="x" y="y"/>
     </OGRVRTLayer>
 </OGRVRTDataSource>

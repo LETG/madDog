@@ -7,8 +7,8 @@
 # siteFolder 4 chars
 # measure type folder 3 chars and 1 number
 # date folder 21 number and less than date value from lastUpdateDate.lock
+. config.sh
 
-rootPath="/data/MADDOG"
 dateFileName="lastUpdateDate.lock"
 
 # startDate used to caculate script duration

@@ -264,7 +264,12 @@
         "id_site": "MARTIN",
         "admin": ["qruaud", "ldeho","makan.gandit@univ-brest.fr", "maddog"],
         "user" : ["ssuanez"]
-    }
+    },
     
+    {
+        "id_site": "RKSARO",
+        "admin": ["qruaud", "ldeho","makan.gandit@univ-brest.fr", "maddog"],
+        "user" : [""]
+    }
     
 ]

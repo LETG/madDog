@@ -171,7 +171,8 @@ const wps = (function () {
             interval = 0.1,
             minDist = 0,
             maxDist = 0,
-            useSmallestDistance = true
+            useSmallestDistance = true,
+            distanceMax = 20
         }) => {
             document.dispatchEvent(wps.startEvent);
             $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
@@ -198,7 +199,8 @@ const wps = (function () {
                 interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("interval", null, null, interval),
                 useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("useSmallestDistance", null, null, useSmallestDistance),
                 minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("minDist", null, null, minDist),
-                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, maxDist)
+                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, maxDist),
+                distanceMax: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("distanceMax", null, null, distanceMax)
             });
             // OUTPUTS
             var outputGenerator = new OutputGenerator();

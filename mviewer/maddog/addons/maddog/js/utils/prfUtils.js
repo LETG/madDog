@@ -652,11 +652,12 @@ const prfUtils = (function () {
             prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
             // reset config
-            let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
+            let { interval, useSmallestDistance, minDist, maxDist, distanceMax } = prfUtils.defaultParams;
             document.getElementById("interval").value = interval;
             document.getElementById("useSmallestDistance").value = useSmallestDistance;
             document.getElementById("minDist").value = minDist;
             document.getElementById("maxDist").value = maxDist;
+            document.getElementById("distanceMax").value = distanceMax;
             maddog.setConfig({
                 fc: {},
                 refline: {},
@@ -682,8 +683,8 @@ const prfUtils = (function () {
          * @param {any} e event or this html item
          */
         onParamChange: (e) => {
-            maddog.setConfig({                
-                [e.id]: e.type === "number" ? e.id === "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
+            maddog.setConfig({
+                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
@@ -695,7 +696,8 @@ const prfUtils = (function () {
             interval: 1,
             useSmallestDistance: true,
             minDist: 0,
-            maxDist: 0
+            maxDist: 0,
+            distanceMax: 20
         }
     }
 })();

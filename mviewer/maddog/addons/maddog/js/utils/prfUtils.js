@@ -64,6 +64,7 @@ const prfUtils = (function () {
             let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];
             feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));
             tools.setSelectedLR(feature);
+            prfUtils.setRefLineFeature(feature);
         },
         /**
          * Calculate distance from 2 points
@@ -480,6 +481,33 @@ const prfUtils = (function () {
             $("#prftrackingBtn").prop('disabled', features.length < 2);
         },
         /**
+         * Store ref line geojson for WPS call
+         * @param {ol.Feature} feature
+         */
+        setRefLineFeature: (feature) => {
+            if (!feature) return;
+            const format = new ol.format.GeoJSON();
+            const featureCollection = {
+                type: "FeatureCollection",
+                crs: {
+                    type: "name",
+                    properties: {
+                        name: "EPSG:2154"
+                    }
+                },
+                features: [
+                    format.writeFeatureObject(feature, {
+                        dataProjection: "EPSG:2154",
+                        featureProjection: "EPSG:3857"
+                    })
+                ]
+            };
+            const reflineGeojson = `<![CDATA[${JSON.stringify(featureCollection)}]]>`;
+            maddog.setConfig({
+                refline: reflineGeojson
+            }, "beachProfileTrackingConfig");
+        },
+        /**
          * On change beach profile entry
          */
         changePrf: () => {
@@ -631,6 +659,7 @@ const prfUtils = (function () {
             document.getElementById("maxDist").value = maxDist;
             maddog.setConfig({
                 fc: {},
+                refline: {},
                 ...prfUtils.defaultParams
             }, "beachProfileTrackingConfig");
         },

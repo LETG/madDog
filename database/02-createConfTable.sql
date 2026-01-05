@@ -115,7 +115,7 @@ INSERT INTO site VALUES (74,'Karreck hir','Kerlouan','KARHIR');
 INSERT INTO site VALUES (75,'Ruduloc nodeven','Kerlouan','RUDNOD');
 INSERT INTO site VALUES (76,'Plage de meneham','Kerlouan','MENHAM');
 INSERT INTO site VALUES (77,'Cremiou','Kerlouan','CREMOU');
-INSERT INTO site VALUES (78,'Lidivic','Plounéour-Brignogan-plages','LIDVIC');
+INSERT INTO site VALUES (78,'Lividic','Plounéour-Brignogan-plages','LIVDIC');
 INSERT INTO site VALUES (79,'Falaise de kerguelen','Plounéour-Brignogan-plages','KERGEL');
 
 

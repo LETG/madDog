@@ -64,6 +64,7 @@ const prfUtils = (function () {
             let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];
             feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));
             tools.setSelectedLR(feature);
+            prfUtils.setRefLineFeature(feature);
         },
         /**
          * Calculate distance from 2 points
@@ -480,6 +481,33 @@ const prfUtils = (function () {
             $("#prftrackingBtn").prop('disabled', features.length < 2);
         },
         /**
+         * Store ref line geojson for WPS call
+         * @param {ol.Feature} feature
+         */
+        setRefLineFeature: (feature) => {
+            if (!feature) return;
+            const format = new ol.format.GeoJSON();
+            const featureCollection = {
+                type: "FeatureCollection",
+                crs: {
+                    type: "name",
+                    properties: {
+                        name: "EPSG:2154"
+                    }
+                },
+                features: [
+                    format.writeFeatureObject(feature, {
+                        dataProjection: "EPSG:2154",
+                        featureProjection: "EPSG:3857"
+                    })
+                ]
+            };
+            const reflineGeojson = `<![CDATA[${JSON.stringify(featureCollection)}]]>`;
+            maddog.setConfig({
+                refline: reflineGeojson
+            }, "beachProfileTrackingConfig");
+        },
+        /**
          * On change beach profile entry
          */
         changePrf: () => {
@@ -624,13 +652,15 @@ const prfUtils = (function () {
             prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
             // reset config
-            let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
+            let { interval, useSmallestDistance, minDist, maxDist, distanceMax } = prfUtils.defaultParams;
             document.getElementById("interval").value = interval;
             document.getElementById("useSmallestDistance").value = useSmallestDistance;
             document.getElementById("minDist").value = minDist;
             document.getElementById("maxDist").value = maxDist;
+            document.getElementById("distanceMax").value = distanceMax;
             maddog.setConfig({
                 fc: {},
+                refline: {},
                 ...prfUtils.defaultParams
             }, "beachProfileTrackingConfig");
         },
@@ -653,8 +683,8 @@ const prfUtils = (function () {
          * @param {any} e event or this html item
          */
         onParamChange: (e) => {
-            maddog.setConfig({                
-                [e.id]: e.type === "number" ? e.id === "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
+            maddog.setConfig({
+                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
@@ -666,7 +696,8 @@ const prfUtils = (function () {
             interval: 1,
             useSmallestDistance: true,
             minDist: 0,
-            maxDist: 0
+            maxDist: 0,
+            distanceMax: 20
         }
     }
 })();

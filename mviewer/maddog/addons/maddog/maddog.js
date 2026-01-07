@@ -210,6 +210,7 @@ maddog = (function () {
                     executionMode: "async",
                     lineage: false,
                     fc: {},
+                    refline: {},
                     ...prfUtils.defaultParams,
                     processIdentifier: "BeachProfile:BeachProfileTracking",
                     callback: (response) => {

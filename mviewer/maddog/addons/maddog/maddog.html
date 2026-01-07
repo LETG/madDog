@@ -301,6 +301,14 @@
                                             </label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
                                         </div>
+                                        <div class="col-xs-3">
+                                            <label for="spaceParam">Distance max reprojection
+                                                <span data-toggle="tooltip" data-placement="top" title="Distance maximale (m) pour reprojeter les points du profil sur la ligne de référence">
+                                                <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </label>
+                                            <input onchange="prfUtils.onParamChange(this)" value="20" type="number" class="form-control tdcParams" id="distanceMax" aria-describedby="basic-addon3">
+                                        </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
                                                 <label for="useSmallestDist">Profil le plus court
@@ -450,4 +458,3 @@
    </div>
 </div>
 <!-- /.Template Mobile -->
-

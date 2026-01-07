@@ -111,12 +111,12 @@ INSERT INTO site VALUES (70,'Pors Treillen','Treffiagat','PORSTR');
 INSERT INTO site VALUES (71,'Cleut Rouz/Kermil','Fouesnant','CLEUTR');
 INSERT INTO site VALUES (72,'Mer Blanche/Kerler/Trégonour','Fouesnant','MERBLA');
 INSERT INTO site VALUES (73,'Plage de Kermor/Treustel','Combrit','TREUST');
-INSERT INTO site VALUES (74,'Karreck hir','Kerlouan','KARHIR');
-INSERT INTO site VALUES (75,'Ruduloc nodeven','Kerlouan','RUDNOD');
-INSERT INTO site VALUES (76,'Plage de meneham','Kerlouan','MENHAM');
-INSERT INTO site VALUES (77,'Cremiou','Kerlouan','CREMOU');
+INSERT INTO site VALUES (74,'Karreck Hir','Kerlouan','KARHIR');
+INSERT INTO site VALUES (75,'Rudoloc Nodeven','Kerlouan','RUDNOD');
+INSERT INTO site VALUES (76,'Plage de Meneham','Kerlouan','MENHAM');
+INSERT INTO site VALUES (77,'Crémiou','Kerlouan','CREMOU');
 INSERT INTO site VALUES (78,'Lividic','Plounéour-Brignogan-plages','LIVDIC');
-INSERT INTO site VALUES (79,'Falaise de kerguelen','Plounéour-Brignogan-plages','KERGEL');
+INSERT INTO site VALUES (79,'Falaise de Kerguelen','Plounéour-Brignogan-plages','KERGEL');
 
 
 

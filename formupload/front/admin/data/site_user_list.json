@@ -698,5 +698,25 @@
             "maddog"
         ],
         "user": ["ssuanez"]
+    },
+    {
+        "id_site": "MOULIN",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "DAPISS",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
     }
 ]

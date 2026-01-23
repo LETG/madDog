@@ -56,9 +56,8 @@
         <div class="row mb-4">
           <div class="mb-3 col-md-6">
             <label for="" class="form-label">Sélectionner un site d'étude :</label>
-            <select id="codeSite" class="form-select" required>
-              <option selected disabled value="">Sélectionner ...</option>
-            </select>
+            <input id="codeSite" list="codeSiteList" class="form-control" placeholder="Commencez à taper pour autocompléter..." required>
+            <datalist id="codeSiteList"></datalist>
             <div class="invalid-feedback">Veuillez sélectionner un site d'étude</div>
           </div>
           <div class="mb-3 col-md-6" id="selectProfilId" style="display: none;">

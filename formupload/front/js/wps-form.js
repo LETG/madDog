@@ -1,7 +1,11 @@
 // Function to get select's value
 function getValSelect(selectId){
-    var value = document.getElementById(selectId).value;
-    return value;
+    var el = document.getElementById(selectId);
+    if (!el) return null;
+    if (el.dataset && el.dataset.code) {
+        return el.dataset.code;
+    }
+    return el.value;
 }
 
 
@@ -58,4 +62,3 @@ function importDataWPS() {
             }            
     }, "imp:importData", "raw", "async", false, inputs, outputs);
 }
-

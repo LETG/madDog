@@ -90,7 +90,7 @@ do
             if [ -z "$metaNumProfil" ]; then metaNumProfil=1; fi
             metaDateSurvey=${metaFields[3]}
             # metaDateSurvey can have different format, convert to YYYY-MM-DD
-            metaDateSurvey=$(date -d "$metaDateSurvey" +"%Y-%m-%
+            metaDateSurvey=$(date -d "$metaDateSurvey" +"%Y-%m-%d")
   
             if [ "$metaTypeMeasure" = "$type_measure" ] && [ "$metaDateSurvey" = "$date_survey" ] && [ "$metaNumProfil" = "$num_profil" ]; then
                 # delete meta and csv

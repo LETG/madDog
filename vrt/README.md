@@ -58,3 +58,15 @@ db=""
 cd ./script/
 sh vrt2Postgis.sh base.vrt prf1_voug PRF1_VOUGOT_20041209 PRF1_VOUGOT_20041209.csv
 ```
+
+### removeSurvey.sh via crontab
+
+Pour exécuter `removeSurvey.sh` automatiquement, utilisez une crontab du même utilisateur que celui utilisé habituellement pour lancer le script (afin de garder les mêmes droits sur la base et le système de fichiers). Exemple :
+
+```
+# Éditer la crontab du bon utilisateur
+crontab -e
+
+# Tous les jours à 02:00
+0 2 * * * cd /chemin/vers/madDog/vrt && ./removeSurvey.sh >> /chemin/vers/madDog/vrt/removeSurvey.log 2>&1
+```

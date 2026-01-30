@@ -29,6 +29,8 @@ echo "-- Get information from history table to remove survey data"
 # get id_survey, date_survey, id_type, code_site
 historyData=$(psql_exec "SELECT hs.id_history, hs.id_survey, hs.date_survey, hs.id_measure_type, hs.id_site, p.num_profil FROM $maddogDBSchema.history hs, $maddogDBSchema.profil p WHERE hs.to_delete = true AND hs.id_survey = p.id_survey;")
 
+surveyDeletedCount=0
+
 # for each entry in historyData
 for entry in $historyData
 do
@@ -63,6 +65,7 @@ do
 
     # Delete entry in survey table( cascade delete will remove data in dependent tables )
     psql_exec DELETE FROM $maddogDBSchema.survey WHERE id_survey = $id_survey;
+    surveyDeletedCount=$((surveyDeletedCount + 1))
 
 
     echo "-- Removing survey data from file system"
@@ -98,10 +101,15 @@ do
                 dataFile="$folder/$baseName.csv"
                 echo "-- Deleting data file: $dataFile and meta file: $metaFile"
                 rm -f "$dataFile" "$metaFile"
-                fileDeleted=true 
+                fileDeleted=true
+                if [ -d "$folder" ] && [ -z "$(ls -A "$folder")" ]; then
+                    echo "-- Removing empty folder: $folder"
+                    rmdir "$folder"
+                fi
             fi
         done
     done
+
 
     # If fileDeleted != true add a warning
     if [ "$fileDeleted" != true ]; then
@@ -119,5 +127,6 @@ echo "-- Updating materialized views"
 psql_exec "REFRESH MATERIALIZED VIEW $maddogDBSchema.sitemntdate;"
 psql_exec "REFRESH MATERIALIZED VIEW $maddogDBSchema.sitemeasureprofil;"
 
+echo "-- Surveys deleted: $surveyDeletedCount"
 
 echo "-- END PROCESS"

@@ -8,6 +8,23 @@ const prfUtils = (function () {
     document.dispatchEvent(create);
 
     return {
+        getLatestRefLinesByType: (features = []) => {
+            if (!features.length) return [];
+            const getDateValue = (feature) => {
+                const raw = feature?.properties?.creationdate;
+                if (raw && typeof moment === "function") {
+                    const m = moment(raw, "YYYY-MM-DDZ", true);
+                    if (m.isValid()) return m.valueOf();
+                }
+                const parsed = new Date(raw);
+                return Number.isNaN(parsed.getTime()) ? -Infinity : parsed.getTime();
+            };
+            const grouped = _.groupBy(features, f => f?.properties?.idtype || "");
+            return Object.values(grouped).map(group => group.reduce((latest, current) => {
+                if (!latest) return current;
+                return getDateValue(current) > getDateValue(latest) ? current : latest;
+            }, null)).filter(Boolean);
+        },
         /**
          * Get PRF Ref Lines from WFS URL
          * @param {String} idsite 
@@ -19,8 +36,12 @@ const prfUtils = (function () {
             fetch(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(r => r.json())
                 .then(data => {
-                    maddog.prfRefLine = data;
-                    return data.features;
+                    const latestByType = prfUtils.getLatestRefLinesByType(data?.features || []);
+                    maddog.prfRefLine = {
+                        ...data,
+                        features: latestByType
+                    };
+                    return latestByType;
                 })
                 .then(prfSelect => {
                     prfSelect = maddog.prfRefLine.features;

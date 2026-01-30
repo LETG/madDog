@@ -718,5 +718,15 @@
             "maddog"
         ],
         "user": []
+    },
+    {
+    "id_site": "ROSAIR",
+    "admin": [
+        "qruaud",
+        "ldeho",
+        "makan.gandit@univ-brest.fr",
+        "maddog"
+    ],
+    "user": []
     }
 ]

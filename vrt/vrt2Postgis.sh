@@ -97,10 +97,11 @@ then
     fi
 
     # File has to be readeable by geoserver to index it
-    chown -R tomcat:tomcat $mntOutput
+    chown -R $systemUserGeoserver:$systemGroupGeoserver $mntOutput
    
-    #update mosaic index
-    curl -v -u $geoserverLogin:$geoserverMdp -XPOST $geoserverUrl -H "\"Content-type: text/plain\"" -d "\"file://$mntDirectory\"" 
+    # Mise à jour du contenu de la couche via "harvesting" du répertoire complet
+    # Pour vérifier la mise à jour http://localhost/geoserver/rest/workspaces/MADDOG/coveragestores/mnt.json
+    curl -v -u $geoserverLogin:$geoserverMdp -XPOST $geoserverUrl -H "Content-type: text/plain" -d "file://$mntDirectory" 
 
     rm $mntGeoJson
     rm $mntOutputTmp

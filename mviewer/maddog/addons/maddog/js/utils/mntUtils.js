@@ -31,6 +31,29 @@ const mntUtils = (function () {
 
     const vectorLayerId = "mntCompareLayer";
 
+    const setMntLoading = (isLoading) => {
+        const loader = document.getElementById("mntLoader");
+        if (loader) {
+            loader.hidden = !isLoading;
+        }
+        const btn = document.getElementById("mntCompareBtn");
+        if (!btn) return;
+        if (isLoading) {
+            btn.dataset.prevDisabled = btn.disabled ? "1" : "0";
+            btn.disabled = true;
+        } else {
+            const prev = btn.dataset.prevDisabled;
+            if (prev === "0") {
+                btn.disabled = false;
+            } else if (prev === "1") {
+                btn.disabled = true;
+            } else if (typeof mntUtils.manageError === "function") {
+                mntUtils.manageError();
+            }
+            delete btn.dataset.prevDisabled;
+        }
+    };
+
     // COLOR CLASS FOR RESULT COMPARE MNT LAYER
     const getDiffColor = (n) => [{
         "color": "#30123b",
@@ -84,8 +107,8 @@ const mntUtils = (function () {
     },
     {
         "color": "#7a0403",
-        condition: () => n > 4,
-        "label": "> 4.0000"
+        condition: () => n <= 5,
+        "label": "5.0000"
     }
     ].filter((e) => e.condition())[0];
 
@@ -244,7 +267,7 @@ const mntUtils = (function () {
                 </wps:ResponseForm>
             </wps:Execute>
         `;
-        fetch(`${mviewer.env?.url_geoserver}/`+maddog.getCfg("config.options.wps.url"), {
+        fetch(`${mviewer.env?.url_app}/`+maddog.getCfg("config.options.wps.url"), {
             method: "POST",
             body: xml,
             headers: {
@@ -263,12 +286,59 @@ const mntUtils = (function () {
             // add layer to map
             removeAllLayers(vectorLayerId);
             mntUtils.map.addLayer(layer);
+        }).catch(() => {
+            // keep silent, loader will be cleared below
+        }).finally(() => {
+            setMntLoading(false);
         });
+    };
+
+    /**
+     * Create compare layer from WPS JSON response
+     * @param {Object|string} responseDocument GeoJSON FeatureCollection
+     */
+    const createCompareLayerJson = (responseDocument) => {
+        if (!responseDocument) return;
+        const geojson = typeof responseDocument === "string" ? JSON.parse(responseDocument) : responseDocument;
+        const features = new ol.format.GeoJSON({
+            defaultDataProjection: "EPSG:2154"
+        }).readFeatures(geojson, {
+            dataProjection: "EPSG:2154",
+            featureProjection: "EPSG:3857"
+        });
+
+        const styleCache = {};
+        const pointStyle = (feature) => {
+            const color = getDiffColor(feature.getProperties()?.elevationDiff);
+            const key = color?.color || "#000000";
+            if (!styleCache[key]) {
+                styleCache[key] = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 5,
+                        fill: new ol.style.Fill({
+                            color: key
+                        })
+                    })
+                });
+            }
+            return styleCache[key];
+        };
+
+        const layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: features
+            }),
+            id: vectorLayerId,
+            style: pointStyle
+        });
+        removeAllLayers(vectorLayerId);
+        mntUtils.map.addLayer(layer);
     };
     // PUBLIC
     return {
         // dates from postgREST table
         dates: [],
+        setMntLoading: setMntLoading,
         init: () => {
             // create selector options
             mntUtils.getDates();
@@ -564,6 +634,16 @@ const mntUtils = (function () {
             createCompareLayerTiff();
         },
 
+        addToCompareLayerJson: (response) => {
+            if (!mntUtils.map) return;
+            // remove layer if exist
+            mntUtils.map.getLayers().getArray()
+                .filter(lyr => lyr.getProperties().id === vectorLayerId)
+                .forEach(el => mntUtils.map.removeLayer(el));
+            // create layer and add points
+            createCompareLayerJson(response?.responseDocument || response);
+        },
+
         /**
          * Callback on WPS response
          * @param {*} response object from WPS
@@ -572,12 +652,17 @@ const mntUtils = (function () {
             // create second map
             mntUtils.addMap();
             // add result to second map
-            return mntUtils.addToCompareLayerTiff();
+            if (maddog.compareRasterMNTConfig?.renderMode === "tiff") {
+                return mntUtils.addToCompareLayerTiff();
+            }
+            mntUtils.addToCompareLayerJson(response);
+            return setMntLoading(false);
         },
         /**
          * Fire manual WPS request without WPS north 52 lib
          */
         onWpsTrigger: () => {
+            setMntLoading(true);
             // create second map
             mntUtils.addMap();
             // add result to second map
@@ -611,7 +696,8 @@ const mntUtils = (function () {
         defaultParams: {
             evaluationInterval: 0,
             initDate: null,
-            dateToCompare: null
+            dateToCompare: null,
+            renderMode: "json"
         }
     }
 })()

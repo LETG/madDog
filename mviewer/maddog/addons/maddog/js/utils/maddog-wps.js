@@ -236,6 +236,9 @@ const wps = (function () {
             evaluationInterval = 10.0
         }) => {
             document.dispatchEvent(wps.startEvent);
+            if (typeof mntUtils !== "undefined" && mntUtils?.setMntLoading) {
+                mntUtils.setMntLoading(true);
+            }
             if (!wpsService || !initDate || !dateToCompare) return {};
             let inputGenerator = new InputGenerator();
             // INPUTS

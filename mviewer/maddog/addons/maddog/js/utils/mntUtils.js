@@ -1,7 +1,7 @@
 /**
  * This file is usefull to manage MNT panels interaction and MNT WMS layer.
  */
-const mntUtils = (function() {
+const mntUtils = (function () {
 
     const MNTLayerName = "mnt";
 
@@ -31,62 +31,85 @@ const mntUtils = (function() {
 
     const vectorLayerId = "mntCompareLayer";
 
+    const setMntLoading = (isLoading) => {
+        const loader = document.getElementById("mntLoader");
+        if (loader) {
+            loader.hidden = !isLoading;
+        }
+        const btn = document.getElementById("mntCompareBtn");
+        if (!btn) return;
+        if (isLoading) {
+            btn.dataset.prevDisabled = btn.disabled ? "1" : "0";
+            btn.disabled = true;
+        } else {
+            const prev = btn.dataset.prevDisabled;
+            if (prev === "0") {
+                btn.disabled = false;
+            } else if (prev === "1") {
+                btn.disabled = true;
+            } else if (typeof mntUtils.manageError === "function") {
+                mntUtils.manageError();
+            }
+            delete btn.dataset.prevDisabled;
+        }
+    };
+
     // COLOR CLASS FOR RESULT COMPARE MNT LAYER
     const getDiffColor = (n) => [{
-            "color": "#30123b",
-            condition: () => n <= -5,
-            "label": "5.0000"
-        },
-        {
-            "color": "#455bcd",
-            condition: () => n <= -4,
-            "label": "4.0000"
-        },
-        {
-            "color": "#3e9cfe",
-            condition: () => n <= -3,
-            "label": "3.0000"
-        },
-        {
-            "color": "#18d7cb",
-            condition: () => n <= -2,
-            "label": "2.0000"
-        },
-        {
-            "color": "#48f882",
-            condition: () => n <= -1,
-            "label": "1.0000"
-        },
-        {
-            "color": "#a4fc3c",
-            condition: () => n <= 0,
-            "label": "0.0000"
-        },
-        {
-            "color": "#e2dc38",
-            condition: () => n <= 1,
-            "label": "1.0000"
-        },
-        {
-            "color": "#fea331",
-            condition: () => n <= 2,
-            "label": "2.0000"
-        },
-        {
-            "color": "#ef5911",
-            condition: () => n <= 3,
-            "label": "3.0000"
-        },
-        {
-            "color": "#c22403",
-            condition: () => n <= 4,
-            "label": "4.0000"
-        },
-        {
-            "color": "#7a0403",
-            condition: () => n > 4,
-            "label": "> 4.0000"
-        }
+        "color": "#30123b",
+        condition: () => n <= -5,
+        "label": "5.0000"
+    },
+    {
+        "color": "#455bcd",
+        condition: () => n <= -4,
+        "label": "4.0000"
+    },
+    {
+        "color": "#3e9cfe",
+        condition: () => n <= -3,
+        "label": "3.0000"
+    },
+    {
+        "color": "#18d7cb",
+        condition: () => n <= -2,
+        "label": "2.0000"
+    },
+    {
+        "color": "#48f882",
+        condition: () => n <= -1,
+        "label": "1.0000"
+    },
+    {
+        "color": "#a4fc3c",
+        condition: () => n <= 0,
+        "label": "0.0000"
+    },
+    {
+        "color": "#e2dc38",
+        condition: () => n <= 1,
+        "label": "1.0000"
+    },
+    {
+        "color": "#fea331",
+        condition: () => n <= 2,
+        "label": "2.0000"
+    },
+    {
+        "color": "#ef5911",
+        condition: () => n <= 3,
+        "label": "3.0000"
+    },
+    {
+        "color": "#c22403",
+        condition: () => n <= 4,
+        "label": "4.0000"
+    },
+    {
+        "color": "#7a0403",
+        condition: () => n <= 5,
+        "label": "5.0000"
+    }
     ].filter((e) => e.condition())[0];
 
     /**
@@ -117,7 +140,7 @@ const mntUtils = (function() {
                     ['==', bandValue, -0],
                     ['color', 0, 0, 0, 0],
                     ['<=', bandValue, -4],
-                    ['color', 62,55,144, 1],
+                    ['color', 62, 55, 144, 1],
                     ['<=', bandValue, -3.75],
                     ['color', 64, 64, 162, 1],
                     ['<=', bandValue, -3.5],
@@ -215,25 +238,25 @@ const mntUtils = (function() {
                     <wps:Input>
                         <ows:Identifier>codeSite</ows:Identifier>
                         <wps:Data>
-                            <wps:LiteralData>${ maddog.idsite }</wps:LiteralData>
+                            <wps:LiteralData>${maddog.idsite}</wps:LiteralData>
                         </wps:Data>
                     </wps:Input>
                     <wps:Input>
                         <ows:Identifier>initDate</ows:Identifier>
                         <wps:Data>
-                            <wps:LiteralData>${ config.initDate }</wps:LiteralData>
+                            <wps:LiteralData>${config.initDate}</wps:LiteralData>
                         </wps:Data>
                     </wps:Input>
                     <wps:Input>
                         <ows:Identifier>dateToCompare</ows:Identifier>
                         <wps:Data>
-                            <wps:LiteralData>${ config.dateToCompare }</wps:LiteralData>
+                            <wps:LiteralData>${config.dateToCompare}</wps:LiteralData>
                         </wps:Data>
                     </wps:Input>
                     <wps:Input>
                         <ows:Identifier>evaluationInterval</ows:Identifier>
                         <wps:Data>
-                            <wps:LiteralData>${ config.evaluationInterval }</wps:LiteralData>
+                            <wps:LiteralData>${config.evaluationInterval}</wps:LiteralData>
                         </wps:Data>
                     </wps:Input>
                 </wps:DataInputs>
@@ -244,7 +267,7 @@ const mntUtils = (function() {
                 </wps:ResponseForm>
             </wps:Execute>
         `;
-        fetch(maddog.getCfg("config.options.wps.url"), {
+        fetch(`${mviewer.env?.url_app}/`+maddog.getCfg("config.options.wps.url"), {
             method: "POST",
             body: xml,
             headers: {
@@ -263,12 +286,59 @@ const mntUtils = (function() {
             // add layer to map
             removeAllLayers(vectorLayerId);
             mntUtils.map.addLayer(layer);
+        }).catch(() => {
+            // keep silent, loader will be cleared below
+        }).finally(() => {
+            setMntLoading(false);
         });
+    };
+
+    /**
+     * Create compare layer from WPS JSON response
+     * @param {Object|string} responseDocument GeoJSON FeatureCollection
+     */
+    const createCompareLayerJson = (responseDocument) => {
+        if (!responseDocument) return;
+        const geojson = typeof responseDocument === "string" ? JSON.parse(responseDocument) : responseDocument;
+        const features = new ol.format.GeoJSON({
+            defaultDataProjection: "EPSG:2154"
+        }).readFeatures(geojson, {
+            dataProjection: "EPSG:2154",
+            featureProjection: "EPSG:3857"
+        });
+
+        const styleCache = {};
+        const pointStyle = (feature) => {
+            const color = getDiffColor(feature.getProperties()?.elevationDiff);
+            const key = color?.color || "#000000";
+            if (!styleCache[key]) {
+                styleCache[key] = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 5,
+                        fill: new ol.style.Fill({
+                            color: key
+                        })
+                    })
+                });
+            }
+            return styleCache[key];
+        };
+
+        const layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: features
+            }),
+            id: vectorLayerId,
+            style: pointStyle
+        });
+        removeAllLayers(vectorLayerId);
+        mntUtils.map.addLayer(layer);
     };
     // PUBLIC
     return {
         // dates from postgREST table
         dates: [],
+        setMntLoading: setMntLoading,
         init: () => {
             // create selector options
             mntUtils.getDates();
@@ -281,7 +351,7 @@ const mntUtils = (function() {
             if (maddog.getCfg(`config.options.syncLegend`)) {
                 mviewer.getMap().getView().on('change:resolution', (event) => {
                     mntUtils.syncLegend(event);
-                });   
+                });
             }
         },
         /**
@@ -322,9 +392,9 @@ const mntUtils = (function() {
             const postgrestAPI = maddog.getCfg("config.options.postgrestapi");
             const table = maddog.getCfg("config.options.mntApi.table");
             const field = maddog.getCfg("config.options.mntApi.field");
-            fetch(`${postgrestAPI}/${table}?${field}=eq.${maddog.idsite}`)
+            fetch(`${postgrestAPI}/${table}?select=date_survey&${field}=eq.${maddog.idsite}&order=date_survey.asc`)
                 .then(response => response.text())
-                .then(response => { // dates are already ordered by date type in postgresql view
+                .then(response => {
                     let datesJson = JSON.parse(response);
                     if (datesJson.length) {
                         mntUtils.date = datesJson[0].date_survey;
@@ -444,7 +514,7 @@ const mntUtils = (function() {
             if (mntMapBaseLayer.length) {
                 // update source
                 mntMapBaseLayer[0].setSource(BL);
-                mntMapBaseLayer[0].set("blid",mviewer.getActiveBaseLayer());
+                mntMapBaseLayer[0].set("blid", mviewer.getActiveBaseLayer());
                 return;
             }
             // create BL
@@ -502,10 +572,10 @@ const mntUtils = (function() {
             });
             // create options with multiselect dataprovider
             let datesOptions = dates.map((d, i) =>
-                ({
-                    label: moment(d.date_survey, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
-                    value: d.date_survey
-                })
+            ({
+                label: moment(d.date_survey, "YYYY-MM-DDZ").format("DD/MM/YYYY"),
+                value: d.date_survey
+            })
             );
             // insert options into multiselect
             $("#mntMultiselect").multiselect('dataprovider', datesOptions);
@@ -564,6 +634,16 @@ const mntUtils = (function() {
             createCompareLayerTiff();
         },
 
+        addToCompareLayerJson: (response) => {
+            if (!mntUtils.map) return;
+            // remove layer if exist
+            mntUtils.map.getLayers().getArray()
+                .filter(lyr => lyr.getProperties().id === vectorLayerId)
+                .forEach(el => mntUtils.map.removeLayer(el));
+            // create layer and add points
+            createCompareLayerJson(response?.responseDocument || response);
+        },
+
         /**
          * Callback on WPS response
          * @param {*} response object from WPS
@@ -572,12 +652,17 @@ const mntUtils = (function() {
             // create second map
             mntUtils.addMap();
             // add result to second map
-            return mntUtils.addToCompareLayerTiff();
+            if (maddog.compareRasterMNTConfig?.renderMode === "tiff") {
+                return mntUtils.addToCompareLayerTiff();
+            }
+            mntUtils.addToCompareLayerJson(response);
+            return setMntLoading(false);
         },
         /**
          * Fire manual WPS request without WPS north 52 lib
          */
         onWpsTrigger: () => {
+            setMntLoading(true);
             // create second map
             mntUtils.addMap();
             // add result to second map
@@ -611,7 +696,8 @@ const mntUtils = (function() {
         defaultParams: {
             evaluationInterval: 0,
             initDate: null,
-            dateToCompare: null
+            dateToCompare: null,
+            renderMode: "json"
         }
     }
 })()

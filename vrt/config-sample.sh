@@ -14,9 +14,12 @@ gdalGridIndivParm="power=6.0:smothing=7.0:radius1=30.0:radius2=30.0:angle=90.0:m
 
 # geoserver dir for image mosaic
 # this folder have to already exist
-mntDirectory=/data/MADDOG/imagemosaic
+rootPath="/data/MADDOG"
+mntDirectory=/data/MADDOG/imagemosaic/mnt/
 
 # geoserver dir for image mosaic
 geoserverLogin=admin 
 geoserverMdp=admin
-geoserverUrl=http://localhost:8080/geoserver/rest/workspaces/maddog/coveragestores/mnt/coverages/file.imagemosaic
+geoserverUrl=http://localhost:8080/geoserver/rest/workspaces/maddog/coveragestores/mnt/external.imagemosaic
+systemUserGeoserver=tomcat
+systemGroupGeoserver=tomcat

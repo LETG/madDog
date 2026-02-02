@@ -166,11 +166,13 @@ const wps = (function () {
             processIdentifier = "BeachProfile:BeachProfileTracking",
             executionMode = "async",
             lineage = false,
-            fc = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,,
+            fc = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,
+            refline = {}, // geojson in <![CDATA]> like <![CDATA{geojson}]>,,
             interval = 0.1,
             minDist = 0,
             maxDist = 0,
-            useSmallestDistance = true
+            useSmallestDistance = true,
+            distanceMax = 20
         }) => {
             document.dispatchEvent(wps.startEvent);
             $('.ppNavTabs a[href="#ppTabGraph"]').tab('show');
@@ -186,10 +188,19 @@ const wps = (function () {
                     false,
                     fc
                 ),
+                refline: inputGenerator.createComplexDataInput_wps_1_0_and_2_0(
+                    "refline",
+                    "application/json",
+                    "",
+                    null,
+                    false,
+                    refline
+                ),
                 interval: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("interval", null, null, interval),
                 useSmallestDistance: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("useSmallestDistance", null, null, useSmallestDistance),
                 minDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("minDist", null, null, minDist),
-                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, maxDist)
+                maxDist: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("maxDist", null, null, maxDist),
+                distanceMax: inputGenerator.createLiteralDataInput_wps_1_0_and_2_0("distanceMax", null, null, distanceMax)
             });
             // OUTPUTS
             var outputGenerator = new OutputGenerator();
@@ -225,6 +236,9 @@ const wps = (function () {
             evaluationInterval = 10.0
         }) => {
             document.dispatchEvent(wps.startEvent);
+            if (typeof mntUtils !== "undefined" && mntUtils?.setMntLoading) {
+                mntUtils.setMntLoading(true);
+            }
             if (!wpsService || !initDate || !dateToCompare) return {};
             let inputGenerator = new InputGenerator();
             // INPUTS

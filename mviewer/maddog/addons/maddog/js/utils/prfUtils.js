@@ -8,6 +8,23 @@ const prfUtils = (function () {
     document.dispatchEvent(create);
 
     return {
+        getLatestRefLinesByType: (features = []) => {
+            if (!features.length) return [];
+            const getDateValue = (feature) => {
+                const raw = feature?.properties?.creationdate;
+                if (raw && typeof moment === "function") {
+                    const m = moment(raw, "YYYY-MM-DDZ", true);
+                    if (m.isValid()) return m.valueOf();
+                }
+                const parsed = new Date(raw);
+                return Number.isNaN(parsed.getTime()) ? -Infinity : parsed.getTime();
+            };
+            const grouped = _.groupBy(features, f => f?.properties?.idtype || "");
+            return Object.values(grouped).map(group => group.reduce((latest, current) => {
+                if (!latest) return current;
+                return getDateValue(current) > getDateValue(latest) ? current : latest;
+            }, null)).filter(Boolean);
+        },
         /**
          * Get PRF Ref Lines from WFS URL
          * @param {String} idsite 
@@ -15,12 +32,16 @@ const prfUtils = (function () {
         getPrfRefLines: (idsite) => {
             // On cherche les lignes de référence des profiles
             // Permettant ensuite de filter les profils a afficher sur la carte et dans la liste de sélection
-            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=`;
             fetch(`${lineRefUrl}'${idsite}' AND idtype LIKE 'PRF%25'`)
                 .then(r => r.json())
                 .then(data => {
-                    maddog.prfRefLine = data;
-                    return data.features;
+                    const latestByType = prfUtils.getLatestRefLinesByType(data?.features || []);
+                    maddog.prfRefLine = {
+                        ...data,
+                        features: latestByType
+                    };
+                    return latestByType;
                 })
                 .then(prfSelect => {
                     prfSelect = maddog.prfRefLine.features;
@@ -64,6 +85,7 @@ const prfUtils = (function () {
             let feature = mviewer.getLayer("refline").layer.getSource().getFeatures().filter(f => f.get("idtype") === id)[0];
             feature.setStyle(prfUtils.profilsStyle(feature, maddog.getCfg("config.options.select.prf"), true));
             tools.setSelectedLR(feature);
+            prfUtils.setRefLineFeature(feature);
         },
         /**
          * Calculate distance from 2 points
@@ -82,7 +104,7 @@ const prfUtils = (function () {
          */
         getPrfByProfilAndIdSite: (idType) => {
             // on récupère ensuite les profils correspondant à l'idSite et au profil selectionné
-            const prfUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=";
+            const prfUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:prf&outputFormat=application/json&CQL_FILTER=idsite=`;
             fetch(`${prfUrl}'${maddog.idsite}' AND idtype='${idType}'`)
                 .then(r => r.json())
                 // récupération du PRF
@@ -105,7 +127,8 @@ const prfUtils = (function () {
                             properties: {
                                 ...p.properties,
                                 color: "#" + Math.random().toString(16).slice(2, 8).toUpperCase(),
-                                points: points,
+                                x: points.map(x => x[3]),
+                                y: points.map(x => x[2]),
                                 elevation: p.geometry.coordinates[2]
                             }
                         };
@@ -212,12 +235,12 @@ const prfUtils = (function () {
          */
         orderDatesOld: (selected) => {
             return selected.sort((a, b) => {
-                return moment(a.isodate).diff(b.isodate);
+                return moment(a.date).diff(b.date);
             });
         },
         orderDates: (selected) => {
             return _.orderBy(selected, (o) => {
-                return moment(o.isodate);
+                return moment(o.date);
             }, ['asc'])
         },
         /**
@@ -231,23 +254,53 @@ const prfUtils = (function () {
             div.id = "prfBilanSedChart";
             document.getElementById("ppTabGraph").appendChild(div);
             // standardize date format
-            let selected = maddog.charts.sediments.result.map(item => ({
-                ...item,
-                isodate: new Date(item.date)
-            }));
-            selected = prfUtils.orderDates(selected, "isodate");
-            // get uniq labels already orderd by date
-            const datesX = _.uniq(selected.map(s => new Date(moment(s.date, "YYYY-MM-DDZ"))));
+            let selected = maddog.charts.sediments.result;
+           // transform date to string yyyy-mm-dd
+            const datesX = selected.map(s => moment(new Date(s.date.replace(/CEST|CET/, ''))).format('YYYY-MM-DD'));
+            // Récupère les valeurs d'évolution de date à date
+            const evolutions = selected.map(s => s.data.filter(i => i.diffWithPrevious)[0]?.diffWithPrevious);
+            // Génère un tableau de couleurs : rouge si positif, bleu sinon
+            const barColors = evolutions.map(v => v > 0 ? '#b43939ff' : '#5881ceff');
+            
             var data = [{
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
+                    y: selected.map(s => s.data.filter(i => i.totalEvolution)[0]?.totalEvolution),
                     name: "Evolution cumulée"
                 },
                 {
                     x: datesX,
-                    y: selected.map(s => s.data.filter(i => i.previousEvolutionPercent)[0]?.previousEvolutionPercent),
+                    y: evolutions,
                     type: "bar",
-                    name: "Evolution de date à date"
+                    name: "Evolution de date à date",
+                    marker: { color: barColors },
+                    showlegend: false 
+                },
+                 // Trace fictive pour la légende globale
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Evolution de date à date",
+                    marker: { color: '#ffffffff' },
+                    showlegend: true,
+                },
+                 // Trace fictive pour la légende "positive"
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Positive",
+                    marker: { color: '#b43939ff' },
+                    showlegend: true
+                },
+                // Trace fictive pour la légende "négative"
+                {
+                    x: [null],
+                    y: [null],
+                    type: "bar",
+                    name: "Négative",
+                    marker: { color: '#5881ceff' },
+                    showlegend: true
                 }
             ];
             const axesFont = {
@@ -289,7 +342,7 @@ const prfUtils = (function () {
                     showgrid: false
                 },
                 yaxis: {
-                    ticktext: selected.map(s => s.data.filter(i => i.totalEvolutionPercent)[0]?.totalEvolutionPercent),
+                    ticktext: selected.map(s => s.data.filter(i => i.totalEvolution)[0]?.totalEvolution),
                     autorange: true,
                     showgrid: false,
                     zeroline: false,
@@ -355,8 +408,6 @@ const prfUtils = (function () {
             const preparedLinesData = selected.map(s => {
                 return {
                     ...s.properties,
-                    x: s.properties.points.map(x => x[3]),
-                    y: s.properties.points.map(x => x[2]),
                     name: `${s.id}-${s.properties.idtype}`
                 }
             });
@@ -434,6 +485,8 @@ const prfUtils = (function () {
          * @param {Array} features <Aray>
          */
         setPrfFeatures: (features) => {
+            // CRS is not handled by WPS geoserver won't read it
+            // TODO probably remove it from WPS request
             const crsInfo = `
                 "crs": {
                     "type": "name",
@@ -442,11 +495,38 @@ const prfUtils = (function () {
                     }
                 }
             `;
-            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":[${JSON.stringify(features)}]}]]>`;
+            const prfGeojson = `<![CDATA[{"type":"FeatureCollection", ${crsInfo},"features":${JSON.stringify(features)}}]]>`;
             maddog.setConfig({
                 fc: prfGeojson
             }, "beachProfileTrackingConfig");
             $("#prftrackingBtn").prop('disabled', features.length < 2);
+        },
+        /**
+         * Store ref line geojson for WPS call
+         * @param {ol.Feature} feature
+         */
+        setRefLineFeature: (feature) => {
+            if (!feature) return;
+            const format = new ol.format.GeoJSON();
+            const featureCollection = {
+                type: "FeatureCollection",
+                crs: {
+                    type: "name",
+                    properties: {
+                        name: "EPSG:2154"
+                    }
+                },
+                features: [
+                    format.writeFeatureObject(feature, {
+                        dataProjection: "EPSG:2154",
+                        featureProjection: "EPSG:3857"
+                    })
+                ]
+            };
+            const reflineGeojson = `<![CDATA[${JSON.stringify(featureCollection)}]]>`;
+            maddog.setConfig({
+                refline: reflineGeojson
+            }, "beachProfileTrackingConfig");
         },
         /**
          * On change beach profile entry
@@ -520,7 +600,8 @@ const prfUtils = (function () {
                 .map(f => f.properties)
                 .map(item => ({
                     ...item,
-                    isodate: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
+
+                    date: new Date(moment(item.creationdate, "YYYY-MM-DDZ"))
                 }));
             let dates = prfUtils.orderDates(data);
             // clean multi select if exists
@@ -592,13 +673,15 @@ const prfUtils = (function () {
             prfUtils.manageError(msg || '<i class="fas fa-exclamation-circle"></i> Vous devez choisir un site, un profil et au moins 2 dates !');
             tools.resetSelectedLR();
             // reset config
-            let { interval, useSmallestDistance, minDist, maxDist } = prfUtils.defaultParams;
+            let { interval, useSmallestDistance, minDist, maxDist, distanceMax } = prfUtils.defaultParams;
             document.getElementById("interval").value = interval;
             document.getElementById("useSmallestDistance").value = useSmallestDistance;
             document.getElementById("minDist").value = minDist;
             document.getElementById("maxDist").value = maxDist;
+            document.getElementById("distanceMax").value = distanceMax;
             maddog.setConfig({
                 fc: {},
+                refline: {},
                 ...prfUtils.defaultParams
             }, "beachProfileTrackingConfig");
         },
@@ -621,8 +704,8 @@ const prfUtils = (function () {
          * @param {any} e event or this html item
          */
         onParamChange: (e) => {
-            maddog.setConfig({                
-                [e.id]: e.type === "number" ? e.id === "interval" ? parseFloat(e.value) : parseInt(e.value) : e.value
+            maddog.setConfig({
+                [e.id]: e.type === "number" ? parseFloat(e.value) : e.value
             }, "beachProfileTrackingConfig");
         },
         multiSelectBtn: (action) => {
@@ -634,7 +717,8 @@ const prfUtils = (function () {
             interval: 1,
             useSmallestDistance: true,
             minDist: 0,
-            maxDist: 0
+            maxDist: 0,
+            distanceMax: 20
         }
     }
 })();

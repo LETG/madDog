@@ -301,6 +301,14 @@
                                             </label>
                                             <input onchange="prfUtils.onParamChange(this)" value="0" type="number" class="form-control tdcParams" id="maxDist" aria-describedby="basic-addon3">
                                         </div>
+                                        <div class="col-xs-3">
+                                            <label for="spaceParam">Distance max reprojection
+                                                <span data-toggle="tooltip" data-placement="top" title="Distance maximale (m) pour reprojeter les points du profil sur la ligne de référence">
+                                                <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </label>
+                                            <input onchange="prfUtils.onParamChange(this)" value="20" type="number" class="form-control tdcParams" id="distanceMax" aria-describedby="basic-addon3">
+                                        </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-analyses dirForm">
                                                 <label for="useSmallestDist">Profil le plus court
@@ -413,6 +421,15 @@
                     <p>Il n'y a aucune date à afficher pour ce site.</p>
                 </div>
             </span>
+            <div class="col-sm-12 text-center load-panel" id="mntLoader" hidden>
+                <div class="loader-sig" id="loader-6">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <p>Chargement des données ...</p>
+            </div>
             <nav class="navbar navbar-default toolbarMenu">
                 <div class="container-fluid">
                     <button  type="button" class="btn btn-default card-link" onClick="tools.showHideMenu(MNT_WPS)">
@@ -450,4 +467,3 @@
    </div>
 </div>
 <!-- /.Template Mobile -->
-

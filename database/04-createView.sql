@@ -8,10 +8,19 @@ CREATE MATERIALIZED VIEW sitebuffer AS
 	FROM 
 	(
 		SELECT 
-			lineref.idSite,
+			lineref_latest.idSite,
 			site.name_site as nameSite,
-			ST_Transform(st_buffer(st_centroid(lineref.geom), 700), 3857) AS geom
-		FROM lineref, site WHERE lineref.idType='TDC1' AND lineref.idSite = site.code_site
+			ST_Transform(st_buffer(st_centroid(lineref_latest.geom), 700), 3857) AS geom
+		FROM (
+			SELECT DISTINCT ON (lineref.idSite)
+				lineref.idSite,
+				lineref.geom
+			FROM lineref
+			WHERE lineref.idType='TDC1'
+			ORDER BY lineref.idSite, lineref.creationdate DESC NULLS LAST
+		) AS lineref_latest,
+		site
+		WHERE lineref_latest.idSite = site.code_site
 	) AS sitebuffer ;
 
 
@@ -57,14 +66,21 @@ WITH DATA;
 CREATE MATERIALIZED VIEW IF NOT EXISTS sitemeasureprofil AS
  SELECT 
  	CASE 
-		WHEN LENGTH(lineref.idtype) = 5 THEN RIGHT(lineref.idtype, 2)::integer 
-		WHEN LENGTH(lineref.idtype) = 4 THEN RIGHT(lineref.idtype, 1)::integer 
+		WHEN LENGTH(lineref_latest.idtype) = 5 THEN RIGHT(lineref_latest.idtype, 2)::integer 
+		WHEN LENGTH(lineref_latest.idtype) = 4 THEN RIGHT(lineref_latest.idtype, 1)::integer 
 	END AS num_profil,
     site.id_site,
-    LEFT(lineref.idtype, 3) AS measuretype
-   FROM lineref,
+    LEFT(lineref_latest.idtype, 3) AS measuretype
+   FROM (
+		SELECT DISTINCT ON (lineref.idsite, lineref.idtype)
+			lineref.idsite,
+			lineref.idtype,
+			lineref.creationdate
+		FROM lineref
+		ORDER BY lineref.idsite, lineref.idtype, lineref.creationdate DESC NULLS LAST
+	) AS lineref_latest,
     site
-  WHERE lineref.idsite::bpchar = site.code_site
+  WHERE lineref_latest.idsite::bpchar = site.code_site
 WITH DATA;
 
 CREATE OR REPLACE VIEW measuretypebysite

@@ -15,15 +15,15 @@
     <mapoptions maxzoom="19" projection="EPSG:3857" center="-469122.1814135454, 6194499.885208064" zoom="10" projextent="-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244" />
   
     <baselayers style="gallery">
-        <baselayer  type="WMS" id="scan25" label="Plan IGN" title="Plan IGN" thumbgallery="img/basemap/scan.jpg"
-			url="https://data.geopf.fr/wms-r" layers="GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2" format="image/jpeg" visible="false"
-			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Plan&lt;/a>"/>      
-        <baselayer  type="WMS" id="photo1" label="Orthophotographie historique" title="Orthophotographie historique" thumbgallery="img/basemap/ortho-ancien.jpg"
-			url="https://data.geopf.fr/wms-r" layers="ORTHOIMAGERY.ORTHOPHOTOS.1950-1965" format="image/jpeg" visible="false"
+         <baselayer  type="WMTS" id="plan" label="Plan IGN" title="GéoPortail" maxscale="2000" thumbgallery="img/basemap/plan_ign.png" opacity="0.8"
+            url="https://data.geopf.fr/wmts" layers="GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2" format="image/png" visible="false" fromcapacity="false"
+            attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'>&lt;img src='img/basemap/geoservices.png'>&lt;/a>" style="normal" matrixset="PM" maxzoom="22"/>
+         <baselayer  type="WMS" id="photo1" label="Orthophotographie historique" title="Orthophotographie historique" thumbgallery="img/basemap/ortho-ancien.jpg"
+			url="https://data.geopf.fr/wms-r" layers="ORTHOIMAGERY.ORTHOPHOTOS.1950-1965" format="image/png" visible="false" owsoptions="VERSION:1.3.0"
 			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Orthohisto&lt;/a>"/>
-        <baselayer  type="WMS" id="photo2" label="Orthophotographie" title="Orthophotographie" thumbgallery="img/basemap/ortho.jpg"
-			url="https://data.geopf.fr/wms-r" layers="ORTHOIMAGERY.ORTHOPHOTOS" format="image/jpeg" visible="false"
-			attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme' target='_blank' >IGN - Géoplateforme Ortho&lt;/a>"/> 
+        <baselayer  type="WMTS" id="ortho2" label="Photo aérienne IGN" title="GéoPortail" maxscale="1000" thumbgallery="img/basemap/ortho.jpg"
+            url="https://data.geopf.fr/wmts" layers="ORTHOIMAGERY.ORTHOPHOTOS" format="image/jpeg" visible="false" fromcapacity="false"
+            attribution="&lt;a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'>&lt;img src='img/basemap/geoservices.png'>&lt;/a>" style="normal" matrixset="PM" maxzoom="22"/>
         <baselayer  type="OSM" id="positron" label="Positron" title="Carto" thumbgallery="img/basemap/positron.png" 
             url="http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" maxzoom="20" 
             visible="true" attribution="Map tiles by  &lt;a href='https://carto.com/attributions' target='_blank'>Carto &lt;/a>, under  &lt;a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0 &lt;/a>" />              
@@ -47,7 +47,7 @@
         	<layer id="communewithsite" name="Communes contenant un site d'étude"  visible="true" 
                 infoformat="application/vnd.ogc.gml"
                 index="7"
-                url="https://portail.indigeo.fr/geoserver/MADDOG/wms"
+                url="{{url_geoserver}}/{{geoserver_workspace}}/wms"
                 legendurl="" 
                 queryable="false"
                 infopanel="bottom-panel"
@@ -61,7 +61,7 @@
                 tooltip="true" tooltipenabled="false" tooltipcontent="{{idsite}}"
                 infopanel="bottom-panel"
                 infoformat="application/vnd.ogc.gml"
-                url="https://portail.indigeo.fr/geoserver/MADDOG/wms"
+                url="{{url_geoserver}}/{{geoserver_workspace}}/wms"
                 legendurl="" 
                 queryable="false"
                 attribution="Source: indigeo"
@@ -70,11 +70,11 @@
 	        </layer>                         
         </theme>
         <theme name="Relevés"  collapsed="false" id="tdc" icon="fas fa-arrow-right">                 
-		    <layer id="mnt" name="Modèle numérique de terrain"  visible="false"
+		    <layer id="mnt " name="Modèle numérique de terrain"  visible="false"
                 index="4"
                 infoformat="application/vnd.ogc.gml"
                 infopanel="bottom-panel"
-                url="https://portail.indigeo.fr/geoserver/MADDOG/wms"
+                url="{{url_geoserver}}/{{geoserver_workspace}}/wms"
                 legendurl=""
                 queryable="false" 
                 attribution="Source: indigeo"

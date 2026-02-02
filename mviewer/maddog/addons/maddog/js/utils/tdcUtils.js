@@ -8,14 +8,34 @@ const tdcUtils = (function () {
     document.dispatchEvent(create);
 
     return {
+        getLatestRefLineFeature: (features = []) => {
+            if (!features.length) return null;
+            const getDateValue = (feature) => {
+                const raw = feature?.properties?.creationdate;
+                if (raw && typeof moment === "function") {
+                    const m = moment(raw, "YYYY-MM-DDZ", true);
+                    if (m.isValid()) return m.valueOf();
+                }
+                const parsed = new Date(raw);
+                return Number.isNaN(parsed.getTime()) ? -Infinity : parsed.getTime();
+            };
+            return features.reduce((latest, current) => {
+                if (!latest) return current;
+                return getDateValue(current) > getDateValue(latest) ? current : latest;
+            }, null);
+        },
         getReferenceLine: (idsite) => {
             // search reference line as first step and required WPS infos
-            const lineRefUrl = maddog.server + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=';
+            const lineRefUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog%3Alineref&outputFormat=application%2Fjson&CQL_FILTER=idsite=`;
             fetch(`${ lineRefUrl }'${ idsite }' AND idtype LIKE 'TDC1'`)
                 .then(r => r.json())
                 .then(lineRef => {
-                    maddog.refLine = lineRef;
-                    return lineRef.features ? lineRef.features[0] : []
+                    const latest = tdcUtils.getLatestRefLineFeature(lineRef?.features || []);
+                    maddog.refLine = {
+                        ...lineRef,
+                        features: latest ? [latest] : []
+                    };
+                    return latest || [];
                 })
                 .then(feature => `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(feature)}]}]]>`)
                 // from reference line, we get radiale
@@ -46,7 +66,7 @@ const tdcUtils = (function () {
         },
         getTDCByIdSite: (idsite) => {
             // next, we get TDC usefull to call coastline tracking WPS
-            const tdcUrl = maddog.server + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=";
+            const tdcUrl = `${mviewer.env?.url_geoserver}/${mviewer.env?.geoserver_workspace}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=maddog:tdc&outputFormat=application/json&CQL_FILTER=idsite=`;
             fetch(`${ tdcUrl }'${ idsite }'`)
                 .then(r => r.json())
                 // get TDC and calculate legend and char color
@@ -402,7 +422,7 @@ const tdcUtils = (function () {
             tdcUtils.tdcTauxChart(dates);
         },
         setTdcFeatures: (features) => {
-            const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":[${JSON.stringify(features)}]}]]>`;
+            const tdcGeojson = `<![CDATA[{"type":"FeatureCollection","features":${JSON.stringify(features)}}]]>`;
             maddog.setConfig({
                 tdc: tdcGeojson
             }, "coastLinesTrackingConfig");

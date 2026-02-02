@@ -2,3 +2,4 @@
 api/maddog.conf
 formupload/backend/target
 vrt/lastUpdateDate.lock
+formupload/.htpasswd

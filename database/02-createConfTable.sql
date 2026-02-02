@@ -120,8 +120,6 @@ INSERT INTO site VALUES (79,'Falaise de Kerguelen','Plounéour-Brignogan-plages'
 INSERT INTO site VALUES (80,'Finistère','Finistère','DEPA29');
 INSERT INTO site VALUES (81,'Plage des Rosaires','Plérin','ROSAIR');
 
-
-
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');
 INSERT INTO public.equipment VALUES (2, 'Centipede_RTK', 'Centipede RTK');

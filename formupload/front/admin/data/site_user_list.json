@@ -728,5 +728,65 @@
         "maddog"
     ],
     "user": []
+    },
+    {
+        "id_site": "CREMOU",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KARHIR",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KERGEN",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "LIVDIC",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "MENHAM",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "RUDNOD",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
     }
 ]

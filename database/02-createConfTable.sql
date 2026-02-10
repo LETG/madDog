@@ -117,7 +117,7 @@ INSERT INTO site VALUES (76,'Plage de Meneham','Kerlouan','MENHAM');
 INSERT INTO site VALUES (77,'Crémiou','Kerlouan','CREMOU');
 INSERT INTO site VALUES (78,'Lividic','Plounéour-Brignogan-plages','LIVDIC');
 INSERT INTO site VALUES (79,'Falaise de Kerguelen','Plounéour-Brignogan-plages','KERGEL');
-INSERT INTO site VALUES (80,'Finistère','Finistère','DEPA29');
+INSERT INTO site VALUES (80,'Finistère','Dineault','DEPA29');
 INSERT INTO site VALUES (81,'Plage des Rosaires','Plérin','ROSAIR');
 
 -- Equipment

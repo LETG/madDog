@@ -858,5 +858,15 @@
             "maddog"
         ],
         "user": []
+    },
+    {
+        "id_site": "COMTES",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
     }
 ]

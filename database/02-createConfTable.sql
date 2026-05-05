@@ -125,6 +125,8 @@ INSERT INTO site VALUES (84,'Plage de Kerdallé et de Kerlaeren','Trégunc','KER
 INSERT INTO site VALUES (85,'Plage de Loc''h Roz','Trégunc','LOCHRO');
 INSERT INTO site VALUES (86,'Plage de Pors Breign','Trégunc','PORSBR');
 INSERT INTO site VALUES (87,'Pointe de Grignallou','Trégunc','GRIGNA');
+INSERT INTO site VALUES (88, 'Plage de la Comtesse (escalier)', 'Saint-Quay-Portrieux', 'COMTES');
+
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

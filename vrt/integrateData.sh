@@ -10,11 +10,69 @@
 . config.sh
 . logging.sh
 
+lockFile="integrateData.lock"
+exec 9>"$lockFile"
+if ! flock -n 9; then
+    log_msg WARN "Une intégration est déjà en cours, arrêt de cette exécution"
+    exit 0
+fi
+
 dateFileName="lastUpdateDate.lock"
 integratedCount=0
 missingMetaCount=0
 failedCount=0
 failedFiles=()
+
+psql_exec(){
+    PGPASSWORD="$maddogDBPassword" psql -h "$maddogDBHost" -p "$maddogDBPort" -d "$maddogDBName" -U "$maddogDBUser" -t -A -q -c "$1"
+}
+
+function surveyAlreadyIntegrated {
+    local csvPath="$1"
+    local metaPath="${csvPath%.*}.meta"
+
+    if [ ! -f "$metaPath" ]; then
+        return 1
+    fi
+
+    local secondline codeSite typeMeasure numProfil dateSurvey existingSurvey
+    secondline=$(sed -n '2p' "$metaPath")
+    IFS=';' read -r codeSite typeMeasure numProfil dateSurvey _ <<< "$secondline"
+    if [ -z "$numProfil" ]; then numProfil=1; fi
+
+    if [[ ! "$codeSite" =~ ^[A-Z0-9]{6}$ ]] || [[ ! "$typeMeasure" =~ ^(REF|MNT|PRF|TDC)$ ]] || [[ ! "$numProfil" =~ ^[0-9]{1,2}$ ]] || [[ ! "$dateSurvey" =~ ^[0-9]{8}$ ]]; then
+        log_msg WARN "Invalid metadata values in $metaPath"
+        return 1
+    fi
+
+    existingSurvey=$(psql_exec "SELECT s.id_survey
+        FROM $maddogDBSchema.survey s
+        JOIN $maddogDBSchema.site st ON st.id_site = s.id_site
+        JOIN $maddogDBSchema.measure_type mt ON mt.id_measure_type = s.id_measure_type_survey
+        JOIN $maddogDBSchema.profil p ON p.id_survey = s.id_survey
+        WHERE st.code_site = '$codeSite'
+          AND mt.type_measure = '$typeMeasure'
+          AND s.date_survey = to_date('$dateSurvey', 'YYYYMMDD')
+          AND p.num_profil = $numProfil
+        LIMIT 1;")
+
+    [ -n "$existingSurvey" ]
+}
+
+function folderHasUnintegratedData {
+    local folderPath="$1"
+
+    for data in "$folderPath"/*.csv
+    do
+        if [ -f "$data" ] && [[ ${data##*/}=~^[A-Z]{6}_[A-Z]{3}[0-9]_[0-9]{8}.* ]] && [ -f "${data%.*}.meta" ]; then
+            if ! surveyAlreadyIntegrated "$data"; then
+                return 0
+            fi
+        fi
+    done
+
+    return 1
+}
 
 # startDate used to caculate script duration
 # this will also be the date set in lastUpdateDate.lock when integration finish
@@ -59,6 +117,9 @@ function listData {
             # Répertoire crée avec mkdir $(date +"%Y%m%d%H%M%N")
             if [[ "${folderDate##*/}" > "$lastUpdatedDate" ]]; then
                 importData $folderDate
+            elif folderHasUnintegratedData "$folderDate"; then
+                log_msg INFO "--- Traitement de ${folderDate##*/} (données non intégrées)"
+                importData $folderDate
             else
                 log_msg DEBUG "--- Skip ${folderDate##*/} (older than last update)"
             fi
@@ -78,6 +139,11 @@ function importData {
                 log_msg WARN "Meta file missing for ${csvPath##*/}"
             fi
             data=${data%*/}    
+
+            if surveyAlreadyIntegrated "$data"; then
+                log_msg WARN "---- Skip ${data##*/}: survey already integrated in database"
+                continue
+            fi
             
             #-- Integrate spatiale data used for maddog application  
             log_msg INFO "---- Import des données de ${data##*/} en base spatiale"

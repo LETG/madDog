@@ -27,6 +27,11 @@ then
     exit 1
 fi
 
+if [[ ! "$idType" =~ ^(REF|MNT|PRF|TDC)[0-9]{1,2}$ ]] || [[ ! "$codeSite" =~ ^[A-Z0-9]{6}$ ]]; then
+    log_msg ERROR "Invalid type or site code"
+    exit 1
+fi
+
 # choose VRT for defined type
 type=${idType:0:3}
 
@@ -116,8 +121,8 @@ fi
 if [[ $type == "REF" ]]
 then
     log_msg DEBUG "-- Create line for point in LineREF"
-    ## Need to add date
-    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, idType, geom) SELECT '$codeSite', idType, line FROM (SELECT idType, ST_Makeline(wkb_geometry ORDER BY linePosition) as line FROM $table GROUP BY idType) as allLines;"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM LINEREF WHERE idSite = '$codeSite' AND idType IN (SELECT DISTINCT idType FROM $table) AND creationDate IN (SELECT DISTINCT creationDate FROM $table WHERE creationDate IS NOT NULL);"
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO LINEREF(idSite, idType, creationDate, geom) SELECT '$codeSite', idType, creationDate, line FROM (SELECT idType, creationDate, ST_Makeline(wkb_geometry ORDER BY linePosition) as line FROM $table GROUP BY idType, creationDate) as allLines;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
     #Update site buffer and communes
@@ -127,6 +132,7 @@ elif [[ $type == "TDC" ]]
 then
     log_msg DEBUG "-- Create line for point in Import TDC"
     ## Need to add date and TDC number
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM TDC WHERE idSite = '$codeSite' AND idType = '$idType' AND creationDate IN (SELECT DISTINCT creationDate FROM $table WHERE creationDate IS NOT NULL);"
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO TDC(idSite, idType, creationDate, geom) SELECT '$codeSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"
@@ -134,6 +140,7 @@ elif [[ $type == "PRF" ]]
 then
     log_msg DEBUG "-- Create line for point in Import PRF"
     ## Need to add date and PRF number
+    PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM PRF WHERE idSite = '$codeSite' AND idType = '$idType' AND creationDate IN (SELECT DISTINCT creationDate FROM $table WHERE creationDate IS NOT NULL);"
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "INSERT INTO PRF(idSite, idType, creationDate, geom) SELECT '$codeSite', '$idType', creationDate, ST_Makeline(ARRAY(SELECT wkb_geometry FROM $table ORDER BY lineposition)) FROM (SELECT creationDate FROM $table WHERE creationDate IS NOT NULL LIMIT 1) as firstDate;"
     #DROP TempTable
     PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DROP TABLE $table;"

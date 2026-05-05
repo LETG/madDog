@@ -19,6 +19,10 @@ then
     exit 1
 fi
 
+sql_escape(){
+    printf "%s" "$1" | sed "s/'/''/g"
+}
+
 if [ -z $fileName ]
 then
     log_msg ERROR "-X-ARGS MISSING -> USE THIS REQUIRED ARGS ORDER :"
@@ -47,6 +51,14 @@ if test -f "${fileNameWithoutExt}.meta"; then
     nameEquipment=${metaFields[5]}
     typeOperator=${metaFields[6]}
 
+    if [[ ! "$codeSite" =~ ^[A-Z0-9]{6}$ ]] || [[ ! "$typeMeasure" =~ ^(REF|MNT|PRF|TDC)$ ]] || [[ ! "$numProfil" =~ ^[0-9]{1,2}$ ]] || [[ ! "$dateSurvey" =~ ^[0-9]{8}$ ]] || [[ ! "$epsg" =~ ^[0-9]{4,5}$ ]]; then
+        log_msg ERROR "Invalid metadata values in ${fileNameWithoutExt}.meta"
+        exit 1
+    fi
+
+    nameEquipmentSql=$(sql_escape "$nameEquipment")
+    typeOperatorSql=$(sql_escape "$typeOperator")
+
     # Check Measure Type exist else create it
     idMeasureType=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_measure_type FROM measure_type where type_measure='$typeMeasure';"`
     log_msg DEBUG "--id_measure_type :  $idMeasureType"
@@ -66,21 +78,29 @@ if test -f "${fileNameWithoutExt}.meta"; then
     fi
 
     # Check if equipement exist else create it
-    idEquipment=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_equipment FROM equipment where name_equipment='$nameEquipment';"`
+    idEquipment=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_equipment FROM equipment where name_equipment='$nameEquipmentSql';"`
     log_msg DEBUG "--idEquipment :  $idEquipment"
     if [ -z "$idEquipment" ]
     then
-        idEquipment=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO equipment (name_equipment) VALUES ('$nameEquipment') RETURNING id_equipment;"`
+        idEquipment=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO equipment (name_equipment) VALUES ('$nameEquipmentSql') RETURNING id_equipment;"`
         log_msg DEBUG "--idEquipment :  $idEquipment"
     fi
 
     # Check if operator exist else create it
-    idOperator=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_operator FROM operator where type_operator='$typeOperator';"`
+    idOperator=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT id_operator FROM operator where type_operator='$typeOperatorSql';"`
     log_msg DEBUG "--idOperator :  $idOperator"
     if [ -z "$idOperator" ]
     then
-        idOperator=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO operator (type_operator) VALUES ('$typeOperator') RETURNING id_operator;"`
+        idOperator=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "INSERT INTO operator (type_operator) VALUES ('$typeOperatorSql') RETURNING id_operator;"`
         log_msg DEBUG "--idOperator :  $idOperator"
+    fi
+
+    # Do not create a second survey for the same site/type/date/profile.
+    existingSurvey=`PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -AXqtc "SELECT s.id_survey FROM $maddogDBSchema.survey s JOIN $maddogDBSchema.profil p ON p.id_survey = s.id_survey WHERE s.id_site = '$idSite' AND s.id_measure_type_survey = '$idMeasureType' AND s.date_survey = to_date('$dateSurvey', 'YYYYMMDD') AND p.num_profil = '$numProfil' LIMIT 1;"`
+    if [ -n "$existingSurvey" ]
+    then
+        log_msg WARN "--Survey already exists for site=$codeSite type=$typeMeasure profile=$numProfil date=$dateSurvey (id_survey=$existingSurvey), skip model import"
+        exit 0
     fi
 
     # Create survey
@@ -117,8 +137,28 @@ if test -f "${fileNameWithoutExt}.meta"; then
     log_msg DEBUG "-Import file to postgresql in table : measure"
     if ! ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt; then
         log_msg ERROR "Import failed for $tmpData"
+        PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM $maddogDBSchema.survey WHERE id_survey = $idSurvey;"
+        rm -f "$configuredVrt" "$tmpData"
         exit 1
     fi
+
+    awk -F';' -v OFS=';' -v idSurvey="$idSurvey" '
+        NR == 1 {
+            if ($NF == "id_survey") print $0;
+            else print $0, "id_survey";
+            next;
+        }
+        NR == 2 {
+            if (NF >= 8) {
+                $8 = idSurvey;
+                print;
+            } else {
+                print $0, idSurvey;
+            }
+            next;
+        }
+        { print }
+    ' "${fileNameWithoutExt}.meta" > "${fileNameWithoutExt}.meta.tmp" && mv "${fileNameWithoutExt}.meta.tmp" "${fileNameWithoutExt}.meta"
 
     rm $configuredVrt
     rm $tmpData

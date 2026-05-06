@@ -89,6 +89,16 @@
         ],
         "user": []
     },
+        {
+        "id_site": "BROCH2",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
     {
         "id_site": "CGAZEL",
         "admin": [

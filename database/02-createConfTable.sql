@@ -117,8 +117,16 @@ INSERT INTO site VALUES (76,'Plage de Meneham','Kerlouan','MENHAM');
 INSERT INTO site VALUES (77,'Crémiou','Kerlouan','CREMOU');
 INSERT INTO site VALUES (78,'Lividic','Plounéour-Brignogan-plages','LIVDIC');
 INSERT INTO site VALUES (79,'Falaise de Kerguelen','Plounéour-Brignogan-plages','KERGEL');
-INSERT INTO site VALUES (80,'Finistère','Finistère','DEPA29');
+INSERT INTO site VALUES (80,'Finistère','Dineault','DEPA29');
 INSERT INTO site VALUES (81,'Plage des Rosaires','Plérin','ROSAIR');
+INSERT INTO site VALUES (82,'Plage de Raguénez','Névez','RAGUEN');
+INSERT INTO site VALUES (83,'Plage de Kersidan','Trégunc','KERSID');
+INSERT INTO site VALUES (84,'Plage de Kerdallé et de Kerlaeren','Trégunc','KERDAL');
+INSERT INTO site VALUES (85,'Plage de Loc''h Roz','Trégunc','LOCHRO');
+INSERT INTO site VALUES (86,'Plage de Pors Breign','Trégunc','PORSBR');
+INSERT INTO site VALUES (87,'Pointe de Grignallou','Trégunc','GRIGNA');
+INSERT INTO site VALUES (88, 'Plage de la Comtesse (escalier)', 'Saint-Quay-Portrieux', 'COMTES');
+INSERT INTO site VALUES (89, 'TEST Plage de Brochu 2', 'Québec', 'BROCH2');
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

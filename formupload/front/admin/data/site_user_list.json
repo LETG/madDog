@@ -89,6 +89,16 @@
         ],
         "user": []
     },
+        {
+        "id_site": "BROCH2",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
     {
         "id_site": "CGAZEL",
         "admin": [
@@ -728,5 +738,145 @@
         "maddog"
     ],
     "user": []
+    },
+    {
+        "id_site": "CREMOU",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KARHIR",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KERGEL",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "LIVDIC",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "MENHAM",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "RUDNOD",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "RAGUEN",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KERSID",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "KERDAL",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "LOCHRO",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "PORSBR",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "GRIGNA",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "DEPA29",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
+    },
+    {
+        "id_site": "COMTES",
+        "admin": [
+            "qruaud",
+            "ldeho",
+            "makan.gandit@univ-brest.fr",
+            "maddog"
+        ],
+        "user": []
     }
 ]

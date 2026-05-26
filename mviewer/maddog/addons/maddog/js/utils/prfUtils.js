@@ -112,15 +112,13 @@ const prfUtils = (function () {
                     if (!prf.features.length) {
                         throw new Error(`Données non disponibles pour le profil ${idType.toUpperCase()}`);
                     };
-                    // get ref point (first by default)
+                    const refLineCoordinates = prfUtils.getSelectedRefLineCoordinates(idType);
                     const newFeatures = prf.features.map(p => {
-                        let refPoint = null;
                         const points = p.geometry.coordinates.map((line, order) => {
-                            if (!order) {
-                                refPoint = [...line, 0];
-                                return [...line, 0];
-                            }
-                            return [...line, prfUtils.getDistance([line[0], line[1]], [refPoint[0], refPoint[1]])]
+                            const distance = refLineCoordinates
+                                ? prfUtils.getDistanceOnReference(refLineCoordinates, line)
+                                : prfUtils.getDistanceOnProfile(p.geometry.coordinates, order);
+                            return [...line, distance];
                         });
                         return {
                             ...p,
@@ -148,6 +146,52 @@ const prfUtils = (function () {
                 .catch(e => {
                     prfUtils.manageError(e, "<i class='fas fa-times-circle'></i>");
                 });
+        },
+        getSelectedRefLineCoordinates: (idType) => {
+            const feature = maddog.prfRefLine?.features?.find(f => f?.properties?.idtype === idType);
+            return feature?.geometry?.coordinates || null;
+        },
+        getDistanceOnProfile: (coordinates, coordinateIndex) => {
+            if (!coordinates?.length || coordinateIndex <= 0) return 0;
+            let distance = 0;
+            for (let i = 1; i <= coordinateIndex; i++) {
+                distance += prfUtils.getDistance(
+                    [coordinates[i - 1][0], coordinates[i - 1][1]],
+                    [coordinates[i][0], coordinates[i][1]]
+                );
+            }
+            return Math.round(distance * 100) / 100;
+        },
+        getDistanceOnReference: (refLineCoordinates, point) => {
+            if (!refLineCoordinates?.length || refLineCoordinates.length < 2 || !point) return 0;
+
+            let cumulative = 0;
+            let closestDistance = Infinity;
+            let closestAlongReference = 0;
+
+            for (let i = 1; i < refLineCoordinates.length; i++) {
+                const start = refLineCoordinates[i - 1];
+                const end = refLineCoordinates[i];
+                const dx = end[0] - start[0];
+                const dy = end[1] - start[1];
+                const segmentLength = Math.sqrt(dx * dx + dy * dy);
+                if (!segmentLength) continue;
+
+                const t = Math.max(0, Math.min(1, ((point[0] - start[0]) * dx + (point[1] - start[1]) * dy) / (segmentLength * segmentLength)));
+                const projectedX = start[0] + t * dx;
+                const projectedY = start[1] + t * dy;
+                const pointDx = point[0] - projectedX;
+                const pointDy = point[1] - projectedY;
+                const distanceToSegment = Math.sqrt(pointDx * pointDx + pointDy * pointDy);
+
+                if (distanceToSegment < closestDistance) {
+                    closestDistance = distanceToSegment;
+                    closestAlongReference = cumulative + (t * segmentLength);
+                }
+                cumulative += segmentLength;
+            }
+
+            return Math.round(closestAlongReference * 100) / 100;
         },
         /**
          * Create style for a given feature
@@ -435,6 +479,7 @@ const prfUtils = (function () {
                     y: 0.9
                 },
                 xaxis: {
+                    rangemode: 'tozero',
                     title: {
                         standoff: 40,
                         text: 'Distance (en m)',

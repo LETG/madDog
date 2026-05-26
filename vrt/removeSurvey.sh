@@ -24,6 +24,22 @@ psql_exec(){
   fi
 }
 
+delete_data_file(){
+    local dataFile="$1"
+    local metaFile="${dataFile%.*}.meta"
+    local folder
+    folder=$(dirname "$dataFile")
+
+    echo "-- Deleting data file: $dataFile and meta file: $metaFile"
+    rm -f "$dataFile" "$metaFile"
+    fileDeleted=true
+
+    if [ -d "$folder" ] && [ -z "$(ls -A "$folder")" ]; then
+        echo "-- Removing empty folder: $folder"
+        rmdir "$folder"
+    fi
+}
+
 echo "-- Get information from history table to remove survey data"
 # Read history table to get data to remove ( only when to_delete = true )
 # get id_survey, date_survey, id_type, code_site
@@ -42,6 +58,7 @@ do
     num_profil=$(echo $entry | cut -d'|' -f6)    
     type_measure=$(psql_exec "SELECT type_measure FROM $maddogDBSchema.measure_type WHERE id_measure_type = $id_measure_type;")
     code_site=$(psql_exec "SELECT code_site FROM $maddogDBSchema.site WHERE id_site = $id_site;" )
+    fileDeleted=false
     
     echo "-- Processing history id: $id_history, survey id: $id_survey, measure type id: $id_measure_type, site id: $id_site"
     echo "-- Code site: $code_site, Measure type: $type_measure , num profil: $num_profil, date: $date_survey"
@@ -50,13 +67,13 @@ do
     "MNT")
         echo "No spatial tables for $type_measure " ;;
     "REF")
-        psql_exec "DELETE FROM $maddogDBSchema.lineref WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        psql_exec "DELETE FROM $maddogDBSchema.lineref WHERE ogc_fid IN (SELECT ogc_fid FROM $maddogDBSchema.lineref WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey' LIMIT 1);"
         echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     "TDC")
-        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        psql_exec "DELETE FROM $maddogDBSchema.tdc WHERE ogc_fid IN (SELECT ogc_fid FROM $maddogDBSchema.tdc WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey' LIMIT 1);"
         echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     "PRF")
-        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey';"
+        psql_exec "DELETE FROM $maddogDBSchema.prf WHERE ogc_fid IN (SELECT ogc_fid FROM $maddogDBSchema.prf WHERE idsite = '$code_site' AND idtype = '$type_measure$num_profil' AND creationdate = '$date_survey' LIMIT 1);"
         echo "Delete $type_measure$num_profil values for survey $id_survey" ;;
     *)
         echo "Unknown type"
@@ -74,41 +91,45 @@ do
     # then delete files and folders if empty   
     # List all subfolder from rootPath/$id_site/$type_measure$num_profil
     dataRootPath="$rootPath/$code_site/$type_measure$num_profil"
-    subFolders=$(find $dataRootPath -type d)
-    for folder in $subFolders 
-    #read all files with extesion meta in subfolders  
-    do
-        metaFiles=$(find $folder -maxdepth 1 -type f -name "*.meta")
-        for metaFile in $metaFiles
+    if [ -d "$dataRootPath" ]; then
+        while IFS= read -r metaFile
         do
-            # for each file, read the second line and compare current data to meta file
-            secondline=`sed -n '2p' $metaFile`;
+            secondline=$(sed -n '2p' "$metaFile")
             IFS=';' read -r -a metaFields <<< $secondline
+            metaIdSurvey=${metaFields[7]}
 
-            # Set variables for next database import
-            metaCodeSite=${metaFields[0]}
-            metaTypeMeasure=${metaFields[1]}
-            metaNumProfil=${metaFields[2]}
-            # if not set set to 1
-            if [ -z "$metaNumProfil" ]; then metaNumProfil=1; fi
-            metaDateSurvey=${metaFields[3]}
-            # metaDateSurvey can have different format, convert to YYYY-MM-DD
-            metaDateSurvey=$(date -d "$metaDateSurvey" +"%Y-%m-%d")
-  
-            if [ "$metaTypeMeasure" = "$type_measure" ] && [ "$metaDateSurvey" = "$date_survey" ] && [ "$metaNumProfil" = "$num_profil" ]; then
-                # delete meta and csv
-                baseName=$(basename "$metaFile" .meta)
-                dataFile="$folder/$baseName.csv"
-                echo "-- Deleting data file: $dataFile and meta file: $metaFile"
-                rm -f "$dataFile" "$metaFile"
-                fileDeleted=true
-                if [ -d "$folder" ] && [ -z "$(ls -A "$folder")" ]; then
-                    echo "-- Removing empty folder: $folder"
-                    rmdir "$folder"
-                fi
+            if [ "$metaIdSurvey" = "$id_survey" ]; then
+                delete_data_file "${metaFile%.*}.csv"
+                break
             fi
-        done
-    done
+        done < <(find "$dataRootPath" -type f -name "*.meta")
+
+        if [ "$fileDeleted" != true ]; then
+            legacyMatches=()
+            while IFS= read -r metaFile
+            do
+                secondline=$(sed -n '2p' "$metaFile")
+                IFS=';' read -r -a metaFields <<< $secondline
+
+                metaCodeSite=${metaFields[0]}
+                metaTypeMeasure=${metaFields[1]}
+                metaNumProfil=${metaFields[2]}
+                if [ -z "$metaNumProfil" ]; then metaNumProfil=1; fi
+                metaDateSurvey=${metaFields[3]}
+                metaDateSurvey=$(date -d "$metaDateSurvey" +"%Y-%m-%d" 2>/dev/null)
+  
+                if [ "$metaCodeSite" = "$code_site" ] && [ "$metaTypeMeasure" = "$type_measure" ] && [ "$metaDateSurvey" = "$date_survey" ] && [ "$metaNumProfil" = "$num_profil" ]; then
+                    legacyMatches+=("$metaFile")
+                fi
+            done < <(find "$dataRootPath" -type f -name "*.meta")
+
+            if [ ${#legacyMatches[@]} -eq 1 ]; then
+                delete_data_file "${legacyMatches[0]%.*}.csv"
+            elif [ ${#legacyMatches[@]} -gt 1 ]; then
+                echo "-- WARNING: Multiple legacy files match survey id: $id_survey. File deletion skipped because no id_survey marker exists in metadata."
+            fi
+        fi
+    fi
 
 
     # If fileDeleted != true add a warning

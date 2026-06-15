@@ -5,7 +5,7 @@
         <Field name="coord_x" src="x" type="Real"/>
         <Field name="coord_y" src="y" type="Real"/>
         <Field name="coord_z" src="z" type="Real"/>
-        <Field name="pro_epsg" src="epsg" type="String"/>
+        <Field name="proj_epsg" src="epsg" type="String"/>
         <Field name="date_measure" src="date" type="Date"/>
         <Field name="description_measure" src="identifiant" type="String"/>
         <Field name="commentaire_measure" src="commentaire" type="String"/>     

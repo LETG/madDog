@@ -127,15 +127,15 @@ INSERT INTO site VALUES (86,'Plage de Pors Breign','Trégunc','PORSBR');
 INSERT INTO site VALUES (87,'Pointe de Grignallou','Trégunc','GRIGNA');
 INSERT INTO site VALUES (88, 'Plage de la Comtesse (escalier)', 'Saint-Quay-Portrieux', 'COMTES');
 INSERT INTO site VALUES (89, 'TEST Plage de Brochu 2', 'Québec', 'BROCH2');
-INSERT INTO site VALUES (90, 'Ile Ilur', 'Ile-dArz', 'ILCPLT');
-INSERT INTO site VALUES (91, 'Ile Ilur, pointe nord', 'Ile-dArz', 'ILPTEN');
-INSERT INTO site VALUES (92, 'Ile Ilur, isthme est', 'Ile-dArz', 'ILISTE');
-INSERT INTO site VALUES (93, 'Ile Ilur, isthme ouest', 'Ile-dArz', 'ILISTO');
-INSERT INTO site VALUES (94, 'Ile Ilur, tombolo', 'Ile-dArz', 'ILTOMB');
-INSERT INTO site VALUES (95, 'Ile Ilur, baie de la chapelle', 'Ile-dArz', 'ILBCHP');
-INSERT INTO site VALUES (96, 'Ile Ilur, pointe sud', 'Ile-dArz', 'ILPTES');
-INSERT INTO site VALUES (97, 'Ile Ilur, plage sud', 'Ile-dArz', 'ILPLGS');
-INSERT INTO site VALUES (98, 'Ile Ilur, grande plage', 'Ile-dArz', 'ILGPLG'); 
+INSERT INTO site VALUES (90, 'Ile Ilur', 'ILE-D''ARZ', 'ILCPLT');
+INSERT INTO site VALUES (91, 'Ile Ilur, pointe nord', 'ILE-D''ARZ', 'ILPTEN');
+INSERT INTO site VALUES (92, 'Ile Ilur, isthme est', 'ILE-D''ARZ', 'ILISTE');
+INSERT INTO site VALUES (93, 'Ile Ilur, isthme ouest', 'ILE-D''ARZ', 'ILISTO');
+INSERT INTO site VALUES (94, 'Ile Ilur, tombolo', 'ILE-D''ARZ', 'ILTOMB');
+INSERT INTO site VALUES (95, 'Ile Ilur, baie de la chapelle', 'ILE-D''ARZ', 'ILBCHP');
+INSERT INTO site VALUES (96, 'Ile Ilur, pointe sud', 'ILE-D''ARZ', 'ILPTES');
+INSERT INTO site VALUES (97, 'Ile Ilur, plage sud', 'ILE-D''ARZ', 'ILPLGS');
+INSERT INTO site VALUES (98, 'Ile Ilur, grande plage', 'ILE-D''ARZ', 'ILGPLG'); 
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

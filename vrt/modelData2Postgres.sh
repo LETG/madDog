@@ -135,12 +135,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     sed -i "s/<SrcDataSource>/<SrcDataSource>${tmpData}/g" $configuredVrt
 
     log_msg DEBUG "-Import file to postgresql in table : measure"
-    log_msg DEBUG "-Import file to postgresql in table : measure"
-    # Ajout temporaire
-    echo "=== CONTENU tempDataModel.csv (3 premières lignes) ==="
-    head -3 $tmpData
-    echo "=== NB COLONNES ==="
-    head -1 $tmpData | awk -F';' '{print NF}'
+    
     if ! ogr2ogr -append -f "PostgreSQL" PG:"host=$maddogDBHost user=$maddogDBUser port=$maddogDBPort dbname=$maddogDBName password=$maddogDBPassword schemas=$maddogDBSchema" -nln "$tableMeasure" $configuredVrt; then
         log_msg ERROR "Import failed for $tmpData"
         PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM $maddogDBSchema.survey WHERE id_survey = $idSurvey;"

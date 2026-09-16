@@ -123,7 +123,9 @@ if test -f "${fileNameWithoutExt}.meta"; then
                 print "ERROR: Invalid CSV line (need at least 6 columns): " $0 > "/dev/stderr"
                 exit 1
             }
-            print $0, epsg, idEquipment, idOperator, idSurvey
+            # Six columns case
+            if (NF == 6) print $0, "", epsg, idEquipment, idOperator, idSurvey
+            else print $0, epsg, idEquipment, idOperator, idSurvey
         }' "$fileName" > "$tmpData"; then
         log_msg ERROR "Invalid measure CSV: $fileName"
         PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM $maddogDBSchema.survey WHERE id_survey = $idSurvey;"

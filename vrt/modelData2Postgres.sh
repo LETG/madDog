@@ -37,8 +37,9 @@ log_msg DEBUG "Using file : $fileName and meta : $fileNameWithoutExt.meta"
 if test -f "${fileNameWithoutExt}.meta"; then
     
     # Read only second line of meta
-    secondline=`sed -n '2p' ${fileNameWithoutExt}.meta`;
-    IFS=';' read -r -a metaFields <<< $secondline
+    secondline=$(sed -n '2p' "${fileNameWithoutExt}.meta")
+    secondline=${secondline%$'\r'}
+    IFS=';' read -r -a metaFields <<< "$secondline"
 
     # Set variables for next database import
     codeSite=${metaFields[0]}
@@ -113,21 +114,27 @@ if test -f "${fileNameWithoutExt}.meta"; then
     
     tmpData=tempDataModel.csv
     log_msg DEBUG "add additional information in csv file"
-    #check how many columns in csv ( latest column 'commentaire' is optional)
-    numCols=$(head -1 $fileName | awk -F';' '{print NF}')
-    if [ $numCols -eq 7 ]
-    then
-        awk -F';' -v OFS=';' -v epsg="$epsg" -v idEquipment="$idEquipment" -v idOperator="$idOperator" -v idSurvey="$idSurvey" \
-            '{print $0, epsg, idEquipment, idOperator, idSurvey}' "$fileName" > "$tmpData"
-    else
-        awk -F';' -v OFS=';' -v epsg="$epsg" -v idEquipment="$idEquipment" -v idOperator="$idOperator" -v idSurvey="$idSurvey" \
-            '{print $0, "", epsg, idEquipment, idOperator, idSurvey}' "$fileName" > "$tmpData"
+    # Normalize CRLF and add database identifiers using awk
+    if ! awk -v epsg="$epsg" -v idEquipment="$idEquipment" -v idOperator="$idOperator" -v idSurvey="$idSurvey" \
+        'BEGIN { FS=OFS=";" }
+        {
+            sub(/\r$/, "")
+            if (NF < 6) {
+                print "ERROR: Invalid CSV line (need at least 6 columns): " $0 > "/dev/stderr"
+                exit 1
+            }
+            print $0, epsg, idEquipment, idOperator, idSurvey
+        }' "$fileName" > "$tmpData"; then
+        log_msg ERROR "Invalid measure CSV: $fileName"
+        PGPASSWORD=$maddogDBPassword psql -h $maddogDBHost -p $maddogDBPort -d $maddogDBName -U $maddogDBUser -c "DELETE FROM $maddogDBSchema.survey WHERE id_survey = $idSurvey;"
+        rm -f "$tmpData"
+        exit 1
     fi
-   
-    log_msg DEBUG "replace header"
-    header="id;x;y;z;identifiant;date;commentaire;epsg;id_equipment;id_operator;id_survey"   
-    #replace header
-    sed -i "1s/.*/$header/" $tmpData
+    
+    # Replace header with expected columns
+    echo "id;x;y;z;identifiant;date;commentaire;epsg;id_equipment;id_operator;id_survey" > "${tmpData}.header"
+    tail -n +2 "$tmpData" >> "${tmpData}.header"
+    mv "${tmpData}.header" "$tmpData"
 
     cp -pr $vrtFile $configuredVrt
     log_msg DEBUG "Using file : $tmpData"
@@ -144,6 +151,7 @@ if test -f "${fileNameWithoutExt}.meta"; then
     fi
 
     awk -F';' -v OFS=';' -v idSurvey="$idSurvey" '
+        { sub(/\r$/, "") }
         NR == 1 {
             if ($NF == "id_survey") print $0;
             else print $0, "id_survey";

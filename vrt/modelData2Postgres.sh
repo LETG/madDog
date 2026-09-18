@@ -119,6 +119,9 @@ if test -f "${fileNameWithoutExt}.meta"; then
         'BEGIN { FS=OFS=";" }
         {
             sub(/\r$/, "")
+            # A final empty record is common in CSV files written with CRLF.
+            # It is not a measurement and must not be treated as malformed data.
+            if ($0 ~ /^[[:space:]]*$/) next
             if (NF < 6) {
                 print "ERROR: Invalid CSV line (need at least 6 columns): " $0 > "/dev/stderr"
                 exit 1

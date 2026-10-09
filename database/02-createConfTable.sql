@@ -136,6 +136,7 @@ INSERT INTO site VALUES (95, 'Ile Ilur, baie de la chapelle', 'ILE-D''ARZ', 'ILB
 INSERT INTO site VALUES (96, 'Ile Ilur, pointe sud', 'ILE-D''ARZ', 'ILPTES');
 INSERT INTO site VALUES (97, 'Ile Ilur, plage sud', 'ILE-D''ARZ', 'ILPLGS');
 INSERT INTO site VALUES (98, 'Ile Ilur, grande plage', 'ILE-D''ARZ', 'ILGPLG'); 
+INSERT INTO site VALUES (99, 'Plage de Porsmilin', 'PLougonvelin', 'PORSMI'); 
 
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');

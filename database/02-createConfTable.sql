@@ -141,9 +141,12 @@ INSERT INTO site VALUES (99, 'Plage de Porsmilin', 'PLougonvelin', 'PORSMI');
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');
 INSERT INTO public.equipment VALUES (2, 'Centipede_RTK', 'Centipede RTK');
-INSERT INTO public.equipment VALUES (3, 'Distancemetre', 'Distancemètre');
-INSERT INTO public.equipment VALUES (4, 'Extraction_MNT', 'Extraction à partir de MNT');
-INSERT INTO public.equipment VALUES (5, 'Numerisation_photographie', 'Numérisation à partir de photographie');
+INSERT INTO public.equipment VALUES (3, 'mixte_GNSS_RTK', 'mixte_GNSS_RTK');
+INSERT INTO public.equipment VALUES (4, 'Distancemetre', 'Distancemètre');
+INSERT INTO public.equipment VALUES (5, 'Extraction_MNT_TLS', 'Extraction à partir de MNT acquis par TLS');
+INSERT INTO public.equipment VALUES (6, 'Extraction_MNT_PHO', 'Extraction à partir de MNT acquis par photogramétrie terrestre');
+INSERT INTO public.equipment VALUES (7, 'Extraction_MNT_LIDAR', 'Extraction à partir de MNT acquis par lidar');
+INSERT INTO public.equipment VALUES (8, 'Numerisation_photographie', 'Numérisation à partir de photographie');
 
 -- Measure type
 INSERT INTO public.measure_type VALUES (1, 'TDC', 'TDC : Trait de côte');

@@ -141,7 +141,7 @@ INSERT INTO site VALUES (99, 'Plage de Porsmilin', 'PLougonvelin', 'PORSMI');
 -- Equipment
 INSERT INTO public.equipment VALUES (1, 'DGPS', 'DGPS');
 INSERT INTO public.equipment VALUES (2, 'Centipede_RTK', 'Centipede RTK');
-INSERT INTO public.equipment VALUES (3, 'mixte_GNSS_RTK', 'mixte_GNSS_RTK');
+INSERT INTO public.equipment VALUES (3, 'DGPS (type non renseigné)', 'Type de DGPS non renseigné ou mixte');
 INSERT INTO public.equipment VALUES (4, 'Distancemetre', 'Distancemètre');
 INSERT INTO public.equipment VALUES (5, 'Extraction_MNT_TLS', 'Extraction à partir de MNT acquis par TLS');
 INSERT INTO public.equipment VALUES (6, 'Extraction_MNT_PHO', 'Extraction à partir de MNT acquis par photogramétrie terrestre');

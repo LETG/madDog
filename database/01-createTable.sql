@@ -23,7 +23,7 @@ CREATE TABLE operator(
 CREATE TABLE equipment(
    id_equipment SERIAL,
    name_equipment VARCHAR(50) ,
-   description_equipment VARCHAR(50) ,
+   description_equipment VARCHAR(100) ,
    PRIMARY KEY(id_equipment)
 );
 
